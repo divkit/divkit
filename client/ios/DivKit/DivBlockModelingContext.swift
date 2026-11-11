@@ -216,6 +216,18 @@ public struct DivBlockModelingContext {
     errorsStorage.add(DivUnknownError(error, path: path))
   }
 
+  func resolvePrototypeData(
+    _ item: Any,
+    index: Int,
+    builderName: String
+  ) -> DivDictionary {
+    guard let dictionary = item as? DivDictionary else {
+      addWarning(message: "\(builderName).data[\(index)] must be a dictionary")
+      return [:]
+    }
+    return dictionary
+  }
+
   func makeBinding<T>(variableName: String?, defaultValue: T) -> Binding<T> {
     guard let variableName else {
       return Binding(name: "", value: Property(initialValue: defaultValue))

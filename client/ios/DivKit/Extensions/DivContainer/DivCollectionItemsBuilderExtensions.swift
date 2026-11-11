@@ -26,7 +26,7 @@ extension DivCollectionItemBuilder {
   ) -> [(Div, DivBlockModelingContext)] {
     let items = resolveData(context.expressionResolver) ?? []
     return items.enumerated().compactMap { index, item -> (Div, DivBlockModelingContext)? in
-      let itemDict = item as? DivDictionary ?? [:]
+      let itemDict = context.resolvePrototypeData(item, index: index, builderName: "item_builder")
       let prototypeContext = context.modifying(
         prototypeParams: PrototypeParams(
           index: index,

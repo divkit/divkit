@@ -213,8 +213,8 @@ final class DivContainerExtensionsTests: XCTestCase {
       divContainer(
         itemBuilder: DivCollectionItemBuilder(
           data: .value([
-            [],
-            [],
+            [:],
+            [:],
           ]),
           prototypes: [
             DivCollectionItemBuilder.Prototype(
@@ -279,8 +279,8 @@ final class DivContainerExtensionsTests: XCTestCase {
       divContainer(
         itemBuilder: DivCollectionItemBuilder(
           data: .value([
-            [],
-            [],
+            [:],
+            [:],
           ]),
           prototypes: [
             DivCollectionItemBuilder.Prototype(
@@ -342,7 +342,7 @@ final class DivContainerExtensionsTests: XCTestCase {
     let block = makeBlock(
       divContainer(
         itemBuilder: DivCollectionItemBuilder(
-          data: .value([[]]),
+          data: .value([[:]]),
           prototypes: [
             DivCollectionItemBuilder.Prototype(
               div: divText(text: "itemBuilder")
@@ -381,6 +381,43 @@ final class DivContainerExtensionsTests: XCTestCase {
     )
 
     assertEqual(block, expectedBlock)
+  }
+
+  func test_ItemBuilder_ReportsNonDictionaryDataAndPreservesItems() {
+    let context = DivBlockModelingContext()
+    let block = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([["text": "a"], 1, "s", [1], [:], NSNull()]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(
+              div: divText(textExpression: "Index = @{index}, size = @{len(it)}")
+            ),
+          ]
+        )
+      ),
+      context: context,
+      ignoreErrors: true
+    )
+    let expectedBlock = makeBlock(divContainer(items: [
+      divText(text: "Index = 0, size = 1"),
+      divText(text: "Index = 1, size = 0"),
+      divText(text: "Index = 2, size = 0"),
+      divText(text: "Index = 3, size = 0"),
+      divText(text: "Index = 4, size = 0"),
+      divText(text: "Index = 5, size = 0"),
+    ]))
+
+    assertEqual(block, expectedBlock)
+    let warnings = context.errorsStorage.errors
+    XCTAssertEqual(warnings.map(\.message), [
+      "item_builder.data[1] must be a dictionary",
+      "item_builder.data[2] must be a dictionary",
+      "item_builder.data[3] must be a dictionary",
+      "item_builder.data[5] must be a dictionary",
+    ])
+    XCTAssertEqual(warnings.map(\.level), [.warning, .warning, .warning, .warning])
+    XCTAssertEqual(warnings.map(\.path), Array(repeating: defaultContainerPath, times: 4))
   }
 
   func test_ItemBuilder_AppliesSizeModifier() throws {

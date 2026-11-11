@@ -143,6 +143,71 @@ final class DivTextExtensionsTests: XCTestCase {
     )
   }
 
+  func test_RangeBuilder_ReportsNonDictionaryDataAndPreservesRanges() throws {
+    let context = DivBlockModelingContext()
+    let div = Div.divText(DivText(
+      rangeBuilder: makeRangeBuilderWithMixedData(),
+      text: .value("012345")
+    ))
+    let block: TextBlock = try makeBlock(div, context: context, ignoreErrors: true).child.unwrap()
+
+    XCTAssertEqual(block.text.string, "012345")
+    let fontSizes = (0..<6).map {
+      (block.text.attribute(.font, at: $0, effectiveRange: nil) as? Font)?.pointSize
+    }
+    XCTAssertEqual(fontSizes, [20, 11, 12, 13, 14, 15])
+    assertBuilderWarnings(context, builderName: "range_builder")
+  }
+
+  func test_EllipsisRangeBuilder_ReportsNonDictionaryDataAndPreservesRanges() throws {
+    let context = DivBlockModelingContext()
+    let div = Div.divText(DivText(
+      ellipsis: DivText.Ellipsis(
+        rangeBuilder: makeRangeBuilderWithMixedData(),
+        text: .value("012345")
+      ),
+      text: .value("Host text")
+    ))
+    let block: TextBlock = try makeBlock(div, context: context, ignoreErrors: true).child.unwrap()
+    let text = try XCTUnwrap(block.truncationToken)
+
+    XCTAssertEqual(text.string, "012345")
+    let fontSizes = (0..<6).map {
+      (text.attribute(.font, at: $0, effectiveRange: nil) as? Font)?.pointSize
+    }
+    XCTAssertEqual(fontSizes, [20, 11, 12, 13, 14, 15])
+    assertBuilderWarnings(context, builderName: "range_builder")
+  }
+
+  func test_ImageBuilder_ReportsNonDictionaryDataAndPreservesImages() throws {
+    let context = DivBlockModelingContext()
+    let div = Div.divText(DivText(
+      imageBuilder: makeImageBuilderWithMixedData(),
+      text: .value("012345")
+    ))
+    let block: TextBlock = try makeBlock(div, context: context, ignoreErrors: true).child.unwrap()
+
+    XCTAssertEqual(block.images.map(\.location), [0, 1, 2, 3, 4, 5])
+    XCTAssertEqual(block.images.map(\.size.width), [20, 11, 12, 13, 14, 15])
+    assertBuilderWarnings(context, builderName: "image_builder")
+  }
+
+  func test_EllipsisImageBuilder_ReportsNonDictionaryDataAndPreservesImages() throws {
+    let context = DivBlockModelingContext()
+    let div = Div.divText(DivText(
+      ellipsis: DivText.Ellipsis(
+        imageBuilder: makeImageBuilderWithMixedData(),
+        text: .value("012345")
+      ),
+      text: .value("Host text")
+    ))
+    let block: TextBlock = try makeBlock(div, context: context, ignoreErrors: true).child.unwrap()
+
+    XCTAssertEqual(block.truncationImages.map(\.location), [0, 1, 2, 3, 4, 5])
+    XCTAssertEqual(block.truncationImages.map(\.size.width), [20, 11, 12, 13, 14, 15])
+    assertBuilderWarnings(context, builderName: "image_builder")
+  }
+
   func test_WithText() {
     let block = makeBlock(
       divText(text: "Hello!")
@@ -376,3 +441,44 @@ private func animatedTextBlock(
 }
 
 private let defaultPath = UIElementPath.root + 0 + "text"
+
+private func makeRangeBuilderWithMixedData() -> DivText.RangeBuilder {
+  DivText.RangeBuilder(
+    data: .value([["text": "a"], 1, "s", [1], [:], NSNull()]),
+    prototypes: [
+      DivText.RangeBuilder.Prototype(range: DivText.Range(
+        end: expression("@{index + 1}"),
+        fontSize: expression("@{10 + index + len(it) * 10}"),
+        start: expression("@{index}")
+      )),
+    ]
+  )
+}
+
+private func makeImageBuilderWithMixedData() -> DivText.ImageBuilder {
+  DivText.ImageBuilder(
+    data: .value([["text": "a"], 1, "s", [1], [:], NSNull()]),
+    prototypes: [
+      DivText.ImageBuilder.Prototype(image: DivText.Image(
+        start: expression("@{index}"),
+        url: .value(url("https://example.com/image.png")),
+        width: DivFixedSize(value: expression("@{10 + index + len(it) * 10}"))
+      )),
+    ]
+  )
+}
+
+private func assertBuilderWarnings(
+  _ context: DivBlockModelingContext,
+  builderName: String
+) {
+  let warnings = context.errorsStorage.errors
+  XCTAssertEqual(warnings.map(\.message), [
+    "\(builderName).data[1] must be a dictionary",
+    "\(builderName).data[2] must be a dictionary",
+    "\(builderName).data[3] must be a dictionary",
+    "\(builderName).data[5] must be a dictionary",
+  ])
+  XCTAssertEqual(warnings.map(\.level), [.warning, .warning, .warning, .warning])
+  XCTAssertEqual(warnings.map(\.path), Array(repeating: defaultPath, times: 4))
+}

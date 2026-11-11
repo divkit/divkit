@@ -24,7 +24,7 @@ extension DivText.ImageBuilder {
       DivText.Image,
       DivBlockModelingContext
     )? in
-      let itemDict = item as? DivDictionary ?? [:]
+      let itemDict = context.resolvePrototypeData(item, index: index, builderName: "image_builder")
       let itemContext = context.modifying(
         pathSuffix: String(index),
         prototypeParams: PrototypeParams(

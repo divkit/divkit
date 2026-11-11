@@ -21,7 +21,7 @@ extension DivText.RangeBuilder {
   ) -> [(DivText.Range, DivBlockModelingContext)] {
     let items = resolveData(context.expressionResolver) ?? []
     return items.enumerated().compactMap { index, item in
-      let itemDict = item as? DivDictionary ?? [:]
+      let itemDict = context.resolvePrototypeData(item, index: index, builderName: "range_builder")
       let itemContext = context.modifying(
         pathSuffix: String(index),
         prototypeParams: PrototypeParams(
