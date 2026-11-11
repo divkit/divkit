@@ -102,9 +102,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     // markdown extension not supported
     "div-text/markdown-extension.json",
 
-    // div-text.tighten_width not supported
-    "div-text/maxwidth-tight-text.json",
-
     // test div-customs required
     "div-size/match-parent/overlap/height/platform-wrap-content-container-height.json",
     "div-size/match-parent/overlap/custom-with-fixed-size.json",
