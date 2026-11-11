@@ -20,6 +20,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
 import com.yandex.div.compose.utils.observeIsConstrained
@@ -48,7 +49,8 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val visibleItems = items.observeVisible()
 
     val supportsMainAxisWeight = !data.width.isWrapContent
-    val isCrossAxisWrapContent = data.height is DivSize.WrapContent
+    // A positive aspect ratio makes the height definite: the cross axis does not wrap the children.
+    val isCrossAxisWrapContent = data.height is DivSize.WrapContent && data.observedAspectRatio() == null
     var foundWeightedChildren = false
     var totalWeightedChildrenMargins = 0.dp
     var needsCrossAxisIntrinsicSize = false

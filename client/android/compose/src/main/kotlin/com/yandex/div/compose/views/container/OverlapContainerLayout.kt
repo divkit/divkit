@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.container
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.MeasurePolicy
@@ -14,6 +15,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.collection.CollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
@@ -23,6 +25,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.isMatchParent
+import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observedDpValue
@@ -30,7 +33,7 @@ import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.compose.views.VisibleDivBlockView
+import com.yandex.div.compose.views.modifiers.MatchParentSize
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -47,12 +50,6 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val items = data.observeItems()
-    val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
-    val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
-    val defaultAlignment = combineAlignment(
-        defaultHorizontalAlignment,
-        defaultVerticalAlignment,
-    )
     val containerModifier = modifier.adaptiveContainerPadding(
         data.paddings,
         horizontalAlignment,
@@ -60,36 +57,24 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     )
 
     val isWidthWrapContent = data.width is DivSize.WrapContent
-    val isHeightWrapContent = data.height is DivSize.WrapContent
-    val needsMatchParentMeasurement = data.aspect == null &&
-        items.items.none { it.value().aspect != null } &&
+    // A positive aspect ratio makes the height follow the width: the children never wrap it.
+    val hasAspect = data.observedAspectRatio() != null
+    val isHeightWrapContent = data.height is DivSize.WrapContent && !hasAspect
+    // Children with their own aspect keep the Box route, unless the container's aspect height is
+    // derived from a wrap-content width that a match-parent child must not define.
+    val needsMatchParentMeasurement = (hasAspect || items.items.none { it.value().aspect != null }) &&
         items.items.any {
             val child = it.value()
             (isWidthWrapContent && child.width.isMatchParent) ||
                 (isHeightWrapContent && child.height.isMatchParent)
         }
     if (!needsMatchParentMeasurement) {
-        Box(containerModifier, contentAlignment = defaultAlignment) {
-            items.observeVisible().forEach { item ->
-                WithDivKey(item) {
-                    WithLocalComponent(items.components?.get(item)) {
-                        DivBlockView(
-                            data = item,
-                            modifier = Modifier.align(
-                                item.resolveOverlapChildAlignment(
-                                    defaultHorizontal = horizontalAlignment,
-                                    defaultVertical = verticalAlignment,
-                                )
-                            ),
-                            layoutParams = DivBlockLayoutParams(
-                                defaultHorizontalAlignment = defaultHorizontalAlignment,
-                                defaultVerticalAlignment = defaultVerticalAlignment,
-                            ),
-                        )
-                    }
-                }
-            }
-        }
+        OverlapLayout(
+            modifier = containerModifier,
+            items = items,
+            defaultHorizontal = horizontalAlignment,
+            defaultVertical = verticalAlignment,
+        )
         return
     }
 
@@ -102,6 +87,40 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
         defaultHorizontal = horizontalAlignment,
         defaultVertical = verticalAlignment,
     )
+}
+
+@Composable
+@NonRestartableComposable
+private fun OverlapLayout(
+    modifier: Modifier,
+    items: CollectionItems,
+    defaultHorizontal: DivContentAlignmentHorizontal,
+    defaultVertical: DivContentAlignmentVertical,
+) {
+    val defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment()
+    val defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment()
+    val layoutParams = DivBlockLayoutParams(
+        defaultHorizontalAlignment = defaultHorizontalAlignment,
+        defaultVerticalAlignment = defaultVerticalAlignment,
+    )
+    Box(
+        modifier,
+        contentAlignment = combineAlignment(defaultHorizontalAlignment, defaultVerticalAlignment),
+    ) {
+        items.observeVisible().forEach { item ->
+            WithDivKey(item) {
+                WithLocalComponent(items.components?.get(item)) {
+                    DivBlockView(
+                        data = item,
+                        modifier = Modifier.align(
+                            item.resolveOverlapChildAlignment(defaultHorizontal, defaultVertical),
+                        ),
+                        layoutParams = layoutParams,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Suppress("DEPRECATION")
@@ -151,9 +170,10 @@ private fun MatchParentOverlapChild(
 ) {
     WithLocalComponent(component) {
         val divBase = div.value()
+        // The metadata is resolved in the child's own local-variable scope, the one DivBlockView
+        // renders it in, and travels to the measure policy as the child's parent data.
         WithLocalComponent(divBase) {
-            val visibility = divBase.visibility.observedValue()
-            if (visibility == DivVisibility.GONE) return@WithLocalComponent
+            if (divBase.visibility.observedValue() == DivVisibility.GONE) return@WithLocalComponent
 
             val child = div.observeOverlapChild(
                 isWidthWrapContent = isWidthWrapContent,
@@ -161,25 +181,16 @@ private fun MatchParentOverlapChild(
                 defaultHorizontal = defaultHorizontal,
                 defaultVertical = defaultVertical,
             )
-            // The wrapper keeps one measurable per Div and carries metadata resolved in the
-            // same local-variable scope as the child itself.
-            Box(
+            DivBlockView(
+                data = div,
                 modifier = Modifier.layoutId(child),
-                propagateMinConstraints = true,
-            ) {
-                VisibleDivBlockView(
-                    data = div,
-                    modifier = Modifier,
-                    layoutParams = DivBlockLayoutParams(
-                        fillMatchParentWidth = !(isWidthWrapContent && child.matchParentWidth),
-                        fillMatchParentHeight = !(isHeightWrapContent && child.matchParentHeight),
-                        defaultHorizontalAlignment = defaultHorizontal
-                            .toCrossAxisHorizontalAlignment(),
-                        defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
-                    ),
-                    visibility = visibility,
-                )
-            }
+                layoutParams = DivBlockLayoutParams(
+                    matchParentWidth = MatchParentSize.contentIf(isWidthWrapContent && child.matchParentWidth),
+                    matchParentHeight = MatchParentSize.contentIf(isHeightWrapContent && child.matchParentHeight),
+                    defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment(),
+                    defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
+                ),
+            )
         }
     }
 }

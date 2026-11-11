@@ -53,7 +53,7 @@ internal fun Modifier.onMeasureConstraints(
 internal fun Modifier.fixedIntrinsics(
     width: Dp? = null,
     height: Dp? = null,
-): Modifier = then(FixedIntrinsicsModifier(width, height))
+): Modifier = if (width == null && height == null) this else then(FixedIntrinsicsModifier(width, height))
 
 private fun Int.constrainIfInfinity(minSize: Int, shouldConstrain: Boolean): Int {
     return if (shouldConstrain && this == Constraints.Infinity) {
@@ -63,7 +63,7 @@ private fun Int.constrainIfInfinity(minSize: Int, shouldConstrain: Boolean): Int
     }
 }
 
-private class FixedIntrinsicsModifier(
+private data class FixedIntrinsicsModifier(
     private val width: Dp?,
     private val height: Dp?,
 ) : LayoutModifier {

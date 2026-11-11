@@ -1,6 +1,7 @@
 package com.yandex.div.test.data
 
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div2.DivAspect
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
@@ -21,4 +22,16 @@ fun matchParent(
     maxSize = maxSize?.let { DivSizeUnitValue(value = constant(it.toLong())) },
 ))
 
-fun wrapContent(): DivSize = DivSize.WrapContent(DivWrapContentSize())
+fun wrapContent(
+    constrained: Boolean = false,
+    minSize: Int? = null,
+    maxSize: Int? = null,
+): DivSize = DivSize.WrapContent(DivWrapContentSize(
+    constrained = if (constrained) constant(true) else null,
+    minSize = minSize?.let { DivSizeUnitValue(value = constant(it.toLong())) },
+    maxSize = maxSize?.let { DivSizeUnitValue(value = constant(it.toLong())) },
+))
+
+fun aspect(ratio: Double): DivAspect = aspect(constant(ratio))
+
+fun aspect(ratio: Expression<Double>): DivAspect = DivAspect(ratio = ratio)

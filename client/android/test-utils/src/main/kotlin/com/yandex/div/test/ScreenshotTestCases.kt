@@ -92,18 +92,6 @@ val composeDeviceScreenshotCases = setOf(
 )
 
 val composeRoborazziIgnoredScreenshotCases = setOf(
-    // div-container.aspect not fully supported
-    "div-container/aspect/wrap_content-width-horizontal.json",
-    "div-container/aspect/wrap_content-width-overlap.json",
-    "div-container/aspect/wrap_content-width-overlap-fixed-height.json",
-    "div-container/aspect/wrap_content-width-overlap-match_parent-height.json",
-    "div-container/aspect/wrap_content-width-vertical.json",
-    "div-container/aspect/wrap_content-width-vertical-constrained-child-not-fit.json",
-    "div-container/aspect/wrap_content-width-vertical-fixed-height.json",
-    "div-container/aspect/wrap_content-width-vertical-match_parent-child-fits.json",
-    "div-container/aspect/wrap_content-width-vertical-match_parent-child-not-fit.json",
-    "div-container/aspect/wrap_content-width-vertical-match_parent-height.json",
-
     // size_provider extension not supported
     "div-container/size_provider.json",
     "div-container/size_provider_recursive.json",

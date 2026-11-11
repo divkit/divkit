@@ -17,7 +17,6 @@ import com.yandex.div.compose.tooltips.tooltipBringToTop
 import com.yandex.div.compose.tooltips.tooltipInput
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
-import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.views.DivBlockLayoutParams
@@ -50,7 +49,6 @@ internal fun Modifier.apply(
         .tooltipBringToTop(divBase.id)
         .divVisibility(visibility)
         .applyIfNotNull(margins) { padding(it) }
-        .applyIf(layoutParams.suppressMatchParentIntrinsics) { suppressMatchParentIntrinsics(divBase) }
         .size(div, layoutParams, margins)
         .then(stateChangeTransition.modifier)
         .visibilityActions(divBase)
@@ -92,10 +90,4 @@ internal fun Modifier.padding(value: DivEdgeInsets?): Modifier {
 internal fun Modifier.verticalPaddings(value: DivEdgeInsets): Modifier {
     val (top, bottom) = value.observeVerticalInsets()
     return padding(top = top, bottom = bottom)
-}
-
-@Composable
-internal fun Modifier.horizontalPaddings(value: DivEdgeInsets): Modifier {
-    val (start, end) = value.observeHorizontalInsets()
-    return padding(start = start, end = end)
 }

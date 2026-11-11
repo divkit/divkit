@@ -16,11 +16,11 @@ import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.views.modifiers.MatchParentSize
 import com.yandex.div2.DivSize
 import kotlin.math.roundToInt
 
@@ -31,14 +31,13 @@ internal fun Modifier.imageAspectRatio(
     ratio: Float,
     height: DivSize,
     alignment: Alignment,
-    fillMatchParentHeight: Boolean,
-    matchParentMaxHeight: Dp,
+    matchParentHeight: MatchParentSize,
     matchHeightConstraintsFirst: Boolean,
 ): Modifier {
     val bounds = if (matchHeightConstraintsFirst && height is DivSize.WrapContent) {
         HeightBounds()
     } else {
-        height.observedHeightBounds(fillMatchParentHeight, matchParentMaxHeight)
+        height.observedHeightBounds(matchParentHeight)
     }
     return this then ImageAspectRatioElement(
         ratio = ratio,
@@ -59,7 +58,7 @@ private data class HeightBounds(
 )
 
 @Composable
-private fun DivSize.observedHeightBounds(fillMatchParentHeight: Boolean, matchParentMaxHeight: Dp): HeightBounds {
+private fun DivSize.observedHeightBounds(matchParentHeight: MatchParentSize): HeightBounds {
     val bounds = when (this) {
         is DivSize.Fixed -> value.observedValue().let { HeightBounds(min = it, max = it, isFixed = true) }
         is DivSize.WrapContent -> HeightBounds(
@@ -70,8 +69,8 @@ private fun DivSize.observedHeightBounds(fillMatchParentHeight: Boolean, matchPa
         is DivSize.MatchParent -> HeightBounds(
             min = value.minSize?.observedValue(),
             max = value.maxSize?.observedValue(),
-            isConstrained = fillMatchParentHeight,
-            matchParentMax = matchParentMaxHeight.takeIf { it.isSpecified },
+            isConstrained = matchParentHeight != MatchParentSize.Content,
+            matchParentMax = (matchParentHeight as? MatchParentSize.Bounded)?.max,
         )
     }
     return if (bounds.min != null && bounds.max != null && bounds.min > bounds.max) {

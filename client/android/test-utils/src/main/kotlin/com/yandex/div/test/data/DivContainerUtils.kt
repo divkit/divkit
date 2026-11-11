@@ -9,6 +9,7 @@ import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivAnimator
 import com.yandex.div2.DivAppearanceTransition
+import com.yandex.div2.DivAspect
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivCollectionItemBuilder
@@ -33,6 +34,7 @@ fun container(
     alignmentHorizontal: DivAlignmentHorizontal? = null,
     alignmentVertical: DivAlignmentVertical? = null,
     animators: List<DivAnimator>? = null,
+    aspect: DivAspect? = null,
     backgrounds: List<DivBackground>? = null,
     border: DivBorder? = null,
     clipToBounds: Expression<Boolean> = constant(true),
@@ -63,6 +65,7 @@ fun container(
             alignmentHorizontal = alignmentHorizontal?.let(::constant),
             alignmentVertical = alignmentVertical?.let(::constant),
             animators = animators,
+            aspect = aspect,
             background = backgrounds,
             border = border,
             clipToBounds = clipToBounds,

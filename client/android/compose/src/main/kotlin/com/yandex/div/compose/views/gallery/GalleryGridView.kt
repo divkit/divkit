@@ -35,6 +35,11 @@ internal fun GalleryGridView(
     // DivGridLayoutManager.instantScrollToPosition establishes lane history from item zero before
     // restoring the default position. Starting directly at defaultItem changes preceding lanes.
     val gridState = rememberLazyStaggeredGridState()
+    // The default item alignment lives outside BoxWithConstraints: a parent that measures the
+    // gallery once more with an unbounded height switches the branch below.
+    if (items.isNotEmpty() && initialDefaultItem > 0) {
+        AdjustDefaultGridItemAlignment(gridState, clampedDefaultItem, items.size, properties)
+    }
 
     BoxWithConstraints(modifier = modifier) {
         val isLazyGridSupported = constraints.hasBoundedWidth && constraints.hasBoundedHeight
@@ -48,9 +53,6 @@ internal fun GalleryGridView(
                 scrollMode = properties.scrollMode,
                 alignment = properties.scrollContentAlignment,
             )
-            if (items.isNotEmpty() && initialDefaultItem > 0) {
-                AdjustDefaultGridItemAlignment(gridState, clampedDefaultItem, items.size, properties)
-            }
         }
         when {
             !isLazyGridSupported ->

@@ -34,9 +34,17 @@ internal fun GalleryListView(
     isScrollable: Boolean,
 ) {
     if (isScrollable) {
+        // The scroll state and the default item alignment live outside BoxWithConstraints: a parent that
+        // measures the gallery once more with an unbounded scroll axis switches the branch below.
+        val initialDefaultItem = remember { properties.defaultItem }
+        val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
+        val listState = rememberLazyListState(initialFirstVisibleItemIndex = clampedDefaultItem)
+        if (initialDefaultItem > 0) {
+            AdjustDefaultItemAlignment(listState, clampedDefaultItem, properties)
+        }
         BoxWithConstraints(modifier = modifier) {
             if (isScrollAxisBounded(properties.isHorizontal)) {
-                ScrollableGalleryView(items, components, properties)
+                ScrollableGalleryView(items, components, properties, listState)
             } else {
                 NonScrollableGalleryView(Modifier, items, components, properties)
             }
@@ -51,15 +59,9 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
     items: List<Div>,
     components: Map<Div, DivLocalComponent>?,
     properties: GalleryProperties,
+    listState: LazyListState,
 ) {
     val isHorizontal = properties.isHorizontal
-    val initialDefaultItem = remember { properties.defaultItem }
-    val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
-
-    val listState = rememberLazyListState(
-        initialFirstVisibleItemIndex = clampedDefaultItem
-    )
-
     val density = LocalDensity.current
     val scrollLayout = remember(listState, density) { listState.galleryScrollLayout(density) }
     BindGalleryScrollActions(
@@ -73,10 +75,6 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
     val flingBehavior = rememberGalleryListFlingBehavior(
         listState, properties.scrollMode, properties.scrollContentAlignment,
     )
-
-    if (initialDefaultItem > 0) {
-        AdjustDefaultItemAlignment(listState, clampedDefaultItem, properties)
-    }
 
     val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
     val maxItemSize = properties.contentPadding.scrollAxisContentSize(

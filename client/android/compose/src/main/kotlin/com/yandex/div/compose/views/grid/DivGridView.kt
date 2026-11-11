@@ -21,12 +21,16 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.combineAlignment
+import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observeHorizontalMarginsSum
+import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.observedAlignment
+import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
-import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGrid
 
@@ -65,6 +69,7 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
                     DivBlockView(
                         data = item,
                         modifier = Modifier
+                            .matchParentMarginsIntrinsics(divBase)
                             .applyIf(columnSpan > 1 && rowSpan == 1) {
                                 then(UnboundedIntrinsicHeight)
                             }
@@ -73,9 +78,6 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
                                 rowSpan = rowSpan,
                                 alignment = divBase.toGridItemAlignment()
                             ),
-                        layoutParams = DivBlockLayoutParams(
-                            suppressMatchParentIntrinsics = true,
-                        ),
                     )
                 }
             }
@@ -88,6 +90,19 @@ private fun DivBase.toGridItemAlignment(): Alignment = combineAlignment(
     alignmentHorizontal?.observedValue()?.toHorizontalAlignment() ?: Alignment.Start,
     alignmentVertical?.observedValue()?.toVerticalAlignment() ?: Alignment.Top,
 )
+
+/**
+ * An auto track takes only the margins from a match_parent cell: the View grid's first pass measures a
+ * match_parent axis at zero, so neither the content nor the size bounds of the cell size the track.
+ */
+@Composable
+private fun Modifier.matchParentMarginsIntrinsics(divBase: DivBase): Modifier {
+    val isHeightMatchParent = divBase.height.isMatchParent && divBase.observedAspectRatio() == null
+    return fixedIntrinsics(
+        width = divBase.observeHorizontalMarginsSum().takeIf { divBase.width.isMatchParent },
+        height = divBase.observeVerticalMarginsSum().takeIf { isHeightMatchParent },
+    )
+}
 
 private object UnboundedIntrinsicHeight : LayoutModifier {
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {

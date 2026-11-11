@@ -6,12 +6,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.modifiers.MatchParentSize
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 
@@ -32,11 +34,7 @@ internal inline fun ScrollableChildItem(
     matchParentMaxSize: Dp = Dp.Unspecified,
     contentModifier: Modifier = Modifier,
 ) {
-    val (matchParentMaxWidth, matchParentMaxHeight) = if (isHorizontal) {
-        matchParentMaxSize to Dp.Unspecified
-    } else {
-        Dp.Unspecified to matchParentMaxSize
-    }
+    val (matchParentWidth, matchParentHeight) = scrollAxisSizes(isHorizontal, matchParentMaxSize)
     WithDivKey(data) {
         WithLocalComponent(component) {
             val childCrossAlignment =
@@ -60,13 +58,19 @@ internal inline fun ScrollableChildItem(
                         } else {
                             Alignment.Top
                         },
-                        matchParentMaxWidth = matchParentMaxWidth,
-                        matchParentMaxHeight = matchParentMaxHeight,
+                        matchParentWidth = matchParentWidth,
+                        matchParentHeight = matchParentHeight,
                     ),
                 )
             }
         }
     }
+}
+
+/** The width and height sizing of a child whose scroll axis is bounded by [scrollAxisMax], when specified. */
+internal fun scrollAxisSizes(isHorizontal: Boolean, scrollAxisMax: Dp): Pair<MatchParentSize, MatchParentSize> {
+    val scrollAxis = if (scrollAxisMax.isSpecified) MatchParentSize.Bounded(scrollAxisMax) else MatchParentSize.Fill
+    return if (isHorizontal) scrollAxis to MatchParentSize.Fill else MatchParentSize.Fill to scrollAxis
 }
 
 /**
