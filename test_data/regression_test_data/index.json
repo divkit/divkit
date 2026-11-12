@@ -1226,6 +1226,7 @@
         "Accessibility"
       ],
       "platforms": [
+        "android",
         "ios"
       ],
       "steps": [
@@ -1233,9 +1234,9 @@
         "Tap 'Действие с меню', then select 'Пункт меню'",
         "Turn on Screen reader",
         "Focus on 'Элемент 1'",
-        "Swipe up or down to go through the actions",
+        "Open the element's accessibility actions: on Android, open the TalkBack menu and select Actions; on iOS, swipe up or down",
         "Select 'Действие 1'",
-        "Select 'Действие с меню', then select 'Пункт меню'",
+        "Open the element's accessibility actions again, select 'Действие с меню', then select 'Пункт меню'",
         "Double tap on screen"
       ],
       "expected_results": [
@@ -1243,7 +1244,7 @@
         "A menu with 'Пункт меню' appears and the text does not change to 'Последнее действие: ignored_action'. After selecting 'Пункт меню' the text shows 'Последнее действие: menu_item'",
         "Screen reader turns on",
         "You will hear 'Это Элемент 1' and that actions are available. 'Действие 1' and 'Действие с меню' buttons can't be focused",
-        "Actions are offered in this order: 'Действие 1', 'Действие с меню'. 'Отключённое действие' is not offered",
+        "Actions are offered in this order (on Android, in the TalkBack Actions menu): 'Действие 1', 'Действие с меню'. 'Отключённое действие' is not offered. On Android, an additional 'Активировать' (Activate) item may appear after the custom actions to run the element's regular tap action",
         "The text below shows 'Последнее действие: action_1'",
         "The same as in step 2",
         "The text shows 'Последнее действие: tap'"

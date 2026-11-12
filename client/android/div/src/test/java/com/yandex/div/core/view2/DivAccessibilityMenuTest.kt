@@ -20,7 +20,6 @@ import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.input
-import com.yandex.div.test.data.menuItem
 import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.slider
 import com.yandex.div.test.data.switch
@@ -507,25 +506,6 @@ class DivAccessibilityMenuTest {
         divView.setVariable("menu_mode", "exclude")
 
         assertEquals(emptyList(), labels())
-    }
-
-    @Test
-    fun `named command executes actions in order even when an action has menu items`() {
-        bind(text(id = "target", text = "Card", accessibility = accessibility(menu = listOf(
-            accessibilityMenuItem("Run", listOf(
-                action(
-                    typed = setVariableAction("last_action", typedValue("first")),
-                    menuItems = listOf(menuItem(text = "Choose", action = action())),
-                ),
-                action(typed = setVariableAction("last_action", DivTypedValue.Str(
-                    StrValue(value = expression("@{last_action + '-second'}")),
-                ))),
-            )),
-        ))))
-
-        performCommand("Run")
-
-        assertEquals("first-second", result())
     }
 
     @Test

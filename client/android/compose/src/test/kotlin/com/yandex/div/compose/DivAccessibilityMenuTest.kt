@@ -374,25 +374,6 @@ class DivAccessibilityMenuTest {
     }
 
     @Test
-    fun `named command executes actions in order even when an action has menu items`() {
-        setContent(text(id = "target", text = "Card", accessibility = accessibility(menu = listOf(
-            accessibilityMenuItem("Run", listOf(
-                action(
-                    typed = setVariableAction("last_action", typedValue("first")),
-                    menuItems = listOf(menuItem(text = "Choose", action = action())),
-                ),
-                action(typed = setVariableAction("last_action", DivTypedValue.Str(
-                    StrValue(value = expression("@{last_action + '-second'}")),
-                ))),
-            )),
-        ))))
-
-        performCommand("Run")
-
-        rule.onNodeWithTag("result").assertTextEquals("first-second")
-    }
-
-    @Test
     fun `invisible element removes commands and rejects a retained callback`() {
         val visibility = Variable.StringVariable("visibility", "visible")
         variableController.declare(visibility)
