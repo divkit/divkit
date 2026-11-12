@@ -31,11 +31,37 @@ class ImagePreviewDecoderTest {
     }
 
     @Test
+    fun `decodes Base64 without padding`() {
+        val preview = decoder.decodePreview("SGVsbG8")
+
+        assertContentEquals("Hello".encodeToByteArray(), preview)
+        assertEquals(emptyList(), reporter.errors)
+    }
+
+    @Test
+    fun `decodes Base64 with whitespace and line breaks`() {
+        val preview = decoder.decodePreview("\tSGVs\r\nbG8= ")
+
+        assertContentEquals("Hello".encodeToByteArray(), preview)
+        assertEquals(emptyList(), reporter.errors)
+    }
+
+    @Test
+    fun `reports non-zero pad bits and returns null`() {
+        reporter.failOnError = false
+
+        val preview = decoder.decodePreview("Zh==")
+
+        assertNull(preview)
+        assertEquals(listOf("Failed to decode Base64 image preview"), reporter.errors)
+    }
+
+    @Test
     fun `reports invalid Base64 and returns null`() {
         val reporter = TestReporter().apply { failOnError = false }
         val preview = ImagePreviewDecoder(reporter).decodePreview("=")
 
         assertNull(preview)
-        assertEquals(listOf("Preview doesn't contain base64 image"), reporter.errors)
+        assertEquals(listOf("Failed to decode Base64 image preview"), reporter.errors)
     }
 }
