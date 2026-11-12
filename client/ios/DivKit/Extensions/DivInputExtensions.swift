@@ -9,19 +9,35 @@ extension DivInput: DivBlockModeling {
     let context = modifiedContextParentPath(context)
     let isFocused = context.blockStateStorage.isFocused(path: context.path)
 
-    let textBinding = context.makeBinding(variableName: textVariable, defaultValue: "")
+    // Resolve once, after applyBaseProperties has initialized local variables and functions.
+    let input = Lazy(getter: { [unowned self] in
+      (
+        keyboardType: resolveKeyboardType(context.expressionResolver),
+        textBinding: context.makeBinding(variableName: textVariable, defaultValue: "")
+      )
+    })
     return try applyBaseProperties(
       to: {
         try makeBaseBlock(
           context: context,
-          textBinding: textBinding,
+          textBinding: input.value.textBinding,
+          keyboardType: input.value.keyboardType,
           isFocused: isFocused
         )
       },
       context: context,
       actionsHolder: nil,
-      customAccessibilityParams: CustomAccessibilityParams { [unowned self] in
-        accessibility?.resolveDescription(context.expressionResolver) ?? textBinding.value
+      customAccessibilityParams: CustomAccessibilityParams(
+        allowsNilLabel: input.value.keyboardType.isSecure
+      ) { [unowned self] in
+        let description = accessibility?.resolveDescription(context.expressionResolver)
+        guard input.value.keyboardType.isSecure else {
+          return description ?? input.value.textBinding.value
+        }
+        // Text of a secure field must never be exposed to VoiceOver. Without a description
+        // the wrapper is not an accessibility element, so VoiceOver reaches the native secure
+        // field.
+        return description?.isEmpty == false ? description : nil
       },
       applyPaddings: false,
       isFocused: isFocused
@@ -31,6 +47,7 @@ extension DivInput: DivBlockModeling {
   private func makeBaseBlock(
     context: DivBlockModelingContext,
     textBinding: Binding<String>,
+    keyboardType: KeyboardType,
     isFocused: Bool
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
@@ -52,7 +69,9 @@ extension DivInput: DivBlockModeling {
     }
 
     let hintValue = resolveHintText(expressionResolver) ?? ""
-    let keyboardType = resolveKeyboardType(expressionResolver)
+    // Without a wrapper label, accessibility metadata belongs to the native secure field.
+    let usesNativeAccessibility = keyboardType.isSecure
+      && (accessibility?.resolveDescription(expressionResolver) ?? "").isEmpty
     let allowSuggestionsBar = resolveAllowSuggestionsBar(expressionResolver)
     let autocapitalizationType = resolveAutocapitalization(expressionResolver)
 
@@ -76,6 +95,10 @@ extension DivInput: DivBlockModeling {
       widthTrait: resolveWidthTrait(context),
       heightTrait: resolveHeightTrait(context),
       hint: hintValue.with(typo: typo.with(color: resolveHintColor(expressionResolver))),
+      accessibilityHint: usesNativeAccessibility
+        ? accessibility?.resolveHint(expressionResolver) : nil,
+      accessibilityStateDescription: usesNativeAccessibility
+        ? accessibility?.resolveStateDescription(expressionResolver) : nil,
       textValue: textBinding,
       rawTextValue: mask?.makeRawVariable(context),
       textTypo: typo.with(color: resolveTextColor(expressionResolver)),

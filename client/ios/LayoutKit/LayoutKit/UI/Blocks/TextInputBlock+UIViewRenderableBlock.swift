@@ -35,6 +35,10 @@ extension TextInputBlock {
       mask: maskValidator
     )
     inputView.setHint(hint)
+    inputView.setAccessibility(
+      hint: accessibilityHint,
+      stateDescription: accessibilityStateDescription
+    )
     inputView.setHighlightColor(highlightColor)
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
@@ -82,6 +86,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private let userInputPipe = SignalPipe<MaskedInputViewModel.Action>()
   private var filters: [TextInputFilter]?
   private var validators: [TextInputValidator]?
+  private var validationMessages: [String] = []
+  private var accessibilityStateDescription: String?
   private let disposePool = AutodisposePool()
   private var layoutDirection: UserInterfaceLayoutDirection = .leftToRight
   private var textAlignmentHorizontal: TextInputBlock.TextAlignmentHorizontal = .start
@@ -371,6 +377,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setHint(_ value: NSAttributedString) {
     hintView.attributedText = value
+    updateAccessibilityLabel()
     setNeedsLayout()
   }
 
@@ -405,6 +412,13 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     } else {
       multiLineInput.selectedRange = NSRange(location: start, length: end - start)
     }
+  }
+
+  func setAccessibility(hint: String?, stateDescription: String?) {
+    singleLineInput.accessibilityHint = hint
+    multiLineInput.accessibilityHint = hint
+    accessibilityStateDescription = stateDescription
+    updateAccessibilityLabel()
   }
 
   private func focusTextInput() {
@@ -458,13 +472,24 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   private func updateValidation() {
-    let accessibilityLabel = validators?.compactMap {
+    validationMessages = validators?.compactMap {
       let isValid = $0.validate(currentText)
       $0.isValid.value = isValid
       return isValid ? nil : $0.message()
-    }.joined(separator: ". ")
-    singleLineInput.accessibilityLabel = accessibilityLabel
-    multiLineInput.accessibilityLabel = accessibilityLabel
+    } ?? []
+    updateAccessibilityLabel()
+  }
+
+  private func updateAccessibilityLabel() {
+    // Select keeps hint as a separate accessibility element.
+    let isHintInLabel = selectionItems == nil
+    hintView.isAccessibilityElement = !isHintInLabel
+    let hint = isHintInLabel ? hintView.attributedText?.string ?? "" : ""
+    let parts = ([hint, accessibilityStateDescription ?? ""] + validationMessages)
+      .filter { !$0.isEmpty }
+    let label = parts.isEmpty ? nil : parts.joined(separator: ". ")
+    singleLineInput.accessibilityLabel = label
+    multiLineInput.accessibilityLabel = label
   }
 
   private func setTextData(_ text: String) {

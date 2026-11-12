@@ -63,6 +63,9 @@ public final class TextInputBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
+  public let accessibilityHint: String?
+  /// Appended to the native field label without overriding its secure accessibility value.
+  public let accessibilityStateDescription: String?
   public let textValue: Binding<String>
   public let rawTextValue: Binding<String>?
   public let textTypo: Typo
@@ -125,6 +128,8 @@ public final class TextInputBlock: BlockWithTraits {
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
     hint: NSAttributedString,
+    accessibilityHint: String? = nil,
+    accessibilityStateDescription: String? = nil,
     textValue: Binding<String>,
     rawTextValue: Binding<String>? = nil,
     textTypo: Typo,
@@ -161,6 +166,8 @@ public final class TextInputBlock: BlockWithTraits {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.hint = hint
+    self.accessibilityHint = accessibilityHint
+    self.accessibilityStateDescription = accessibilityStateDescription
     self.textValue = textValue
     self.rawTextValue = rawTextValue
     self.textTypo = textTypo
@@ -234,6 +241,8 @@ extension TextInputBlock {
       && lhs.heightTrait == rhs.heightTrait
       && lhs.highlightColor == rhs.highlightColor
       && lhs.hint == rhs.hint
+      && lhs.accessibilityHint == rhs.accessibilityHint
+      && lhs.accessibilityStateDescription == rhs.accessibilityStateDescription
       && lhs.inputType == rhs.inputType
       && lhs.isEnabled == rhs.isEnabled
       && lhs.isFocused == rhs.isFocused
@@ -269,6 +278,8 @@ extension TextInputBlock: ElementFocusUpdating {
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       hint: hint,
+      accessibilityHint: accessibilityHint,
+      accessibilityStateDescription: accessibilityStateDescription,
       textValue: textValue,
       rawTextValue: rawTextValue,
       textTypo: textTypo,
@@ -309,6 +320,8 @@ extension TextInputBlock {
     widthTrait: LayoutTrait? = nil,
     heightTrait: LayoutTrait? = nil,
     hint: NSAttributedString? = nil,
+    accessibilityHint: String? = nil,
+    accessibilityStateDescription: String? = nil,
     textValue: Binding<String>? = nil,
     rawTextValue: Binding<String>? = nil,
     textTypo: Typo? = nil,
@@ -346,6 +359,9 @@ extension TextInputBlock {
       widthTrait: widthTrait ?? self.widthTrait,
       heightTrait: heightTrait ?? self.heightTrait,
       hint: hint ?? self.hint,
+      accessibilityHint: accessibilityHint ?? self.accessibilityHint,
+      accessibilityStateDescription: accessibilityStateDescription ?? self
+        .accessibilityStateDescription,
       textValue: textValue ?? self.textValue,
       rawTextValue: rawTextValue ?? self.rawTextValue,
       textTypo: textTypo ?? self.textTypo,

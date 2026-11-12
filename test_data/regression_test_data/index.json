@@ -5405,6 +5405,38 @@
       ],
       "file": "gallery/item_animations_enabled.json",
       "case_id": 535
+    },
+    {
+      "title": "Accessibility input password",
+      "platforms": [
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "android": "This case checks the iOS-specific accessibility of div-input: the field wrapper, the native secure text field role and the hint label. Android uses native input fields with their own accessibility.",
+        "web": "This case checks the iOS-specific accessibility of div-input: the field wrapper, the native secure text field role and the hint label. Web uses native input fields with their own accessibility, and accessibility merge mode is not supported on Web."
+      },
+      "tags": [
+        "Accessibility",
+        "DivInput"
+      ],
+      "steps": [
+        "Turn on VoiceOver",
+        "Focus the field \"Password with hint\", double tap to edit and type qwerty123",
+        "Move VoiceOver focus to another element and back to the field",
+        "Focus the field \"Password with accessibility description\", double tap to edit and type qwerty123, then move focus away and back",
+        "Swipe to the container \"Account\". The password in it is pre-filled with qwerty123 because the container with merge mode is a single VoiceOver element and its field cannot be focused",
+        "Focus the validated field and type 123, listen to the field name, then type 456 and listen again",
+        "Tap \"Toggle password visibility\" and move VoiceOver focus to the first two fields and to the container \"Account\", then toggle back and repeat"
+      ],
+      "expected_results": [
+        "VoiceOver never reads the typed value of a password field",
+        "The field with hint is announced as \"Password\" with the secure text field role, both when empty and when filled. The hint is not announced as a separate element.",
+        "The field with description is announced only as \"Secret code\" (the description is read by the wrapper, so there is no secure text field role). The typed value is never read.",
+        "The container is announced as \"Account\" without the password value",
+        "The validated field is announced as \"Password. Password is too short\" while it has fewer than six characters, then as \"Password\". The error text under the field is visible only while the password is invalid.",
+        "After the toggle the fields are regular text fields: the field with hint is announced by its text, the field with description is still announced only as \"Secret code\", and the container is announced as \"Account qwerty123\" because its field is no longer secure. After toggling back the typed values are not read again, and the container is announced as \"Account\"."
+      ],
+      "file": "accessibility/input_password.json"
     }
   ]
 }

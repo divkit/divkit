@@ -40,7 +40,7 @@ extension DivAccessibility {
        let merged = block.mergedAccessibilityLabel {
       label = merged
     }
-    if label == nil, type != .auto {
+    if label == nil, type != .auto, !customParams.allowsNilLabel {
       label = ""
     }
 
@@ -94,13 +94,18 @@ struct CustomAccessibilityParams {
   static let `default` = CustomAccessibilityParams()
 
   let defaultTraits: AccessibilityElement.Traits
+  /// Keeps a `nil` label for any accessibility type, so the element is not exposed
+  /// to VoiceOver and its native subviews are reachable instead.
+  let allowsNilLabel: Bool
   let descriptionProvider: (() -> String?)?
 
   init(
     defaultTraits: AccessibilityElement.Traits = .none,
+    allowsNilLabel: Bool = false,
     descriptionProvider: (() -> String?)? = nil
   ) {
     self.defaultTraits = defaultTraits
+    self.allowsNilLabel = allowsNilLabel
     self.descriptionProvider = descriptionProvider
   }
 }

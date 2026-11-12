@@ -91,8 +91,14 @@ public func divInput(
   allowSuggestionsBarExpression: String? = nil,
   id: String? = nil,
   keyboardType: DivInput.KeyboardType? = nil,
+  keyboardTypeExpression: String? = nil,
   textVariable: String
 ) -> Div {
+  let keyboardTypeValue: Expression<DivInput.KeyboardType>? = if let keyboardTypeExpression {
+    expression(keyboardTypeExpression)
+  } else {
+    keyboardType.map { .value($0) }
+  }
   let allowSuggestionsBarValue: Expression<Bool>? = if let allowSuggestionsBarExpression {
     expression(allowSuggestionsBarExpression)
   } else {
@@ -104,7 +110,7 @@ public func divInput(
     allowSuggestionsBar: allowSuggestionsBarValue,
     extensions: extensions,
     id: id,
-    keyboardType: keyboardType.map { .value($0) },
+    keyboardType: keyboardTypeValue,
     textVariable: textVariable
   ))
 }

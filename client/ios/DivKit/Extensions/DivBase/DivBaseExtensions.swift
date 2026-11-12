@@ -3,11 +3,12 @@ import LayoutKit
 import VGSL
 
 extension DivBase {
+  // Accessibility parameters are evaluated after context setup and block creation.
   func applyBaseProperties(
     to makeBlock: () throws -> Block,
     context: DivBlockModelingContext,
     actionsHolder: DivActionsHolder?,
-    customAccessibilityParams: CustomAccessibilityParams = .default,
+    customAccessibilityParams: @autoclosure () -> CustomAccessibilityParams = .default,
     applyPaddings: Bool = true,
     clipToBounds: Bool = true,
     isFocused: Bool = false
@@ -73,7 +74,7 @@ extension DivBase {
         )
         .applyBackground()
         .applyVisibilityActionsAndDecorations(
-          customAccessibilityParams: customAccessibilityParams
+          customAccessibilityParams: customAccessibilityParams()
         )
         .applyTransformations()
         .applyTransitioningAnimations()
