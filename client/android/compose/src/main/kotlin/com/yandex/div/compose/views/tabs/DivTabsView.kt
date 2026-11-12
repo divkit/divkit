@@ -68,11 +68,11 @@ internal fun DivTabsView(
     } else {
         null
     }
-    val externalSelected = data.selectedTab.observedIntValue().coerceIn(0, items.size - 1)
+    val scope = rememberCoroutineScope()
+    val externalSelected = data.selectedTab.observedIntValue()
     LaunchedEffect(externalSelected) {
-        if (state.currentIndex != externalSelected) {
-            state.selectTab(externalSelected, titleAnimation)
-        }
+        // Let the tabs state keep an ongoing animation when the new value targets the same page.
+        scope.launch { state.selectTab(externalSelected, titleAnimation) }
     }
 
     BindTabsScrollActions(
@@ -82,7 +82,6 @@ internal fun DivTabsView(
         animation = titleAnimation,
     )
 
-    val scope = rememberCoroutineScope()
     val fixedWidth = (data.width as? DivSize.Fixed)?.value?.observedValue()
     val fixedHeight = (data.height as? DivSize.Fixed)?.value?.observedValue()
     val titlePaddings = data.titlePaddings.observeInsets()

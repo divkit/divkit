@@ -1,6 +1,8 @@
 package com.yandex.div.compose.views.tabs
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
@@ -28,6 +30,8 @@ import com.yandex.div2.DivData
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivTabsSelectionTest {
@@ -65,6 +69,42 @@ class DivTabsSelectionTest {
         setContent()
 
         onPage("Page 3").assertIsDisplayed()
+    }
+
+    @Test
+    fun `selected_tab change with the same clamped index selects its page`() {
+        selectedTab.set(2)
+        setContent()
+        rule.onNodeWithText("Tab 1").performClick()
+        rule.waitForIdle()
+
+        selectedTab.set(5)
+        rule.waitForIdle()
+
+        onPage("Page 3").assertIsDisplayed()
+    }
+
+    @Test
+    fun `selected_tab change to the same target finishes an ongoing page scroll`() {
+        setContent()
+        val range = rule.onNode(SemanticsMatcher.keyIsDefined(SemanticsActions.PageRight))
+            .fetchSemanticsNode().config[SemanticsProperties.HorizontalScrollAxisRange]
+        rule.mainClock.autoAdvance = false
+        selectedTab.set(2)
+        var progress = 0f
+        for (frame in 0 until 120) {
+            rule.mainClock.advanceTimeByFrame()
+            rule.waitForIdle()
+            progress = range.value() / range.maxValue()
+            if (progress in 0.80f..0.98f) break
+        }
+        assertTrue(progress in 0.80f..0.98f, "Page scroll progress: $progress")
+
+        selectedTab.set(5)
+        rule.mainClock.autoAdvance = true
+        rule.waitForIdle()
+
+        assertEquals(range.maxValue(), range.value(), absoluteTolerance = 0.5f)
     }
 
     @Test
@@ -114,6 +154,19 @@ class DivTabsSelectionTest {
 
         onPage("Page 2").assertIsDisplayed()
         rule.onNodeWithText("Tab 3").assertDoesNotExist()
+    }
+
+    @Test
+    fun `fewer updated items keep user selection when selected_tab is unchanged`() {
+        selectedTab.set(2)
+        setContent()
+        rule.onNodeWithText("Tab 1").performClick()
+        rule.waitForIdle()
+
+        data.value = tabsData(pages = 2)
+        rule.waitForIdle()
+
+        onPage("Page 1").assertIsDisplayed()
     }
 
     @Test
