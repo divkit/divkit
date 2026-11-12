@@ -1,0 +1,81 @@
+{
+  "description": "Multi-line range backgrounds: centered lines of different width, and line boxes in text with line_height next to a font size fragment",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "fragments_text": {
+      "type": "text",
+      "font_size": 24,
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "fragments_text",
+              "text": "Short\nMuch longer line",
+              "text_alignment_horizontal": "center",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 22,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  },
+                  "border": {
+                    "corner_radius": 4,
+                    "stroke": {
+                      "color": "#D32F2F",
+                      "width": 1
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "fragments_text",
+              "text": "Upper line\nLower line",
+              "line_height": 36,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 21,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                },
+                {
+                  "start": 0,
+                  "end": 5,
+                  "font_size": 14
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

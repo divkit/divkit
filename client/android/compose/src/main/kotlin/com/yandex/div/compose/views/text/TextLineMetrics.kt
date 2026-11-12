@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 private const val HALF_PX = 0.5f
 private const val PARAGRAPH_BREAK = ' '
 
-private class TextShift(val start: Int, val end: Int, val shiftPx: Int, val font: LineMetrics)
+internal class TextShift(val start: Int, val end: Int, val shiftPx: Int, val font: LineMetrics)
 
 internal class TextLineBounds(val end: Int, val top: Int, val bottom: Int)
 
@@ -49,7 +49,8 @@ internal fun AnnotatedText.withLineMetrics(
         TextShift(range.start, range.end, range.baselineOffsetPx, font)
     }
     if (layout == null || text.isEmpty()) {
-        return LineMetricsText(withLineStyles(shifts, emptyList(), emptyList()), emptyList())
+        val styled = withLineStyles(shifts, emptyList(), emptyList(), emptyList())
+        return LineMetricsText(styled, emptyList())
     }
 
     fun TextLayoutResult.lineMetrics(line: Int): IntRange {
@@ -66,14 +67,13 @@ internal fun AnnotatedText.withLineMetrics(
         }
         line.box(natural, metrics, lineHeightPx)
     }
-    val lineShifts = shifts + boxes.flatMap { it.shifts }
     val paragraphs = if (boxes.none { it.lineHeightPx != null || it.topOffsetPx > 0 }) {
         emptyList()
     } else {
         layout.paragraphs(text.text, lines, boxes, fontSizePx, maxLines)
     }
     val bounds = lines.zip(boxes) { line, box -> TextLineBounds(line.end, -box.ascentPx, box.descentPx) }
-    return LineMetricsText(withLineStyles(lineShifts, paragraphs, lines), bounds)
+    return LineMetricsText(withLineStyles(shifts, lines, boxes, paragraphs), bounds)
 }
 
 private fun TextLayoutResult.paragraphs(
@@ -102,9 +102,11 @@ private fun TextLayoutResult.paragraphs(
 
 private fun AnnotatedText.withLineStyles(
     shifts: List<TextShift>,
-    paragraphs: List<AnnotatedString.Range<ParagraphStyle>>,
     lines: List<LineGroup>,
+    boxes: List<LineBox>,
+    paragraphs: List<AnnotatedString.Range<ParagraphStyle>>,
 ): AnnotatedText {
+    val lineShifts = shifts + boxes.flatMap { it.shifts }
     val trailingLine = paragraphs.lastOrNull()?.end?.takeIf { it < text.length }
     val lineBreaks = (paragraphs.drop(1).map { it.start - 1 } + listOfNotNull(trailingLine))
         .mapNotNull { offset ->
@@ -116,7 +118,7 @@ private fun AnnotatedText.withLineStyles(
         }
         .toMap()
     val styled = AnnotatedString.Builder(text.replacingChars(lineBreaks)).apply {
-        shifts.forEach { addStyle(it.font.shiftStyle(it.shiftPx), it.start, it.end) }
+        lineShifts.forEach { addStyle(it.font.shiftStyle(it.shiftPx), it.start, it.end) }
         paragraphs.forEach { addStyle(it.item, it.start, it.end) }
         paragraphs.dropLast(1).forEach {
             val line = text.text.substring(it.start, it.end)
@@ -124,7 +126,14 @@ private fun AnnotatedText.withLineStyles(
             if (start < it.end) addStyle(SpanStyle(fontSize = 0.sp), start, it.end)
         }
     }.toAnnotatedString()
-    return copy(text = styled, decorations = decorations.map { it.withGlyphBoxes(lines, shifts) })
+    val boxedDecorations = decorations.map { decoration ->
+        if (decoration.hasFragmentBoxes) {
+            decoration.withFragmentBoxes(lines, boxes, shifts, fonts)
+        } else {
+            decoration.withGlyphBoxes(lines, lineShifts)
+        }
+    }
+    return copy(text = styled, decorations = boxedDecorations)
 }
 
 private fun TextRangeDecoration.withGlyphBoxes(lines: List<LineGroup>, shifts: List<TextShift>): TextRangeDecoration {
@@ -143,7 +152,7 @@ private fun TextRangeDecoration.withGlyphBoxes(lines: List<LineGroup>, shifts: L
     return if (boxes.isEmpty()) this else copy(glyphBoxes = boxes)
 }
 
-private class LineGroup(val start: Int, val end: Int, val firstLine: Int)
+internal class LineGroup(val start: Int, val end: Int, val firstLine: Int)
 
 private val String.trailingLineFeed: Int?
     get() = (length - 1).takeIf { length > 1 && this[it] == '\n' && this[it - 1] != '\n' }
@@ -163,11 +172,13 @@ private fun TextLayoutResult.lineGroups(text: String, hyphens: Hyphens?, maxLine
     }
 }
 
-private class LineBox(
+internal class LineBox(
     val lineHeightPx: Int?,
     val topOffsetPx: Int,
     val ascentPx: Int,
     val descentPx: Int,
+    val frameAscentPx: Int,
+    val frameDescentPx: Int,
     val contentAscentPx: Int,
     val contentDescentPx: Int,
     val shifts: List<TextShift>,
@@ -196,9 +207,13 @@ private fun LineGroup.box(
 
     val ascent: Int
     val descent: Int
+    val frameAscent: Int
+    val frameDescent: Int
     if (lineHeight == null) {
         ascent = contentAscent
         descent = contentDescent
+        frameAscent = naturalAscent
+        frameDescent = naturalDescent
     } else {
         val extra = lineHeight - naturalAscent - naturalDescent
         if (extra >= 0) {
@@ -208,6 +223,8 @@ private fun LineGroup.box(
             ascent = naturalAscent + extra / 2
             descent = lineHeight - ascent
         }
+        frameAscent = ascent
+        frameDescent = descent
     }
 
     val shifts = ranges.mapNotNull { range ->
@@ -224,6 +241,8 @@ private fun LineGroup.box(
         topOffsetPx = topOffset,
         ascentPx = ascent + topOffset,
         descentPx = descent,
+        frameAscentPx = frameAscent,
+        frameDescentPx = frameDescent,
         contentAscentPx = contentAscent,
         contentDescentPx = contentDescent,
         shifts = shifts,

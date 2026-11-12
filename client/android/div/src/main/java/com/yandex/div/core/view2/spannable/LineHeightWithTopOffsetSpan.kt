@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.spannable
 
 import android.graphics.Paint
+import android.text.Layout
 import android.text.Spanned
 import android.text.style.LineHeightSpan
 import androidx.annotation.Px
@@ -64,13 +65,17 @@ internal class LineHeightWithTopOffsetSpan(
             .fold(lineHeight) { result, span -> max(result, span.lineHeight) }
         applyLineHeight(maxLineHeight, fm)
 
-        if (topOffsetStart == spanStart && topOffsetStart in start..end) {
+        if (addsTopOffset(spanStart, start, end)) {
             applyTopOffset(fm)
         }
         if (text.substring(start, end).contains("\n")) {
             // Next line on new paragraph
             fontMetricsSaved = false
         }
+    }
+
+    private fun addsTopOffset(spanStart: Int, lineStart: Int, lineEnd: Int): Boolean {
+        return topOffset > 0 && topOffsetStart == spanStart && topOffsetStart in lineStart..lineEnd
     }
 
     private fun applyLineHeight(lineHeight: Int, fm: Paint.FontMetricsInt) {
@@ -96,9 +101,6 @@ internal class LineHeightWithTopOffsetSpan(
     }
 
     private fun applyTopOffset(fm: Paint.FontMetricsInt) {
-        if (topOffset <= 0) {
-            return
-        }
         fm.top -= topOffset
         fm.ascent -= topOffset
     }
@@ -115,5 +117,26 @@ internal class LineHeightWithTopOffsetSpan(
         fm.ascent = savedAscent
         fm.descent = savedDescent
         fm.bottom = savedBottom
+    }
+
+    companion object {
+
+        /**
+         * Returns how much the top offsets of the spans in [text] grow the [line] of [layout].
+         */
+        fun getLineTopOffset(text: Spanned, layout: Layout, line: Int): Int {
+            val start = layout.getLineStart(line)
+            val end = layout.getLineEnd(line)
+            val offsetSpansEnd = if (end < text.length && text[end - 1] != '\n') end + 1 else end
+            val topOffset = text.getSpans<LineHeightWithTopOffsetSpan>(start, offsetSpansEnd).sumOf {
+                if (it.addsTopOffset(text.getSpanStart(it), start, end)) it.topOffset else 0
+            }
+            val lineHeight = text.getSpans<LineHeightWithTopOffsetSpan>(start, end)
+                .maxOfOrNull { it.lineHeight } ?: 0
+            if (topOffset == 0 || lineHeight <= 0) return topOffset
+
+            val height = layout.getLineDescent(line) - layout.getLineAscent(line)
+            return (height - lineHeight).coerceIn(0, topOffset)
+        }
     }
 }

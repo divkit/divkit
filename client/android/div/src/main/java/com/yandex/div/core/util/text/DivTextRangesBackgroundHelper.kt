@@ -34,27 +34,13 @@ internal class DivTextRangesBackgroundHelper(
         val spannedText = text as? Spannable ?: return false
         return spans.any { span ->
             span.border == backgroundSpan.border && span.background == backgroundSpan.background
-                && span.baselineOffset == backgroundSpan.baselineOffset
-                && span.alignmentVertical == backgroundSpan.alignmentVertical
                 && span.lineHeight == backgroundSpan.lineHeight
-                && span.fontSize == backgroundSpan.fontSize
-                && span.topOffset == backgroundSpan.topOffset
-                && span.typeface == backgroundSpan.typeface
-                && span.fontFeatureSettings == backgroundSpan.fontFeatureSettings
-                && span.fontVariationSettings == backgroundSpan.fontVariationSettings
                 && end == spannedText.getSpanEnd(span) && start == spannedText.getSpanStart(span)
         }
     }
 
-    private val singleLineRenderer: DivTextRangesBackgroundRenderer by lazy {
-        SingleLineRenderer(
-            view = view,
-            resolver = resolver
-        )
-    }
-
-    private val multiLineRenderer: DivTextRangesBackgroundRenderer by lazy {
-        MultiLineRenderer(
+    private val renderer: DivTextRangesBackgroundRenderer by lazy {
+        DivTextRangesBackgroundRenderer(
             view = view,
             resolver = resolver
         )
@@ -78,21 +64,16 @@ internal class DivTextRangesBackgroundHelper(
 
         if (spanStart < 0 || spanEnd < 0 || spanStart >= spanEnd) return
 
-        val startLine = layout.getLineForOffset(spanStart)
-        val endLine = layout.getLineForOffset(spanEnd)
-
-        val startOffset = layout.getPrimaryHorizontal(spanStart).toInt()
-        val endOffset = layout.getPrimaryHorizontal(spanEnd).toInt()
-
         when (span.background) {
             is DivTextRangeBackground.Cloud -> {
+                val startLine = layout.getLineForOffset(spanStart)
+                val endLine = layout.getLineForOffset(spanEnd)
+                val startOffset = layout.getPrimaryHorizontal(spanStart).toInt()
+                val endOffset = layout.getPrimaryHorizontal(spanEnd).toInt()
                 cloudBackgroundRenderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset, span)
             }
 
-            else -> {
-                val renderer = if (startLine == endLine) singleLineRenderer else multiLineRenderer
-                renderer.draw(canvas, layout, startLine, endLine, startOffset, endOffset, span)
-            }
+            else -> renderer.draw(canvas, text, layout, span, spanStart, spanEnd)
         }
     }
 }

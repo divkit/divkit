@@ -50,7 +50,6 @@ import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TextColorSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
-import com.yandex.div.internal.util.makeIf
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
@@ -188,7 +187,6 @@ internal class SpannedTextBuilder @Inject constructor(
                     start,
                     end,
                     range,
-                    textData,
                     inEllipsis
                 )
             }
@@ -500,7 +498,6 @@ internal class SpannedTextBuilder @Inject constructor(
         start: Int,
         end: Int,
         range: DivText.Range,
-        textData: TextData,
         inEllipsis: Boolean,
     ) {
         val border = range.border
@@ -508,40 +505,12 @@ internal class SpannedTextBuilder @Inject constructor(
         if (border == null && background == null) return
 
         val displayMetrics = textView.context.resources.displayMetrics
-
-        val fontSizeValue = range.fontSize?.evaluate(resolver)?.toIntSafely()
         val fontSizeUnit = range.fontSizeUnit.evaluate(resolver)
-
-        val typefaceProvider = typefaceResolver.getTypefaceProvider(
-            range.fontFamily?.evaluate(resolver) ?: textData.fontFamily
-        )
-
-        val rangeFontWeight = range.fontWeight?.evaluate(resolver)
-        val rangeFontWeightValue = range.fontWeightValue?.evaluate(resolver)?.toIntSafely()
-        val fontWeightValue = if (rangeFontWeight != null || rangeFontWeightValue != null) {
-            getTypefaceValue(rangeFontWeight, rangeFontWeightValue)
-        } else {
-            getTypefaceValue(textData.fontWeight, textData.fontWeightValue)
-        }
-
-        val rangeFontVariationSettings = range.fontVariationSettings?.evaluate(resolver)
-        val fontVariationSettings = makeIf(typefaceProvider.isVariable &&
-            (rangeFontWeight != null || rangeFontWeightValue != null || rangeFontVariationSettings != null)
-        ) {
-            getFontVariations(rangeFontWeight, rangeFontWeightValue, rangeFontVariationSettings)
-        }
 
         val backgroundSpan = DivBackgroundSpan(
             border = border,
             background = background,
-            baselineOffset = range.baselineOffset.evaluate(resolver).unitToPx(displayMetrics, fontSizeUnit),
-            alignmentVertical = range.alignmentVertical?.evaluate(resolver),
             lineHeight = range.lineHeight?.evaluate(resolver)?.unitToPx(displayMetrics, fontSizeUnit),
-            fontSize = fontSizeValue?.unitToPx(displayMetrics, fontSizeUnit),
-            topOffset = range.topOffset?.evaluate(resolver)?.toIntSafely()?.unitToPx(displayMetrics, fontSizeUnit),
-            typeface = getTypeface(fontWeightValue, typefaceProvider),
-            fontFeatureSettings = range.fontFeatureSettings?.evaluate(resolver),
-            fontVariationSettings = fontVariationSettings,
         )
         if (textView is DivLineHeightTextView &&
             !textView.hasBackgroundSpan(spannedText, backgroundSpan, start, end, resolver)) {

@@ -5,8 +5,10 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
@@ -47,6 +49,18 @@ internal data class TextRangeMetrics(
 }
 
 @Composable
+internal fun rememberAnnotatedText(
+    text: AnnotatedString,
+    decorations: List<TextRangeDecoration>,
+    ranges: List<RangeMetricsInput>,
+    textStyle: TextStyle,
+): AnnotatedText {
+    val metrics = rememberRangeMetrics(ranges, textStyle)
+    val fonts = rememberRangeFonts(ranges, textStyle, decorations)
+    return AnnotatedText(text, decorations, metrics, fonts)
+}
+
+@Composable
 internal fun rememberRangeMetrics(
     ranges: List<RangeMetricsInput>,
     textStyle: TextStyle,
@@ -58,6 +72,37 @@ internal fun rememberRangeMetrics(
         resolveRangeMetrics(ranges) { spanStyle ->
             cache.getOrCreate(fontFamilyResolver, density, textStyle.merge(spanStyle))
         }
+    }
+}
+
+@Composable
+internal fun rememberRangeFonts(
+    ranges: List<RangeMetricsInput>,
+    textStyle: TextStyle,
+    decorations: List<TextRangeDecoration>,
+): List<GlyphBox> {
+    if (decorations.none { it.hasFragmentBoxes }) return emptyList()
+    val cache = divContext.component.lineMetricsCache
+    val fontFamilyResolver = LocalFontFamilyResolver.current
+    val density = LocalDensity.current
+    return remember(ranges, textStyle, cache, fontFamilyResolver, density) {
+        resolveRangeFonts(ranges) { spanStyle ->
+            cache.getOrCreate(fontFamilyResolver, density, textStyle.merge(spanStyle))
+        }
+    }
+}
+
+private fun resolveRangeFonts(
+    ranges: List<RangeMetricsInput>,
+    fontMetrics: (SpanStyle) -> LineMetrics,
+): List<GlyphBox> {
+    val bounds = ranges.flatMap { listOf(it.start, it.end) }.distinct().sorted()
+    return bounds.zipWithNext().mapNotNull { (start, end) ->
+        val spanStyle = ranges.filter { it.start <= start && end <= it.end }
+            .fold(SpanStyle()) { style, range -> style.merge(range.spanStyle) }
+            .takeIf { it.fontSize.isSpecified } ?: return@mapNotNull null
+        val font = fontMetrics(spanStyle)
+        GlyphBox(start, end, font.ascentPx, font.descentPx)
     }
 }
 

@@ -273,7 +273,7 @@ private fun RenderNativeText(
     } else {
         RenderAnnotatedText(
             modifier = modifier,
-            annotatedText = annotatedText,
+            annotatedText = remember(annotatedText) { annotatedText.withFontBoxes() },
             inlineContent = inlineContent,
             textStyle = textStyle,
             overflow = overflow,
@@ -503,7 +503,7 @@ private fun rememberEllipsizedTextRendering(
         onTextLayout = onTextLayout,
     )
     if (!rendering.text.hasLineMetrics(textStyle, inlineContent)) {
-        return rendering
+        return rendering.copy(text = remember(rendering.text) { rendering.text.withFontBoxes() })
     }
     val lines = rememberLineMetricsText(rendering.text, textStyle, inlineContent, measurer, availableWidth, maxLines)
     return rendering.copy(text = lines.text, inlineContent = lines.inlineContent)
@@ -639,7 +639,7 @@ private fun DivText.buildAnnotatedText(
     builder.addTextActions(actions, 0, builder.length)
     val metrics = builder.addTextRanges(this, ranges, length, offsets, baseFontSize, textStyle.color.alpha, decorations)
     builder.maskDecoratedRanges(decorations)
-    return AnnotatedText(builder.toAnnotatedString(), decorations, rememberRangeMetrics(metrics, textStyle))
+    return rememberAnnotatedText(builder.toAnnotatedString(), decorations, metrics, textStyle)
 }
 
 private fun AnnotatedString.Builder.addTextGradient(gradientBrush: Brush?) {
@@ -691,8 +691,8 @@ private fun AnnotatedString.Builder.addTextRanges(
                 component,
             )
             addStyle(spanStyle, decorationStart, decorationEnd)
-            if (decoration != null) decorations += decoration
             metrics += range.observeMetrics(decorationStart, decorationEnd, spanStyle, fontSizeUnit, component)
+            if (decoration != null) decorations += decoration.withRangeMetrics(metrics.last())
             val rangeActions = range.actions.observedEnabledActions(component)
             if (rangeActions.isNotEmpty()) {
                 // Added after the whole text link so that it wins the hit test: a tap reaches the

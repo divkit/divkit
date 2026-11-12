@@ -18,7 +18,7 @@ import kotlin.math.roundToInt
 internal class CloudTextRangeBackgroundRenderer(
     private val context: Context,
     private val expressionResolver: ExpressionResolver
-) : DivTextRangesBackgroundRenderer() {
+) {
 
     private val path = Path()
     private val paint = Paint()
@@ -33,7 +33,7 @@ internal class CloudTextRangeBackgroundRenderer(
     private val displayMetrics: DisplayMetrics
         get() = context.resources.displayMetrics
 
-    override fun draw(
+    fun draw(
         canvas: Canvas,
         layout: Layout,
         startLine: Int,

@@ -1,0 +1,54 @@
+{
+  "description": "Range background with top_offset and without font_size on the second line: the box is the line box without the offset",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "fragments_text": {
+      "type": "text",
+      "font_size": 24,
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "fragments_text",
+              "text": "First line\nSecond",
+              "ranges": [
+                {
+                  "start": 11,
+                  "end": 17,
+                  "top_offset": 20,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

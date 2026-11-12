@@ -1,0 +1,79 @@
+{
+  "description": "Range background and border over a font size fragment followed by an inline image, a trailing space and a line feed",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "fragments_text": {
+      "type": "text",
+      "font_size": 24,
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "fragments_text",
+              "text": "Title \nBody",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 11,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  },
+                  "border": {
+                    "corner_radius": 4,
+                    "stroke": {
+                      "color": "#D32F2F",
+                      "width": 4
+                    }
+                  }
+                },
+                {
+                  "start": 0,
+                  "end": 5,
+                  "font_size": 14
+                }
+              ],
+              "images": [
+                {
+                  "start": 5,
+                  "url": "https://yastatic.net/s3/home/divkit/chess.png",
+                  "width": {
+                    "type": "fixed",
+                    "value": 12
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 12
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

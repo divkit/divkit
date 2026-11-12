@@ -63,7 +63,8 @@ internal fun rememberLineMetricsText(
         style.lineHeight.isSpecified -> with(density) { style.lineHeight.roundToPx() }
         else -> null
     }
-    val needsLayout = lineHeightPx != null || text.metrics.any { it.needsLayout }
+    val needsLayout = lineHeightPx != null || text.metrics.any { it.needsLayout } ||
+        text.needsLineFrames
     val width = if (needsLayout) availableWidth.intValue else Constraints.Infinity
     return remember(text, style, inlineContent, measurer, width, fontSizePx, lineHeightPx, maxLines) {
         val naturalStyle = style.copy(lineHeight = TextUnit.Unspecified, lineHeightStyle = null)

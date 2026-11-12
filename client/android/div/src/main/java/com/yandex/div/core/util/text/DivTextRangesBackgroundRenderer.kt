@@ -5,178 +5,228 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.text.Layout
+import android.text.Spanned
 import android.text.TextPaint
+import android.text.style.MetricAffectingSpan
+import android.text.style.ReplacementSpan
 import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.view2.divs.dpToPx
-import com.yandex.div.core.view2.divs.supportFontVariations
 import com.yandex.div.core.view2.divs.widgets.widthPx
+import com.yandex.div.core.view2.spannable.BaselineShiftSpan
+import com.yandex.div.core.view2.spannable.FontSizeSpan
+import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
+import com.yandex.div.core.view2.spannable.VerticalAlignmentSpan
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSolidBackground
-import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTextRangeBackground
 import com.yandex.div2.DivTextRangeBorder
 import kotlin.math.max
 import kotlin.math.min
 
-internal abstract class DivTextRangesBackgroundRenderer() {
-
-    private val tempPaint = TextPaint()
-
-    abstract fun draw(
-        canvas: Canvas,
-        layout: Layout,
-        startLine: Int,
-        endLine: Int,
-        startOffset: Int,
-        endOffset: Int,
-        span: DivBackgroundSpan,
-    )
-
-    protected fun getLineBounds(
-        layout: Layout,
-        line: Int,
-        span: DivBackgroundSpan,
-        isFirstLine: Boolean = false,
-    ): LineBounds {
-        val baseline = layout.getLineBaseline(line)
-        val lineAscent = layout.getLineAscent(line)
-        val lineDescent = layout.getLineDescent(line)
-
-        val textAscent: Int
-        val textDescent: Int
-        if (span.fontSize != null) {
-            tempPaint.textSize = span.fontSize.toFloat()
-            tempPaint.typeface = span.typeface
-            tempPaint.fontFeatureSettings = span.fontFeatureSettings
-            if (supportFontVariations) {
-                tempPaint.fontVariationSettings = span.fontVariationSettings
-            }
-
-            val fontMetrics = tempPaint.fontMetricsInt
-            textAscent = fontMetrics.ascent
-            textDescent = fontMetrics.descent
-        } else {
-            textAscent = lineAscent
-            textDescent = lineDescent
-        }
-
-        val backgroundAscent: Int
-        val backgroundDescent: Int
-        if (span.lineHeight != null) {
-            val textHeight = textDescent - textAscent
-            val extraSpace = span.lineHeight - textHeight
-            val extraTop = extraSpace / 2
-            val extraBottom = extraSpace - extraTop
-            backgroundAscent = textAscent - extraTop
-            backgroundDescent = textDescent + extraBottom
-        } else {
-            backgroundAscent = textAscent
-            backgroundDescent = textDescent
-        }
-
-        val baselineShift = when {
-            span.baselineOffset != 0 -> -span.baselineOffset
-            span.alignmentVertical == DivTextAlignmentVertical.TOP -> {
-                lineAscent - textAscent
-            }
-            span.alignmentVertical == DivTextAlignmentVertical.CENTER -> {
-                val lineCenter = (lineAscent + lineDescent) / 2
-                val textCenter = (textAscent + textDescent) / 2
-                lineCenter - textCenter
-            }
-
-            span.alignmentVertical == DivTextAlignmentVertical.BOTTOM -> {
-                lineDescent - textDescent
-            }
-            else -> 0
-        }
-
-        val topOffsetShift = if (isFirstLine) -(span.topOffset ?: 0) else 0
-
-        val top = baseline + backgroundAscent + baselineShift + topOffsetShift
-        val bottom = baseline + backgroundDescent + baselineShift
-
-        return LineBounds(top, bottom)
-    }
-
-    protected data class LineBounds(
-        val top: Int,
-        val bottom: Int
-    )
-}
-
-internal class SingleLineRenderer(
+internal class DivTextRangesBackgroundRenderer(
     private val view: View,
     private val resolver: ExpressionResolver,
-) : DivTextRangesBackgroundRenderer() {
+) {
 
-    override fun draw(
+    private val paint = TextPaint()
+
+    fun draw(
         canvas: Canvas,
+        text: Spanned,
         layout: Layout,
-        startLine: Int,
-        endLine: Int,
-        startOffset: Int,
-        endOffset: Int,
         span: DivBackgroundSpan,
+        start: Int,
+        end: Int,
     ) {
-        val bounds = getLineBounds(layout, startLine, span, isFirstLine = true)
-        val left = min(startOffset, endOffset)
-        val right = max(startOffset, endOffset)
-        val borderDrawer = BackgroundDrawer(view.resources.displayMetrics, span.border, span.background, canvas, resolver)
-        borderDrawer.drawBackground(left.toFloat(), bounds.top.toFloat(), right.toFloat(), bounds.bottom.toFloat())
+        val metrics = view.resources.displayMetrics
+        val drawer = BackgroundDrawer(metrics, span.border, span.background, canvas, resolver)
+        RangeBoxes(text, layout, span, paint).build(start, end).forEach { box ->
+            drawer.drawBackground(box.rect, box.roundsLeft, box.roundsRight)
+        }
     }
 }
 
+private val METRIC_SPAN = MetricAffectingSpan::class.java
 
-internal class MultiLineRenderer(
-    private val view: View,
-    private val resolver: ExpressionResolver,
-    ) : DivTextRangesBackgroundRenderer() {
+private class RangeBox(val rect: RectF, val roundsLeft: Boolean, val roundsRight: Boolean)
 
-    override fun draw(
-        canvas: Canvas,
-        layout: Layout,
-        startLine: Int,
-        endLine: Int,
-        startOffset: Int,
-        endOffset: Int,
-        span: DivBackgroundSpan,
-    ) {
-        val paragDir = layout.getParagraphDirection(startLine)
-        val lineEndOffset = if (paragDir == Layout.DIR_RIGHT_TO_LEFT) {
-            layout.getLineLeft(startLine)
-        } else {
-            layout.getLineRight(startLine)
-        }.toInt()
+private class VerticalMetrics(val ascent: Int, val descent: Int)
 
-        var bounds = getLineBounds(layout, startLine, span, isFirstLine = true)
-        val drawer = BackgroundDrawer(view.resources.displayMetrics, span.border, span.background, canvas, resolver)
-        drawer.drawBackgroundStart(startOffset.toFloat(), bounds.top.toFloat(),
-            lineEndOffset.toFloat(), bounds.bottom.toFloat())
+private class FragmentMetrics(val font: VerticalMetrics?, val baselineShift: Int)
 
-        for (line in startLine + 1 until endLine) {
-            bounds = getLineBounds(layout, line, span, isFirstLine = false)
-            drawer.drawBackgroundMiddle(
-                (layout.getLineLeft(line).toInt()).toFloat(),
-                bounds.top.toFloat(),
-                (layout.getLineRight(line).toInt()).toFloat(),
-                bounds.bottom.toFloat()
+private class RangeBoxes(
+    private val text: Spanned,
+    private val layout: Layout,
+    private val span: DivBackgroundSpan,
+    private val paint: TextPaint,
+) {
+
+    private val fontMetrics = Paint.FontMetricsInt()
+
+    fun build(start: Int, end: Int): List<RangeBox> {
+        val startLine = layout.getLineForOffset(start)
+        val endLine = layout.getLineForOffset(end)
+        val endsAtLineStart = endLine > startLine && end == layout.getLineStart(endLine)
+        val lastLine = if (endsAtLineStart) endLine - 1 else endLine
+        return (startLine..lastLine).flatMap { line ->
+            val lineEnd = if (line == endLine) end else min(end, getVisibleLineEnd(line))
+            val startX = if (line == startLine) {
+                layout.getPrimaryHorizontal(start)
+            } else {
+                getLineEdge(line, isStart = true)
+            }
+            val endX = when {
+                line == endLine -> layout.getPrimaryHorizontal(end)
+                lineEnd < layout.getLineEnd(line) -> layout.getPrimaryHorizontal(lineEnd)
+                else -> getLineEdge(line, isStart = false)
+            }
+            val boxes = getLineBoxes(
+                line = line,
+                start = max(start, layout.getLineStart(line)),
+                end = lineEnd,
+                startX = startX.toInt(),
+                endX = endX.toInt(),
             )
+            val rangeEdges = listOfNotNull(
+                startX.toInt().takeIf { line == startLine },
+                endX.toInt().takeIf { line == lastLine },
+            ).map(Int::toFloat)
+            boxes.map { RangeBox(it, it.left in rangeEdges, it.right in rangeEdges) }
         }
+    }
 
-        val lineStartOffset = if (paragDir == Layout.DIR_RIGHT_TO_LEFT) {
-            layout.getLineRight(startLine)
-        } else {
-            layout.getLineLeft(startLine)
-        }.toInt()
+    private fun getVisibleLineEnd(line: Int): Int {
+        val lineStart = layout.getLineStart(line)
+        var lineEnd = layout.getLineEnd(line)
+        while (lineEnd > lineStart && text[lineEnd - 1].isWhitespace()) lineEnd--
+        return lineEnd
+    }
 
-        bounds = getLineBounds(layout, endLine, span, isFirstLine = false)
+    private fun getLineEdge(line: Int, isStart: Boolean): Float {
+        val isRtl = layout.getParagraphDirection(line) == Layout.DIR_RIGHT_TO_LEFT
+        return if (isStart != isRtl) layout.getLineLeft(line) else layout.getLineRight(line)
+    }
 
-        drawer.drawBackgroundEnd(lineStartOffset.toFloat(), bounds.top.toFloat(), endOffset.toFloat(),
-            bounds.bottom.toFloat())
+    private fun getLineBoxes(
+        line: Int,
+        start: Int,
+        end: Int,
+        startX: Int,
+        endX: Int,
+    ): List<RectF> {
+        val boxes = mutableListOf<RectF>()
+        val lineMetrics by lazy(LazyThreadSafetyMode.NONE) { getLineMetrics(line) }
+        var fragmentStart = start
+        var fragmentStartX = startX
+        while (fragmentStart < end) {
+            val fragmentEnd = text.nextSpanTransition(fragmentStart, end, METRIC_SPAN)
+            val fragmentEndX = if (fragmentEnd == end) {
+                endX
+            } else {
+                layout.getPrimaryHorizontal(fragmentEnd).toInt()
+            }
+            val fragment = getFragmentMetrics(fragmentStart, fragmentEnd)
+            val (top, bottom) = getBounds(
+                line = line,
+                metrics = fragment.font ?: lineMetrics,
+                baselineShift = fragment.baselineShift,
+            )
+            val box = RectF(
+                min(fragmentStartX, fragmentEndX).toFloat(),
+                top.toFloat(),
+                max(fragmentStartX, fragmentEndX).toFloat(),
+                bottom.toFloat(),
+            )
+            val previous = boxes.lastOrNull()
+            when {
+                box.isEmpty -> Unit
+                previous != null && previous.hasSameBounds(box) -> previous.union(box)
+                else -> boxes += box
+            }
+            fragmentStart = fragmentEnd
+            fragmentStartX = fragmentEndX
+        }
+        return boxes
+    }
+
+    private fun getFragmentMetrics(start: Int, end: Int): FragmentMetrics {
+        val spans = text.getSpans(start, end, METRIC_SPAN)
+        paint.set(layout.paint)
+        paint.baselineShift = 0
+        spans.forEach { it.updateDrawState(paint) }
+
+        val hasFontSize = spans.any { it is FontSizeSpan }
+        val isShifted = hasFontSize || spans.none { it is VerticalAlignmentSpan }
+        val baselineShift = if (isShifted) paint.baselineShift else 0
+        paint.getFontMetricsInt(fontMetrics)
+        val font = VerticalMetrics(fontMetrics.ascent, fontMetrics.descent).takeIf { hasFontSize }
+        return FragmentMetrics(font, baselineShift)
+    }
+
+    private fun getLineMetrics(line: Int): VerticalMetrics {
+        val lineStart = layout.getLineStart(line)
+        val lineEnd = layout.getLineEnd(line)
+        val topOffset = LineHeightWithTopOffsetSpan.getLineTopOffset(text, layout, line)
+        val lineAscent = layout.getLineAscent(line) + topOffset
+        if (text.getSpans(lineStart, lineEnd, BaselineShiftSpan::class.java).isEmpty()) {
+            return VerticalMetrics(lineAscent, layout.getLineDescent(line))
+        }
+        var ascent = 0
+        var descent = 0
+        var shiftedAscent = 0
+        var shiftedDescent = 0
+        var runStart = lineStart
+        while (runStart < lineEnd) {
+            val runEnd = text.nextSpanTransition(runStart, lineEnd, METRIC_SPAN)
+            val shift = measureRun(runStart, runEnd)
+            ascent = min(ascent, fontMetrics.ascent)
+            descent = max(descent, fontMetrics.descent)
+            shiftedAscent = min(shiftedAscent, fontMetrics.ascent + min(shift, 0))
+            shiftedDescent = max(shiftedDescent, fontMetrics.descent + max(shift, 0))
+            runStart = runEnd
+        }
+        return VerticalMetrics(
+            ascent = lineAscent + ascent - shiftedAscent,
+            descent = layout.getLineDescent(line) + descent - shiftedDescent,
+        )
+    }
+
+    private fun measureRun(start: Int, end: Int): Int {
+        paint.set(layout.paint)
+        paint.baselineShift = 0
+        var replacement: ReplacementSpan? = null
+        for (span in text.getSpans(start, end, METRIC_SPAN)) {
+            when (span) {
+                is ReplacementSpan -> replacement = span
+                is VerticalAlignmentSpan -> Unit
+                else -> span.updateMeasureState(paint)
+            }
+        }
+        paint.getFontMetricsInt(fontMetrics)
+        replacement?.getSize(paint, text, start, end, fontMetrics)
+        return paint.baselineShift
+    }
+
+    private fun getBounds(
+        line: Int,
+        metrics: VerticalMetrics,
+        baselineShift: Int,
+    ): Pair<Int, Int> {
+        var ascent = metrics.ascent
+        var descent = metrics.descent
+        span.lineHeight?.let { lineHeight ->
+            val extraSpace = lineHeight - (descent - ascent)
+            val extraTop = extraSpace / 2
+            ascent -= extraTop
+            descent += extraSpace - extraTop
+        }
+        val baseline = layout.getLineBaseline(line) + baselineShift
+        return baseline + ascent to baseline + descent
     }
 }
+
+private fun RectF.hasSameBounds(other: RectF) = top == other.top && bottom == other.bottom
 
 private class BackgroundDrawer(
     private val metrics: DisplayMetrics,
@@ -200,54 +250,13 @@ private class BackgroundDrawer(
         } else radii = null
     }
 
-    fun drawBackgroundEnd(start: Float, top: Float,
-                          end: Float,
-                          bottom: Float) {
-        val radiiEnd = FloatArray(8)
-        if (radii != null) radiiEnd.apply {
-            set(0, 0f)
-            set(1, 0f)
-            set(2, radii[2])
-            set(3, radii[3])
-            set(4, radii[4])
-            set(5, radii[5])
-            set(6, 0f)
-            set(7, 0f)
+    fun drawBackground(box: RectF, roundsLeft: Boolean, roundsRight: Boolean) {
+        val boxRadii = radii?.let { radii ->
+            val left = if (roundsLeft) radii[0] else 0f
+            val right = if (roundsRight) radii[2] else 0f
+            floatArrayOf(left, left, right, right, right, right, left, left)
         }
-        drawBackground(radiiEnd, start, top, end, bottom)
-    }
-
-    fun drawBackgroundStart(start: Float, top: Float,
-                      end: Float,
-                          bottom: Float) {
-        val radiiStart = FloatArray(8)
-        if (radii != null) {
-            radiiStart.apply {
-                set(0, radii[0])
-                set(1, radii[1])
-                set(2, 0f)
-                set(3, 0f)
-                set(4, 0f)
-                set(5, 0f)
-                set(6, radii[6])
-                set(7, radii[7])
-            }
-        }
-        drawBackground(radiiStart, start, top, end, bottom)
-    }
-
-    fun drawBackgroundMiddle(start: Float,
-                         top: Float,
-                         end: Float,
-                         bottom: Float) {
-        drawBackground(FloatArray(8), start, top, end, bottom)
-    }
-
-    fun drawBackground(start: Float,
-                       top: Float,
-                       end: Float,
-                       bottom: Float) {
-        drawBackground(radii, start, top, end, bottom)
+        drawBackground(boxRadii, box.left, box.top, box.right, box.bottom)
     }
 
     private fun drawBackground(radii: FloatArray?,

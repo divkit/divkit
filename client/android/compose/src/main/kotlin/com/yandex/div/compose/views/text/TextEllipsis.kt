@@ -428,6 +428,10 @@ private fun AnnotatedText.truncatedTo(
             metrics, ellipsis.metrics, offsets,
             TextRangeMetrics::start, TextRangeMetrics::end,
         ) { range, start, end -> range.copy(start = start, end = end) },
+        fonts = mapTruncatedRanges(
+            fonts, ellipsis.fonts, offsets,
+            GlyphBox::start, GlyphBox::end,
+        ) { font, start, end -> font.copy(start = start, end = end) },
     )
 }
 

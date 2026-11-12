@@ -1,0 +1,136 @@
+{
+  "description": "Range backgrounds split by font and shift: a range font size gives the box of that font, other fragments keep the line box",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "fragments_text": {
+      "type": "text",
+      "font_size": 24,
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "fragments_text",
+              "text": "Range font size",
+              "ranges": [
+                {
+                  "start": 6,
+                  "end": 10,
+                  "font_size": 14,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "fragments_text",
+              "text": "Small and large",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 15,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  },
+                  "border": {
+                    "corner_radius": 4,
+                    "stroke": {
+                      "color": "#D32F2F",
+                      "width": 1
+                    }
+                  }
+                },
+                {
+                  "start": 0,
+                  "end": 5,
+                  "font_size": 14
+                }
+              ]
+            },
+            {
+              "type": "fragments_text",
+              "text": "Top offset",
+              "ranges": [
+                {
+                  "start": 4,
+                  "end": 10,
+                  "font_size": 14,
+                  "top_offset": 8,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "fragments_text",
+              "text": "Partly raised",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 13,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                },
+                {
+                  "start": 0,
+                  "end": 6,
+                  "baseline_offset": 8
+                }
+              ]
+            },
+            {
+              "type": "fragments_text",
+              "text": "Aligned top",
+              "line_height": 40,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 11,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                },
+                {
+                  "start": 0,
+                  "end": 7,
+                  "font_size": 14,
+                  "alignment_vertical": "top"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

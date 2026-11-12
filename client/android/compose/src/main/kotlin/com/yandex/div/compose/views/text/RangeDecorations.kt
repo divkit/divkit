@@ -44,7 +44,11 @@ internal data class AnnotatedText(
     val text: androidx.compose.ui.text.AnnotatedString,
     val decorations: List<TextRangeDecoration>,
     val metrics: List<TextRangeMetrics> = emptyList(),
-)
+    val fonts: List<GlyphBox> = emptyList(),
+) {
+    val needsLineFrames: Boolean
+        get() = metrics.any { it.baselineOffsetPx != 0 } && decorations.any { it.hasFragmentBoxes }
+}
 
 @Immutable
 internal data class TextRangeDecoration(
@@ -54,9 +58,15 @@ internal data class TextRangeDecoration(
     val border: RangeBorder?,
     val mask: RangeMask?,
     val followsGlyphs: Boolean = false,
+    val lineHeightPx: Int? = null,
     val glyphBoxes: List<GlyphBox> = emptyList(),
 ) {
     val hidesText: Boolean get() = mask != null
+    val hasFragmentBoxes: Boolean get() = mask == null && background !is RangeBackground.Cloud
+}
+
+internal fun TextRangeDecoration.withRangeMetrics(metrics: RangeMetricsInput): TextRangeDecoration {
+    return copy(lineHeightPx = metrics.lineHeightPx)
 }
 
 @Immutable
@@ -324,10 +334,7 @@ private fun TextLayoutResult.lineRects(start: Int, end: Int, glyphBoxes: List<Gl
         }
         if (lineStart >= lineEnd) return@mapNotNull null
 
-        val glyphBox = glyphBoxes.find { it.start < lineEnd && it.end > lineStart }
-        val top = glyphBox?.let { getLineBaseline(line) - it.ascentPx } ?: getLineTop(line)
-        val bottom = glyphBox?.let { getLineBaseline(line) + it.descentPx } ?: getLineBottom(line)
-        val rects = selectionRects(lineStart, lineEnd, top, bottom)
+        val rects = selectionRects(line, lineStart, lineEnd, glyphBoxes)
         if (rects.isEmpty()) return@mapNotNull null
 
         val startBox = getBoundingBox(lineStart)
@@ -347,24 +354,36 @@ private fun TextLayoutResult.lineRects(start: Int, end: Int, glyphBoxes: List<Gl
     }
 }
 
-private fun TextLayoutResult.selectionRects(start: Int, end: Int, top: Float, bottom: Float): List<Rect> {
+private fun TextLayoutResult.selectionRects(
+    line: Int,
+    start: Int,
+    end: Int,
+    glyphBoxes: List<GlyphBox>,
+): List<Rect> {
     // Character bounds stay on their own line at a wrap and retain each BiDi run's visual position.
     // Merge only touching visual intervals: a logical range can leave gaps on a mixed-direction line.
+    val baseline = getLineBaseline(line)
     val rects = (start until end).mapNotNull { offset ->
+        val glyphBox = glyphBoxes.find { offset in it.start until it.end }
+        val top = glyphBox?.let { baseline - it.ascentPx } ?: getLineTop(line)
+        val bottom = glyphBox?.let { baseline + it.descentPx } ?: getLineBottom(line)
         val box = getBoundingBox(offset)
-        val rect = Rect(box.left, top, box.right, bottom)
-        rect.takeUnless { it.isEmpty }
+        Rect(box.left, top, box.right, bottom).takeUnless { it.isEmpty }
     }
     val merged = mutableListOf<Rect>()
     for (rect in rects.sortedBy { it.left }) {
         val previous = merged.lastOrNull()
-        if (previous != null && rect.left <= previous.right) {
+        if (previous != null && rect.continues(previous)) {
             merged[merged.lastIndex] = Rect(previous.left, previous.top, max(previous.right, rect.right), previous.bottom)
         } else {
             merged += rect
         }
     }
     return merged
+}
+
+private fun Rect.continues(previous: Rect): Boolean {
+    return left <= previous.right && top == previous.top && bottom == previous.bottom
 }
 
 private fun List<RangeLine>.toRangePath(cornerRadiusPx: Float, insetPx: Float = 0f): Path {
