@@ -838,6 +838,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/DivTooltipController.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/DivTooltipController.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/DivTooltipEvent.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/DivTooltipEvent.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/Modifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/Modifiers.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipAnchorEntries.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipAnchorEntries.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipAnimations.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipAnimations.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipInput.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipInput.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipPopup.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipPopup.kt",
