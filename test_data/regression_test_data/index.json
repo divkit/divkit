@@ -824,7 +824,8 @@
         "Slider"
       ],
       "automated": [
-        "android"
+        "android",
+        "ios"
       ],
       "priority": "blocker",
       "steps": [
@@ -847,7 +848,8 @@
         "Slider"
       ],
       "automated": [
-        "android"
+        "android",
+        "ios"
       ],
       "priority": "critical",
       "steps": [
