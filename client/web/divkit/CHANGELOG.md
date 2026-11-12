@@ -1,3 +1,8 @@
+## 33.12.0 (November 16, 2026)
+
+* Added the optional `hideImagesWithoutUrl` render flag to hide image and GIF elements with an absent or null URL without reserving layout space.
+
+
 ## 33.11.0 (November 9, 2026)
 
 * Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.

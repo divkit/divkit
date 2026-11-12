@@ -1,3 +1,38 @@
+## 33.12.0
+
+### Android Client
+* Added support `accessibility.menu` in View and Compose renderers.
+* Added support for `swipe_out_actions` in the Compose renderer.
+* Added support for duration in typed scroll actions for tabs.
+* Compose histogram configuration accepts the common HistogramBridge from core.
+* Fixed `dict_set_value`, `array_insert_value`, `array_remove_value`, `array_set_value` and `update_structure` ignoring `scope_id`. These actions and `set_variable` now evaluate their parameters in the context of the element that performs the action and look up the variable from the `scope_id` element, as on iOS and Web; previously `set_variable` evaluated them in the context of the `scope_id` element. If the `scope_id` element is not found or is ambiguous, an error is reported and the variable is looked up from the element that performs the action.
+* Fixed `div-text` range `background` and `border` in the View and Compose renderers: each part with its own font size or shift gets its own box, as on iOS and Web, and the `top_offset` space is not painted.
+* Fixed `div-tooltip` in `non_modal` mode with a `substrate_div` being closed by a tap outside it when `close_by_tap_outside` is `false`.
+* Fixed `elapsed_time_variable` synchronization of video in the Compose renderer: the initial variable value seeks the video instead of being overwritten by the player position, and player progress no longer seeks the video.
+* Fixed a crash when updating variables in the Compose renderer.
+* Fixed stale global variable values in elements with their own `variables`, `variable_triggers` or `functions` and in `item_builder` items, including trigger conditions and actions, when a card is bound again with the same `DivDataTag` after all its views were cleaned up.
+* Improved rendering performance outside state transitions in the Compose renderer.
+* Shared the height of a container with a definite height among its `match_parent` children the way the View renderer does in the Compose renderer: a child clamped by `min_size` or `max_size` leaves the pool and the rest is shared again, instead of leaving a gap or ignoring the bound.
+* Supported `aspect` for containers with `wrap_content` width in the Compose renderer: the width wraps the content and the height follows the ratio.
+* Supported `images`, `image_builder` and `range_builder` of the `div-text` custom `ellipsis` in the Compose renderer.
+* Supported `item_builder` in `div-pager` in the Compose renderer.
+* Supported `range_builder` in `div-text` in the Compose renderer.
+* Supported `tighten_width` in `div-text` in the Compose renderer.
+* Tab transitions without an explicit duration jump instantly when the destination is more than three pages away.
+* `Evaluable.checkIsCacheable()` now throws `IllegalStateException` when called before the expression has been evaluated.
+* `div-evaluable` is now a Kotlin Multiplatform library with Android and JVM targets.
+
+### iOS Client
+* Added warnings for non-dictionary items in `item_builder.data`, `range_builder.data`, and `image_builder.data`. These items are still processed as empty dictionaries.
+* Fixed VoiceOver reading the typed value of `div-input` with `keyboard_type: password`. The field is now announced by `accessibility.description` if set, otherwise as a secure text field named by `hint_text`.
+* Fixed `visibility_actions` and `disappear_actions` being lost when the element view is recreated while their timer is pending, e.g. when a gallery reloads after a patch.
+* Fixed a crash in `div-slider` when `max_value` is less than or equal to `min_value`.
+* Migrated Kotlin Multiplatform iOS integration from CocoaPods to Swift Package Manager.
+
+### Web Client
+* Added the optional `hideImagesWithoutUrl` render flag to hide image and GIF elements with an absent or null URL without reserving layout space.
+
+
 ## 33.11.0
 
 ### Android Client
