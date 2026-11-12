@@ -1,0 +1,44 @@
+{
+  "card": {
+    "log_id": "swipe_out_actions_example",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "id": "card",
+          "default_state_id": "visible",
+          "states": [
+            {
+              "state_id": "visible",
+              "swipe_out_actions": [
+                {
+                  "url": "div-action://set_state?state_id=0/card/hidden"
+                }
+              ],
+              "div": {
+                "type": "text",
+                "text": "Swipe me ← →",
+                "font_size": 20,
+                "text_alignment_horizontal": "center",
+                "paddings": {
+                  "top": 30,
+                  "bottom": 30
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#E3F2FD"
+                  }
+                ]
+              }
+            },
+            {
+              "state_id": "hidden"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

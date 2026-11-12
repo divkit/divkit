@@ -16293,6 +16293,7 @@
   "test_data/regression_test_data/slider_scroll_vertical.json":"divkit/public/test_data/regression_test_data/slider_scroll_vertical.json",
   "test_data/regression_test_data/slider_shapes.json":"divkit/public/test_data/regression_test_data/slider_shapes.json",
   "test_data/regression_test_data/state/multiple_root_state_switching.json":"divkit/public/test_data/regression_test_data/state/multiple_root_state_switching.json",
+  "test_data/regression_test_data/state/swipe_out_actions.json":"divkit/public/test_data/regression_test_data/state/swipe_out_actions.json",
   "test_data/regression_test_data/state_binding.json":"divkit/public/test_data/regression_test_data/state_binding.json",
   "test_data/regression_test_data/states_default_state.json":"divkit/public/test_data/regression_test_data/states_default_state.json",
   "test_data/regression_test_data/stored_value.json":"divkit/public/test_data/regression_test_data/stored_value.json",

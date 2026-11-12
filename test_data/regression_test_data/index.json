@@ -4411,6 +4411,23 @@
       "file": "state/multiple_root_state_switching.json"
     },
     {
+      "title": "State with swipe_out_actions",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "DivState"
+      ],
+      "steps": [
+        "Swipe element"
+      ],
+      "expected_results": [
+        "Element disappears"
+      ],
+      "file": "state/swipe_out_actions.json"
+    },
+    {
       "title": "Input inside pager",
       "case_id": 134,
       "platforms": [
