@@ -30,7 +30,6 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -59,15 +58,15 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
     val testScope = TestScope(testDispatcher)
 
     val divContext = DivContext(
-        getApplicationContext(),
-        divConfiguration {
+        baseContext = getApplicationContext(),
+        configuration = divConfiguration {
             extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler())
             fontSourceProvider = TestFontSourceProvider()
             imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext())
             networkClient = LocalNetworkClient()
             reporter = this@ComposeContentRoborazziRule.reporter
         },
-        DivDebugConfiguration(
+        debugConfiguration = DivDebugConfiguration(
             coroutineScope = testScope,
             imagePainterStateListener = painterTracker::onStateChanged,
             ioDispatcher = testDispatcher,
@@ -101,9 +100,7 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
         val data = configuration.parseDivData()
         composeRule.setContent {
             CompositionLocalProvider(
-                // Keep the platform theme used by the existing screenshot goldens.
-                LocalContext provides divContext.component.baseContext,
-                LocalDivContext provides divContext,
+                LocalContext provides divContext,
                 LocalLayoutDirection provides configuration.layoutDirection
             ) {
                 viewConfiguration = LocalViewConfiguration.current

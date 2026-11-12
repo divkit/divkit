@@ -30,12 +30,13 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class LegacyDivContextTest {
+class LocalContextTest {
 
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
 
     private var renderedContext: DivContext? = null
+
     private val customFactory = object : DivCustomViewFactory {
         @Composable
         override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
@@ -43,16 +44,21 @@ class LegacyDivContextTest {
             Text("Legacy custom", modifier)
         }
     }
+
     private val divContext by lazy {
-        DivContext(rule.activity, divConfiguration {
-            reporter = TestReporter()
-            customViewFactories = mapOf("legacy" to customFactory)
-        })
+        DivContext(
+            baseContext = rule.activity,
+            configuration = divConfiguration {
+                reporter = TestReporter()
+                customViewFactories = mapOf("legacy" to customFactory)
+            }
+        )
     }
-    private val card by lazy { data(custom(type = "legacy")) }
+
+    private val card = data(custom(type = "legacy"))
 
     @Test
-    fun `legacy LocalContext provider renders custom content with its DivContext`() {
+    fun `LocalContext provider renders custom content with its DivContext`() {
         rule.setContent {
             CompositionLocalProvider(LocalContext provides divContext) {
                 DivView(card)
@@ -64,7 +70,7 @@ class LegacyDivContextTest {
     }
 
     @Test
-    fun `legacy ComposeView context renders custom content without an explicit provider`() {
+    fun `ComposeView context renders custom content without an explicit provider`() {
         val view = ComposeView(divContext).apply {
             setContent { DivView(card) }
         }
@@ -75,7 +81,7 @@ class LegacyDivContextTest {
     }
 
     @Test
-    fun `DivViewHost with data preserves the legacy context for custom content`() {
+    fun `DivViewHost with data preserves LocalContext for custom content`() {
         val host = DivViewHost(divContext)
         host.setContent(card)
         rule.activity.setContentView(host.composeView)
@@ -85,7 +91,7 @@ class LegacyDivContextTest {
     }
 
     @Test
-    fun `DivViewHost without data preserves the legacy context for custom content`() {
+    fun `DivViewHost without data preserves LocalContext for custom content`() {
         val host = DivViewHost(divContext)
         host.setContent { DivView(card) }
         rule.activity.setContentView(host.composeView)
@@ -95,7 +101,7 @@ class LegacyDivContextTest {
     }
 
     @Test
-    fun `DivViewHost respects a nested legacy context provider`() {
+    fun `DivViewHost respects a nested LocalContext provider`() {
         val outerContext = contextWithValue("Outer")
         val innerContext = contextWithValue("Inner")
         val nestedCard = data(text(text = expression("@{value}")))
@@ -111,7 +117,7 @@ class LegacyDivContextTest {
     }
 
     @Test
-    fun `legacy LocalContext provider is preserved in tooltip custom content`() {
+    fun `LocalContext provider is preserved in tooltip custom content`() {
         val tooltipCard = data(text(
             text = "Show tooltip",
             action = action(typed = showTooltipAction(id = "tooltip")),
