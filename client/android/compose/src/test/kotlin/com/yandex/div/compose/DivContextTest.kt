@@ -1,5 +1,7 @@
 package com.yandex.div.compose
 
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.internal.DivDebugConfiguration
@@ -11,6 +13,7 @@ import com.yandex.div.test.data.variable
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertNotSame
 import kotlin.test.assertSame
 import kotlinx.coroutines.cancel
@@ -32,6 +35,13 @@ class DivContextTest {
     @AfterTest
     fun tearDown() {
         scope.cancel()
+    }
+
+    @Test
+    fun `DivContext preserves the Android ContextWrapper contract`() {
+        val wrapper = assertIs<ContextWrapper>(context)
+
+        assertSame(getApplicationContext<Context>(), wrapper.baseContext)
     }
 
     @Test

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import coil3.ComponentRegistry
 import coil3.EventListener
 import coil3.ImageLoader
@@ -20,7 +21,6 @@ import coil3.request.Options
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
@@ -77,7 +77,7 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
             tag = SCREENSHOT_VIEW_TAG
             configuration.applyTo(this)
             setContent {
-                CompositionLocalProvider(LocalDivContext provides divContext) {
+                CompositionLocalProvider(LocalContext provides divContext) {
                     DivView(data = data)
                 }
             }

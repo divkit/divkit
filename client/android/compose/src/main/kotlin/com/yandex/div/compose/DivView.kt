@@ -17,14 +17,12 @@ import kotlin.time.measureTimedValue
 /**
  * A composable that builds its own layout according to the provided [DivData].
  *
- * Requires [DivContext] to be provided through [LocalDivContext]:
+ * Requires [DivContext] as the current [androidx.compose.ui.platform.LocalContext]:
  *
  *    val configuration = divConfiguration {}
  *    val divContext = DivContext(activity, configuration)
- *    ComposeView(activity).setContent {
- *        CompositionLocalProvider(LocalDivContext provides divContext) {
- *            DivView(data = data)
- *        }
+ *    ComposeView(divContext).setContent {
+ *        DivView(data = data)
  *    }
  *
  * @param data the [DivData] describing the layout to render.

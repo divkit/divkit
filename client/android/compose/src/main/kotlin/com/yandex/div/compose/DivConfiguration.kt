@@ -27,10 +27,8 @@ import com.yandex.div.core.network.DivNetworkClient
  *        reporter = MyReporter()
  *    }
  *    val divContext = DivContext(baseContext = activity, configuration = configuration)
- *    ComposeView(activity).setContent {
- *        CompositionLocalProvider(LocalDivContext provides divContext) {
- *            DivView(data = data)
- *        }
+ *    ComposeView(divContext).setContent {
+ *        DivView(data = data)
  *    }
  */
 class DivConfiguration private constructor(

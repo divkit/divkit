@@ -24,7 +24,6 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.lottie.DivLottieResourceLoader
 import com.yandex.div.test.data.data
 import com.yandex.div2.Div
@@ -186,7 +185,7 @@ class LottieDynamicPropertiesTest {
             recompose?.value
             val baseContext = LocalContext.current
             val context = remember(baseContext) { DivContext(baseContext, configuration) }
-            CompositionLocalProvider(LocalDivContext provides context) {
+            CompositionLocalProvider(LocalContext provides context) {
                 DivView(data = data.value, modifier = modifier)
             }
         }

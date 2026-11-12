@@ -22,9 +22,9 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.text
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
-import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.runner.RunWith
 
@@ -69,7 +69,10 @@ class LocalDivContextTest {
             rule.setContent { DivView(data(text(text = "Card"))) }
         }
 
-        assertTrue(error.message.orEmpty().contains("LocalDivContext not provided"))
+        assertEquals(
+            "DivContext not provided. Supply it through LocalContext or use DivViewHost.",
+            error.message,
+        )
     }
 
     @Test
@@ -92,6 +95,24 @@ class LocalDivContextTest {
 
         rule.onNodeWithText("Outer").assertIsDisplayed()
         rule.onNodeWithText("Inner").assertIsDisplayed()
+    }
+
+    @Test
+    fun `explicit DivContext takes precedence over the legacy Android context`() {
+        val legacyContext = contextWithValue("Legacy")
+        val explicitContext = contextWithValue("Explicit")
+        val card = data(text(text = expression("@{value}")))
+
+        rule.setContent {
+            CompositionLocalProvider(
+                LocalContext provides legacyContext,
+                LocalDivContext provides explicitContext,
+            ) {
+                DivView(card)
+            }
+        }
+
+        rule.onNodeWithText("Explicit").assertIsDisplayed()
     }
 
     private fun contextWithValue(value: String) = DivContext(

@@ -1,14 +1,11 @@
 package com.yandex.div.compose
 
 import androidx.compose.runtime.ProvidableCompositionLocal
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.compositionLocalWithComputedDefaultOf
+import androidx.compose.ui.platform.LocalContext
 
-/**
- * The [DivContext] shared by [DivView]s in this composition.
- *
- * Provide it with `CompositionLocalProvider(LocalDivContext provides divContext)`.
- * [DivViewHost] provides it automatically, keeping the platform context unchanged.
- */
-val LocalDivContext: ProvidableCompositionLocal<DivContext> = staticCompositionLocalOf {
-    error("LocalDivContext not provided. Use CompositionLocalProvider or DivViewHost.")
-}
+internal val LocalDivContext: ProvidableCompositionLocal<DivContext> =
+    compositionLocalWithComputedDefaultOf {
+        LocalContext.currentValue as? DivContext
+            ?: error("DivContext not provided. Supply it through LocalContext or use DivViewHost.")
+    }

@@ -11,12 +11,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
@@ -149,7 +149,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
 
     private fun setContent(data: DivData) {
         composeView.setContent {
-            CompositionLocalProvider(LocalDivContext provides divContext) {
+            CompositionLocalProvider(LocalContext provides divContext) {
                 DivView(
                     data = data,
                     modifier = Modifier.safeDrawingPadding().drawWithContent {

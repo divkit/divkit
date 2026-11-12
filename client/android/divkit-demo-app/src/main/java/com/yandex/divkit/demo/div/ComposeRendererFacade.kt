@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.yandex.div.DivDataTag
 import com.yandex.div.compose.DivContext as ComposeDivContext
 import com.yandex.div.compose.DivView as ComposeDivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
@@ -73,7 +73,7 @@ class ComposeRendererFacade(
     init {
         container.addView(composeView, 0)
         composeView.setContent {
-            CompositionLocalProvider(LocalDivContext provides divContext) {
+            CompositionLocalProvider(LocalContext provides divContext) {
                 divData.value?.let { data ->
                     ComposeDivView(data = data)
                 }

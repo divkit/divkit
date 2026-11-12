@@ -1036,6 +1036,7 @@
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewWithTriggersTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewWithTriggersTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewWithVideoTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewWithVideoTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/IntegrationTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/IntegrationTest.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/LegacyDivContextTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/LegacyDivContextTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/LocalDivContextTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/LocalDivContextTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/TestDivVideoPlayer.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/TestDivVideoPlayer.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/TestExternalActionHandler.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/TestExternalActionHandler.kt",

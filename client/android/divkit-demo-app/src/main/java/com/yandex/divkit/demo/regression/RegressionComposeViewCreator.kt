@@ -7,9 +7,9 @@ import android.view.View
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView as ComposeDivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
@@ -81,7 +81,7 @@ class RegressionComposeViewCreator(context: Context) {
         )
         val view = ComposeView(platformContext).apply {
             setContent {
-                CompositionLocalProvider(LocalDivContext provides divContext) {
+                CompositionLocalProvider(LocalContext provides divContext) {
                     ComposeDivView(data = divData.value)
                 }
             }
