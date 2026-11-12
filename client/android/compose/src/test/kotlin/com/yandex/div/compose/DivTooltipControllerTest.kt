@@ -25,6 +25,7 @@ import com.yandex.div.test.data.showTooltipAction
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTooltip
 import kotlin.test.AfterTest
@@ -577,7 +578,7 @@ class DivTooltipControllerTest {
 
     private fun anchor(
         label: String = "Anchor",
-        action: com.yandex.div2.DivAction? = null,
+        action: DivAction? = null,
         tooltips: List<DivTooltip> = listOf(tooltip(TOOLTIP_ID, "Tooltip text")),
     ): Div = text(
         text = label,

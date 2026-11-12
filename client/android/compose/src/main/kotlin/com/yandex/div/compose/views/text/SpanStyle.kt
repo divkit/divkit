@@ -8,8 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
@@ -88,8 +90,8 @@ internal fun rememberMaskedSpanStyle(): SpanStyle {
     return remember(brush) {
         SpanStyle(
             brush = brush,
-            textDecoration = androidx.compose.ui.text.style.TextDecoration.None,
-            shadow = androidx.compose.ui.graphics.Shadow.None,
+            textDecoration = TextDecoration.None,
+            shadow = Shadow.None,
         )
     }
 }

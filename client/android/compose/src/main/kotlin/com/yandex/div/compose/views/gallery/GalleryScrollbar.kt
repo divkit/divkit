@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.gallery
 
+import android.R
 import androidx.compose.foundation.ScrollIndicatorState
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,7 +35,7 @@ internal fun Modifier.galleryScrollbar(
 
     val context = LocalContext.current
     val color = remember(context) {
-        val attributes = context.obtainStyledAttributes(intArrayOf(android.R.attr.colorControlNormal))
+        val attributes = context.obtainStyledAttributes(intArrayOf(R.attr.colorControlNormal))
         val color = Color(attributes.getColor(0, android.graphics.Color.GRAY))
         attributes.recycle()
         color.copy(alpha = color.alpha * .5f)

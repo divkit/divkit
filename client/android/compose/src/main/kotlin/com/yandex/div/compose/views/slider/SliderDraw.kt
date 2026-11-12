@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.slider
 
 import android.graphics.Paint
+import android.graphics.Rect
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -148,7 +149,7 @@ private fun DrawScope.drawThumbText(text: String, style: SliderTextStyle, center
         color = style.color
         typeface = style.typeface
     }
-    val bounds = android.graphics.Rect().also { paint.getTextBounds(text, 0, text.length, it) }
+    val bounds = Rect().also { paint.getTextBounds(text, 0, text.length, it) }
     drawContext.canvas.nativeCanvas.drawText(
         text,
         centerX - paint.measureText(text) / 2f + style.offsetX,

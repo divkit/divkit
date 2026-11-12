@@ -32,6 +32,7 @@ import com.yandex.div.test.data.setStoredValueAction
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.typedValue
 import com.yandex.div2.DivActionSetStoredValue
+import com.yandex.div2.DivData
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVariable
 import com.yandex.div2.StrVariable
@@ -199,7 +200,7 @@ class DivStoredValuesStorageIntegrationTest {
         return DivContext(applicationContext, configuration)
     }
 
-    private fun setContent(divContext: DivContext, data: com.yandex.div2.DivData) {
+    private fun setContent(divContext: DivContext, data: DivData) {
         rule.setContent {
             CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data)

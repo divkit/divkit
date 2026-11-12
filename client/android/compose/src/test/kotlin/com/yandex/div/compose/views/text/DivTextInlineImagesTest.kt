@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.text
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -507,7 +508,7 @@ class DivTextInlineImagesTest {
     private fun inlineImage(
         start: Expression<Long>,
         accessibility: DivText.Image.Accessibility? = null,
-        url: Expression<android.net.Uri> = constant("empty://".toUri()),
+        url: Expression<Uri> = constant("empty://".toUri()),
         baselineOffset: Expression<Double>? = null,
         height: DivFixedSize = DivFixedSize(value = constant(20L)),
         indexingDirection: Expression<DivText.Image.IndexingDirection> =

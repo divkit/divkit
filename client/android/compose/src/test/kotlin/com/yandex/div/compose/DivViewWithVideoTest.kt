@@ -33,6 +33,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.json.JSONObject
 import org.junit.Rule
 import org.junit.runner.RunWith
 
@@ -71,7 +72,7 @@ class DivViewWithVideoTest {
     @Test
     fun `no error reported when only player_settings_payload is set`() {
         setContent(
-            video(playerSettingsPayload = constant(org.json.JSONObject()))
+            video(playerSettingsPayload = constant(JSONObject()))
         )
 
         assertNull(reporter.lastError)

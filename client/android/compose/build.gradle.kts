@@ -1,4 +1,5 @@
 import dev.detekt.gradle.Detekt
+import java.io.File
 
 plugins {
     alias(libs.plugins.android.library)
@@ -78,7 +79,7 @@ tasks.register<Detekt>("detektMetrics") {
     buildUponDefaultConfig = true
     config.setFrom(rootProject.file("config/detekt/detekt-metrics.yml"))
     // A baseline would hide exactly the functions this task exists to measure.
-    baseline.set(null as java.io.File?)
+    baseline.set(null as File?)
     ignoreFailures = true
     val inputDir = projectDir.resolve(metricsInput)
     setSource(inputDir)

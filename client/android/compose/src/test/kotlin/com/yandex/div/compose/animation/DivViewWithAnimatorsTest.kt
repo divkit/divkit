@@ -36,10 +36,12 @@ import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
+import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivAnimationDirection
 import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivAnimator
 import com.yandex.div2.DivColorAnimator
+import com.yandex.div2.DivTrigger
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -875,10 +877,10 @@ class DivViewWithAnimatorsTest {
     )
 
     private fun target(
-        animator: com.yandex.div2.DivAnimator,
+        animator: DivAnimator,
         scopeId: String? = TARGET_ID,
-        startAction: com.yandex.div2.DivActionTyped = animatorStartAction(ANIMATOR_ID),
-        triggers: List<com.yandex.div2.DivTrigger>? = null,
+        startAction: DivActionTyped = animatorStartAction(ANIMATOR_ID),
+        triggers: List<DivTrigger>? = null,
     ): Div = text(
         action = action(scopeId = scopeId, typed = startAction),
         animators = listOf(animator),

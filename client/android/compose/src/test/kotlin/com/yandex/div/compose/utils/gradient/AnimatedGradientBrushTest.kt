@@ -2,6 +2,7 @@ package com.yandex.div.compose.utils.gradient
 
 import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Shader
 import androidx.compose.ui.geometry.Size
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div2.DivRadialGradientRelativeRadius
@@ -42,7 +43,7 @@ class AnimatedGradientBrushTest {
         assertEquals(-100f, translation, TOLERANCE)
     }
 
-    private fun android.graphics.Shader.translationX(): Float {
+    private fun Shader.translationX(): Float {
         val matrix = Matrix()
         @Suppress("DEPRECATION")
         getLocalMatrix(matrix)

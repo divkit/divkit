@@ -12,6 +12,7 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -41,7 +43,7 @@ import kotlin.math.roundToInt
 
 @Immutable
 internal data class AnnotatedText(
-    val text: androidx.compose.ui.text.AnnotatedString,
+    val text: AnnotatedString,
     val decorations: List<TextRangeDecoration>,
     val metrics: List<TextRangeMetrics> = emptyList(),
     val fonts: List<GlyphBox> = emptyList(),
@@ -563,7 +565,7 @@ private class ParticleDrawing(
             drawCircle(
                 color = color,
                 radius = particle.radius,
-                center = androidx.compose.ui.geometry.Offset(particle.constrainedX, particle.constrainedY),
+                center = Offset(particle.constrainedX, particle.constrainedY),
             )
         }
     }

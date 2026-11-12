@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.text
 
 import android.graphics.Matrix
+import android.graphics.Shader
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.junit4.v2.createComposeRule
@@ -128,7 +129,7 @@ class AnimatedTextGradientTest {
         textGradient = animatedTextGradient(duration = Expression.constant(duration)),
     )
 
-    private fun android.graphics.Shader.translationX(): Float {
+    private fun Shader.translationX(): Float {
         val matrix = Matrix()
         @Suppress("DEPRECATION")
         getLocalMatrix(matrix)

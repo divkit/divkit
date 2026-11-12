@@ -1,4 +1,4 @@
-@file:OptIn(coil3.annotation.ExperimentalCoilApi::class)
+@file:OptIn(ExperimentalCoilApi::class)
 
 package com.yandex.div.compose.views.image
 
@@ -20,6 +20,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import coil3.annotation.ExperimentalCoilApi
 import coil3.asImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
