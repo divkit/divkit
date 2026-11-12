@@ -15,7 +15,7 @@ import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import dev.zacsweers.metro.Inject
-import java.io.IOException
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 @DivViewScope
@@ -103,6 +103,7 @@ internal class SubmitActionHandler @Inject constructor(
         div.children().forEach { find(it, id, result) }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun execute(
         request: DivNetworkRequest,
         onSuccess: () -> Unit,
@@ -111,7 +112,9 @@ internal class SubmitActionHandler @Inject constructor(
         coroutineScopeProvider.get()?.launch {
             val response = try {
                 networkClient.execute(request)
-            } catch (e: IOException) {
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
                 reporter.reportError(e)
                 onFail()
                 return@launch

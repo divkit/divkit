@@ -14,7 +14,6 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Named
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import org.json.JSONException
 
 @DivViewScope
 @OptIn(ExperimentalTime::class)
@@ -69,6 +68,7 @@ internal class LazyStoredValuesStorage @Inject constructor(
         return null
     }
 
+    @Suppress("TooGenericExceptionCaught")
     override fun setValue(
         value: StoredValue,
         scope: DivStoredValueScope,
@@ -81,7 +81,7 @@ internal class LazyStoredValuesStorage @Inject constructor(
 
         try {
             setValue(value, scope.toInternalScope(), lifetime)
-        } catch (e: JSONException) {
+        } catch (e: Exception) {
             reporter.reportError("Failed to store value '${value.name}': ${e.message}")
         }
     }

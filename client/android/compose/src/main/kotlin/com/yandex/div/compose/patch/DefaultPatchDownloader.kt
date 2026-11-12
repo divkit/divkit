@@ -11,7 +11,6 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div2.DivPatch
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Named
-import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -28,10 +27,10 @@ internal class DefaultPatchDownloader @Inject constructor(
         val request = DivNetworkRequest.Builder(url.toString()).build()
         networkClient.execute(request).use { response ->
             if (!response.isSuccessful) {
-                throw IOException("Patch request failed: HTTP ${response.code}")
+                error("Patch request failed: HTTP ${response.code}")
             }
 
-            val body = response.body ?: throw IOException("Empty patch response")
+            val body = response.body ?: error("Empty patch response")
             val json = JSONObject(body.readBytes().decodeToString())
             val environment = DivParsingEnvironment({ reporter.reportError(it) })
             json.optJSONObject("templates")?.let { environment.parseTemplates(it) }

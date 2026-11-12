@@ -25,7 +25,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -105,7 +104,7 @@ class DefaultPatchDownloaderTest {
         whenever(response.isSuccessful) doReturn false
         whenever(response.code) doReturn 404
 
-        val error = assertFailsWith<IOException> {
+        val error = assertFailsWith<Exception> {
             downloader.downloadPatch(url)
         }
 
@@ -118,7 +117,7 @@ class DefaultPatchDownloaderTest {
     fun `downloadPatch() fails to parse empty response`() = runTest {
         whenever(response.body) doReturn null
 
-        val error = assertFailsWith<IOException> {
+        val error = assertFailsWith<Exception> {
             downloader.downloadPatch(url)
         }
 

@@ -32,7 +32,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.kotlin.verify
-import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -286,20 +285,21 @@ class DivViewWithSubmitActionsTest {
     }
 
     @Test
-    fun `onFailureActions are executed after network exception`() {
+    fun `onFailureActions are executed after exception`() {
         reporter.failOnError = false
 
         setContent(action = submitAction)
 
         submit()
 
-        networkClient.response.completeExceptionally(IOException("offline"))
+        networkClient.response.completeExceptionally(Exception("request failed"))
         rule.waitForIdle()
 
         assertEquals(
             listOf(actionData(id = "failure", source = DivActionSource.SUBMIT)),
             handledActions
         )
+        assertEquals(listOf("request failed"), reporter.errors)
     }
 
     @Test
