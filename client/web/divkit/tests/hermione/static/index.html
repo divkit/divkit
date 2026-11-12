@@ -212,6 +212,7 @@
                     globalVariablesController.setVariable(window.result);
                 }
 
+                const testIdOwners = new WeakMap();
                 window.divkitRoot = Ya.DivKit.render({
                     id: 'test',
                     target: root,
@@ -221,6 +222,7 @@
                     globalVariablesController,
                     extensions: new Map([
                         ['size_provider', Ya.DivKit.SizeProvider],
+                        ['gesture', Ya.DivKit.Gesture],
                     ]),
                     store: {
                         get: function(name, type, scope) {
@@ -267,8 +269,16 @@
                         window.errors.push(event.error);
                     },
                     onComponent(details) {
-                        if (details.type === 'mount' && details.json.id) {
-                            details.node.setAttribute('data-test-id', details.json.id);
+                        if (details.type !== 'destroy' && details.node) {
+                            const id = details.componentContext.id;
+                            const owner = JSON.stringify(details.componentContext.path);
+                            if (id) {
+                                details.node.setAttribute('data-test-id', id);
+                                testIdOwners.set(details.node, owner);
+                            } else if (testIdOwners.get(details.node) === owner) {
+                                details.node.removeAttribute('data-test-id');
+                                testIdOwners.delete(details.node);
+                            }
                         }
                     },
                     onCustomAction(action, context) {

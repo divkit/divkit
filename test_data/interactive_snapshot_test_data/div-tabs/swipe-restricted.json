@@ -1,7 +1,8 @@
 {
   "description": "Tab swipe restricted: headers switch tabs, content swipes do not",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

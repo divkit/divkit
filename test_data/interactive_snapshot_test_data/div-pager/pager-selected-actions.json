@@ -2,7 +2,8 @@
   "description": "Pager selected actions",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "card": {

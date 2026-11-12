@@ -1,7 +1,8 @@
 {
   "description": "#207 Switching state in the tooltip: show the tooltip, switch the root card state, switch the tooltip state, and change the shared card variable using the original buttons. General snapshots verify the root card and tooltip after each action.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

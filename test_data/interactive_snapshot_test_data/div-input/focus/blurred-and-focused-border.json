@@ -1,7 +1,8 @@
 {
   "description": "Input blurred and focused border before and after receiving focus",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "card": {

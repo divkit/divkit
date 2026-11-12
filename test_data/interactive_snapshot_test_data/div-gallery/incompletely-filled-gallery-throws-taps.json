@@ -1,7 +1,8 @@
 {
   "description": "Tapping the empty gallery area invokes the parent container action.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

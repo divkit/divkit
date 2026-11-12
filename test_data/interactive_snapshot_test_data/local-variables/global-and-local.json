@@ -2,7 +2,8 @@
   "description": "set_variable resolves the nearest declaration of the same name in card, element-local and parent-local scopes; tapping each row updates its value while the other two remain unchanged.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

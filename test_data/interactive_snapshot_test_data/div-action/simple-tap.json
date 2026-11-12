@@ -2,7 +2,8 @@
   "description": "Tapping a DivState's text buttons runs set_state actions to switch to the other state and back; the displayed text follows both transitions.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

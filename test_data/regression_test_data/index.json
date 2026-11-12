@@ -325,7 +325,8 @@
         "web"
       ],
       "automated": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivGallery"
@@ -652,7 +653,8 @@
       ],
       "automated": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "steps": [
         "Horizontal swipe to left",
@@ -776,7 +778,8 @@
       ],
       "automated": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivPager"
@@ -2370,7 +2373,8 @@
         "android"
       ],
       "automated": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "DivPager"
@@ -2593,7 +2597,8 @@
       "case_id": 155,
       "automated": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "platforms": [
         "android",
@@ -3773,7 +3778,8 @@
         "web"
       ],
       "automated": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips"
@@ -3851,7 +3857,8 @@
         "web"
       ],
       "automated": [
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips"
@@ -4536,7 +4543,8 @@
       ],
       "automated": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "extensions"
@@ -4701,7 +4709,8 @@
       "case_id": 138,
       "automated": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "platforms": [
         "ios",
@@ -4982,7 +4991,8 @@
       "file": "indicator_auto_binding_no_ids.json",
       "case_id": 520,
       "automated": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -5004,7 +5014,8 @@
       "file": "indicator_auto_binding_same_ids.json",
       "case_id": 521,
       "automated": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -5356,7 +5367,8 @@
       "case_id": 523,
       "automated": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {

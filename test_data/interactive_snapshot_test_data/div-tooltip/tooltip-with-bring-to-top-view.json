@@ -1,7 +1,8 @@
 {
   "description": "#491 Tooltip with bring to top view: capture the initial card, show the tooltip using the original button, verify the tooltip and promo_view above the substrate, then close it using the original cross and compare the restored card with the initial snapshot. Snapshots verify final states and layering. Substrate animation progress is not covered; whether it needs a separate check is pending discussion.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

@@ -2,7 +2,8 @@
   "description": "Actions on two items of one item_builder prototype and one item of another resolve each item's data in set_variable URLs and display the selected item's title.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

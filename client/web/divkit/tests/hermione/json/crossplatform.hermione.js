@@ -77,7 +77,9 @@ function createInteractiveTestCase(testCase, testPath) {
 
         let snapshotIndex = 0;
         for (const step of steps) {
-            if (step.type === 'div_action') {
+            if (step.type === 'tap' || step.type === 'swipe') {
+                await this.browser.yaInteractiveGesture(step);
+            } else if (step.type === 'div_action') {
                 await this.browser.execute(action => {
                     window.divkitRoot.execAction(action);
                 }, step.action);
@@ -87,18 +89,27 @@ function createInteractiveTestCase(testCase, testPath) {
                 if (!step.target || step.target.type !== 'div_id') {
                     throw new Error(`Unsupported verify_text target type: ${step.target?.type}`);
                 }
-                const actualText = await this.browser.execute(id => {
-                    const element = [...document.querySelectorAll('[data-test-id]')]
-                        .find(candidate => candidate.getAttribute('data-test-id') === id);
-                    return element ? element.innerText : null;
-                }, step.target.id);
-                if (actualText === null) {
-                    throw new Error(`No view with id '${step.target.id}'`);
-                }
-                actualText.should.equal(step.text, `Text mismatch for id '${step.target.id}'`);
+                await this.browser.waitUntil(async () => {
+                    const actualText = await this.browser.execute(id => {
+                        const element = [...document.querySelectorAll('[data-test-id]')]
+                            .find(candidate => candidate.getAttribute('data-test-id') === id);
+                        return element ? element.innerText : null;
+                    }, step.target.id);
+                    return actualText === step.text;
+                }, {
+                    timeout: 3000,
+                    timeoutMsg: `Expected text '${step.text}' for id '${step.target.id}'`,
+                });
             } else if (step.type === 'verify_snapshot') {
                 await this.browser.pause(300);
-                await this.browser.assertView(`step${snapshotIndex}`, '#root');
+                let selector = '#root';
+                if (step.target) {
+                    if (step.target.type !== 'div_id') {
+                        throw new Error(`Unsupported verify_snapshot target type: ${step.target.type}`);
+                    }
+                    selector = await this.browser.execute(id => `[data-test-id="${CSS.escape(id)}"]`, step.target.id);
+                }
+                await this.browser.assertView(`step${snapshotIndex}`, selector);
                 snapshotIndex++;
             } else {
                 throw new Error(`Unsupported interactive step type: ${step.type}`);

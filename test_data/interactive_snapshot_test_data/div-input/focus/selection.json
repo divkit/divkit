@@ -1,7 +1,8 @@
 {
   "description": "Input selects all text when focused",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "card": {

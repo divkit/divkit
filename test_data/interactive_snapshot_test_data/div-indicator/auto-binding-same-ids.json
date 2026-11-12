@@ -1,7 +1,8 @@
 {
   "description": "With both pagers sharing the same ID and both indicators omitting pager_id, each indicator auto-binds to its nearest pager. Three real swipes and whole-card snapshots check independent upper/lower page and indicator selections of 1/0 and 1/2.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

@@ -2,7 +2,8 @@
   "description": "Resizing a text element from 1x1 to 100x100 through a tapped typed set_variable action preserves its 180-degree rotation around the updated center; snapshots cover both sizes.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "card": {

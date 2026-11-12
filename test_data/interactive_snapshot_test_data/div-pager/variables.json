@@ -1,7 +1,8 @@
 {
   "description": "Variables in pager",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {
