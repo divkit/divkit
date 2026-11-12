@@ -27,15 +27,30 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor(
         resolver: ExpressionResolver,
     ): Boolean = when (action) {
         is DivActionTyped.ArrayInsertValue -> {
-            handle(action.value, resolver, view.errorCollector)
+            handle(
+                action = action.value,
+                resolver = resolver,
+                scopeResolver = view.findScopeResolver(scopeId, resolver),
+                errorCollector = view.errorCollector,
+            )
             true
         }
         is DivActionTyped.ArrayRemoveValue -> {
-            handle(action.value, resolver, view.errorCollector)
+            handle(
+                action = action.value,
+                resolver = resolver,
+                scopeResolver = view.findScopeResolver(scopeId, resolver),
+                errorCollector = view.errorCollector,
+            )
             true
         }
         is DivActionTyped.ArraySetValue -> {
-            handle(action.value, resolver, view.errorCollector)
+            handle(
+                action = action.value,
+                resolver = resolver,
+                scopeResolver = view.findScopeResolver(scopeId, resolver),
+                errorCollector = view.errorCollector,
+            )
             true
         }
         else -> false
@@ -44,12 +59,13 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor(
     private fun handle(
         action: DivActionArrayInsertValue,
         resolver: ExpressionResolver,
+        scopeResolver: ExpressionResolver,
         errorCollector: ErrorCollector,
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index?.evaluate(resolver)?.toInt()
         val newValue = action.value.evaluateAsPrimitive(resolver)
-        updateVariable(variableName, resolver, errorCollector) { array ->
+        updateVariable(variableName, scopeResolver, errorCollector) { array ->
             val length = array.length()
             when (index) {
                 null, length -> array.mutate { add(newValue) }
@@ -67,11 +83,12 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor(
     private fun handle(
         action: DivActionArrayRemoveValue,
         resolver: ExpressionResolver,
+        scopeResolver: ExpressionResolver,
         errorCollector: ErrorCollector,
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
-        updateVariable(variableName, resolver, errorCollector) { array ->
+        updateVariable(variableName, scopeResolver, errorCollector) { array ->
             val length = array.length()
             when (index) {
                 in 0 until length -> array.mutate { removeAt(index) }
@@ -88,12 +105,13 @@ internal class DivActionTypedArrayMutationHandler @Inject constructor(
     private fun handle(
         action: DivActionArraySetValue,
         resolver: ExpressionResolver,
+        scopeResolver: ExpressionResolver,
         errorCollector: ErrorCollector,
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val index = action.index.evaluate(resolver).toInt()
         val newValue = action.value.evaluateAsPrimitive(resolver)
-        updateVariable(variableName, resolver, errorCollector) { array ->
+        updateVariable(variableName, scopeResolver, errorCollector) { array ->
             val length = array.length()
             when (index) {
                 in 0 until length -> array.mutate { this[index] = newValue }

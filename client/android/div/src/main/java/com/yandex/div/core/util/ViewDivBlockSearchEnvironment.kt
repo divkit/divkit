@@ -18,7 +18,11 @@ internal class ViewDivBlockSearchEnvironment(
     override fun rootBlock(): DivBlock? {
         val state = divView.currentCardState() ?: return null
         val resolver = divView.expressionResolver
-        return DivBlock.create(state.div, resolver, rootPath(state, resolver))
+        val path = rootPath(state, resolver)
+        val rootResolver = resolver.asImpl?.runtimeStore
+            ?.getOrCreateRuntime(path.fullPath, state.div, resolver)
+            ?.expressionResolver ?: resolver
+        return DivBlock.create(state.div, rootResolver, path)
     }
 
     override fun findDescendants(root: DivBlock): Iterable<DivBlock> {

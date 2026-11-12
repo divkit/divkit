@@ -24,7 +24,12 @@ internal class DivActionTypedUpdateStructureHandler @Inject constructor(
         resolver: ExpressionResolver
     ): Boolean = when (action) {
         is DivActionTyped.UpdateStructure -> {
-            handleAction(action.value, resolver, view.errorCollector)
+            handleAction(
+                action = action.value,
+                resolver = resolver,
+                scopeResolver = view.findScopeResolver(scopeId, resolver),
+                errorCollector = view.errorCollector,
+            )
             true
         }
 
@@ -34,10 +39,15 @@ internal class DivActionTypedUpdateStructureHandler @Inject constructor(
     private fun handleAction(
         action: DivActionUpdateStructure,
         resolver: ExpressionResolver,
+        scopeResolver: ExpressionResolver,
         errorCollector: ErrorCollector,
     ) {
         val variableName = action.variableName.evaluate(resolver)
-        variableMutationHandler.setVariable(variableName, resolver, errorCollector) { variable: Variable ->
+        variableMutationHandler.setVariable(
+            name = variableName,
+            resolver = scopeResolver,
+            errorCollector = errorCollector,
+        ) { variable: Variable ->
             variable.also { it.mutate(action, resolver, errorCollector) }
         }
     }

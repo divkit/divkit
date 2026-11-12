@@ -1,6 +1,5 @@
 package com.yandex.div.core.actions
 
-import com.yandex.div.core.util.ContainerFinder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
@@ -37,16 +36,17 @@ internal class DivActionTypedSetVariableHandler @Inject constructor(
         scopeId: String?,
         action: DivActionTyped.SetVariable,
         view: Div2View,
-        actionResolver: ExpressionResolver,
+        resolver: ExpressionResolver,
     ) {
-        val resolver = scopeId?.let {
-            ContainerFinder(scopeId).findContainer(view)?.expressionResolver
-        } ?: actionResolver
-
         val variableName = action.value.variableName.evaluate(resolver)
         val newValue = action.value.value.evaluate(resolver)
+        val scopeResolver = view.findScopeResolver(scopeId, resolver)
         val errorCollector = view.errorCollector
-        variableMutationHandler.setVariable(variableName, resolver, errorCollector) { variable: Variable ->
+        variableMutationHandler.setVariable(
+            name = variableName,
+            resolver = scopeResolver,
+            errorCollector = errorCollector,
+        ) { variable: Variable ->
             variable.also { it.mutate(newValue, errorCollector) }
         }
     }

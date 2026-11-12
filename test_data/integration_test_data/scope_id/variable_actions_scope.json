@@ -1,0 +1,560 @@
+{
+  "description": "set_variable, dict_set_value, array_insert_value, array_remove_value, array_set_value and update_structure with scope_id change the variable declared on the scope element. Action parameters are evaluated in the context of the element that performs the action. If the scope ID repeats in several states of div-state, the element in the active state is used. On Android and iOS, the scope element can be the root element. If the scope element is not found, an error is reported and the variable is looked up from the element that performs the action. When snapshot becomes true, triggers on the scope elements copy their variables to card variables.",
+  "div_data": {
+    "card": {
+      "log_id": "variable_actions_scope",
+      "variables": [
+        {
+          "type": "string",
+          "name": "source",
+          "value": "sender"
+        },
+        {
+          "type": "boolean",
+          "name": "snapshot",
+          "value": false
+        },
+        {
+          "type": "string",
+          "name": "text_result",
+          "value": ""
+        },
+        {
+          "type": "string",
+          "name": "dict_result",
+          "value": ""
+        },
+        {
+          "type": "string",
+          "name": "array_result",
+          "value": ""
+        },
+        {
+          "type": "string",
+          "name": "root_result",
+          "value": ""
+        },
+        {
+          "type": "string",
+          "name": "state_result",
+          "value": ""
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "id": "root",
+            "variables": [
+              {
+                "type": "string",
+                "name": "root_text",
+                "value": "initial"
+              }
+            ],
+            "variable_triggers": [
+              {
+                "condition": "@{snapshot}",
+                "actions": [
+                  {
+                    "log_id": "copy_root_text",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "root_result",
+                      "value": {
+                        "type": "string",
+                        "value": "@{root_text}"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "id": "scope",
+                "variables": [
+                  {
+                    "type": "string",
+                    "name": "source",
+                    "value": "scope"
+                  },
+                  {
+                    "type": "string",
+                    "name": "scoped_text",
+                    "value": "initial"
+                  },
+                  {
+                    "type": "dict",
+                    "name": "scoped_dict",
+                    "value": {
+                      "key": "initial",
+                      "nested": {
+                        "key": "initial"
+                      }
+                    }
+                  },
+                  {
+                    "type": "array",
+                    "name": "scoped_array",
+                    "value": [
+                      "first",
+                      "second",
+                      "third"
+                    ]
+                  }
+                ],
+                "variable_triggers": [
+                  {
+                    "condition": "@{snapshot}",
+                    "actions": [
+                      {
+                        "log_id": "copy_text",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "text_result",
+                          "value": {
+                            "type": "string",
+                            "value": "@{scoped_text}"
+                          }
+                        }
+                      },
+                      {
+                        "log_id": "copy_dict",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "dict_result",
+                          "value": {
+                            "type": "string",
+                            "value": "@{getStringFromDict(scoped_dict, 'key')}|@{getStringFromDict(scoped_dict, 'nested', 'key')}"
+                          }
+                        }
+                      },
+                      {
+                        "log_id": "copy_array",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "array_result",
+                          "value": {
+                            "type": "string",
+                            "value": "@{getStringFromArray(scoped_array, 0)}|@{getStringFromArray(scoped_array, 1)}|@{getStringFromArray(scoped_array, 2)}|@{len(scoped_array)}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "text": "@{scoped_text}"
+              },
+              {
+                "type": "state",
+                "id": "switch",
+                "default_state_id": "active",
+                "states": [
+                  {
+                    "state_id": "inactive",
+                    "div": {
+                      "type": "container",
+                      "items": [
+                        {
+                          "type": "text",
+                          "id": "state_scope",
+                          "variables": [
+                            {
+                              "type": "string",
+                              "name": "state_text",
+                              "value": "initial"
+                            }
+                          ],
+                          "text": "@{state_text}"
+                        },
+                        {
+                          "type": "text",
+                          "text": "inactive state"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "state_id": "active",
+                    "div": {
+                      "type": "container",
+                      "items": [
+                        {
+                          "type": "text",
+                          "id": "state_scope",
+                          "variables": [
+                            {
+                              "type": "string",
+                              "name": "state_text",
+                              "value": "initial"
+                            }
+                          ],
+                          "variable_triggers": [
+                            {
+                              "condition": "@{snapshot}",
+                              "actions": [
+                                {
+                                  "log_id": "copy_state_text",
+                                  "typed": {
+                                    "type": "set_variable",
+                                    "variable_name": "state_result",
+                                    "value": {
+                                      "type": "string",
+                                      "value": "@{state_text}"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          ],
+                          "text": "@{state_text}"
+                        },
+                        {
+                          "type": "text",
+                          "text": "active state"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "set_variable_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "scoped_text",
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "take_snapshot",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "snapshot",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "text_result",
+          "value": {
+            "type": "string",
+            "value": "sender"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_set_value_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "dict_set_value",
+              "variable_name": "scoped_dict",
+              "key": "key",
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "update_dict_structure_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "scoped_dict",
+              "path": "nested/key",
+              "value": {
+                "type": "string",
+                "value": "@{source}_updated"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "take_snapshot",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "snapshot",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "dict_result",
+          "value": {
+            "type": "string",
+            "value": "sender|sender_updated"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "array_insert_value_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "array_insert_value",
+              "variable_name": "scoped_array",
+              "index": 1,
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "array_remove_value_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "array_remove_value",
+              "variable_name": "scoped_array",
+              "index": 2
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "array_set_value_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "array_set_value",
+              "variable_name": "scoped_array",
+              "index": 0,
+              "value": {
+                "type": "string",
+                "value": "@{source}_set"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "update_array_structure_in_scope",
+            "scope_id": "scope",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "scoped_array",
+              "path": "2",
+              "value": {
+                "type": "string",
+                "value": "@{source}_updated"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "take_snapshot",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "snapshot",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "array_result",
+          "value": {
+            "type": "string",
+            "value": "sender_set|sender|sender_updated|3"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "set_variable_in_active_state_scope",
+            "scope_id": "state_scope",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "state_text",
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "take_snapshot",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "snapshot",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "state_result",
+          "value": {
+            "type": "string",
+            "value": "sender"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "set_variable_in_root_scope",
+            "scope_id": "root",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "root_text",
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "take_snapshot",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "snapshot",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "root_result",
+          "value": {
+            "type": "string",
+            "value": "sender"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "set_variable_with_missing_scope",
+            "scope_id": "missing_scope",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "text_result",
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "text_result",
+          "value": {
+            "type": "string",
+            "value": "sender"
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'missing_scope' not found"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  ]
+}

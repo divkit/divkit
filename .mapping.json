@@ -15763,6 +15763,7 @@
   "test_data/integration_test_data/scope_id/scope_unique_missing_instance_errors.json":"divkit/public/test_data/integration_test_data/scope_id/scope_unique_missing_instance_errors.json",
   "test_data/integration_test_data/scope_id/submit_scope.json":"divkit/public/test_data/integration_test_data/scope_id/submit_scope.json",
   "test_data/integration_test_data/scope_id/tooltip_scope.json":"divkit/public/test_data/integration_test_data/scope_id/tooltip_scope.json",
+  "test_data/integration_test_data/scope_id/variable_actions_scope.json":"divkit/public/test_data/integration_test_data/scope_id/variable_actions_scope.json",
   "test_data/integration_test_data/set_variable/set_array_variable.json":"divkit/public/test_data/integration_test_data/set_variable/set_array_variable.json",
   "test_data/integration_test_data/set_variable/set_boolean_variable.json":"divkit/public/test_data/integration_test_data/set_variable/set_boolean_variable.json",
   "test_data/integration_test_data/set_variable/set_color_variable.json":"divkit/public/test_data/integration_test_data/set_variable/set_color_variable.json",

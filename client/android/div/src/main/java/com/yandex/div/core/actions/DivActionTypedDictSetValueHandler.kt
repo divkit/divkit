@@ -25,7 +25,12 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor(
         resolver: ExpressionResolver,
     ): Boolean = when (action) {
         is DivActionTyped.DictSetValue -> {
-            handleSetValue(action.value, resolver, view.errorCollector)
+            handleSetValue(
+                action = action.value,
+                resolver = resolver,
+                scopeResolver = view.findScopeResolver(scopeId, resolver),
+                errorCollector = view.errorCollector,
+            )
             true
         }
         else -> false
@@ -34,12 +39,17 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor(
     private fun handleSetValue(
         action: DivActionDictSetValue,
         resolver: ExpressionResolver,
+        scopeResolver: ExpressionResolver,
         errorCollector: ErrorCollector,
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val key = action.key.evaluate(resolver)
         val newValue = action.value?.evaluateAsPrimitive(resolver)
-        variableMutationHandler.setVariable(variableName, resolver, errorCollector) { variable: Variable ->
+        variableMutationHandler.setVariable(
+            name = variableName,
+            resolver = scopeResolver,
+            errorCollector = errorCollector,
+        ) { variable: Variable ->
             variable.also { it.mutate(key, newValue, errorCollector) }
         }
     }

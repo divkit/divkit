@@ -122,5 +122,6 @@ private val ignoredFiles = listOf(
     "set_stored_value_scope.json",
     "submit_scope.json",
     "tooltip_scope.json",
+    "variable_actions_scope.json",
     "wrap_content_constraints_warning.json",
 )
