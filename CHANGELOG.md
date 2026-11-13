@@ -1,3 +1,9 @@
+## 33.10.1
+
+### Android Client
+* Fixed stale global variable values in elements with their own `variables`, `variable_triggers` or `functions` and in `item_builder` items, including trigger conditions and actions, when a card is bound again with the same `DivDataTag` after all its views were cleaned up.
+
+
 ## 33.10.0
 
 ### Android Client
