@@ -8345,6 +8345,7 @@
   "client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+VerifyLog.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+VerifyLog.swift",
   "client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+VerifySnapshot.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+VerifySnapshot.swift",
   "client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+VerifyText.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+VerifyText.swift",
+  "client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+Wait.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep+Wait.swift",
   "client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/Steps/RunnerStep.swift",
   "client/ios/DivKitRegressionUITests/Runner/VerifySnapshotPerformer.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/VerifySnapshotPerformer.swift",
   "client/ios/DivKitRegressionUITests/Runner/XCUIElement+Focus.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/XCUIElement+Focus.swift",

@@ -10,7 +10,7 @@ enum RunnerStep: Decodable {
   case verifyLog(VerifyLog)
   case verifySnapshot(VerifySnapshot)
   case divAction(DivAction)
-  case wait
+  case wait(Wait)
 
   enum StepType: String, Decodable {
     case tap
@@ -76,7 +76,7 @@ enum RunnerStep: Decodable {
     case .divAction:
       self = try .divAction(DivAction(from: decoder))
     case .wait:
-      self = .wait
+      self = try .wait(Wait(from: decoder))
     }
   }
 }

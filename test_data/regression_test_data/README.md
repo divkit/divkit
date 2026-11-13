@@ -27,11 +27,3 @@ JSON data for framework testing inside `DivKit Playground` apps. Theese test cas
 ## Automated UI scenarios
 
 Executable scenarios are stored in [`interactive_snapshot_test_data`](../interactive_snapshot_test_data). The iOS runner reads a self-contained card from `div_data` and displays it in `DivKitUITestsHostApp`.
-
-The common scenario fields are:
-
-- `description` – a human-readable scenario description.
-- `div_data` – full card JSON (`templates` and `card`), required by the iOS runner.
-- `case_id` – a positive identifier for runners that load cards from `index.json`; not used by iOS.
-- `platforms` – platforms that execute the scenario. The iOS runner ignores scenarios without `ios`.
-- `steps` – ordered UI operations.
