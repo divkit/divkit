@@ -1,6 +1,5 @@
 package com.yandex.div.compose.extensions.shimmer
 
-import android.os.SystemClock
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,7 +40,7 @@ import kotlin.math.tan
  */
 class ShimmerExtensionHandler : DivExtensionHandler {
     // used to synchronize animations across multiple elements
-    private var animationStartTime: Long = 0L
+    private var animationStartTime: Long? = null
 
     @Composable
     override fun Content(
@@ -62,10 +61,6 @@ class ShimmerExtensionHandler : DivExtensionHandler {
 
     @Composable
     private fun Modifier.shimmer(paramsJson: JSONObject, animationsEnabled: Boolean): Modifier {
-        if (animationStartTime == 0L) {
-            animationStartTime = SystemClock.uptimeMillis()
-        }
-
         val params = remember(paramsJson) { ShimmerExtensionParams.fromJson(paramsJson) }
         val config = params.observedConfig()
         val phaseState = remember { mutableFloatStateOf(0f) }
@@ -77,7 +72,8 @@ class ShimmerExtensionHandler : DivExtensionHandler {
             val durationMillis = config.durationMillis.coerceAtLeast(1L)
             while (true) {
                 withFrameMillis { now ->
-                    val elapsed = (now - animationStartTime).coerceAtLeast(0L)
+                    val start = animationStartTime ?: now.also { animationStartTime = it }
+                    val elapsed = (now - start).coerceAtLeast(0L)
                     phaseState.floatValue =
                         (elapsed % durationMillis).toFloat() / durationMillis.toFloat()
                 }
