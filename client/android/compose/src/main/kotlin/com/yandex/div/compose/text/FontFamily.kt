@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.resolveAsTypeface
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div2.DivFontWeight
 import org.json.JSONObject
 
@@ -19,7 +19,7 @@ internal fun rememberFontFamily(
     fontWeightValue: Int?,
     fontVariationSettings: JSONObject? = null,
 ): FontFamily {
-    val component = divContext.component
+    val component = LocalDivContext.current.component
     val provider = component.fontSourceProvider
     val cache = component.fontFamilyCache
     return remember(fontFamily, fontWeight, fontWeightValue, fontVariationSettings) {

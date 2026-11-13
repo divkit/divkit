@@ -9,7 +9,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.isSpecified
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.font.LineMetrics
@@ -65,7 +65,7 @@ internal fun rememberRangeMetrics(
     ranges: List<RangeMetricsInput>,
     textStyle: TextStyle,
 ): List<TextRangeMetrics> {
-    val cache = divContext.component.lineMetricsCache
+    val cache = LocalDivContext.current.component.lineMetricsCache
     val fontFamilyResolver = LocalFontFamilyResolver.current
     val density = LocalDensity.current
     return remember(ranges, textStyle, cache, fontFamilyResolver, density) {
@@ -82,7 +82,7 @@ internal fun rememberRangeFonts(
     decorations: List<TextRangeDecoration>,
 ): List<GlyphBox> {
     if (decorations.none { it.hasFragmentBoxes }) return emptyList()
-    val cache = divContext.component.lineMetricsCache
+    val cache = LocalDivContext.current.component.lineMetricsCache
     val fontFamilyResolver = LocalFontFamilyResolver.current
     val density = LocalDensity.current
     return remember(ranges, textStyle, cache, fontFamilyResolver, density) {

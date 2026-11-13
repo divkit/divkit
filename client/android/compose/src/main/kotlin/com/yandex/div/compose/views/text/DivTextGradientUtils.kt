@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.graphics.Brush
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
@@ -28,7 +28,7 @@ internal fun DivTextGradient.observedValue(): Brush? {
 
 @Composable
 private fun DivAnimatedTextGradient.observedValue(): Brush? {
-    val animationsEnabled = divContext.component
+    val animationsEnabled = LocalDivContext.current.component
         .animationConfiguration
         .isEnabledAsState()
     val duration = duration.observedValue()

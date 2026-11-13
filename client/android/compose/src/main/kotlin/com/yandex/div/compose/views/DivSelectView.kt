@@ -31,7 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -100,7 +100,7 @@ private fun SelectView(
     var isFocused by remember { mutableStateOf(false) }
     var selectSize by remember { mutableStateOf(IntSize.Zero) }
     val focusRequester = remember { FocusRequester() }
-    val inputFocus = divContext.component.inputFocus
+    val inputFocus = LocalDivContext.current.component.inputFocus
     val inputModeManager = LocalInputModeManager.current
     val density = LocalDensity.current
     val selectWidthDp = with(density) { selectSize.width.toDp() }

@@ -13,7 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.font.LineMetrics
 import kotlin.math.roundToInt
 
@@ -26,7 +26,7 @@ internal fun getLineMetrics(
         return null
     }
 
-    return divContext.component.lineMetricsCache.getOrCreate(
+    return LocalDivContext.current.component.lineMetricsCache.getOrCreate(
         fontFamilyResolver = LocalFontFamilyResolver.current,
         density = LocalDensity.current,
         style = textStyle,

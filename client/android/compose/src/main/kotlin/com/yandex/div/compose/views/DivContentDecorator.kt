@@ -2,7 +2,7 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -18,7 +18,7 @@ internal class DivContentDecorator(
 
     @Composable
     fun Content(modifier: Modifier, content: @Composable (Modifier) -> Unit) {
-        val component = divContext.component
+        val component = LocalDivContext.current.component
         val extensions = data.value().extensions
             ?.filter { it.isEnabled.observedValue() }
             ?.map { it to component.extensionHandlers[it.id] }

@@ -14,7 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.platform.LocalDensity
 import coil3.compose.rememberAsyncImagePainter
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
@@ -100,7 +100,7 @@ private fun ObserveElapsedTimeVariable(player: DivVideoPlayer, variableName: Str
 
 @Composable
 private fun VideoPreviewImage(preview: ByteArray, scale: DivVideoScale) {
-    val component = divContext.component
+    val component = LocalDivContext.current.component
     Image(
         modifier = Modifier.fillMaxSize(),
         painter = rememberAsyncImagePainter(

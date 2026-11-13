@@ -7,7 +7,7 @@ import coil3.request.ImageRequest
 import coil3.request.transformations
 import coil3.size.Precision
 import coil3.size.Scale
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 import kotlin.coroutines.EmptyCoroutineContext
@@ -42,6 +42,6 @@ internal class ImageRequestFactory @Inject constructor(
 
 @Composable
 internal fun rememberImageRequest(params: ImageRequestParams): ImageRequest {
-    val factory = divContext.component.imageRequestFactory
+    val factory = LocalDivContext.current.component.imageRequestFactory
     return remember(params) { factory.build(params) }
 }

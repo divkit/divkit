@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedValue
@@ -64,7 +64,7 @@ internal fun TabTitleItem(
 
 @Composable
 private fun TabTitleDelimiter(delimiter: DivTabs.TabTitleDelimiter) {
-    val component = divContext.component
+    val component = LocalDivContext.current.component
     val painter = rememberAsyncImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(data = delimiter.imageUrl.observedValue())

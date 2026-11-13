@@ -35,8 +35,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.collection.observeBuilderDataElements
-import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
@@ -326,7 +326,7 @@ private fun InlineImage(image: InlineImageData) {
         return
     }
 
-    val component = divContext.component
+    val component = LocalDivContext.current.component
     val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(

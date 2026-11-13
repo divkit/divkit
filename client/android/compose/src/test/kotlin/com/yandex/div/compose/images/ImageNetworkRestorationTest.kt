@@ -19,7 +19,7 @@ import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import coil3.request.ImageResult
 import coil3.request.SuccessResult
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
@@ -288,7 +288,7 @@ class ImageNetworkRestorationTest {
                 imageLoaderConfiguration = this@ImageNetworkRestorationTest.imageLoaderConfiguration
             }
         ) {
-            whenever(localComponent.imageLoader) doReturn divContext.component.imageLoader
+            whenever(localComponent.imageLoader) doReturn LocalDivContext.current.component.imageLoader
             CompositionLocalProvider(LocalComponent provides localComponent) {
                 content()
             }

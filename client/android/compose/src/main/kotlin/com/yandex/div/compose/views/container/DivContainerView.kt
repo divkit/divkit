@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrain
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observedValue
@@ -41,7 +41,7 @@ internal fun DivContainerView(
     val modifier = if (data.clipToBounds.observedValue()) {
         modifier.clipToBounds(
             data = data,
-            hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
+            hasWildcardExtensions = LocalComponent.current.wildcardExtensions.isNotEmpty(),
         )
     } else {
         modifier

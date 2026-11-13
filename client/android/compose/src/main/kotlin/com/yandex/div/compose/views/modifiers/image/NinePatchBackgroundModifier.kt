@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.core.graphics.Insets
 import coil3.BitmapImage
 import coil3.compose.AsyncImagePainter
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
@@ -35,7 +35,7 @@ internal fun Modifier.ninePatchBackground(data: DivNinePatchBackground): Modifie
 
 @Composable
 private fun Modifier.ninePatchBackground(imageUrl: Uri, insets: DivAbsoluteEdgeInsets): Modifier {
-    val component = divContext.component
+    val component = LocalDivContext.current.component
     val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(ImageRequestParams(data = imageUrl)),
         onState = component.debugConfiguration.imagePainterStateListener

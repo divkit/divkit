@@ -8,7 +8,7 @@ import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.IntSize
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
@@ -30,7 +30,7 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
         data.contentAlignmentVertical
     )
 
-    val component = divContext.component
+    val component = LocalDivContext.current.component
     val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(

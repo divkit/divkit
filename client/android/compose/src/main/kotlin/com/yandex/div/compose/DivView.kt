@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.state.WithRootStatePath
 import com.yandex.div.compose.tooltips.TooltipsHost
@@ -33,7 +32,9 @@ fun DivView(
     data: DivData,
     modifier: Modifier = Modifier
 ) {
-    val (viewContext, prepareDuration) = measureTimedValue { divContext.getViewContext(data) }
+    val (viewContext, prepareDuration) = measureTimedValue {
+        LocalDivContext.current.getViewContext(data)
+    }
     val component = viewContext.component
     component.histogramReporter.measure(prepareDuration) {
         val localComponent = viewContext.rootLocalComponent

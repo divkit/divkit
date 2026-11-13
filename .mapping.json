@@ -739,7 +739,6 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/collection/ItemVariableProvider.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/collection/ItemVariableProvider.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/context/CompositionKeyStorage.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/context/CompositionKeyStorage.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivCompositionKey.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivCompositionKey.kt",
-  "client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivContextUtils.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivContextUtils.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivLocalComponentStorage.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivLocalComponentStorage.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivViewContext.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivViewContext.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivViewContextFactory.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/context/DivViewContextFactory.kt",

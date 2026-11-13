@@ -18,7 +18,6 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -104,7 +103,7 @@ class InputFocusTest {
 
     private fun setContent(content: @Composable () -> Unit) {
         rule.setContentWithDivContext(configuration) {
-            inputFocus = divContext.component.inputFocus
+            inputFocus = LocalDivContext.current.component.inputFocus
             content()
         }
     }
