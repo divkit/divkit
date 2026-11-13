@@ -428,12 +428,19 @@ struct TooltipManagerTests {
   }
 
   @Test
-  func closingModalReplacedBeforeCloseAnimationEnds_keepsReplacementVisible() async {
+  func replacingModal_keepsReplacementVisibleAndReleasesPreviousContainer() async {
     let window = ModalWindows()
     var closedIdentities = [TooltipIdentity]()
     window.manager.setCloseHandler { closedIdentities.append($0) }
     let contentA = MockClosingTooltipView()
     let contentB = MockClosingTooltipView()
+
+    func expectReplacementIsShown() {
+      #expect(!window.modalWindow.isHidden)
+      #expect(window.isShowing(contentB))
+      #expect(contentB.closeCount == 0)
+    }
+
     let longFadeOut = TransitioningAnimation(
       kind: .fade,
       start: 1,
@@ -453,24 +460,26 @@ struct TooltipManagerTests {
     window.manager.hideTooltip(identity: tooltipInfo.identity)
     anchorView.tooltips = [makeTooltip(viewFactory: { contentB })]
     #expect(await window.manager.showTooltip(info: tooltipInfo))
-    #expect(weakContainerA != nil)
+    expectReplacementIsShown()
 
-    // The container is released once its close animation has completed.
-    #expect(await waitUntil(timeout: 3) { weakContainerA == nil })
-    #expect(await waitUntil { closedIdentities.count == 1 })
-    #expect(closedIdentities == [tooltipInfo.identity])
-    #expect(window.presenter.closedCount == 0)
-    #expect(!window.modalWindow.isHidden)
-    #expect(window.isShowing(contentB))
+    // The close handler is delivered after A's close completion.
+    #expect(await waitUntil(timeout: 3) { closedIdentities == [tooltipInfo.identity] })
+    #expect(weakContainerA?.window == nil)
     #expect(contentA.closeCount == 1)
-    #expect(contentB.closeCount == 0)
+    expectReplacementIsShown()
 
+    // UIKit can retain A temporarily after closing; check its release separately.
+    #expect(await waitUntil(timeout: 3) { weakContainerA == nil })
+    expectReplacementIsShown()
+
+    let closedCountBeforeHidingB = window.presenter.closedCount
     window.manager.hideTooltip(identity: tooltipInfo.identity)
     #expect(await waitUntil(timeout: 3) { window.modalWindow.isHidden })
     #expect(window.modalWindow.rootViewController == nil)
-    #expect(await waitUntil { closedIdentities.count == 2 })
-    #expect(closedIdentities == [tooltipInfo.identity, tooltipInfo.identity])
-    #expect(window.presenter.closedCount == 1)
+    #expect(await waitUntil {
+      closedIdentities == [tooltipInfo.identity, tooltipInfo.identity]
+    })
+    #expect(window.presenter.closedCount == closedCountBeforeHidingB + 1)
     #expect(contentB.closeCount == 1)
   }
 
