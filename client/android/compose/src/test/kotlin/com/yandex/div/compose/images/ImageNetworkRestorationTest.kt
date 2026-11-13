@@ -22,8 +22,8 @@ import coil3.request.SuccessResult
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
-import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.mockLocalComponent
+import com.yandex.div.compose.network.NetworkRestorationController
 import com.yandex.div.compose.setContentWithDivContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope

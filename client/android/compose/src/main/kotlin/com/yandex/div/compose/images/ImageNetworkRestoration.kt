@@ -1,24 +1,16 @@
 package com.yandex.div.compose.images
 
-import android.Manifest
-import androidx.annotation.RequiresPermission
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
-import coil3.network.HttpException
 import com.yandex.div.compose.di.LocalComponent
-import com.yandex.div.compose.internal.NetworkRestorationController
-import java.io.InterruptedIOException
-import java.net.ConnectException
-import java.net.SocketException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
+import com.yandex.div.compose.network.NetworkRestorationController
+import com.yandex.div.compose.network.isNetworkConnectivityError
 
 @Composable
-@RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
 internal fun rememberNetworkRestoringImagePainter(
     model: Any?,
     onState: ((AsyncImagePainter.State) -> Unit)? = null,
@@ -82,7 +74,9 @@ private class ImageNetworkRestoration(
 
     fun onState(state: AsyncImagePainter.State) {
         clear()
-        if (state is AsyncImagePainter.State.Error && state.result.throwable.isNetworkConnectivityError()) {
+        if (state is AsyncImagePainter.State.Error &&
+            isNetworkConnectivityError(state.result.throwable)
+        ) {
             error = state
             if (!updatingInput) {
                 enqueue()
@@ -118,20 +112,4 @@ private class ImageNetworkRestoration(
         failedInput = null
         error = null
     }
-}
-
-private fun Throwable?.isNetworkConnectivityError(): Boolean {
-    var cause: Throwable? = this
-    while (cause != null) {
-        when (cause) {
-            is UnknownHostException,
-            is ConnectException,
-            is SocketTimeoutException,
-            is SocketException,
-            is InterruptedIOException,
-            is HttpException -> return true
-        }
-        cause = cause.cause
-    }
-    return false
 }

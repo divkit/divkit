@@ -9,7 +9,7 @@ import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
 import com.yandex.div.compose.internal.DivDebugConfiguration
-import com.yandex.div.compose.internal.NetworkRestorationController
+import com.yandex.div.compose.network.NetworkRestorationController
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.variables.ScopedVariableProvider
 import com.yandex.div.compose.variables.VariableAndConstantProvider

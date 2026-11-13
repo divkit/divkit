@@ -1,4 +1,4 @@
-package com.yandex.div.compose.internal
+package com.yandex.div.compose.network
 
 import android.content.Context
 import android.net.ConnectivityManager

@@ -10,7 +10,7 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
-import com.yandex.div.compose.internal.NetworkRestorationController
+import com.yandex.div.compose.network.NetworkRestorationController
 import com.yandex.div.compose.triggers.DivTriggerStorage
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.DivVariableAdapter
