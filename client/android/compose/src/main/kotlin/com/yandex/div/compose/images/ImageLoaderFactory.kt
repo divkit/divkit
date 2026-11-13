@@ -1,7 +1,7 @@
 package com.yandex.div.compose.images
 
-import android.content.Context
 import coil3.ImageLoader
+import coil3.PlatformContext
 import coil3.request.allowHardware
 import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div.internal.coil.GifDecoderFactory
@@ -10,7 +10,7 @@ import dev.zacsweers.metro.Inject
 
 @DivContextScope
 internal class ImageLoaderFactory @Inject constructor(
-    private val context: Context,
+    private val context: PlatformContext,
     private val imageLoaderConfiguration: ImageLoaderConfiguration
 ) {
 

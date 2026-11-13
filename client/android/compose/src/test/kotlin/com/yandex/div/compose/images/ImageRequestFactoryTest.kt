@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.size.Precision
 import coil3.size.Scale
 import coil3.size.Size
+import com.yandex.div.compose.di.DivContextPlatformModule
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -17,7 +18,12 @@ import kotlin.test.assertEquals
 class ImageRequestFactoryTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
-    private val factory = ImageRequestFactory(context, mock())
+
+    private val factory = ImageRequestFactory(
+        context = context,
+        imageRequestListener = mock(),
+        maxDisplaySize = DivContextPlatformModule.provideMaxDisplaySize(context),
+    )
 
     @Test
     fun `limits requested image size to display`() = runTest {

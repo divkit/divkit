@@ -10,6 +10,7 @@ import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import coil3.request.ImageResult
 import coil3.request.SuccessResult
+import com.yandex.div.compose.di.DivContextPlatformModule
 import com.yandex.div.compose.images.ImageRequestFactory
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.color
@@ -52,6 +53,7 @@ class CoilImagePreloaderTest {
         imageRequestFactory = ImageRequestFactory(
             context = context,
             imageRequestListener = mock(),
+            maxDisplaySize = DivContextPlatformModule.provideMaxDisplaySize(context),
         ),
     )
 

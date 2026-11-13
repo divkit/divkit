@@ -1,25 +1,26 @@
 package com.yandex.div.compose.images
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import coil3.PlatformContext
 import coil3.request.ImageRequest
 import coil3.request.transformations
 import coil3.size.Precision
 import coil3.size.Scale
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.DivContextScope
+import com.yandex.div.compose.di.Names
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlin.coroutines.EmptyCoroutineContext
-import kotlin.math.max
 
 @DivContextScope
 internal class ImageRequestFactory @Inject constructor(
-    private val context: Context,
+    private val context: PlatformContext,
     private val imageRequestListener: ImageRequestListener,
+    @Named(Names.MAX_DISPLAY_SIZE)
+    private val maxDisplaySize: Int,
 ) {
-    private val maxDisplaySize = context.resources.displayMetrics.let { max(it.widthPixels, it.heightPixels) }
-
     fun build(params: ImageRequestParams): ImageRequest {
         return ImageRequest.Builder(context)
             .data(params.data)
