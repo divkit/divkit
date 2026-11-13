@@ -1,6 +1,5 @@
 package com.yandex.div.compose.histogram
 
-import android.annotation.SuppressLint
 import android.view.ViewTreeObserver
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -40,7 +39,7 @@ internal class DivViewHistogramReporter(
         this(configuration, TimeSource.Monotonic)
 
     @Composable
-    @SuppressLint("ComposableNaming")
+    @Suppress("ComposableNaming")
     inline fun measure(prepareDuration: Duration, content: @Composable () -> Unit) {
         if (!configuration.isEnabled) {
             content()

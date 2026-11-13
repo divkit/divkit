@@ -36,7 +36,6 @@ dependencies {
     implementation(project(":div-core"))
     implementation(project(":div-evaluable"))
     implementation(project(":div-storage"))
-    implementation(project(":logging"))
     implementation(project(":render-common"))
 
     implementation(platform(libs.androidx.compose.bom))

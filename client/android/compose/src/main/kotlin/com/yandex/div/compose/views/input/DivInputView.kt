@@ -95,7 +95,7 @@ private fun InputField(
     Box(
         modifier = modifier
             .trackInputFocus()
-            .onPreviewKeyEvent { it.nativeKeyEvent.isEnterDown() && keyboard.onEnter() },
+            .onPreviewKeyEvent { it.isEnterDown() && keyboard.onEnter() },
         contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical),
     ) {
         InterceptPlatformTextInput(keyboard.interceptor) {

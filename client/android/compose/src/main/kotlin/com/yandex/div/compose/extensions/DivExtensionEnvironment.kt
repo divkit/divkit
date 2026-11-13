@@ -1,6 +1,5 @@
 package com.yandex.div.compose.extensions
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -19,7 +18,7 @@ import com.yandex.div2.DivExtension
  */
 @ConsistentCopyVisibility
 @Stable
-@SuppressLint("ComposableNaming")
+@Suppress("ComposableNaming")
 data class DivExtensionEnvironment internal constructor(
     val data: Div,
     val extension: DivExtension,

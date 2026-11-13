@@ -1,6 +1,5 @@
 package com.yandex.div.compose.pager
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
@@ -35,7 +34,7 @@ internal class DivPagerStateStorage @Inject constructor() {
     }
 }
 
-@SuppressLint("ComposableNaming")
+@Suppress("ComposableNaming")
 @Composable
 internal fun DivPagerStateStorage.rememberAndStoreState(
     pager: DivPager,

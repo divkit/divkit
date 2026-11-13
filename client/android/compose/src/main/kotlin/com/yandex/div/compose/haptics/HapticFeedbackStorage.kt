@@ -1,6 +1,5 @@
 package com.yandex.div.compose.haptics
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.hapticfeedback.HapticFeedback
@@ -26,7 +25,7 @@ internal class HapticFeedbackStorage @Inject constructor() {
     }
 }
 
-@SuppressLint("ComposableNaming")
+@Suppress("ComposableNaming")
 @Composable
 internal fun HapticFeedbackStorage.bind() {
     val hapticFeedback = LocalHapticFeedback.current

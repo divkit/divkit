@@ -1,6 +1,5 @@
 package com.yandex.div.compose.visibility
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.actions.DivActionHandler
@@ -107,7 +106,7 @@ internal class VisibilityActionTracker @Inject constructor(
  */
 private data class TrackedAction(val context: DivActionHandlingContext, val action: DivSightAction)
 
-@SuppressLint("ComposableNaming")
+@Suppress("ComposableNaming")
 @Composable
 internal fun VisibilityActionTracker.bind() {
     val divViewHost = LocalDivViewHost.current ?: return

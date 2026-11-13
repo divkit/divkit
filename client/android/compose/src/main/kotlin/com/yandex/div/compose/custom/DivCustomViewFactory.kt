@@ -1,6 +1,5 @@
 package com.yandex.div.compose.custom
 
-import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.preload.PreloadResult
@@ -11,7 +10,7 @@ import com.yandex.div.compose.preload.PreloadResult
  * Implement this interface and pass it to [com.yandex.div.compose.DivConfiguration]
  * to provide custom component rendering.
  *
- * For wrapping classic Android [View], extend [DivCustomAndroidViewFactory] instead.
+ * For wrapping classic Android views, extend [DivCustomAndroidViewFactory] instead.
  *
  * @see com.yandex.div.compose.DivConfiguration
  */

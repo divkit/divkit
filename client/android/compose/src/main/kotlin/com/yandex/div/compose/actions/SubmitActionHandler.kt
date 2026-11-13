@@ -62,7 +62,7 @@ internal class SubmitActionHandler @Inject constructor(
                 variables = target.variables,
                 expressionResolver = targetComponent.expressionResolver,
                 reportError = reporter::reportError,
-            ).toByteArray()
+            ).encodeToByteArray()
         }
         val url = action.request.url.evaluate(expressionResolver).toString()
         val request = DivNetworkRequest.Builder(url)

@@ -1,8 +1,7 @@
-@file:SuppressLint("ComposableNaming")
+@file:Suppress("ComposableNaming")
 
 package com.yandex.div.compose.utils
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.yandex.div.compose.di.LocalComponent

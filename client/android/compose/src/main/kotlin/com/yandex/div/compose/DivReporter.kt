@@ -1,6 +1,6 @@
 package com.yandex.div.compose
 
-import com.yandex.div.internal.Log
+import com.yandex.div.core.log.Log
 
 /**
  * Handles error and warning reports from the DivKit pipeline.

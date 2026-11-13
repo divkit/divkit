@@ -1,6 +1,5 @@
 package com.yandex.div.compose.context
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.key
@@ -36,7 +35,7 @@ internal class DivViewCoroutineScopeProvider @Inject constructor(
     fun get(): CoroutineScope? = scope
 
     @Composable
-    @SuppressLint("ComposableNaming")
+    @Suppress("ComposableNaming")
     fun attach() {
         // Replacing data can change the provider without removing DivView from composition.
         // Key the scope by provider so the previous card's coroutines are canceled.

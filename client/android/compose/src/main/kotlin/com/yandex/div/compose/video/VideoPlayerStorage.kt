@@ -1,6 +1,5 @@
 package com.yandex.div.compose.video
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.di.DivViewScope
@@ -34,7 +33,7 @@ internal class VideoPlayerStorage @Inject constructor() {
     }
 }
 
-@SuppressLint("ComposableNaming")
+@Suppress("ComposableNaming")
 @Composable
 internal fun VideoPlayerStorage.registerPlayer(id: String, player: DivVideoPlayer) {
     DisposableEffect(this, id, player) {

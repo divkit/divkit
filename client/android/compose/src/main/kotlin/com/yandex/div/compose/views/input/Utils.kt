@@ -3,11 +3,20 @@ package com.yandex.div.compose.views.input
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEvent
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div2.DivInput
+
+internal fun KeyEvent.isEnterDown(): Boolean {
+    return type == KeyEventType.KeyDown && (key == Key.Enter || key == Key.NumPadEnter)
+}
 
 internal fun keyboardOptions(
     keyboardType: DivInput.KeyboardType,

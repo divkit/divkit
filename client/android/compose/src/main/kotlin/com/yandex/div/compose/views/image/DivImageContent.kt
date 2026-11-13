@@ -1,6 +1,5 @@
 package com.yandex.div.compose.views.image
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -78,7 +77,7 @@ internal fun DivImageContent(
     }
     // Intentionally snapshot without subscribing: future successes invalidate through storage,
     // while this covers an already-successful painter retained for the same request.
-    @SuppressLint("StateFlowValueCalledInComposition")
+    @Suppress("StateFlowValueCalledInComposition")
     val isPainterLoaded = imagePainter?.state?.value is AsyncImagePainter.State.Success &&
         successfulRequestRef.value === imageRequest
     val isStoredImageLoaded = imageStateStorage.isLoaded(data)

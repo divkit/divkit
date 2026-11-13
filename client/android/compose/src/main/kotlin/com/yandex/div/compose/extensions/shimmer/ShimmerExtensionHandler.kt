@@ -28,6 +28,7 @@ import com.yandex.div.internal.extensions.ShimmerExtensionParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivCornersRadius
 import org.json.JSONObject
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.roundToLong
@@ -102,7 +103,7 @@ private fun ShimmerConfig.toDrawingConfig(size: Size, phase: Float): ShimmerDraw
 
     val normalizedAngle = (angle.toInt() % 360 + 360) % 360
 
-    val tanAngle = abs(tan(Math.toRadians(angle)).toFloat())
+    val tanAngle = abs(tan(angle * (PI / 180.0)).toFloat())
     val translateHeight = height + tanAngle * width
     val translateWidth = width + tanAngle * height
 
@@ -139,7 +140,7 @@ private fun ShimmerConfig.toDrawingConfig(size: Size, phase: Float): ShimmerDraw
         }
     }
 
-    val rotateRad = Math.toRadians(rotate).toFloat()
+    val rotateRad = (rotate * (PI / 180.0)).toFloat()
     val cosA = cos(rotateRad)
     val sinA = sin(rotateRad)
     val centerX = width / 2f

@@ -1,6 +1,5 @@
 package com.yandex.div.compose.context
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -42,7 +41,7 @@ internal class DivViewContext(
         component.data.variableTriggers.orEmpty().forEach(rootLocalComponent.triggerStorage::add)
     }
 
-    @SuppressLint("ComposableNaming")
+    @Suppress("ComposableNaming")
     @Composable
     fun onComposition() {
         DisposableEffect(this) {

@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.input
 
+import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.Key
@@ -164,6 +165,38 @@ class DivInputEnterKeyActionsTest {
 
         field.assertTextEquals("a")
         assertEquals(actionData(id = "enter", source = DivActionSource.KEYBOARD), actionHandler.handledAction)
+    }
+
+    @Test
+    fun `numpad enter performs enter key actions once without inserting newline`() {
+        setContent(enterKeyActions = listOf(action(id = "enter")))
+        field.performTextInput("a")
+
+        field.performKeyInput { pressKey(Key.NumPadEnter) }
+
+        field.assertTextEquals("a")
+        assertEquals(
+            listOf(actionData(id = "enter", source = DivActionSource.KEYBOARD)),
+            actionHandler.handledActions,
+        )
+    }
+
+    @Test
+    fun `input connection numpad enter performs enter key actions once`() {
+        setContent(enterKeyActions = listOf(action(id = "enter")))
+        field.performTextInput("a")
+
+        rule.runOnIdle {
+            val connection = checkNotNull(inputRequest).createInputConnection(EditorInfo())
+            connection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_NUMPAD_ENTER))
+            connection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_NUMPAD_ENTER))
+        }
+
+        field.assertTextEquals("a")
+        assertEquals(
+            listOf(actionData(id = "enter", source = DivActionSource.KEYBOARD)),
+            actionHandler.handledActions,
+        )
     }
 
     @Test

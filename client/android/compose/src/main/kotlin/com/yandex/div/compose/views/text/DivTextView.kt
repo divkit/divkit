@@ -749,7 +749,7 @@ internal fun AnnotatedString.replacingChars(chars: Map<Int, Char>): AnnotatedStr
     }
     val text = text.toCharArray()
     chars.forEach { (offset, char) -> text[offset] = char }
-    return AnnotatedString(String(text), annotations)
+    return AnnotatedString(text.concatToString(), annotations)
 }
 
 internal fun AnnotatedString.hasAnnotations(): Boolean {
@@ -757,17 +757,17 @@ internal fun AnnotatedString.hasAnnotations(): Boolean {
 }
 
 private fun String.hasComplexGraphemes(): Boolean {
-    var offset = 0
-    while (offset < length) {
-        val codePoint = codePointAt(offset)
-        val type = Character.getType(codePoint)
-        val isCombiningMark = type == Character.NON_SPACING_MARK.toInt() ||
-            type == Character.COMBINING_SPACING_MARK.toInt() ||
-            type == Character.ENCLOSING_MARK.toInt()
-        if (codePoint > Char.MAX_VALUE.code || codePoint == ZERO_WIDTH_JOINER || isCombiningMark) {
+    for (offset in indices) {
+        val char = this[offset]
+        val type = char.category
+        val isCombiningMark = type == CharCategory.NON_SPACING_MARK ||
+            type == CharCategory.COMBINING_SPACING_MARK ||
+            type == CharCategory.ENCLOSING_MARK
+        val isSupplementary = char.isHighSurrogate() && offset < lastIndex &&
+            this[offset + 1].isLowSurrogate()
+        if (isSupplementary || char.code == ZERO_WIDTH_JOINER || isCombiningMark) {
             return true
         }
-        offset += Character.charCount(codePoint)
     }
     return false
 }

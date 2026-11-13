@@ -1,7 +1,7 @@
 package com.yandex.div.compose.views.input
 
 import android.text.InputType
-import android.view.KeyEvent
+import android.view.KeyEvent as AndroidKeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputConnectionWrapper
@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.text.input.ImeAction
 import com.yandex.div.compose.actions.DivActionSource
@@ -106,12 +107,7 @@ private class EnterInputConnection(
         return text == "\n" && onEnter() || super.commitText(text, newCursorPosition)
     }
 
-    override fun sendKeyEvent(event: KeyEvent): Boolean {
-        return event.isEnterDown() && onEnter() || super.sendKeyEvent(event)
+    override fun sendKeyEvent(event: AndroidKeyEvent): Boolean {
+        return KeyEvent(event).isEnterDown() && onEnter() || super.sendKeyEvent(event)
     }
-}
-
-internal fun KeyEvent.isEnterDown(): Boolean {
-    return action == KeyEvent.ACTION_DOWN &&
-        (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
 }
