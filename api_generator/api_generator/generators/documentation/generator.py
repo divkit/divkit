@@ -7,6 +7,7 @@ from .documentation_entities import (
     DocumentationDeclarable,
     DocumentationEntity
 )
+from .toc import build_toc, load_toc_config
 from .translations import translations
 from .utils import bold, code, paragraph
 from ..base import Generator
@@ -37,7 +38,30 @@ class DocumentationGenerator(Generator):
             self.__translations = translations(lang)
             Path(self._output_path).mkdir(parents=True, exist_ok=True)
             self._generate_files(objects_doc)
-        self.__make_menu_file(objects_doc)
+        if self._config.generation.documentation_toc is None:
+            self.__make_menu_file(objects_doc)
+        else:
+            self.__make_grouped_menu_files(objects_doc)
+
+    def __make_grouped_menu_files(self, objects: List[DocumentationDeclarable]):
+        languages = [lang.value for lang in DescriptionLanguage]
+        toc_path = self._config.generation.documentation_toc
+        toc_config = load_toc_config(toc_path, languages)
+        pages = set(
+            filename[:-len('.md')]
+            for filename in os.listdir(os.path.join(self._config.output_path, languages[0]))
+            if filename.endswith('.md')
+        )
+        enumerations = {
+            obj.name: obj.entity_names
+            for obj in objects
+            if isinstance(obj, EntityEnumeration)
+        }
+        toc = build_toc(toc_config, pages, enumerations, config_path=toc_path)
+        for lang in languages:
+            filename = os.path.join(self._config.output_path, f'toc.{lang}.yaml')
+            with open(filename, 'w', encoding='utf-8') as file:
+                file.write(toc.render(lang))
 
     def __make_menu_file(self, objects: List[DocumentationDeclarable]):
         filename = os.path.join(self._config.output_path, 'toc.yaml')
@@ -167,7 +191,7 @@ class DocumentationGenerator(Generator):
 
     def _entity_enumeration_declaration(self, entity_enumeration: EntityEnumeration) -> Text:
         header = self.__translations['div_generator_entity_enumeration']
-        enumeration = '\n'.join(map(lambda entity: f'* [{entity[0]}]({entity[0]}.md#{entity[0]})',
+        enumeration = '\n'.join(map(lambda entity: f'* [{entity[0]}]({entity[0]}.md)',
                                     entity_enumeration.entities))
         return Text([
             f'# {entity_enumeration.name}',

@@ -41,6 +41,27 @@ The Kotlin generator supports opt-in standalone parsers for existing models:
 See `client/android/parser-json/parser-generator-config.json` for the complete
 Android configuration. Other generator configurations retain their existing behavior.
 
+### Documentation table of contents
+
+The documentation generator writes one Markdown page per schema to `<output>/<lang>/`. By default it also
+writes a flat `<output>/toc.yaml`. With the `toc` option it writes a grouped `<output>/toc.<lang>.yaml`
+for every language instead:
+
+```json
+{
+  "lang": "documentation",
+  "toc": "documentation_toc.json"
+}
+```
+
+The path is resolved relative to the config file. The TOC config has a `root` group node, a list of
+`helpers` (pages that stay `hidden: true`) and an optional free-text `comment`. A node is a page name, a page node
+(`{"page": "div-size", "name": {"ru": "...", "en": "..."}, "items": [...]}`, `name` is optional) or a group
+node (`{"name": {"ru": "...", "en": "..."}, "items": [...], "expanded": true}`). `"any_of": "<schema>"`
+appends the members of that `anyOf` schema that are not placed anywhere else, in alphabetical order.
+Generation fails if a page is in no group and not in `helpers`, if a page is placed twice, or if a
+configured name has no schema.
+
 ### Build
 
 Setup environment:

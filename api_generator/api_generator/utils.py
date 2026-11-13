@@ -112,6 +112,10 @@ def sha256_update_from_dir(directory: str, hash: Hash) -> Hash:
     return hash
 
 
+def sha256_text(text: str) -> str:
+    return str(hashlib.sha256(text.encode()).hexdigest())
+
+
 def sha256_dir(directory: str) -> str:
     return str(sha256_update_from_dir(directory, hashlib.sha256()).hexdigest())
 

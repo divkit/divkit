@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Text, List, Optional
 import json
 from enum import Enum, auto
-from .utils import sha256_file, sha256_dir, print_warning
+from .utils import sha256_file, sha256_dir, sha256_text, print_warning
 import os
 
 
@@ -75,6 +75,9 @@ class Config:
             self.generate_equality: bool = dictionary.get('generateEquality') or False
             self.remove_prefix: str = dictionary.get('removePrefix') or ''
             self.supertype_entities: List[str] = dictionary.get('supertypeEntities') or []
+            self.documentation_toc: Optional[str] = dictionary.get('toc')
+            if self.documentation_toc is not None and self.lang != GeneratedLanguage.DOCUMENTATION:
+                raise NotImplementedError('toc is supported only for documentation')
 
             self.generate_templates: bool = dictionary.get('generateTemplates', True)
             self.generate_serialization: bool = dictionary.get('generateSerialization', True)
@@ -121,6 +124,12 @@ class Config:
             self.generator_changed = True
 
         self.config_hash = sha256_file(config_path)
+        if self.generation.documentation_toc is not None:
+            if not os.path.isabs(self.generation.documentation_toc):
+                self.generation.documentation_toc = os.path.join(os.path.dirname(os.path.abspath(config_path)),
+                                                                 self.generation.documentation_toc)
+            if os.path.isfile(self.generation.documentation_toc):
+                self.config_hash = sha256_text(self.config_hash + sha256_file(self.generation.documentation_toc))
         stored_config_hash = _stored_sha256(os.path.join(output_path, 'config_hash'))
         self.config_changed = self.config_hash != stored_config_hash
 

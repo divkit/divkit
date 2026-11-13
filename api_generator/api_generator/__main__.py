@@ -1,9 +1,11 @@
 from typing import Tuple
 from argparse import ArgumentParser
 import os
+import sys
 
 from .generator import generate_api
 from .config import Config
+from .generators.documentation.toc import DocumentationTocError
 
 
 def __file_path(path) -> str:
@@ -50,8 +52,12 @@ def main():
     generator_path = os.path.dirname(__file__)
     if not os.path.isdir(generator_path):
         generator_path = None
-    config = Config(generator_path, config_path, schema_path, output_path)
-    generate_api(config, check_hash, save_hash)
+    try:
+        config = Config(generator_path, config_path, schema_path, output_path)
+        generate_api(config, check_hash, save_hash)
+    except DocumentationTocError as error:
+        print(f'error: {error}', file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == '__main__':

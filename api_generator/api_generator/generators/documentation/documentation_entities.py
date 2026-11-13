@@ -355,7 +355,7 @@ class DocumentationObject(Object, DocumentationPropertyType):
             return ''
 
         list_header = dictionary['div_generator_values_list']
-        details = list(map(lambda obj: f'<li>[{obj[0]}]({obj[0]}.md#{obj[0]})</li>', self.object.entities))
+        details = list(map(lambda obj: f'<li>[{obj[0]}]({obj[0]}.md)</li>', self.object.entities))
         details.insert(0, list_header)
         return ''.join(details)
 
