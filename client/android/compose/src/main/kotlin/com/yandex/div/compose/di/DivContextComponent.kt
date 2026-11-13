@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 @DependencyGraph(
     bindingContainers = [
         DivContextModule::class,
+        DivContextPlatformModule::class,
     ]
 )
 internal interface DivContextComponent : DivContextDependencies {

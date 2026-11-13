@@ -25,8 +25,11 @@ class DivFontFamilyCacheTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val reporter = TestReporter()
     private val source = DivFontSource.Typeface(Typeface.DEFAULT)
-    private val italicSource = DivFontSource.Typeface(Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC))
-    private val cache = DivFontFamilyCache(context.assets, reporter)
+    private val italicSource = DivFontSource.Typeface(
+        Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC)
+    )
+    private val factory = AndroidDivFontFamilyFactory(context.assets, reporter)
+    private val cache = DivFontFamilyCache(factory)
     private val fontFamilyResolver = createFontFamilyResolver(context)
 
     @Test
@@ -90,7 +93,7 @@ class DivFontFamilyCacheTest {
 
     @Test
     fun `each DivFontFamilyCache instance has its own storage`() {
-        val otherCache = DivFontFamilyCache(context.assets, reporter)
+        val otherCache = DivFontFamilyCache(factory)
 
         val fromCache = cache.getOrCreate(source, FontWeight.Normal, null)
         val fromOtherCache = otherCache.getOrCreate(source, FontWeight.Normal, null)
@@ -107,7 +110,8 @@ class DivFontFamilyCacheTest {
         )
 
         assertEquals(
-            "font_variation_settings cannot be applied to a Typeface. Use DivFontSource.Resource or DivFontSource.Asset for variable fonts.",
+            "font_variation_settings cannot be applied to a Typeface. " +
+                "Use DivFontSource.Resource or DivFontSource.Asset for variable fonts.",
             reporter.lastWarning
         )
     }

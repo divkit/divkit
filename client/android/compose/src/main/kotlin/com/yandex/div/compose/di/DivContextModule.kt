@@ -2,7 +2,6 @@ package com.yandex.div.compose.di
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.res.AssetManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
@@ -37,10 +36,6 @@ internal interface DivContextModule {
     fun bindImagePreloader(impl: CoilImagePreloader): ImagePreloader
 
     companion object {
-        @DivContextScope
-        @Provides
-        fun provideAssetManager(context: Context): AssetManager = context.assets
-
         @DivContextScope
         @OptIn(ExperimentalTime::class)
         @Provides

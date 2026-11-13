@@ -1,0 +1,22 @@
+package com.yandex.div.compose.di
+
+import android.content.Context
+import android.content.res.AssetManager
+import com.yandex.div.compose.font.AndroidDivFontFamilyFactory
+import com.yandex.div.compose.font.DivFontFamilyFactory
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.Provides
+
+@BindingContainer
+internal interface DivContextPlatformModule {
+
+    @Binds
+    fun bindFontFamilyFactory(impl: AndroidDivFontFamilyFactory): DivFontFamilyFactory
+
+    companion object {
+        @DivContextScope
+        @Provides
+        fun provideAssetManager(context: Context): AssetManager = context.assets
+    }
+}

@@ -1,14 +1,8 @@
 package com.yandex.div.compose.font
 
-import android.content.res.AssetManager
-import android.graphics.Typeface
-import android.os.Build
-import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
-import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
@@ -21,8 +15,7 @@ import dev.zacsweers.metro.Inject
  */
 @DivContextScope
 internal class DivFontFamilyCache @Inject constructor(
-    private val assets: AssetManager,
-    private val reporter: DivReporter,
+    private val factory: DivFontFamilyFactory,
 ) {
 
     private val cache = HashMap<Key, FontFamily>()
@@ -33,25 +26,7 @@ internal class DivFontFamilyCache @Inject constructor(
         variations: FontVariation.Settings?,
     ): FontFamily {
         val key = Key(source, weight, variations)
-        return cache.getOrPut(key) { createFontFamily(key) }
-    }
-
-    @OptIn(ExperimentalTextApi::class)
-    private fun createFontFamily(key: Key): FontFamily {
-        val settings = key.variations ?: FontVariation.Settings()
-        return when (val source = key.source) {
-            is DivFontSource.Resource -> FontFamily(Font(source.resId, key.weight, variationSettings = settings))
-            is DivFontSource.Asset -> FontFamily(Font(source.path, assets, key.weight, variationSettings = settings))
-            is DivFontSource.Typeface -> {
-                if (key.variations != null) {
-                    reporter.reportWarning(
-                        "font_variation_settings cannot be applied to a Typeface. " +
-                                "Use DivFontSource.Resource or DivFontSource.Asset for variable fonts."
-                    )
-                }
-                FontFamily(source.typeface.withWeight(key.weight))
-            }
-        }
+        return cache.getOrPut(key) { factory.create(source, weight, variations) }
     }
 
     private data class Key(
@@ -59,9 +34,4 @@ internal class DivFontFamilyCache @Inject constructor(
         val weight: FontWeight,
         val variations: FontVariation.Settings?,
     )
-}
-
-private fun Typeface.withWeight(weight: FontWeight): Typeface {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return this
-    return Typeface.create(this, weight.weight, isItalic)
 }

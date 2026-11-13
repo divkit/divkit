@@ -16,6 +16,8 @@ apply(from = "../publish-android.gradle")
 android {
     namespace = "com.yandex.div.compose"
 
+    sourceSets.getByName("test").assets.srcDir("../test-utils/src/main/res/font")
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
