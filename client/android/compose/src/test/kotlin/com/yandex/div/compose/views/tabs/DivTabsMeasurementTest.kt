@@ -27,6 +27,7 @@ import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.custom
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
@@ -77,6 +78,32 @@ class DivTabsMeasurementTest {
         setContent()
 
         // One copy measures the page height; the other is displayed by HorizontalPager.
+        assertEquals(listOf(0, 0), createdPages)
+    }
+
+    @Test
+    fun `only two copies of the first page are created inside an intrinsic-width parent`() {
+        rule.setContentWithDivContext(configuration) {
+            DivView(
+                data = data(
+                    container(
+                        width = wrapContent(),
+                        items = listOf(
+                            tabs(
+                                items = heights.mapIndexed { index, height ->
+                                    tabItem(
+                                        title = "Tab $index",
+                                        div = custom(height = fixed(height), type = "page-$index"),
+                                    )
+                                },
+                            )
+                        ),
+                    )
+                ),
+            )
+        }
+        rule.waitForIdle()
+
         assertEquals(listOf(0, 0), createdPages)
     }
 

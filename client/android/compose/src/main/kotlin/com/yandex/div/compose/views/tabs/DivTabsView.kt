@@ -29,6 +29,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.restrictParentScroll
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
@@ -152,7 +153,8 @@ private fun TabsContent(
     val pageContents = remember(items) {
         arrayOfNulls<@Composable () -> Unit>(items.size)
     }
-    SubcomposeLayout { constraints ->
+    // Intrinsic width comes from the titles; pages stay lazy and fill the resolved viewport.
+    SubcomposeLayout(modifier = IntrinsicSizeBarrier) { constraints ->
         fun subcomposePage(index: Int): List<Measurable> {
             val content = pageContents[index] ?: run {
                 val newContent: @Composable () -> Unit = {
