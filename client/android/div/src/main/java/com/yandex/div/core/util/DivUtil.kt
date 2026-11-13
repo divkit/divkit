@@ -5,14 +5,6 @@ import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.ViewGroup
-import android.view.animation.Interpolator
-import android.view.animation.LinearInterpolator
-import com.yandex.div.core.animation.EaseInInterpolator
-import com.yandex.div.core.animation.EaseInOutInterpolator
-import com.yandex.div.core.animation.EaseInterpolator
-import com.yandex.div.core.animation.EaseOutInterpolator
-import com.yandex.div.core.animation.SpringInterpolator
-import com.yandex.div.core.animation.reversed
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.bitmap.BitmapFilter
@@ -33,8 +25,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivAnimationDirection
-import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBorder
@@ -111,40 +101,6 @@ internal fun Div.canBeReused(other: Div, resolver: ExpressionResolver): Boolean 
     }
     return div.background === otherDiv.background
 }
-
-internal val DivAnimationInterpolator.androidInterpolator: Interpolator
-    get() = when (this) {
-        DivAnimationInterpolator.LINEAR -> LinearInterpolator()
-        DivAnimationInterpolator.EASE -> EaseInterpolator()
-        DivAnimationInterpolator.EASE_IN -> EaseInInterpolator()
-        DivAnimationInterpolator.EASE_OUT -> EaseOutInterpolator()
-        DivAnimationInterpolator.EASE_IN_OUT -> EaseInOutInterpolator()
-        DivAnimationInterpolator.SPRING -> SpringInterpolator()
-    }
-
-internal fun DivAnimationInterpolator.androidInterpolator(reverse: Boolean): Interpolator {
-    return if (reverse) {
-        androidInterpolator.reversed()
-    } else {
-        androidInterpolator
-    }
-}
-
-internal val DivAnimationDirection.isReversed: Boolean
-    get() {
-        return when (this) {
-            DivAnimationDirection.REVERSE, DivAnimationDirection.ALTERNATE_REVERSE -> true
-            else -> false
-        }
-    }
-
-internal val DivAnimationDirection.isAlternated: Boolean
-    get() {
-        return when (this) {
-            DivAnimationDirection.ALTERNATE, DivAnimationDirection.ALTERNATE_REVERSE -> true
-            else -> false
-        }
-    }
 
 internal fun DivBorder.getCornerRadii(
     widthPx: Float,

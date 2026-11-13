@@ -468,12 +468,8 @@
     "ru": "Конечное значение анимации."
   },
   "div_animation_interpolator": {
-    "en": "Animation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>",
-    "ru": "Характер скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные варианты соответствует кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
-  },
-  "div_animation_interpolator_short": {
-    "en": "Animation speed nature.",
-    "ru": "Характер скорости анимации."
+    "en": "Animation speed nature:<li>`linear` — linear animation speed;</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>",
+    "ru": "Характер скорости анимации:<li>`linear` — линейная скорость анимации;</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
   },
   "div_animation_items": {
     "en": "Animation elements.",
@@ -1804,8 +1800,8 @@
     "ru": "Преобразование страницы пейджера во время движения."
   },
   "div_pager_page_transformation_interpolator": {
-    "en": "Animation speed adjustment. When the value is set to `spring`, it’s a damped oscillation animation truncated to 0.7, with the `damping=1` parameter. Other values correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1)</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1)</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1)</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1)</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1)</li>",
-    "ru": "Изменение скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные значения соответствуют кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
+    "en": "Animation speed nature:<li>`linear` — linear animation speed;</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>",
+    "ru": "Характер скорости анимации:<li>`linear` — линейная скорость анимации;</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
   },
   "div_pager_page_transformation_overlap": {
     "en": "Pages are stacked during animation overlapping one another.",

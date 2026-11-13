@@ -15,7 +15,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.ScaleAnimation
 import android.widget.PopupWindow
-import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.animation.defaultInterpolator
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -103,7 +103,7 @@ internal fun PopupWindow.clearAnimation() {
 private fun defaultTransition(divTooltip: DivTooltip, resolver: ExpressionResolver) = TransitionSet()
     .addTransition(Fade())
     .addTransition(TranslateAnimation(divTooltip.position.evaluate(resolver)))
-    .setInterpolator(SpringInterpolator())
+    .setInterpolator(defaultInterpolator)
 
 private fun DivAnimation.toTransition(position: DivTooltip.Position, incoming: Boolean,
                                       resolver: ExpressionResolver): Transition? {
@@ -132,7 +132,7 @@ private fun DivAnimation.toTransition(position: DivTooltip.Position, incoming: B
         DivAnimation.Name.NATIVE,
         DivAnimation.Name.NO_ANIMATION -> null
     }
-        ?.setDuration(duration.evaluate(resolver).toLong())
+        ?.setDuration(duration.evaluate(resolver))
         ?.setInterpolator(interpolator.evaluate(resolver).androidInterpolator)
 }
 
@@ -336,7 +336,7 @@ private fun defaultAnimation(
     addAnimation(createTranslateAnimation(view, position, incoming, null))
 
     duration = DEFAULT_DURATION
-    interpolator = SpringInterpolator()
+    interpolator = defaultInterpolator
 }
 
 private fun createDefaultAlphaAnimation(

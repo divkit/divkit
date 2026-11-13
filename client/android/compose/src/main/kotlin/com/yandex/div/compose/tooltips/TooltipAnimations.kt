@@ -2,12 +2,7 @@ package com.yandex.div.compose.tooltips
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -19,10 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observedAnimationSpec
 import com.yandex.div2.DivAnimation
-import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltip.Position
 
@@ -114,23 +108,6 @@ private fun DivAnimation.toExitTransition(position: Position): ExitTransition {
     }
 }
 
-@Composable
-private fun <T> DivAnimation.observedAnimationSpec(): TweenSpec<T> {
-    val easing = when (interpolator.observedValue()) {
-        DivAnimationInterpolator.LINEAR -> LinearEasing
-        DivAnimationInterpolator.EASE -> FastOutSlowInEasing
-        DivAnimationInterpolator.EASE_IN -> FastOutLinearInEasing
-        DivAnimationInterpolator.EASE_OUT -> LinearOutSlowInEasing
-        DivAnimationInterpolator.EASE_IN_OUT -> FastOutSlowInEasing
-        DivAnimationInterpolator.SPRING -> springEasing
-    }
-    return tween(
-        durationMillis = duration.observedIntValue(),
-        delayMillis = startDelay.observedIntValue(),
-        easing = easing
-    )
-}
-
 private val defaultEnterTransition = fadeIn(
     animationSpec = tween(
         durationMillis = DEFAULT_TOOLTIP_TRANSITION_DURATION_MS,
@@ -144,8 +121,6 @@ private val defaultExitTransition = fadeOut(
         easing = FastOutSlowInEasing
     )
 )
-
-private val springEasing = CubicBezierEasing(0.5f, 1.7f, 0.5f, 1f)
 
 private data class SlideDirection(val x: Float, val y: Float)
 

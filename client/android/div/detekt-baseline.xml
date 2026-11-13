@@ -288,7 +288,6 @@
     <ID>ReturnCount:JSONObjectEvaluator.kt:JSONObjectEvaluator$private fun transformObject: Result&lt;Map&lt;String, Any?&gt;&gt;</ID>
     <ID>ReturnCount:LinearContainerLayout.kt:LinearContainerLayout$override fun getBaseline: Int</ID>
     <ID>ReturnCount:LinearContainerLayout.kt:LinearContainerLayout$private fun measureMatchParentHeightChildFirstTime</ID>
-    <ID>ReturnCount:LookupTableInterpolator.kt:LookupTableInterpolator$override fun getInterpolation: Float</ID>
     <ID>ReturnCount:MaskSpan.kt:MaskSpan$internal fun onFrame: Boolean</ID>
     <ID>ReturnCount:PagerMultiPageScrollHelper.kt:PagerMultiPageScrollHelper$override fun findSnapView: View?</ID>
     <ID>ReturnCount:PagerMultiPageScrollHelper.kt:PagerMultiPageScrollHelper$override fun onFling: Boolean</ID>

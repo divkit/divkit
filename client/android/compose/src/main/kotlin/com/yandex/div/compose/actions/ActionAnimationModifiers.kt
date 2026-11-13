@@ -1,8 +1,6 @@
 package com.yandex.div.compose.actions
 
-import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -13,10 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observedAnimationSpec
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.utils.toEasing
 import com.yandex.div2.DivAnimation
 
 @Composable
@@ -62,7 +59,7 @@ private fun Modifier.fadeOnPress(
         } else {
             1f
         },
-        animationSpec = animation.toAnimationSpec(),
+        animationSpec = animation.observedAnimationSpec(),
         label = "alphaAnimation"
     )
     return graphicsLayer {
@@ -82,7 +79,7 @@ private fun Modifier.scaleOnPress(
         } else {
             1f
         },
-        animationSpec = animation.toAnimationSpec(),
+        animationSpec = animation.observedAnimationSpec(),
         label = "scaleAnimation"
     )
     return graphicsLayer {
@@ -90,13 +87,3 @@ private fun Modifier.scaleOnPress(
         scaleY = animatedScale
     }
 }
-
-@Composable
-private fun DivAnimation.toAnimationSpec(): AnimationSpec<Float> {
-    return tween(
-        durationMillis = duration.observedIntValue(),
-        delayMillis = startDelay.observedIntValue(),
-        easing = interpolator.observedValue().toEasing(),
-    )
-}
-

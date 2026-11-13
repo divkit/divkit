@@ -40,7 +40,7 @@
     },
     "interpolator": {
       "$ref": "div-animation-interpolator.json",
-      "default_value": "spring",
+      "default_value": "ease_in_out",
       "$description": "translations.json#/div_animation_interpolator"
     },
     "items": {

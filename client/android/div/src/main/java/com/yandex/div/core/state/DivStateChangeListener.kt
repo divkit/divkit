@@ -3,7 +3,7 @@ package com.yandex.div.core.state
 import android.view.ViewGroup
 import android.view.animation.Interpolator
 import androidx.transition.TransitionManager
-import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.animation.defaultInterpolator
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.SceneRootWatcher
 import javax.inject.Provider
@@ -22,13 +22,13 @@ interface DivStateChangeListener {
 
 class DefaultDivStateChangeListener @JvmOverloads constructor(
     private val rootViewProvider: Provider<ViewGroup?>,
-    private val interpolator: Interpolator = SpringInterpolator()
+    private val interpolator: Interpolator = defaultInterpolator
 ) : DivStateChangeListener  {
 
     @JvmOverloads
     constructor(
         rootView: ViewGroup,
-        interpolator: Interpolator = SpringInterpolator()
+        interpolator: Interpolator = defaultInterpolator
     ) : this(Provider { rootView }, interpolator)
 
     override fun onDivAnimatedStateChanged(divView: Div2View) {

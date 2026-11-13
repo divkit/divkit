@@ -17,7 +17,7 @@ public final class DivAnimation: Sendable {
 
   public let duration: Expression<Int> // constraint: number >= 0; default value: 300
   public let endValue: Expression<Double>?
-  public let interpolator: Expression<DivAnimationInterpolator> // default value: spring
+  public let interpolator: Expression<DivAnimationInterpolator> // default value: ease_in_out
   public let items: [DivAnimation]?
   public let name: Expression<Name>
   public let repeatCount: DivCount // default value: .divInfinityCount(DivInfinityCount())
@@ -33,7 +33,7 @@ public final class DivAnimation: Sendable {
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveEnum(interpolator) ?? DivAnimationInterpolator.spring
+    resolver.resolveEnum(interpolator) ?? DivAnimationInterpolator.easeInOut
   }
 
   public func resolveName(_ resolver: ExpressionResolver) -> Name? {
@@ -79,7 +79,7 @@ public final class DivAnimation: Sendable {
   ) {
     self.duration = duration ?? .value(300)
     self.endValue = endValue
-    self.interpolator = interpolator ?? .value(.spring)
+    self.interpolator = interpolator ?? .value(.easeInOut)
     self.items = items
     self.name = name
     self.repeatCount = repeatCount ?? .divInfinityCount(DivInfinityCount())
