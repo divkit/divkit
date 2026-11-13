@@ -1,25 +1,23 @@
 package com.yandex.div.compose.actions
 
-import android.content.ClipboardManager
-import android.content.Context
-import androidx.core.content.getSystemService
-import com.yandex.div.compose.DivReporter
-import com.yandex.div.internal.actions.resolveClipData
+import com.yandex.div.compose.system.ClipboardManager
 import com.yandex.div2.DivActionCopyToClipboard
+import com.yandex.div2.DivActionCopyToClipboardContent
 import dev.zacsweers.metro.Inject
 
 internal class CopyToClipboardActionHandler @Inject constructor(
-    private val context: Context,
-    private val reporter: DivReporter,
+    private val clipboardManager: ClipboardManager,
 ) {
 
     fun handle(context: DivActionHandlingContext, action: DivActionCopyToClipboard) {
-        val clipboard = this.context.getSystemService<ClipboardManager>()
-        if (clipboard == null) {
-            reporter.reportError("Failed to access clipboard manager")
-            return
-        }
+        val expressionResolver = context.expressionResolver
+        when (val content = action.content) {
+            is DivActionCopyToClipboardContent.ContentTextCase ->
+                clipboardManager.putText(content.value.value.evaluate(expressionResolver))
 
-        clipboard.setPrimaryClip(action.content.resolveClipData(context.expressionResolver))
+            is DivActionCopyToClipboardContent.ContentUrlCase -> {
+                clipboardManager.putUri(content.value.value.evaluate(expressionResolver))
+            }
+        }
     }
 }
