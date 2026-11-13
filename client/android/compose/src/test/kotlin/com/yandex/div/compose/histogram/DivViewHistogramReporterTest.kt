@@ -1,27 +1,30 @@
 package com.yandex.div.compose.histogram
 
-import android.view.View
+import android.graphics.Canvas
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
-import androidx.test.core.app.ApplicationProvider
+import androidx.core.graphics.createBitmap
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
-import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
+import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.histogram.HistogramBridge
 import com.yandex.div.core.histogram.NoOpHistogramBridge
 import com.yandex.div.histogram.HistogramFilter
@@ -29,10 +32,8 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
 import org.junit.Rule
 import org.junit.runner.RunWith
-import org.mockito.Mockito.CALLS_REAL_METHODS
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.microseconds
@@ -40,33 +41,51 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 import kotlin.time.TestTimeSource
 import kotlin.time.toDuration
-import com.yandex.div.histogram.HistogramBridge as LegacyHistogramBridge
 
 @RunWith(AndroidJUnit4::class)
 class DivViewHistogramReporterTest {
 
     @get:Rule
-    val rule = createComposeRule()
+    val rule = createAndroidComposeRule<ComponentActivity>()
 
-    private val timeSource = TestTimeSource()
     private val histogramBridge = RecordingHistogramBridge()
-    private lateinit var view: View
+    private val timeSource = TestTimeSource()
+
+    private val configuration = divConfiguration {
+        histogramConfiguration = createConfiguration(isEnabled = true)
+        reporter = TestReporter()
+    }
 
     @Test
-    fun `apply changes and effects are reported separately`() {
+    fun `all cold metrics are reported`() {
         val reporter = createReporter()
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1.milliseconds) {
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
                 timeSource += 2.milliseconds
-                Box(modifier = Modifier.then(OnAttachElement { timeSource += 4.milliseconds }))
-                remember { OnRememberedObserver { timeSource += 8.milliseconds } }
-                DisposableEffect(Unit) {
+                Box(
+                    modifier = modifier
+                        .size(10.dp)
+                        .then(OnAttachElement { timeSource += 8.milliseconds })
+                        .drawWithContent {
+                            drawContent()
+                            timeSource += 128.milliseconds
+                        }
+                )
+                remember {
+                    timeSource += 4.milliseconds
+                    Any()
+                }
+                SideEffect {
                     timeSource += 16.milliseconds
+                }
+                DisposableEffect(Unit) {
+                    timeSource += 32.milliseconds
                     onDispose {}
                 }
-                SideEffect { timeSource += 32.milliseconds }
+                LaunchedEffect(Unit) {
+                    timeSource += 64.milliseconds
+                }
             }
         }
         drawFrame()
@@ -74,12 +93,67 @@ class DivViewHistogramReporterTest {
         assertEquals(
             listOf(
                 "DivCompose.Render.Prepare.Cold" to 1_000L,
-                "DivCompose.Render.Composition.Cold" to 2_000L,
-                "DivCompose.Render.ApplyChanges.Cold" to 4_000L,
-                "DivCompose.Render.Effects.Cold" to 24_000L,
-                "DivCompose.Render.Total.Cold" to 62_000L,
+                "DivCompose.Render.Composition.Cold" to 6_000L,
+                "DivCompose.Render.ApplyChanges.Cold" to 8_000L,
+                "DivCompose.Render.Effects.Cold" to 32_000L,
+                "DivCompose.Render.Total.Cold" to 254_000L,
             ),
             histogramBridge.histograms
+        )
+    }
+
+    @Test
+    fun `total is not reported again when content is redrawn`() {
+        val reporter = createReporter()
+        var drawDuration by mutableIntStateOf(8)
+
+        rule.setContent {
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
+                Box(
+                    modifier = modifier
+                        .size(10.dp)
+                        .drawWithContent {
+                            drawContent()
+                            timeSource += drawDuration.milliseconds
+                        }
+                )
+            }
+        }
+        drawFrame()
+
+        rule.runOnIdle { drawDuration = 16 }
+        drawFrame()
+
+        assertEquals(
+            listOf("DivCompose.Render.Total.Cold" to 8_000L),
+            histogramsWith("DivCompose.Render.Total.")
+        )
+    }
+
+    @Test
+    fun `all warm metrics are reported when modifier changes with the same data`() {
+        val data = data(text(text = "Text"))
+        var modifier by mutableStateOf(Modifier.size(10.dp))
+
+        rule.setContentWithDivContext(configuration) {
+            DivView(data = data, modifier = modifier)
+        }
+        drawFrame()
+
+        rule.runOnIdle {
+            modifier = Modifier.size(20.dp)
+        }
+        drawFrame()
+
+        assertEquals(
+            listOf(
+                "DivCompose.Render.Prepare.Warm",
+                "DivCompose.Render.Composition.Warm",
+                "DivCompose.Render.ApplyChanges.Warm",
+                "DivCompose.Render.Effects.Warm",
+                "DivCompose.Render.Total.Warm",
+            ),
+            histogramsWith(".Warm").map { it.first }
         )
     }
 
@@ -88,8 +162,8 @@ class DivViewHistogramReporterTest {
         val reporter = createReporter()
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1.milliseconds) {
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
+                Box(modifier = modifier.size(10.dp))
                 DisposableEffect(Unit) {
                     timeSource += 8.milliseconds
                     onDispose { timeSource += 4.milliseconds }
@@ -97,6 +171,8 @@ class DivViewHistogramReporterTest {
             }
         }
         drawFrame()
+
+        histogramBridge.histograms.clear()
 
         reporter.forceRecomposition()
         drawFrame()
@@ -109,7 +185,7 @@ class DivViewHistogramReporterTest {
                 "DivCompose.Render.Effects.Warm" to 8_000L,
                 "DivCompose.Render.Total.Warm" to 12_000L,
             ),
-            histogramBridge.histograms.filter { it.first.endsWith(".Warm") }
+            histogramBridge.histograms
         )
     }
 
@@ -119,23 +195,23 @@ class DivViewHistogramReporterTest {
         var prepareDuration = 3.milliseconds
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration) {
-                Box(modifier = Modifier.size(10.dp))
+            reporter.measure(prepareDuration) { modifier ->
+                Box(modifier = modifier.size(10.dp))
             }
         }
         drawFrame()
 
-        prepareDuration = 5.microseconds
+        prepareDuration = 5.milliseconds
+
         reporter.forceRecomposition()
         drawFrame()
 
         assertEquals(
             listOf(
                 "DivCompose.Render.Prepare.Cold" to 3_000L,
-                "DivCompose.Render.Prepare.Warm" to 5L,
+                "DivCompose.Render.Prepare.Warm" to 5_000L,
             ),
-            histogramBridge.histograms.filter { it.first.startsWith("DivCompose.Render.Prepare.") }
+            histogramsWith("DivCompose.Render.Prepare.")
         )
     }
 
@@ -151,19 +227,13 @@ class DivViewHistogramReporterTest {
         )
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1.milliseconds) {
-                Box(modifier = Modifier.size(10.dp))
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
+                Box(modifier = modifier.size(10.dp))
             }
         }
         drawFrame()
 
-        assertEquals(
-            listOf("Composition", "ApplyChanges", "Effects", "Total").map {
-                "DivCompose.Render.$it.Cold"
-            },
-            histogramBridge.histograms.map { it.first }
-        )
+        assertEquals(emptyList(), histogramsWith("DivCompose.Render.Prepare."))
     }
 
     @Test
@@ -174,16 +244,15 @@ class DivViewHistogramReporterTest {
         )
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1.milliseconds) {
-                Box(modifier = Modifier.size(10.dp))
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
+                Box(modifier = modifier.size(10.dp))
             }
         }
         drawFrame()
 
         assertEquals(
             listOf("Card.DivCompose.Render.Prepare.Cold" to 1_000L),
-            histogramBridge.histograms.filter { it.first.contains(".Prepare.") }
+            histogramsWith("DivCompose.Render.Prepare.")
         )
     }
 
@@ -195,48 +264,15 @@ class DivViewHistogramReporterTest {
         )
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1.milliseconds) {
-                Box(modifier = Modifier.size(10.dp))
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
+                Box(modifier = modifier.size(10.dp))
             }
         }
         drawFrame()
 
         assertEquals(
             listOf("DivCompose.Render.Prepare.Cold" to 1_000L),
-            histogramBridge.histograms.filter { it.first.contains(".Prepare.") }
-        )
-    }
-
-    @Test
-    fun `DivView reports prepare before other render histograms`() {
-        val divContext = DivContext(
-            baseContext = ApplicationProvider.getApplicationContext(),
-            configuration = DivConfiguration(
-                histogramConfiguration = createConfiguration(isEnabled = true),
-                reporter = TestReporter()
-            )
-        )
-        val data = data(text(text = "Text"))
-
-        rule.setContent {
-            view = LocalView.current
-            CompositionLocalProvider(LocalDivContext provides divContext) {
-                DivView(data = data)
-            }
-        }
-        drawFrame()
-
-        divContext.debugFeatures.forceRecomposition(data)
-        drawFrame()
-
-        assertEquals(
-            listOf("Cold", "Warm").flatMap { state ->
-                listOf("Prepare", "Composition", "ApplyChanges", "Effects", "Total").map {
-                    "DivCompose.Render.$it.$state"
-                }
-            },
-            histogramBridge.histograms.map { it.first }
+            histogramsWith("DivCompose.Render.Prepare.")
         )
     }
 
@@ -245,9 +281,12 @@ class DivViewHistogramReporterTest {
         val reporter = createReporter(isEnabled = false)
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1.milliseconds) {
-                Box(modifier = Modifier.size(10.dp).testTag("content"))
+            reporter.measure(prepareDuration = 1.milliseconds) { modifier ->
+                Box(
+                    modifier = modifier
+                        .size(10.dp)
+                        .testTag("content")
+                )
             }
         }
         drawFrame()
@@ -260,20 +299,24 @@ class DivViewHistogramReporterTest {
     }
 
     @Test
-    fun `core bridge receives histogram bucket settings in microseconds`() {
-        val bridge = mock<HistogramBridge>()
+    fun `HistogramBridge receives histogram bucket settings in microseconds`() {
+        val histogramBridge = mock<HistogramBridge>()
         val reporter = DivViewHistogramReporter(
-            configuration = createConfiguration(isEnabled = true, histogramBridge = bridge),
+            configuration = createConfiguration(
+                isEnabled = true,
+                histogramBridge = histogramBridge,
+            ),
             timeSource = timeSource
         )
 
         rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1234.microseconds) {}
+            reporter.measure(prepareDuration = 1234.microseconds) { modifier ->
+                Box(modifier = modifier.size(10.dp))
+            }
         }
         drawFrame()
 
-        verify(bridge).recordTimeHistogram(
+        verify(histogramBridge).recordTimeHistogram(
             name = "DivCompose.Render.Prepare.Cold",
             duration = 1234,
             min = 1000,
@@ -283,32 +326,20 @@ class DivViewHistogramReporterTest {
         )
     }
 
-    @Test
-    fun `legacy bridge receives render histograms through its TimeUnit callback`() {
-        val bridge = mock<LegacyHistogramBridge>(defaultAnswer = CALLS_REAL_METHODS)
-        val reporter = DivViewHistogramReporter(
-            configuration = createConfiguration(isEnabled = true, histogramBridge = bridge),
-            timeSource = timeSource
-        )
-
-        rule.setContent {
-            view = LocalView.current
-            reporter.measure(prepareDuration = 1234.microseconds) {}
-        }
-        drawFrame()
-
-        verify(bridge).recordTimeHistogram(
-            name = "DivCompose.Render.Prepare.Cold",
-            duration = 1234,
-            min = 1000,
-            max = 10_000_000,
-            unit = TimeUnit.MICROSECONDS,
-            bucketCount = 50
-        )
+    private fun histogramsWith(name: String): List<Pair<String, Long>> {
+        return histogramBridge.histograms.filter { it.first.contains(name) }
     }
 
     private fun drawFrame() {
-        rule.runOnIdle { view.viewTreeObserver.dispatchOnDraw() }
+        rule.runOnIdle {
+            val view = rule.activity.window.decorView
+            val bitmap = createBitmap(view.width, view.height)
+            try {
+                view.draw(Canvas(bitmap))
+            } finally {
+                bitmap.recycle()
+            }
+        }
         rule.waitForIdle()
     }
 
@@ -350,12 +381,6 @@ class DivViewHistogramReporterTest {
         ) {
             histograms += name to duration.toDuration(unit).inWholeMicroseconds
         }
-    }
-
-    private class OnRememberedObserver(private val onRemembered: () -> Unit) : RememberObserver {
-        override fun onRemembered() = onRemembered.invoke()
-        override fun onForgotten() = Unit
-        override fun onAbandoned() = Unit
     }
 
     private class OnAttachElement(

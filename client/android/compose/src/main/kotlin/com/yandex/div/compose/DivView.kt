@@ -36,9 +36,9 @@ fun DivView(
         LocalDivContext.current.getViewContext(data)
     }
     val component = viewContext.component
-    component.histogramReporter.measure(prepareDuration) {
+    component.histogramReporter.measure(prepareDuration) { drawModifier ->
         val localComponent = viewContext.rootLocalComponent
-        val boundModifier = modifier.bindRootFocus(component.focusBindingStorage)
+        val boundModifier = drawModifier.then(modifier).bindRootFocus(component.focusBindingStorage)
         viewContext.onComposition()
 
         CompositionLocalProvider(
