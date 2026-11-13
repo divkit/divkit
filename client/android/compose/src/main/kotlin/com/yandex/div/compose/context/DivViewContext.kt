@@ -8,10 +8,10 @@ import com.yandex.div.compose.animation.observe
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewComponent
 import com.yandex.div.compose.di.declaresLocalScope
-import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.layoutprovider.observe
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.observe
+import com.yandex.div.compose.system.bind
 import com.yandex.div.compose.timers.observe
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.ScopedVariableProvider

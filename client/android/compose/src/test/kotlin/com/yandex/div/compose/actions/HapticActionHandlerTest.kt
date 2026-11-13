@@ -3,7 +3,7 @@ package com.yandex.div.compose.actions
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.haptics.HapticFeedbackStorage
+import com.yandex.div.compose.system.HapticFeedbackStorage
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.hapticAction
 import com.yandex.div2.DivActionHaptic

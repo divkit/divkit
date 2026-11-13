@@ -1,4 +1,4 @@
-package com.yandex.div.compose.haptics
+package com.yandex.div.compose.system
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect

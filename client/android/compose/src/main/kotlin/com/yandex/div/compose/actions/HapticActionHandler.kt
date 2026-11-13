@@ -2,7 +2,7 @@ package com.yandex.div.compose.actions
 
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.haptics.HapticFeedbackStorage
+import com.yandex.div.compose.system.HapticFeedbackStorage
 import com.yandex.div2.DivActionHaptic
 import dev.zacsweers.metro.Inject
 
