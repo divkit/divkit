@@ -350,7 +350,7 @@ internal class DivPagerBinder @Inject constructor(
             FixedPageSizeItemDecoration(paddings, sizeProvider)
         } else {
             WrapContentPageSizeOffScreenPagesController(this, itemSpacing, sizeProvider, paddings, adapter)
-            WrapContentPageSizeItemDecoration(parentSize, paddings, scrollAxisAlignment)
+            WrapContentPageSizeItemDecoration(parentSize, paddings)
         }
 
         viewPager.setItemDecoration(decoration)

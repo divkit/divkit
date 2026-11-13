@@ -12,15 +12,19 @@ internal abstract class DivPagerPageSizeProvider(
 
     fun getPrevNeighbourSize(position: Int): Float? = when (alignment) {
         ItemAlignment.START -> paddings.start
-        ItemAlignment.CENTER -> getCenteredNeighbourSize(position)
+        ItemAlignment.CENTER -> getCenteredPrevNeighbourSize(position)
         ItemAlignment.END -> getItemSize(position)?.let { parentSize - paddings.end - it }
     }
 
     fun getNextNeighbourSize(position: Int) = when (alignment) {
         ItemAlignment.START -> getItemSize(position)?.let { parentSize - paddings.start - it }
-        ItemAlignment.CENTER -> getCenteredNeighbourSize(position)
+        ItemAlignment.CENTER -> getCenteredNextNeighbourSize(position)
         ItemAlignment.END -> paddings.end
     }
 
-    private fun getCenteredNeighbourSize(position: Int) = getItemSize(position)?.let { (parentSize - it) / 2f }
+    protected open fun getCenteredPrevNeighbourSize(position: Int): Float? =
+        getItemSize(position)?.let { (parentSize - it) / 2f }
+
+    protected open fun getCenteredNextNeighbourSize(position: Int): Float? =
+        getCenteredPrevNeighbourSize(position)
 }

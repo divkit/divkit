@@ -1,0 +1,208 @@
+{
+  "description": "Centered wrap_content pagers whose fixed-width items leave odd free space: each page is exactly as wide as its item, so the right border is not clipped, and pages stay on whole pixels — around the middle item, at the first item and when all items fit into the pager",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "bordered_page": {
+      "type": "text",
+      "text": "",
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#000000",
+          "width": 1
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        }
+      ]
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "item_spacing": {
+        "type": "fixed",
+        "value": 8
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "test_pager",
+              "default_item": 1,
+              "items": [
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 199
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 199
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 199
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_pager",
+              "default_item": 1,
+              "items": [
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 201
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 201
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 201
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_pager",
+              "default_item": 0,
+              "items": [
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 199
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 199
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 199
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_pager",
+              "default_item": 1,
+              "items": [
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 59
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 59
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 59
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_pager",
+              "default_item": 1,
+              "items": [
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 61
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 61
+                  }
+                },
+                {
+                  "type": "bordered_page",
+                  "width": {
+                    "type": "fixed",
+                    "value": 61
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
