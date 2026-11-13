@@ -9,9 +9,11 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import com.yandex.div.compose.expressions.observedValue
@@ -36,7 +38,10 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
 
     val mode = accessibility.mode.observedValue()
     if (mode == Mode.EXCLUDE) {
-        return clearAndSetSemantics { }
+        return Modifier.clearAndSetSemantics {
+            hideFromAccessibility()
+            data.id?.let { testTag = it }
+        }.then(this)
     }
 
     val type = if (accessibility.type != Type.AUTO) {

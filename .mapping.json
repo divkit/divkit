@@ -1022,6 +1022,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/visibility/VisibilityTrackingNode.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/visibility/VisibilityTrackingNode.kt",
   "client/android/compose/src/main/res/values-ru/strings.xml":"divkit/public/client/android/compose/src/main/res/values-ru/strings.xml",
   "client/android/compose/src/main/res/values/strings.xml":"divkit/public/client/android/compose/src/main/res/values/strings.xml",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivAccessibilityExcludeTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivAccessibilityExcludeTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivAccessibilityMenuTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivAccessibilityMenuTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivContextTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivContextTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivTooltipControllerTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivTooltipControllerTest.kt",
