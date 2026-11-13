@@ -14,11 +14,21 @@ import com.yandex.div.core.util.binding.BindingDispatcher
 import com.yandex.div.core.util.binding.BindingThreadExecutor
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.action
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.prototype
+import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.trigger
+import com.yandex.div.test.data.variable
 import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
+import com.yandex.div2.DivTypedValue
+import com.yandex.div2.StrValue
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.ExecutionException
@@ -26,6 +36,8 @@ import java.util.concurrent.FutureTask
 import kotlin.test.assertEquals
 import kotlin.test.AfterTest
 import kotlin.test.Test
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
@@ -180,6 +192,74 @@ class Div2ViewRuntimeOwnershipTest {
         assertEquals("Updated title", newView.titleText())
     }
 
+    @Test
+    fun `local scope of a cached card shows the variable updated while the card had no views`() {
+        val card = data(
+            container(
+                items = listOf(
+                    text(
+                        id = "title",
+                        text = expression("@{card_title}"),
+                        variables = listOf(variable("local", "")),
+                    ),
+                ),
+            ),
+        )
+        cacheRuntimeAndUpdateTitle(card)
+        val view = onMain { createView() }
+
+        onMain { view.setData(card, cardTag) }
+
+        assertEquals("Updated title", view.titleText())
+    }
+
+    @Test
+    fun `items of a cached card show the variable updated while the card had no views`() {
+        val title = prototype(text(text = expression("@{card_title}")), id = constant("title"))
+        val card = data(
+            container(
+                itemBuilder = itemBuilder(
+                    data = JSONArray().put(JSONObject()),
+                    prototypes = listOf(title),
+                ),
+            ),
+        )
+        cacheRuntimeAndUpdateTitle(card)
+        val view = onMain { createView() }
+
+        onMain { view.setData(card, cardTag) }
+
+        assertEquals("Updated title", view.titleText())
+    }
+
+    @Test
+    fun `local trigger of a cached card uses the variable updated while the card had no views`() {
+        val triggerResult = Variable.StringVariable("trigger_result", "")
+        context.divVariableController.declare(triggerResult)
+        val title = DivTypedValue.Str(StrValue(expression("@{card_title}")))
+        val card = data(
+            container(
+                items = listOf(
+                    text(
+                        text = expression("@{card_title}"),
+                        triggers = listOf(
+                            trigger(
+                                action = action(typed = setVariableAction("trigger_result", title)),
+                                condition = "@{card_title != ''}",
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        cacheRuntimeAndUpdateTitle(card)
+        val view = onMain { createView() }
+
+        onMain { view.setData(card, cardTag) }
+
+        assertEquals("Updated title", triggerResult.getValue())
+    }
+
     @AfterTest
     fun cleanup() {
         try {
@@ -220,6 +300,13 @@ class Div2ViewRuntimeOwnershipTest {
         val cachedRuntime = runtimeStore
         cleanup()
         cachedRuntime
+    }
+
+    private fun cacheRuntimeAndUpdateTitle(data: DivData) = onMain {
+        val view = createView()
+        view.setData(data, cardTag)
+        view.cleanup()
+        cardTitle.set("Updated title")
     }
 
     private fun observeViewsReceivingSubscriptions(runtime: RuntimeStore): List<Div2View?> = onMain {

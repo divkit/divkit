@@ -125,7 +125,10 @@ internal class RuntimeStoreImpl(
         allRuntimes.forEach { it.cleanup(divView) }
     }
 
-    override fun updateSubscriptions() = allRuntimes.forEach { it.updateSubscriptions() }
+    override fun updateSubscriptions() {
+        val resubscribed = allRuntimes.filter { it.subscribe() }
+        resubscribed.forEach { it.restoreSubscriptions() }
+    }
 
     override fun clearBindings(divView: Div2View) = allRuntimes.forEach { it.clearBinding(divView) }
 
