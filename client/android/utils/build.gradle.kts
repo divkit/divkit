@@ -14,6 +14,7 @@ android {
 
 dependencies {
     implementation(project(":assertion"))
+    implementation(project(":core"))
     implementation(project(":div-core"))
 
     implementation(libs.androidx.collection)

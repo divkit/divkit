@@ -1,6 +1,7 @@
 package com.yandex.div.compose.animation
 
 import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.runtime.withFrameNanos
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionSource
@@ -9,30 +10,42 @@ import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.utils.toEasing
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivAnimationDirection
+import com.yandex.div2.DivAnimatorBase
 import com.yandex.div2.DivCount
 import com.yandex.div2.DivNumberAnimator
 import com.yandex.div2.DivTypedValue
 import kotlin.math.floor
 
 internal class NumberAnimation(
-    private val cancelActions: List<DivAction>?,
-    private val direction: DivAnimationDirection,
-    private val durationMillis: Long,
-    private val easing: Easing,
-    private val endActions: List<DivAction>?,
-    private val fixedIterations: Long?,
+    private val animator: DivAnimatorBase,
+    private val action: DivActionAnimatorStart,
     private val localComponent: DivLocalComponent,
     private val numberValues: NumberValues,
     private val durationScale: Float,
-    private val startDelayMillis: Long,
 ) {
-    private val scaledDurationMillis = durationMillis * durationScale.toDouble()
-    private val scaledStartDelayMillis = startDelayMillis * durationScale.toDouble()
+    private var direction = DivAnimationDirection.NORMAL
+    private var easing: Easing = LinearEasing
+    private var fixedIterations: Long? = null
+    private var scaledDurationMillis = 0.0
+    private var scaledStartDelayMillis = 0.0
+    private var isCancelled = false
 
     fun start() {
+        numberValues.writeStart()
+        // Writing the start value may run triggers that stop or restart this very animator.
+        if (isCancelled) return
+
+        // Timing is resolved after the start value is written: it may depend on the variable.
+        val resolver = localComponent.expressionResolver
+        direction = (action.direction ?: animator.direction).evaluate(resolver)
+        easing = (action.interpolator ?: animator.interpolator).evaluate(resolver).toEasing()
+        fixedIterations = (action.repeatCount ?: animator.repeatCount).fixedIterations(resolver)
+        scaledDurationMillis =
+            (action.duration ?: animator.duration).evaluate(resolver) * durationScale.toDouble()
+        scaledStartDelayMillis =
+            (action.startDelay ?: animator.startDelay).evaluate(resolver) * durationScale.toDouble()
         if (scaledStartDelayMillis == 0.0) {
             numberValues.captureStart()
             applyProgress(
@@ -82,15 +95,17 @@ internal class NumberAnimation(
     }
 
     fun cancel() {
-        localComponent.handleActions(cancelActions.orEmpty(), DivActionSource.ANIMATION)
-        localComponent.handleActions(endActions.orEmpty(), DivActionSource.ANIMATION)
+        isCancelled = true
+        localComponent.handleActions(animator.cancelActions.orEmpty(), DivActionSource.ANIMATION)
+        localComponent.handleActions(animator.endActions.orEmpty(), DivActionSource.ANIMATION)
     }
 
     fun complete() {
-        localComponent.handleActions(endActions.orEmpty(), DivActionSource.ANIMATION)
+        localComponent.handleActions(animator.endActions.orEmpty(), DivActionSource.ANIMATION)
     }
 
     fun end() {
+        isCancelled = true
         val terminalIteration = fixedIterations?.minus(1) ?: 0L
         applyProgress(terminalIteration, 1f)
         complete()
@@ -117,6 +132,8 @@ internal class NumberAnimation(
 }
 
 internal sealed interface NumberValues {
+    fun writeStart()
+
     fun captureStart()
 
     fun set(fraction: Float)
@@ -124,9 +141,16 @@ internal sealed interface NumberValues {
 
 internal class IntegerValues(
     private val variable: Variable.IntegerVariable,
+    private val startValue: Long?,
     private val end: Int,
 ) : NumberValues {
     private var start: Int? = null
+
+    override fun writeStart() {
+        if (startValue != null) {
+            variable.setValueDirectly(startValue)
+        }
+    }
 
     override fun captureStart() {
         getOrCaptureStart()
@@ -146,9 +170,16 @@ internal class IntegerValues(
 
 internal class DoubleValues(
     private val variable: Variable.DoubleVariable,
+    private val startValue: Double?,
     private val end: Float,
 ) : NumberValues {
     private var start: Float? = null
+
+    override fun writeStart() {
+        if (startValue != null) {
+            variable.setValueDirectly(startValue)
+        }
+    }
 
     override fun captureStart() {
         getOrCaptureStart()
@@ -188,18 +219,7 @@ internal fun buildNumberAnimation(
             return null
         }
     }
-    return NumberAnimation(
-        direction = (action.direction ?: animator.direction).evaluate(resolver),
-        durationMillis = (action.duration ?: animator.duration).evaluate(resolver),
-        easing = (action.interpolator ?: animator.interpolator).evaluate(resolver).toEasing(),
-        fixedIterations = (action.repeatCount ?: animator.repeatCount).fixedIterations(resolver),
-        localComponent = localComponent,
-        numberValues = values,
-        durationScale = durationScale,
-        startDelayMillis = (action.startDelay ?: animator.startDelay).evaluate(resolver),
-        cancelActions = animator.cancelActions,
-        endActions = animator.endActions,
-    )
+    return NumberAnimation(animator, action, localComponent, values, durationScale)
 }
 
 private fun integerValues(
@@ -208,14 +228,11 @@ private fun integerValues(
     action: DivActionAnimatorStart,
     resolver: ExpressionResolver,
 ): NumberValues {
-    val explicitStart = action.startValue?.integerValue(resolver)
-        ?: animator.startValue?.evaluate(resolver)
+    val startValue = (action.startValue?.integerValue(resolver)
+        ?: animator.startValue?.evaluate(resolver))?.toLong()
     val end = (action.endValue?.integerValue(resolver)
         ?: animator.endValue.evaluate(resolver)).toInt()
-    if (explicitStart != null) {
-        variable.setValueDirectly(explicitStart)
-    }
-    return IntegerValues(variable, end)
+    return IntegerValues(variable, startValue, end)
 }
 
 private fun doubleValues(
@@ -224,18 +241,16 @@ private fun doubleValues(
     action: DivActionAnimatorStart,
     resolver: ExpressionResolver,
 ): NumberValues {
-    val explicitStart = action.startValue?.doubleValue(resolver)
+    val startValue = action.startValue?.doubleValue(resolver)
         ?: animator.startValue?.evaluate(resolver)
     val end = (action.endValue?.doubleValue(resolver)
         ?: animator.endValue.evaluate(resolver)).toFloat()
-    if (explicitStart != null) {
-        variable.setValueDirectly(explicitStart)
-    }
-    return DoubleValues(variable, end)
+    return DoubleValues(variable, startValue, end)
 }
 
 private fun DivCount.fixedIterations(resolver: ExpressionResolver): Long? = when (this) {
-    is DivCount.Fixed -> (value.value.evaluate(resolver).toInt() - 1).coerceAtLeast(0).toLong() + 1
+    // A fixed count of zero means infinite repetition (schema: div_animator_base_repeat_count).
+    is DivCount.Fixed -> value.value.evaluate(resolver).takeIf { it > 0L }
     is DivCount.Infinity -> null
 }
 

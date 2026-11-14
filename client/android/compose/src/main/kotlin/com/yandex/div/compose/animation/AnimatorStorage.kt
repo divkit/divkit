@@ -121,9 +121,15 @@ internal class AnimatorStorage @Inject constructor(
         runner.cancel(key)
 
         when (animator) {
-            is DivAnimator.Color -> reporter.reportError(
-                "Color animator not supported: '${action.animatorId}'"
-            )
+            is DivAnimator.Color -> buildColorAnimation(
+                target.localComponent,
+                animator.value,
+                action,
+                currentDurationScale(),
+                reporter,
+            )?.let { animation ->
+                runner.start(key, animation)
+            }
 
             is DivAnimator.Number -> buildNumberAnimation(
                 target.localComponent,
@@ -210,7 +216,9 @@ internal class AnimatorRunner(
 
     fun start(key: AnimatorKey, animation: NumberAnimation) {
         val coroutineScope = coroutineScopeProvider.get() ?: return
-        animation.start()
+        // The callbacks of the cancelled previous run may have started this key again: that start
+        // is the newer command and wins, so one animator per key stays running.
+        if (running.containsKey(key)) return
         lateinit var runningAnimator: RunningAnimator
         val job = coroutineScope.launch(start = CoroutineStart.LAZY) {
             animation.run()
@@ -218,6 +226,9 @@ internal class AnimatorRunner(
         }
         runningAnimator = RunningAnimator(animation = animation, job = job)
         running[key] = runningAnimator
+        // Writing the start value may run triggers that stop or restart this very animator:
+        // cancel() has already cancelled the lazy job, so start() does nothing then.
+        animation.start()
         job.start()
     }
 

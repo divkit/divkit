@@ -20,19 +20,24 @@ import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.animatorStartAction
 import com.yandex.div.test.data.animatorStopAction
-import com.yandex.div.test.data.container
+import com.yandex.div.test.data.colorAnimator
+import com.yandex.div.test.data.colorExpression
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.doubleExpression
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixedCount
 import com.yandex.div.test.data.infinityCount
+import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.numberAnimator
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.trigger
+import com.yandex.div.test.data.typedColorValue
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
@@ -40,7 +45,6 @@ import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivAnimationDirection
 import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivAnimator
-import com.yandex.div2.DivColorAnimator
 import com.yandex.div2.DivTrigger
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
@@ -60,10 +64,16 @@ class DivViewWithAnimatorsTest {
     private val integerValue = Variable.IntegerVariable(VALUE, 0L)
     private val doubleValue = Variable.DoubleVariable(DOUBLE_VALUE, 0.0)
     private val stringValue = Variable.StringVariable(STRING_VALUE, "initial")
+    private val colorValue = Variable.ColorVariable(COLOR_VALUE, Color.parse("#FF000000").value)
+    private val targetColor = Variable.ColorVariable(TARGET_COLOR, Color.parse("#FF00FF00").value)
+    private val restarted = Variable.BooleanVariable(RESTARTED, false)
     private val variableController = DivVariableController().apply {
         declare(integerValue)
         declare(doubleValue)
         declare(stringValue)
+        declare(colorValue)
+        declare(targetColor)
+        declare(restarted)
     }
     private val reporter = TestReporter()
     private val externalActionHandler = TestExternalActionHandler()
@@ -518,6 +528,61 @@ class DivViewWithAnimatorsTest {
     }
 
     @Test
+    fun `number animator timing is resolved after the start value is written`() {
+        setContent(target(
+            animator = numberAnimator(
+                duration = intExpression("@{$VALUE}"),
+                endValue = constant(320.0),
+                id = ANIMATOR_ID,
+                startValue = 160.0,
+                variableName = VALUE,
+            )
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(80)
+
+        assertEquals(240L, integerValue.getValue())
+
+        advanceAnimationBy(80)
+
+        assertEquals(320L, integerValue.getValue())
+    }
+
+    @Test
+    fun `stop from a trigger on the start value cancels the number animator`() {
+        setContent(target(
+            animator = numberAnimator(
+                cancelActions = listOf(action(url = CANCEL_URL)),
+                duration = 160,
+                endActions = listOf(action(url = END_URL)),
+                endValue = 100.0,
+                id = ANIMATOR_ID,
+                startValue = 5.0,
+                variableName = VALUE,
+            ),
+            triggers = listOf(trigger(
+                action = action(scopeId = TARGET_ID, typed = animatorStopAction(ANIMATOR_ID)),
+                condition = "@{$VALUE == 5}",
+            )),
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(160)
+
+        assertEquals(5L, integerValue.getValue())
+        assertEquals(
+            listOf(
+                actionData(source = DivActionSource.ANIMATION, url = CANCEL_URL),
+                actionData(source = DivActionSource.ANIMATION, url = END_URL),
+            ),
+            externalActionHandler.handledActions,
+        )
+    }
+
+    @Test
     fun `stop cancels infinite alternating animator before running end actions`() {
         setContent(container(items = listOf(
             target(
@@ -713,6 +778,403 @@ class DivViewWithAnimatorsTest {
     }
 
     @Test
+    fun `color animator interpolates argb channels and runs end actions`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 1024,
+                endActions = listOf(action(url = END_URL)),
+                endValue = "#FF304050",
+                id = ANIMATOR_ID,
+                startValue = "#00102030",
+                variableName = COLOR_VALUE,
+            )
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(256)
+
+        assertEquals(Color.parse("#401C2B3A"), colorValue.getValue())
+
+        advanceAnimationBy(768)
+
+        assertEquals(Color.parse("#FF304050"), colorValue.getValue())
+        assertEquals(
+            listOf(actionData(source = DivActionSource.ANIMATION, url = END_URL)),
+            externalActionHandler.handledActions,
+        )
+    }
+
+    @Test
+    fun `color animator interpolates in linear light like ArgbEvaluator`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FFFFFFFF",
+                id = ANIMATOR_ID,
+                startValue = "#FF000000",
+                variableName = COLOR_VALUE,
+            )
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FFBABABA"), colorValue.getValue())
+    }
+
+    @Test
+    fun `start action overrides color start and end values`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FFFFFFFF",
+                id = ANIMATOR_ID,
+                startValue = "#FF000000",
+                variableName = COLOR_VALUE,
+            ),
+            startAction = animatorStartAction(
+                animatorId = ANIMATOR_ID,
+                endValue = typedColorValue(0xFF303030),
+                startValue = typedColorValue(0xFF101010),
+            ),
+        ))
+
+        startTargetAnimation()
+
+        assertEquals(Color.parse("#FF101010"), colorValue.getValue())
+
+        beginAnimation()
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FF242424"), colorValue.getValue())
+
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FF303030"), colorValue.getValue())
+    }
+
+    @Test
+    fun `start action overrides timing values and direction for color variable`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 1000,
+                endValue = "#FF0000F0",
+                id = ANIMATOR_ID,
+                interpolator = DivAnimationInterpolator.EASE_IN,
+                startDelay = 500,
+                startValue = "#FF000010",
+                variableName = COLOR_VALUE,
+            ),
+            startAction = animatorStartAction(
+                animatorId = ANIMATOR_ID,
+                direction = DivAnimationDirection.ALTERNATE,
+                duration = 160,
+                interpolator = DivAnimationInterpolator.LINEAR,
+                repeatCount = fixedCount(2),
+                startDelay = 96,
+            ),
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(48)
+
+        assertEquals(Color.parse("#FF000010"), colorValue.getValue())
+
+        advanceAnimationBy(128)
+
+        assertEquals(Color.parse("#FF0000AF"), colorValue.getValue())
+
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FF0000F0"), colorValue.getValue())
+
+        advanceAnimationBy(160)
+
+        assertEquals(Color.parse("#FF000010"), colorValue.getValue())
+    }
+
+    @Test
+    fun `color animator without start value uses current variable value`() {
+        colorValue.set(Color.parse("#FF202020"))
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FF404040",
+                id = ANIMATOR_ID,
+                variableName = COLOR_VALUE,
+            )
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FF333333"), colorValue.getValue())
+    }
+
+    @Test
+    fun `color start value is captured after delay`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FF0000FE",
+                id = ANIMATOR_ID,
+                startDelay = 96,
+                variableName = COLOR_VALUE,
+            )
+        ))
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(48)
+
+        rule.runOnIdle { colorValue.set(Color.parse("#FF000040")) }
+        advanceAnimationBy(48)
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FF0000BD"), colorValue.getValue())
+    }
+
+    @Test
+    fun `color end value is evaluated before explicit start`() {
+        colorValue.set(Color.parse("#FF00FF00"))
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = colorExpression("@{setColorBlue($COLOR_VALUE, 1.0)}"),
+                id = ANIMATOR_ID,
+                startValue = "#FF000000",
+                variableName = COLOR_VALUE,
+            )
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(160)
+
+        assertEquals(Color.parse("#FF00FFFF"), colorValue.getValue())
+    }
+
+    @Test
+    fun `repeating color animator restarts from the start color`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FF0000FE",
+                id = ANIMATOR_ID,
+                repeatCount = fixedCount(2),
+                startValue = "#FF000000",
+                variableName = COLOR_VALUE,
+            )
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(224)
+
+        assertEquals(Color.parse("#FF0000A7"), colorValue.getValue())
+    }
+
+    @Test
+    fun `restarted color animator ends at the changed end value`() {
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = colorExpression("@{$TARGET_COLOR}"),
+                id = ANIMATOR_ID,
+                variableName = COLOR_VALUE,
+            )
+        ))
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(160)
+
+        assertEquals(Color.parse("#FF00FF00"), colorValue.getValue())
+
+        rule.runOnIdle { targetColor.set(Color.parse("#FFFF0000")) }
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(160)
+
+        assertEquals(Color.parse("#FFFF0000"), colorValue.getValue())
+    }
+
+    @Test
+    fun `stop from a trigger on the start color cancels the color animator`() {
+        setContent(target(
+            animator = colorAnimator(
+                cancelActions = listOf(action(url = CANCEL_URL)),
+                direction = DivAnimationDirection.REVERSE,
+                duration = 160,
+                endActions = listOf(action(url = END_URL)),
+                endValue = "#FF0000FF",
+                id = ANIMATOR_ID,
+                startValue = "#FFFF0000",
+                variableName = COLOR_VALUE,
+            ),
+            triggers = listOf(trigger(
+                action = action(scopeId = TARGET_ID, typed = animatorStopAction(ANIMATOR_ID)),
+                condition = "@{$COLOR_VALUE == toColor('#FFFF0000')}",
+            )),
+        ))
+
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(160)
+
+        assertEquals(Color.parse("#FFFF0000"), colorValue.getValue())
+        assertEquals(
+            listOf(
+                actionData(source = DivActionSource.ANIMATION, url = CANCEL_URL),
+                actionData(source = DivActionSource.ANIMATION, url = END_URL),
+            ),
+            externalActionHandler.handledActions,
+        )
+    }
+
+    @Test
+    fun `zero repeat count repeats the color animator until stopped`() {
+        setContent(container(items = listOf(
+            target(
+                animator = colorAnimator(
+                    duration = 160,
+                    endActions = listOf(action(url = END_URL)),
+                    endValue = "#FF0000FE",
+                    id = ANIMATOR_ID,
+                    repeatCount = fixedCount(0),
+                    startValue = "#FF000000",
+                    variableName = COLOR_VALUE,
+                )
+            ),
+            text(
+                action = action(
+                    scopeId = TARGET_ID,
+                    typed = animatorStopAction(ANIMATOR_ID),
+                ),
+                id = STOP_ID,
+                text = "Stop",
+            ),
+        )))
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(240)
+
+        assertEquals(Color.parse("#FF0000B9"), colorValue.getValue())
+        assertEquals(emptyList(), externalActionHandler.handledActions)
+
+        rule.onNodeWithTag(STOP_ID).performClick()
+        val stoppedValue = colorValue.getValue()
+        advanceAnimationBy(160)
+
+        assertEquals(stoppedValue, colorValue.getValue())
+        assertEquals(
+            listOf(actionData(source = DivActionSource.ANIMATION, url = END_URL)),
+            externalActionHandler.handledActions,
+        )
+    }
+
+    @Test
+    fun `restart from cancel actions keeps a single running color animator`() {
+        setContent(container(items = listOf(
+            target(
+                animator = colorAnimator(
+                    cancelActions = listOf(
+                        action(url = "div-action://set_variable?name=$RESTARTED&value=true")
+                    ),
+                    duration = 160,
+                    endActions = listOf(action(url = END_URL)),
+                    endValue = "#FF0000FE",
+                    id = ANIMATOR_ID,
+                    startValue = "#FF000000",
+                    variableName = COLOR_VALUE,
+                ),
+                triggers = listOf(trigger(
+                    action = action(
+                        scopeId = TARGET_ID,
+                        typed = animatorStartAction(ANIMATOR_ID, repeatCount = infinityCount()),
+                    ),
+                    condition = "@{$RESTARTED}",
+                )),
+            ),
+            text(
+                action = action(
+                    scopeId = TARGET_ID,
+                    typed = animatorStopAction(ANIMATOR_ID),
+                ),
+                id = STOP_ID,
+                text = "Stop",
+            ),
+        )))
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(80)
+
+        startTargetAnimation()
+
+        assertEquals(Color.parse("#FF000000"), colorValue.getValue())
+
+        beginAnimation()
+        advanceAnimationBy(400)
+
+        assertEquals(Color.parse("#FF0000B9"), colorValue.getValue())
+        val endAction = actionData(source = DivActionSource.ANIMATION, url = END_URL)
+        assertEquals(listOf(endAction), externalActionHandler.handledActions)
+
+        rule.onNodeWithTag(STOP_ID).performClick()
+        val stoppedValue = colorValue.getValue()
+        advanceAnimationBy(320)
+
+        assertEquals(stoppedValue, colorValue.getValue())
+        assertEquals(listOf(endAction, endAction), externalActionHandler.handledActions)
+    }
+
+    @Test
+    fun `stop cancels infinite color animator before running end actions`() {
+        setContent(container(items = listOf(
+            target(
+                animator = colorAnimator(
+                    cancelActions = listOf(action(url = CANCEL_URL)),
+                    duration = 160,
+                    endActions = listOf(action(url = END_URL)),
+                    endValue = "#FF0000FE",
+                    id = ANIMATOR_ID,
+                    repeatCount = infinityCount(),
+                    startValue = "#FF000000",
+                    variableName = COLOR_VALUE,
+                )
+            ),
+            text(
+                action = action(
+                    scopeId = TARGET_ID,
+                    typed = animatorStopAction(ANIMATOR_ID),
+                ),
+                id = STOP_ID,
+                text = "Stop",
+            ),
+        )))
+        startTargetAnimation()
+        beginAnimation()
+        advanceAnimationBy(80)
+
+        assertEquals(Color.parse("#FF0000B9"), colorValue.getValue())
+
+        rule.onNodeWithTag(STOP_ID).performClick()
+        val stoppedValue = colorValue.getValue()
+        advanceAnimationBy(160)
+
+        assertEquals(stoppedValue, colorValue.getValue())
+        assertEquals(
+            listOf(
+                actionData(source = DivActionSource.ANIMATION, url = CANCEL_URL),
+                actionData(source = DivActionSource.ANIMATION, url = END_URL),
+            ),
+            externalActionHandler.handledActions,
+        )
+    }
+
+    @Test
     fun `missing animator reports an error`() {
         reporter.failOnError = false
         setContent(text(
@@ -791,20 +1253,40 @@ class DivViewWithAnimatorsTest {
     }
 
     @Test
-    fun `color animator reports an unsupported error`() {
+    fun `color animator on non-color variable reports an error`() {
         reporter.failOnError = false
         setContent(target(
-            animator = DivAnimator.Color(DivColorAnimator(
-                duration = constant(160L),
-                endValue = constant(0xFFFF0000.toInt()),
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FF000000",
                 id = ANIMATOR_ID,
                 variableName = VALUE,
-            ))
+            )
         ))
 
         startTargetAnimation()
 
-        assertEquals(listOf("Color animator not supported: '$ANIMATOR_ID'"), reporter.errors)
+        assertEquals(
+            listOf("Color animator variable has incompatible type: '$VALUE'"),
+            reporter.errors,
+        )
+    }
+
+    @Test
+    fun `missing color animator variable reports an error`() {
+        reporter.failOnError = false
+        setContent(target(
+            animator = colorAnimator(
+                duration = 160,
+                endValue = "#FF000000",
+                id = ANIMATOR_ID,
+                variableName = "missing",
+            )
+        ))
+
+        startTargetAnimation()
+
+        assertEquals(listOf("Color animator variable not found: 'missing'"), reporter.errors)
     }
 
     @Test
@@ -920,12 +1402,15 @@ class DivViewWithAnimatorsTest {
         const val ANIMATOR_ID = "rotation"
         const val CANCEL_URL = "test://cancel"
         const val CHILD_ID = "child"
+        const val COLOR_VALUE = "color_value"
         const val DOUBLE_VALUE = "double_value"
         const val END_URL = "test://end"
         const val MISSING_SCOPE_ID = "missing"
+        const val RESTARTED = "restarted"
         const val START_ID = "start"
         const val STOP_ID = "stop"
         const val STRING_VALUE = "string_value"
+        const val TARGET_COLOR = "target_color"
         const val TARGET_ID = "target"
         const val VALUE = "value"
     }
