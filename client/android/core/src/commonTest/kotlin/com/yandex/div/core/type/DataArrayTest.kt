@@ -1,7 +1,6 @@
 package com.yandex.div.core.type
 
-import com.yandex.div.core.json.asJsonArray
-import org.json.JSONArray
+import com.yandex.div.core.json.JsonArray
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -13,7 +12,7 @@ class DataArrayTest {
 
     @Test
     fun `get returns nested JSON array as is`() {
-        val nested = JSONArray().asJsonArray()
+        val nested = JsonArray()
 
         val array = DataArray.of(listOf(nested))
 
@@ -130,7 +129,7 @@ class DataArrayTest {
                 "quote \"",
                 1.5,
                 null,
-                JSONArray("""[1]""").asJsonArray(),
+                JsonArray("""[1]"""),
                 DataObject.of(mapOf("key" to true)),
             )
         )

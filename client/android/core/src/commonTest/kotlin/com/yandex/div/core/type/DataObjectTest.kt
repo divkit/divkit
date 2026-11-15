@@ -1,7 +1,6 @@
 package com.yandex.div.core.type
 
-import com.yandex.div.core.json.asJsonObject
-import org.json.JSONObject
+import com.yandex.div.core.json.JsonObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -13,7 +12,7 @@ class DataObjectTest {
 
     @Test
     fun `get returns nested JSON object as is`() {
-        val nested = JSONObject().asJsonObject()
+        val nested = JsonObject()
 
         val obj = DataObject.of(mapOf("nested" to nested))
 
@@ -109,7 +108,7 @@ class DataObjectTest {
                 "string" to "quote \"",
                 "number" to 1.5,
                 "null" to null,
-                "json" to JSONObject("""{"key":"value"}""").asJsonObject(),
+                "json" to JsonObject("""{"key":"value"}"""),
                 "data" to DataArray.of(listOf(true)),
             )
         )
