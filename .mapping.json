@@ -6673,7 +6673,7 @@
   "client/android/publish-common.gradle":"divkit/public/client/android/publish-common.gradle",
   "client/android/render-common/build.gradle.kts":"divkit/public/client/android/render-common/build.gradle.kts",
   "client/android/render-common/detekt-baseline.xml":"divkit/public/client/android/render-common/detekt-baseline.xml",
-  "client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/animation/DivSystemAnimationUtils.kt":"divkit/public/client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/animation/DivSystemAnimationUtils.kt",
+  "client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/animation/SystemAnimationConfiguration.kt":"divkit/public/client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/animation/SystemAnimationConfiguration.kt",
   "client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/images/NinePatchUtils.kt":"divkit/public/client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/images/NinePatchUtils.kt",
   "client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/text/TextTruncation.android.kt":"divkit/public/client/android/render-common/src/androidMain/kotlin/com/yandex/div/render/common/text/TextTruncation.android.kt",
   "client/android/render-common/src/commonMain/kotlin/com/yandex/div/render/common/gradient/GradientGeometry.kt":"divkit/public/client/android/render-common/src/commonMain/kotlin/com/yandex/div/render/common/gradient/GradientGeometry.kt",

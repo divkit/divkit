@@ -8,7 +8,7 @@ import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.render.common.animation.isSystemAnimationsEnabled
+import com.yandex.div.render.common.animation.SystemAnimationConfiguration
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
@@ -18,12 +18,13 @@ import javax.inject.Named
 @DivScope
 @InternalApi
 class DivAnimationsEnabledController @Inject constructor(
-    @Named(Names.THEMED_CONTEXT) private val context: Context,
+    @Named(Names.THEMED_CONTEXT) context: Context,
     private val provider: DivAnimationsEnabledProvider,
 ) {
+    private val systemConfiguration = SystemAnimationConfiguration(context)
 
     fun isEnabled(): Boolean =
-        context.isSystemAnimationsEnabled() && provider.isAnimationsEnabled()
+        systemConfiguration.isEnabled && provider.isAnimationsEnabled()
 
     fun observe(divView: Div2View, observer: () -> Unit): Disposable {
         val scope = divView.context.lifecycleOwner?.lifecycleScope ?: MainScope()
