@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
+import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
@@ -41,7 +42,7 @@ internal fun GalleryGridView(
         AdjustDefaultGridItemAlignment(gridState, clampedDefaultItem, items.size, properties)
     }
 
-    BoxWithConstraints(modifier = modifier) {
+    BoxWithConstraints(modifier = modifier.then(IntrinsicSizeBarrier)) {
         val isLazyGridSupported = constraints.hasBoundedWidth && constraints.hasBoundedHeight
         if (isLazyGridSupported) {
             val density = LocalDensity.current

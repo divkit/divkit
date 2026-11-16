@@ -19,6 +19,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.variables.mutableStateFromIntegerVariable
 import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
@@ -91,6 +92,7 @@ private fun PagerView(
 
     Box(
         modifier = modifier
+            .then(IntrinsicSizeBarrier)
             .constrainUnboundedMax(isWidth = isHorizontal)
             .onMeasureConstraints { constraints ->
                 viewportSizePx.intValue = if (isHorizontal) {

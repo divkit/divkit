@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
+import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
@@ -42,7 +43,7 @@ internal fun GalleryListView(
         if (initialDefaultItem > 0) {
             AdjustDefaultItemAlignment(listState, clampedDefaultItem, properties)
         }
-        BoxWithConstraints(modifier = modifier) {
+        BoxWithConstraints(modifier = modifier.then(IntrinsicSizeBarrier)) {
             if (isScrollAxisBounded(properties.isHorizontal)) {
                 ScrollableGalleryView(items, components, properties, listState)
             } else {

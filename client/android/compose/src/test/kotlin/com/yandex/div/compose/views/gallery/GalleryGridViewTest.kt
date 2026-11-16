@@ -3,9 +3,11 @@ package com.yandex.div.compose.views.gallery
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
@@ -17,12 +19,14 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.matchParent
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.wrapContent
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
@@ -98,6 +102,28 @@ class GalleryGridViewTest {
         )
 
         assertEquals(itemBounds("fixedItem").width, itemBounds("matchParentItem").width)
+    }
+
+    @Test
+    fun `gallery in wrap content container with match parent sibling shows items`() {
+        composeRule.setContent(
+            configuration = configuration,
+            data = data(
+                container(
+                    items = listOf(
+                        text(height = matchParent(), text = "stretched"),
+                        text(height = fixed(100), text = "sizing"),
+                        gallery(
+                            columnCount = constant(2L),
+                            items = listOf(text(text = "item")),
+                        ),
+                    ),
+                    orientation = DivContainer.Orientation.HORIZONTAL,
+                )
+            ),
+        )
+
+        composeRule.onNodeWithText("item").assertIsDisplayed()
     }
 
     @Test
