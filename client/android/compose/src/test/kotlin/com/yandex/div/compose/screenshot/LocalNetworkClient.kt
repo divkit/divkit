@@ -13,9 +13,13 @@ internal class LocalNetworkClient : DivNetworkClient {
             "Unsupported test request: ${request.method} $url"
         }
 
-        val fileName = url.substringAfterLast('/')
-        val bytes = checkNotNull(javaClass.getResourceAsStream("/patches/$fileName")) {
-            "No local response for $url"
+        check(url.startsWith(REMOTE_ROOT)) {
+            "No local response for $url: only $REMOTE_ROOT is served locally"
+        }
+
+        val resource = "/patches/${url.removePrefix(REMOTE_ROOT)}"
+        val bytes = checkNotNull(javaClass.getResourceAsStream(resource)) {
+            "No local response for $url: missing resource $resource"
         }.use { it.readBytes() }
 
         return object : DivNetworkResponse {
@@ -27,5 +31,9 @@ internal class LocalNetworkClient : DivNetworkClient {
             override fun headers(name: String): List<String> = emptyList()
             override fun close() = body.close()
         }
+    }
+
+    private companion object {
+        const val REMOTE_ROOT = "https://yastatic.net/s3/home/divkit/"
     }
 }

@@ -1,6 +1,7 @@
 {
   "description": "Patch gallery with typed action",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

@@ -4030,6 +4030,7 @@
       ],
       "file": "patch/typed-gallery.json",
       "automated": [
+        "android",
         "ios"
       ]
     },
@@ -4066,6 +4067,7 @@
       ],
       "file": "patch/inside_gallery.json",
       "automated": [
+        "android",
         "ios"
       ]
     },
@@ -4151,6 +4153,7 @@
       ],
       "file": "patch/inside_pager.json",
       "automated": [
+        "android",
         "ios"
       ]
     },
@@ -4323,6 +4326,7 @@
       ],
       "file": "patch/root.json",
       "automated": [
+        "android",
         "ios"
       ]
     },
@@ -4347,6 +4351,7 @@
       ],
       "file": "patch/actions_applied.json",
       "automated": [
+        "android",
         "ios"
       ]
     },
@@ -4371,6 +4376,7 @@
       ],
       "file": "patch/actions_failed.json",
       "automated": [
+        "android",
         "ios"
       ]
     },

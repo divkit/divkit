@@ -1,6 +1,7 @@
 {
   "description": "Patch gallery internal items",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

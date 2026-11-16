@@ -1,0 +1,78 @@
+{
+  "patch": {
+    "changes": [
+      {
+        "id": "root_div",
+        "items": [
+          {
+            "id": "root_div",
+            "type": "container",
+            "height": {
+              "type": "match_parent"
+            },
+            "items": [
+              {
+                "type": "container",
+                "id": "item1",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Original text",
+                    "height": {
+                      "type": "fixed",
+                      "value": 48
+                    },
+                    "id": "patched_original_text"
+                  }
+                ]
+              },
+              {
+                "type": "gallery",
+                "id": "item2",
+                "height": {
+                  "type": "match_parent"
+                },
+                "orientation": "vertical",
+                "items": [
+                  {
+                    "type": "item",
+                    "text": "First item in gallery",
+                    "text_id": "patched_gallery_first_text"
+                  },
+                  {
+                    "type": "item",
+                    "text": "Second item in gallery",
+                    "text_id": "patched_gallery_second_text"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "mode": "partial"
+  },
+  "templates": {
+    "item": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "paddings": {
+        "start": 16,
+        "top": 16,
+        "end": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#888888"
+        }
+      },
+      "$id": "text_id"
+    }
+  }
+}

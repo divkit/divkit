@@ -1,6 +1,7 @@
 {
   "description": "Patch on_applied_actions",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

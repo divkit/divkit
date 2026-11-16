@@ -1,6 +1,7 @@
 {
   "description": "Patch pager internal items",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

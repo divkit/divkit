@@ -1,6 +1,7 @@
 {
   "description": "Patch on_failed_actions",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
