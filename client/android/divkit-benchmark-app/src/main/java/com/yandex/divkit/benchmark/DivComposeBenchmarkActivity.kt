@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +23,6 @@ import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
-import com.yandex.divkit.benchmark.perf.PerfMetricReporter
 import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -33,7 +31,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -48,7 +45,6 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
     private lateinit var divContext: DivContext
     private lateinit var composeView: ComposeView
     private lateinit var textView: TextView
-    private lateinit var frameTotalMetric: FrameTotalMetric
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +62,6 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         composeView = ComposeView(this).apply {
             rootLayout.addView(this)
         }
-        frameTotalMetric = FrameTotalMetric(window)
 
         lifecycleScope.launch {
             runBenchmark()
@@ -100,21 +95,9 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         showMessage("Finished")
     }
 
-    override fun onDestroy() {
-        frameTotalMetric.close()
-        super.onDestroy()
-    }
-
     private suspend fun measureRender(phase: String, render: () -> Unit) {
-        val frame = frameTotalMetric.start()
         render()
         waitHistogram("DivCompose.Render.Total.$phase")
-        val totalDuration = withTimeout(10.seconds) { frame.await() }
-        PerfMetricReporter.reportTimeMetric(
-            "DivCompose.Frame.Total.$phase",
-            TimeUnit.MICROSECONDS,
-            totalDuration.inWholeMicroseconds,
-        )
     }
 
     private fun parseDivData(): DivData {
@@ -152,10 +135,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
             CompositionLocalProvider(LocalContext provides divContext) {
                 DivView(
                     data = data,
-                    modifier = Modifier.safeDrawingPadding().drawWithContent {
-                        frameTotalMetric.onDraw(composeView.drawingTime)
-                        drawContent()
-                    }
+                    modifier = Modifier.safeDrawingPadding()
                 )
             }
         }

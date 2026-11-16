@@ -34,8 +34,6 @@ class ComposePerformanceTest : BasePerformanceTest() {
             "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
             "DivCompose.Render.Total.Warm",
-            "DivCompose.Frame.Total.Cold",
-            "DivCompose.Frame.Total.Warm",
         ]
     )
     @Test
@@ -59,8 +57,6 @@ class ComposePerformanceTest : BasePerformanceTest() {
             "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
             "DivCompose.Render.Total.Warm",
-            "DivCompose.Frame.Total.Cold",
-            "DivCompose.Frame.Total.Warm",
         ]
     )
     @Test
@@ -84,8 +80,6 @@ class ComposePerformanceTest : BasePerformanceTest() {
             "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
             "DivCompose.Render.Total.Warm",
-            "DivCompose.Frame.Total.Cold",
-            "DivCompose.Frame.Total.Warm",
         ]
     )
     @Test
