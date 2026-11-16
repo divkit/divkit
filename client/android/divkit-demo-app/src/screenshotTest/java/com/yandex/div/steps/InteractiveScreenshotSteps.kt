@@ -91,7 +91,7 @@ internal class InteractiveScreenshotSteps {
     }
 
     private fun performSwipe(swipe: Step.Swipe) = step("Swipe div '${swipe.id}'") {
-        onView(swipe.id).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to))
+        onView(swipe.id).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to, swipe.holdDurationMs))
     }
 
     private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {

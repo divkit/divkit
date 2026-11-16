@@ -1,0 +1,139 @@
+{
+  "description": "Short swipe of div-state with swipe_out_actions: stopped at the end returns, released while moving swipes out",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "swipe_out_fling",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "content_alignment_vertical": "center",
+            "items": [
+              {
+                "type": "state",
+                "id": "toast",
+                "width": {
+                  "type": "match_parent"
+                },
+                "states": [
+                  {
+                    "state_id": "visible",
+                    "div": {
+                      "type": "text",
+                      "id": "toast_visible",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "paddings": {
+                        "left": 16,
+                        "right": 16,
+                        "top": 14,
+                        "bottom": 14
+                      },
+                      "border": {
+                        "corner_radius": 12
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#202124"
+                        }
+                      ],
+                      "text": "Toast visible",
+                      "font_size": 15,
+                      "text_color": "#FFFFFF"
+                    },
+                    "swipe_out_actions": [
+                      {
+                        "log_id": "swipe_out",
+                        "url": "div-action://set_state?state_id=0/toast/dismissed"
+                      }
+                    ]
+                  },
+                  {
+                    "state_id": "dismissed",
+                    "div": {
+                      "type": "text",
+                      "id": "toast_dismissed",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "paddings": {
+                        "left": 16,
+                        "right": 16,
+                        "top": 14,
+                        "bottom": 14
+                      },
+                      "text": "Toast dismissed",
+                      "font_size": 15,
+                      "text_color": "#000000"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "toast"
+      },
+      "from": {
+        "x": 0.1,
+        "y": 0.5
+      },
+      "to": {
+        "x": 0.4,
+        "y": 0.5
+      },
+      "hold_duration_ms": 100
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "toast_visible"
+      },
+      "text": "Toast visible"
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "toast"
+      },
+      "from": {
+        "x": 0.1,
+        "y": 0.5
+      },
+      "to": {
+        "x": 0.4,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "toast_dismissed"
+      },
+      "text": "Toast dismissed"
+    }
+  ]
+}

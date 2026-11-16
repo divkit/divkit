@@ -2,7 +2,9 @@ package com.yandex.div.compose.screenshot
 
 import android.graphics.PointF
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.toAndroidRectF
+import androidx.compose.ui.test.TouchInjectionScope
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.doubleClick
@@ -112,7 +114,13 @@ class RoborazziInteractiveScreenshotTest(
         clipSwipeToBounds(from, to, visibleBounds.toAndroidRectF())
         val offset = node.positionInRoot - node.boundsInRoot.topLeft
         target.performTouchInput {
-            swipe(offset + Offset(from.x, from.y), offset + Offset(to.x, to.y))
+            val start = offset + Offset(from.x, from.y)
+            val end = offset + Offset(to.x, to.y)
+            if (step.holdDurationMs > 0) {
+                swipeAndHold(start, end, step.holdDurationMs)
+            } else {
+                swipe(start, end)
+            }
         }
     }
 
@@ -180,3 +188,19 @@ class RoborazziInteractiveScreenshotTest(
         fun cases() = cases
     }
 }
+
+private fun TouchInjectionScope.swipeAndHold(start: Offset, end: Offset, holdDurationMs: Long) {
+    val moveSteps = (SWIPE_DURATION_MS / eventPeriodMillis).toInt().coerceAtLeast(1)
+    down(start)
+    for (index in 1..moveSteps) {
+        moveTo(lerp(start, end, index.toFloat() / moveSteps), SWIPE_DURATION_MS / moveSteps)
+    }
+    var held = 0L
+    while (held < holdDurationMs) {
+        moveTo(end, eventPeriodMillis)
+        held += eventPeriodMillis
+    }
+    up()
+}
+
+private const val SWIPE_DURATION_MS = 200L

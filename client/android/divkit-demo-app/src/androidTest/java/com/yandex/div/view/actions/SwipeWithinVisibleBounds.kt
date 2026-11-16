@@ -15,7 +15,8 @@ import org.hamcrest.Matcher
 
 class SwipeWithinVisibleBounds(
     private val normalizedFrom: PointF,
-    private val normalizedTo: PointF
+    private val normalizedTo: PointF,
+    private val holdDurationMs: Long,
 ) : ViewAction {
 
     override fun getConstraints(): Matcher<View> = isDisplayed()
@@ -33,7 +34,7 @@ class SwipeWithinVisibleBounds(
         val location = IntArray(2)
         view.getLocationOnScreen(location)
         GeneralSwipeAction(
-            Swipe.FAST,
+            if (holdDurationMs > 0) LinearSwiper(holdDurationMs) else Swipe.FAST,
             { floatArrayOf(location[0] + from.x, location[1] + from.y) },
             { floatArrayOf(location[0] + to.x, location[1] + to.y) },
             Press.FINGER

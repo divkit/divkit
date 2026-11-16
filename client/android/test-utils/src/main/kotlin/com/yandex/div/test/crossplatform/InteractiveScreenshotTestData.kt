@@ -20,7 +20,12 @@ class InteractiveScreenshotTestData(
 
         class LongTap(val id: String) : Step()
 
-        class Swipe(val id: String, val from: PointF, val to: PointF) : Step()
+        class Swipe(
+            val id: String,
+            val from: PointF,
+            val to: PointF,
+            val holdDurationMs: Long,
+        ) : Step()
 
         class Wait(val delay: Long) : Step()
 
@@ -96,9 +101,12 @@ class InteractiveScreenshotTestData(
         private const val SWIPE_DIRECTION = "direction"
         private const val SWIPE_FROM = "from"
         private const val SWIPE_TO = "to"
+        private const val SWIPE_HOLD_DURATION_MS = "hold_duration_ms"
+        private const val DEFAULT_SWIPE_HOLD_DURATION_MS = 0L
 
         private fun parseSwipe(step: JSONObject): Step.Swipe {
             val id = parseTargetId(step)
+            val holdDurationMs = parseHoldDurationMs(step)
             return if (step.has(SWIPE_DIRECTION)) {
                 if (step.has(SWIPE_FROM) || step.has(SWIPE_TO)) {
                     throw JSONException(
@@ -113,12 +121,20 @@ class InteractiveScreenshotTestData(
                     else -> throw JSONException("Unsupported swipe direction: $value")
                 }
                 val to = PointF(1f - from.x, 1f - from.y)
-                Step.Swipe(id, from, to)
+                Step.Swipe(id, from, to, holdDurationMs)
             } else {
                 val from = parsePoint(step.getJSONObject(SWIPE_FROM))
                 val to = parsePoint(step.getJSONObject(SWIPE_TO))
-                Step.Swipe(id, from, to)
+                Step.Swipe(id, from, to, holdDurationMs)
             }
+        }
+
+        private fun parseHoldDurationMs(step: JSONObject): Long {
+            val holdDurationMs = step.optLong(SWIPE_HOLD_DURATION_MS, DEFAULT_SWIPE_HOLD_DURATION_MS)
+            if (holdDurationMs < 0) {
+                throw JSONException("swipe hold_duration_ms must not be negative, got: $holdDurationMs")
+            }
+            return holdDurationMs
         }
 
         private fun parsePoint(point: JSONObject): PointF {

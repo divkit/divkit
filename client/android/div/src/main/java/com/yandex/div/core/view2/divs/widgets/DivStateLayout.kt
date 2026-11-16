@@ -26,6 +26,13 @@ import kotlin.math.sign
 
 private const val ANIMATION_TIME = 300f
 
+/**
+ * Same value as `item_touch_helper_swipe_escape_velocity` used by RecyclerView's ItemTouchHelper
+ * for swipe-to-dismiss. The resource is private to the recyclerview library, and ViewConfiguration
+ * has no equivalent, so the value is duplicated here.
+ */
+private const val SWIPE_ESCAPE_VELOCITY_DP = 120f
+
 internal class DivStateLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -64,10 +71,11 @@ internal class DivStateLayout @JvmOverloads constructor(
             requestDisallowInterceptTouchEvent(false)
             return super.onTouchEvent(event)
         }
+        // ACTION_DOWN is already handled in onInterceptTouchEvent.
+        val handled = event.action == MotionEvent.ACTION_DOWN || gestureDetector.onTouchEvent(event)
         if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
             swipeListener.finishSwipe()
         }
-        val handled = gestureDetector.onTouchEvent(event)
         return if (handled) {
             true
         } else {
@@ -114,9 +122,25 @@ internal class DivStateLayout @JvmOverloads constructor(
             get() = if (isNotEmpty()) getChildAt(0) else null
         val inScroll: Boolean
             get() = (view?.translationX ?: 0f) != 0f
+        private val swipeEscapeVelocity =
+            SWIPE_ESCAPE_VELOCITY_DP * resources.displayMetrics.density
+        private var flingDirection = 0f
 
         override fun onDown(e: MotionEvent): Boolean {
+            flingDirection = 0f
             return true
+        }
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float,
+        ): Boolean {
+            if (abs(velocityX) >= swipeEscapeVelocity && abs(velocityX) > abs(velocityY)) {
+                flingDirection = sign(velocityX)
+            }
+            return false
         }
 
         override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
@@ -136,12 +160,14 @@ internal class DivStateLayout @JvmOverloads constructor(
 
         fun finishSwipe() {
             val view = this.view ?: return
+            val flungOut = view.translationX != 0f && flingDirection == sign(view.translationX)
+            flingDirection = 0f
 
             val duration: Float
             val targetTranslation: Float
             val dismiss: Boolean
-            if (abs(view.translationX) > view.width / 2) {
-                duration = ANIMATION_TIME * abs(view.width - view.translationX) / view.width
+            if (abs(view.translationX) > view.width / 2 || flungOut) {
+                duration = ANIMATION_TIME * (view.width - abs(view.translationX)) / view.width
                 targetTranslation = sign(view.translationX) * view.width.toFloat()
                 dismiss = true
             } else {

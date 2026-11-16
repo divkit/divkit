@@ -7,6 +7,7 @@ extension RunnerStep {
       case direction
       case from
       case to
+      case holdDurationMs = "hold_duration_ms"
     }
 
     private enum Direction: String, Decodable {
@@ -39,6 +40,7 @@ extension RunnerStep {
     let target: RunnerTarget
     let from: CGVector
     let to: CGVector
+    let holdDuration: TimeInterval?
 
     init(from decoder: Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -60,6 +62,15 @@ extension RunnerStep {
         ))
       }
 
+      let holdDurationMs = try container.decodeIfPresent(Int.self, forKey: .holdDurationMs)
+      if let holdDurationMs, holdDurationMs < 0 {
+        throw DecodingError.dataCorrupted(.init(
+          codingPath: decoder.codingPath,
+          debugDescription: "swipe hold_duration_ms must not be negative"
+        ))
+      }
+      holdDuration = holdDurationMs.map { TimeInterval($0) / 1000 }
+
       guard [from.dx, from.dy, to.dx, to.dy].allSatisfy({ (0...1).contains($0) }), from != to else {
         throw DecodingError.dataCorrupted(.init(
           codingPath: decoder.codingPath,
@@ -75,9 +86,15 @@ extension RunnerExecutor {
     try root.interact(with: step.target) { element in
       let start = element.coordinate(withNormalizedOffset: step.from)
       let end = element.coordinate(withNormalizedOffset: step.to)
-      start.press(forDuration: swipePressDuration, thenDragTo: end)
+      start.press(
+        forDuration: swipePressDuration,
+        thenDragTo: end,
+        withVelocity: .default,
+        thenHoldForDuration: step.holdDuration ?? defaultHoldDuration
+      )
     }
   }
 }
 
 private let swipePressDuration: TimeInterval = 0.2
+private let defaultHoldDuration: TimeInterval = 0
