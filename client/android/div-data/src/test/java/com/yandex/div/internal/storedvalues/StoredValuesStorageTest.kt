@@ -1,7 +1,7 @@
 package com.yandex.div.internal.storedvalues
 
 import com.yandex.div.core.json.JsonObject
-import com.yandex.div.storage.common.InMemoryStoredValuesRepository
+import com.yandex.div.storage.InMemoryStoredValuesRepository
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull

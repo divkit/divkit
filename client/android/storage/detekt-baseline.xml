@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues />
+  <CurrentIssues>
+    <ID>ForbiddenComment:DivStorageImpl.kt:DivStorageImpl$// TODO: ticket for make a private pls</ID>
+    <ID>MagicNumber:StorageStatements.kt:StorageStatements.&lt;no name provided&gt;$3</ID>
+    <ID>MagicNumber:StorageStatements.kt:StorageStatements.&lt;no name provided&gt;$4</ID>
+    <ID>MaxLineLength:DB.kt:TemplateUsageQueries$const val DELETE_TEMPLATE_USAGE_BY_CARD_ID_QUERY_TEMPLATE = "DELETE FROM $TEMPLATE_USAGES_TABLE WHERE $TEMPLATE_USAGES_CARD_ID = ?"</ID>
+    <ID>MaxLineLength:DB.kt:TemplateUsageQueries$const val INSERT_TEMPLATE_USAGE_QUERY_TEMPLATE = "INSERT OR IGNORE INTO `$TEMPLATE_USAGES_TABLE` (`$TEMPLATE_USAGES_CARD_ID`,`$TEMPLATE_ID`) VALUES (?,?)"</ID>
+    <ID>TooGenericExceptionThrown:ReadState.kt:ReadState$throw RuntimeException("Cursor should be called only once")</ID>
+    <ID>TooManyFunctions:DivStorage.kt:DivStorage&lt;T : Any&gt;</ID>
+    <ID>TooManyFunctions:DivStorageImpl.kt:DivStorageImpl&lt;T : Any&gt; : DivStorage</ID>
+    <ID>TooManyFunctions:StorageStatements.kt:StorageStatements&lt;T : Any&gt;</ID>
+  </CurrentIssues>
+</SmellBaseline>

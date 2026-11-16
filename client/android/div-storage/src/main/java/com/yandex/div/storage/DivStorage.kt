@@ -5,15 +5,15 @@ import com.yandex.div.storage.database.ExecutionResult
 import com.yandex.div.storage.database.Migration
 import com.yandex.div.storage.database.StorageException
 import com.yandex.div.storage.rawjson.RawJson
+import com.yandex.div.storage.templates.AndroidTemplate
 import com.yandex.div.storage.templates.RawTemplateData
-import com.yandex.div.storage.templates.Template
 import org.json.JSONObject
 
 internal interface DivStorage {
     @AnyThread
     fun saveData(groupId: String,
                  divs: List<RawDataAndMetadata>,
-                 templatesByHash: List<Template>,
+                 templatesByHash: List<AndroidTemplate>,
                  actionOnError: DivDataRepository.ActionOnError,
     ): ExecutionResult
 

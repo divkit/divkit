@@ -1,7 +1,7 @@
 package com.yandex.div.compose.storedvalues
 
 import com.yandex.div.core.json.JsonObject
-import com.yandex.div.storage.common.StoredValuesRepository
+import com.yandex.div.storage.StoredValuesRepository
 
 class TestStoredValuesRepository : StoredValuesRepository {
     private val _values = mutableMapOf<String, JsonObject>()

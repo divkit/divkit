@@ -6,7 +6,7 @@ import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.analytics.CardErrorLoggerFactory
 import com.yandex.div.storage.database.AndroidDatabaseOpenHelper
-import com.yandex.div.storage.database.DatabaseOpenHelperProvider
+import com.yandex.div.storage.database.AndroidDatabaseOpenHelperProvider
 import com.yandex.div.storage.histogram.HistogramNameProvider
 import com.yandex.div.storage.histogram.HistogramRecorder
 import com.yandex.div.storage.templates.DivParsingHistogramProxy
@@ -52,10 +52,10 @@ interface DivStorageComponent {
                 databaseNamePrefix: String = "",
         ): InternalStorageComponent {
             val histogramRecorder = HistogramRecorder(histogramReporter, histogramNameProvider)
-            val openHelperProvider = DatabaseOpenHelperProvider { c, name, version, ccb, ucb ->
+            val openHelperProvider = AndroidDatabaseOpenHelperProvider { c, name, version, ccb, ucb ->
                 AndroidDatabaseOpenHelper(c, name, version, ccb, ucb, histogramRecorder)
             }
-            val divStorage = DivStorageImpl(
+            val divStorage = AndroidDivStorage(
                     context,
                     openHelperProvider,
                     databaseNamePrefix,

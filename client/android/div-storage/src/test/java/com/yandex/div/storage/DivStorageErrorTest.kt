@@ -1,29 +1,24 @@
 package com.yandex.div.storage
 
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.storage.database.AndroidDatabaseOpenHelper
-import com.yandex.div.storage.database.COLUMN_CARD_DATA
-import com.yandex.div.storage.database.COLUMN_CARD_GROUP_ID
-import com.yandex.div.storage.database.COLUMN_CARD_ID
-import com.yandex.div.storage.database.COLUMN_CARD_METADATA
-import com.yandex.div.storage.database.COLUMN_LAYOUT_ID
+import com.yandex.div.storage.database.AndroidDatabaseOpenHelperProvider
 import com.yandex.div.storage.database.DatabaseOpenHelper
-import com.yandex.div.storage.database.DatabaseOpenHelperProvider
-import com.yandex.div.storage.database.TABLE_CARDS
+import com.yandex.div.storage.database.asStorageCursor
+import java.util.UUID
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import java.util.UUID
 
 private const val ID_1 = "card_id_1"
 
@@ -32,16 +27,63 @@ private const val ID_1 = "card_id_1"
  */
 @RunWith(RobolectricTestRunner::class)
 class DivStorageErrorTest {
+    @Test
+    fun `loadData rethrows SQL errors other than database locking`() {
+        val cause = android.database.SQLException("database failure")
+        whenCardsTableQuery().thenThrow(cause)
+
+        val error = kotlin.test.assertFailsWith<android.database.SQLException> {
+            underTest.loadData(ID_1)
+        }
+
+        kotlin.test.assertSame(cause, error)
+    }
+
+    @Test
+    fun `loadData returns database locking errors`() {
+        val cause = android.database.sqlite.SQLiteDatabaseLockedException("database locked")
+        whenCardsTableQuery().thenThrow(cause)
+
+        val result = underTest.loadData(ID_1)
+
+        kotlin.test.assertTrue(result.restoredData.isEmpty())
+        kotlin.test.assertSame(cause, result.errors.single().cause)
+    }
+
+    @kotlin.test.Test
+    fun `statement error preserves the legacy SQL cause chain`() {
+        val cause = android.database.SQLException("database failure")
+        doThrow(cause).whenever(db).compileStatement(any())
+
+        val result = underTest.saveData(
+            "group", emptyList(), emptyList(), DivDataRepository.ActionOnError.ABORT_TRANSACTION
+        )
+
+        val error = kotlin.test.assertIs<DivStorageErrorException>(result.errors.single())
+        kotlin.test.assertSame(cause, error.cause?.cause)
+    }
+
+    @kotlin.test.Test
+    fun `existence check does not expose common exception types to Android`() {
+        doThrow(android.database.SQLException("database failure"))
+            .whenever(db).rawQuery(any(), anyOrNull())
+
+        val error = kotlin.test.assertFailsWith<DivStorageErrorException> {
+            underTest.isCardExists("card", "group")
+        }
+
+        kotlin.test.assertIs<DivStorageErrorException>(error.cause)
+    }
     private var dbHelper: AndroidDatabaseOpenHelper? = null
     private var db: DatabaseOpenHelper.Database = mock()
-    private val openHelperProvider: DatabaseOpenHelperProvider =
-            DatabaseOpenHelperProvider { context, name, version, ccb, ucb ->
+    private val openHelperProvider: AndroidDatabaseOpenHelperProvider =
+            AndroidDatabaseOpenHelperProvider { context, name, version, ccb, ucb ->
                 dbHelper ?: spy(AndroidDatabaseOpenHelper(context, name, version, ccb, ucb, mock())).apply {
                     whenever(writableDatabase).doReturn(db)
                     whenever(readableDatabase).doReturn(db)
                 }.also { dbHelper = it }
             }
-    private val underTest = DivStorageImpl(
+    private val underTest = AndroidDivStorage(
             context = ApplicationProvider.getApplicationContext(),
             openHelperProvider = openHelperProvider,
     )
@@ -94,12 +136,12 @@ class DivStorageErrorTest {
     )
 
     private fun whenCardsTableQuery() = whenever(db.query(
-            argThat { this == TABLE_CARDS },
+            argThat { this == "cards" },
             anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
             anyOrNull(), anyOrNull(), anyOrNull()
     ))
 
-    private fun createCursor(listData: List<RestoredData>): Cursor {
+    private fun createCursor(listData: List<RestoredData>): DatabaseOpenHelper.Cursor {
         return object: StubCursor() {
             private var countMovingToNext = 0
             override fun moveToNext(): Boolean {
@@ -108,10 +150,10 @@ class DivStorageErrorTest {
 
             override fun getColumnIndex(columnName: String?): Int {
                 return when(columnName) {
-                    COLUMN_CARD_ID, COLUMN_LAYOUT_ID -> 0
-                    COLUMN_CARD_GROUP_ID -> 1
-                    COLUMN_CARD_DATA -> 2
-                    COLUMN_CARD_METADATA -> 3
+                    "card_id", "layout_id" -> 0
+                    "group_id" -> 1
+                    "card_data" -> 2
+                    "metadata" -> 3
                     else -> TODO()
                 }
             }
@@ -139,7 +181,7 @@ class DivStorageErrorTest {
                     else -> TODO()
                 } == null
             }
-        }
+        }.asStorageCursor()
     }
 
     private fun validByteArray() = JSONObject().toString().toByteArray()

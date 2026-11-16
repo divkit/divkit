@@ -1,11 +1,15 @@
 package com.yandex.div.storage
 
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.storage.DivDataRepository.Payload
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
+import kotlin.test.assertIs
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.junit.Assert
@@ -125,6 +129,52 @@ class DivDataRepositoryTest {
             RawDataAndMetadata(ID_0, rawDivData)), templates))
         val cards = underTest.getAll().resultData
         Assert.assertEquals(1, cards.size)
+    }
+
+    @Test
+    fun `getAll retries after a SQL error with an empty cache`() {
+        val saved = underTest.put(Payload(listOf(RawDataAndMetadata(ID_0, rawDivData)), templates))
+        Assert.assertTrue(saved.errors.isEmpty())
+        val reader = createSUT()
+
+        val failedRead = withUnavailableCards { runCatching { reader.getAll() } }
+        val recovered = reader.getAll()
+
+        Assert.assertEquals(listWithOneId, recovered.resultData.map { it.id })
+        Assert.assertTrue(recovered.errors.isEmpty())
+        assertIs<SQLiteException>(failedRead.exceptionOrNull())
+    }
+
+    @Test
+    fun `getAll retries missing cards after a SQL error with a populated cache`() {
+        val otherId = "id1"
+        val saved = underTest.put(Payload(listOf(
+            RawDataAndMetadata(ID_0, rawDivData),
+            RawDataAndMetadata(otherId, rawDivData),
+        ), templates))
+        Assert.assertTrue(saved.errors.isEmpty())
+        val reader = createSUT()
+        Assert.assertEquals(listWithOneId, reader.get(listWithOneId).resultData.map { it.id })
+
+        val failedRead = withUnavailableCards { runCatching { reader.getAll() } }
+        val recovered = reader.getAll()
+
+        Assert.assertEquals(setOf(ID_0, otherId), recovered.resultData.map { it.id }.toSet())
+        Assert.assertTrue(recovered.errors.isEmpty())
+        assertIs<SQLiteException>(failedRead.exceptionOrNull())
+    }
+
+    private fun <T> withUnavailableCards(block: () -> T): T {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val path = context.getDatabasePath("div-storage.db").path
+        return SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE).use { db ->
+            db.execSQL("ALTER TABLE cards RENAME TO temporarily_unavailable_cards")
+            try {
+                block()
+            } finally {
+                db.execSQL("ALTER TABLE temporarily_unavailable_cards RENAME TO cards")
+            }
+        }
     }
 
     @Test

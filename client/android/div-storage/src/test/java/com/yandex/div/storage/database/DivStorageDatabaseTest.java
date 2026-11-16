@@ -18,7 +18,12 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
-import com.yandex.div.storage.DivStorageImpl;
+import com.yandex.div.storage.internal.DivStorageImpl;
+import com.yandex.div.storage.StorageCodec;
+import com.yandex.div.storage.database.DatabaseOpenHelper;
+import com.yandex.div.storage.database.DatabaseOpenHelperProvider;
+import com.yandex.div.storage.database.StorageException;
+import com.yandex.div.storage.database.StorageStatements;
 import com.yandex.div.storage.histogram.HistogramRecorder;
 
 import org.junit.Assert;
@@ -28,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
+import kotlin.Unit;
 
 @SuppressWarnings("KotlinInternalInJava")
 @RunWith(RobolectricTestRunner.class)
@@ -36,19 +42,19 @@ public class DivStorageDatabaseTest {
     @SuppressWarnings("unused") // used to preload cursor window size which could be slow in robolectric outside of tests
     private static final CursorWindow sPreloadedCursorWindow = new CursorWindow("test");
 
-    private DivStorageImpl mStorage;
+    private DivStorageImpl<byte[]> mStorage;
     private AndroidDatabaseOpenHelper mHelper;
 
     private final DatabaseOpenHelperProvider mProvider = spy(new DatabaseOpenHelperProvider() {
         @Override
         @NonNull
-        public DatabaseOpenHelper provide(@NonNull Context context,
-                                          @NonNull String name, int version,
+        public DatabaseOpenHelper provide(@NonNull String name, int version,
                                           @NonNull DatabaseOpenHelper.CreateCallback ccb,
                                           @NonNull DatabaseOpenHelper.UpgradeCallback ucb) {
             if (mHelper == null) {
                 mHelper = spy(new AndroidDatabaseOpenHelper(
-                        context, name, version, ccb, ucb, mock(HistogramRecorder.class)));
+                        ApplicationProvider.getApplicationContext(), name, version,
+                        ccb, ucb, mock(HistogramRecorder.class)));
                 SQLiteDatabase spyDb = spy(SQLiteDatabase.create(null));
                 spyDb.setForeignKeyConstraintsEnabled(true);
                 doNothing().when(spyDb).close();
@@ -62,9 +68,10 @@ public class DivStorageDatabaseTest {
 
     @Before
     public void setUp() {
-        mStorage = spy(new DivStorageImpl(
-                ApplicationProvider.getApplicationContext(),
-                mProvider, "test-db"
+        mStorage = spy(new DivStorageImpl<>(
+                StorageCodec.Companion.getBYTES(),
+                mProvider, "test-db", (error, message) -> Unit.INSTANCE,
+                (message, cause) -> new SQLException(message, cause), error -> true
         ));
         mHelper.getWritableDatabase().execSQL("PRAGMA foreign_keys = ON");
     }
@@ -73,7 +80,7 @@ public class DivStorageDatabaseTest {
     public void onCreateMustCallCreateDatabase() {
         // Set
         DatabaseOpenHelper.Database database = mock(DatabaseOpenHelper.Database.class);
-        DivStorageImpl spy = mStorage;
+        DivStorageImpl<byte[]> spy = mStorage;
         doNothing().when(spy).createTables(any(DatabaseOpenHelper.Database.class));
         doNothing().when(spy).dropTables(any(DatabaseOpenHelper.Database.class));
 
@@ -102,7 +109,8 @@ public class DivStorageDatabaseTest {
     public void storageStatementExecutionNotConcealingExceptions () {
         List<? extends StorageException> exceptions =
                 mStorage.getStatementExecutor()
-                        .execute(StorageStatements.INSTANCE.deleteTemplatesWithoutLinksToCards())
+                        .execute(new StorageStatements<>(StorageCodec.Companion.getBYTES())
+                                .deleteTemplatesWithoutLinksToCards())
                         .getErrors();
         Assert.assertEquals(1, exceptions.size());
         StorageException exception = exceptions.get(0);
@@ -112,7 +120,7 @@ public class DivStorageDatabaseTest {
     @Test
     public void storageCreateDatabaseWithGivenPrefix() {
         verify(mProvider, times(1)).provide(
-          any(), eq("test-db-div-storage.db"), eq(DB_VERSION), any(), any()
+          eq("test-db-div-storage.db"), eq(DB_VERSION), any(), any()
         );
     }
 }

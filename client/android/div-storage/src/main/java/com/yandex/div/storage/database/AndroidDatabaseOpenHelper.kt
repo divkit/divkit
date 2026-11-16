@@ -1,14 +1,17 @@
 package com.yandex.div.storage.database
 
 import android.content.Context
-import android.database.Cursor
+import android.database.Cursor as AndroidCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteStatement
+import android.database.sqlite.SQLiteStatement as AndroidStatement
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.Assert
+import com.yandex.div.storage.database.DatabaseOpenHelper
 import com.yandex.div.storage.database.DatabaseOpenHelper.CreateCallback
+import com.yandex.div.storage.database.DatabaseOpenHelper.Cursor
+import com.yandex.div.storage.database.DatabaseOpenHelper.Statement
 import com.yandex.div.storage.database.DatabaseOpenHelper.UpgradeCallback
 import com.yandex.div.storage.histogram.HistogramRecorder
 import java.io.IOException
@@ -81,11 +84,11 @@ internal class AndroidDatabaseOpenHelper(
             orderBy: String?,
             limit: String?
         ): Cursor {
-            return db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)
+            return db.query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit).asStorageCursor()
         }
 
         override fun rawQuery(query: String, selectionArgs: Array<out String?>?): Cursor {
-            return db.rawQuery(query, selectionArgs)
+            return db.rawQuery(query, selectionArgs).asStorageCursor()
         }
 
         override fun beginTransaction() {
@@ -100,8 +103,8 @@ internal class AndroidDatabaseOpenHelper(
             db.endTransaction()
         }
 
-        override fun compileStatement(sql: String): SQLiteStatement {
-            return db.compileStatement(sql)
+        override fun compileStatement(sql: String): Statement {
+            return db.compileStatement(sql).asStorageStatement()
         }
 
         @Throws(IOException::class)
@@ -166,4 +169,25 @@ internal class AndroidDatabaseOpenHelper(
             }
         }
     }
+}
+
+internal fun AndroidCursor.asStorageCursor(): Cursor = object : Cursor {
+    override val isClosed: Boolean get() = this@asStorageCursor.isClosed
+    override fun moveToFirst(): Boolean = this@asStorageCursor.moveToFirst()
+    override fun moveToNext(): Boolean = this@asStorageCursor.moveToNext()
+    override fun getColumnIndex(name: String): Int = this@asStorageCursor.getColumnIndex(name)
+    override fun getString(index: Int): String = this@asStorageCursor.getString(index)
+    override fun getBlob(index: Int): ByteArray = this@asStorageCursor.getBlob(index)
+    override fun isNull(index: Int): Boolean = this@asStorageCursor.isNull(index)
+    override fun close() = this@asStorageCursor.close()
+}
+
+private fun AndroidStatement.asStorageStatement(): Statement = object : Statement {
+    override fun bindString(index: Int, value: String) = this@asStorageStatement.bindString(index, value)
+    override fun bindBlob(index: Int, value: ByteArray) = this@asStorageStatement.bindBlob(index, value)
+    override fun bindNull(index: Int) = this@asStorageStatement.bindNull(index)
+    override fun execute() = this@asStorageStatement.execute()
+    override fun executeInsert(): Long = this@asStorageStatement.executeInsert()
+    override fun executeUpdateDelete(): Int = this@asStorageStatement.executeUpdateDelete()
+    override fun close() = this@asStorageStatement.close()
 }

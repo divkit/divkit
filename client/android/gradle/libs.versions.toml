@@ -22,6 +22,7 @@ jvm-toolchain = "17"
 kotlin = "2.3.21"
 kotlinpoet = "2.4.0"
 kotlinx-coroutines = "1.10.2"
+kotlinx-atomicfu = "0.32.1"
 kotlinx-datetime = "0.8.0"
 kotlinx-serialization = "1.11.0"
 ksp = "2.3.11"
@@ -54,6 +55,7 @@ androidx-material = "1.14.0"
 androidx-media3 = "1.6.1"
 androidx-profileinstaller = "1.4.1"
 androidx-recyclerview = "1.3.0"
+androidx-sqlite = "2.6.2"
 androidx-test = "1.7.0"
 androidx-test-ext-junit = "1.3.0"
 androidx-test-services = "1.6.0"
@@ -86,6 +88,8 @@ androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayo
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
+androidx-sqlite = { module = "androidx.sqlite:sqlite", version.ref = "androidx-sqlite" }
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "androidx-sqlite" }
 androidx-transition = { module = "androidx.transition:transition", version.ref = "androidx-transition" }
 androidx-viewpager = { module = "androidx.viewpager:viewpager", version.ref = "androidx-viewpager" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
@@ -152,6 +156,7 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "kotlinx-atomicfu" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }

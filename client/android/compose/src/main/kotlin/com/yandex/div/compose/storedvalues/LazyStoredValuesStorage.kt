@@ -9,7 +9,7 @@ import com.yandex.div.internal.storedvalues.StoredValueException
 import com.yandex.div.internal.storedvalues.StoredValueScope
 import com.yandex.div.internal.storedvalues.StoredValuesStorage
 import com.yandex.div.internal.variables.variableValueToEvaluableValue
-import com.yandex.div.storage.common.StoredValuesRepository
+import com.yandex.div.storage.StoredValuesRepository
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Named
 import kotlin.time.Clock

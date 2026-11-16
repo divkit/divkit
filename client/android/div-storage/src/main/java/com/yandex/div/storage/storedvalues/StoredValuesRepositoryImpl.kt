@@ -5,7 +5,7 @@ import com.yandex.div.core.json.JsonObject
 import com.yandex.div.core.json.asJsonObject
 import com.yandex.div.core.json.asOrgJsonObject
 import com.yandex.div.storage.RawJsonRepository
-import com.yandex.div.storage.common.StoredValuesRepository
+import com.yandex.div.storage.StoredValuesRepository
 import com.yandex.div.storage.rawjson.RawJson
 
 @InternalApi

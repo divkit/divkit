@@ -5,6 +5,12 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorage
 import com.yandex.div.storage.DivStorageErrorException
 import com.yandex.div2.DivTemplate
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.FutureTask
+import java.util.concurrent.TimeUnit
+import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
 import org.mockito.kotlin.any
@@ -15,12 +21,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.FutureTask
-import java.util.concurrent.TimeUnit
-import kotlin.test.Test
-import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
 
 private const val GROUP_1 = "group_1"
 private const val GROUP_2 = "group_2"
@@ -100,7 +100,7 @@ class TemplatesContainerTest {
         """.trimIndent()
     )
 
-    private val templatesByGroup = mutableMapOf<String, MutableList<Template>>()
+    private val templatesByGroup = mutableMapOf<String, MutableList<AndroidTemplate>>()
     private val templateReferences = mutableSetOf<DivStorage.TemplateReference>()
 
     private val templateReferencesResult = mock<DivStorage.LoadDataResult<DivStorage.TemplateReference>> {
@@ -297,7 +297,7 @@ class TemplatesContainerTest {
         )
     }
 
-    private fun addToStorage(groupId: String, templates: List<Template>) {
+    private fun addToStorage(groupId: String, templates: List<AndroidTemplate>) {
         val references = templates.map { DivStorage.TemplateReference(groupId, it.id, it.hash) }
         templateReferences.addAll(references)
         templatesByGroup

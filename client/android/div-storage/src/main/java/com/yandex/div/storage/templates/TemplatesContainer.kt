@@ -15,13 +15,13 @@ import com.yandex.div.storage.analytics.ErrorExplanation
 import com.yandex.div.storage.histogram.HistogramNameProvider
 import com.yandex.div.storage.histogram.HistogramRecorder
 import com.yandex.div2.DivTemplate
-import org.json.JSONException
-import org.json.JSONObject
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Provider
+import org.json.JSONException
+import org.json.JSONObject
 
 private typealias TemplateHash = String
 private typealias TemplateId = String
@@ -100,7 +100,7 @@ internal class TemplatesContainer(
             templateProvider?.get(templateId) != null -> {
                 shortReason = "unknown, template is loaded"
             }
-            // Template is missing at in-memory cache, let's then check persistent cache.
+            // AndroidTemplate is missing at in-memory cache, let's then check persistent cache.
             !templateStored() -> {
                 details.append(
                         "supported responses: ${supportedGroups.joinToString()}"
@@ -139,7 +139,7 @@ internal class TemplatesContainer(
         return ErrorExplanation(shortReason, details.toString())
     }
 
-    fun addTemplates(groupId: String, json: JSONObject, sourceType: String?): List<Template> {
+    fun addTemplates(groupId: String, json: JSONObject, sourceType: String?): List<AndroidTemplate> {
         val parseHistogramBaseName = histogramNameProvider?.divParsingHistogramName
         val templateHashes = calculateTemplateHashes(json)
         val env = getEnvironment(groupId)
@@ -161,7 +161,7 @@ internal class TemplatesContainer(
         }
         env.templates.putAll(templateParsingResult.parsedTemplates)
 
-        val results = ArrayList<Template>(templateParsingResult.parsedTemplates.size)
+        val results = ArrayList<AndroidTemplate>(templateParsingResult.parsedTemplates.size)
         templateParsingResult.parsedTemplates.forEach { (id, template) ->
             val templateHash = templateHashes[id] ?: run {
                 errorLogger.logError(IllegalStateException(
@@ -171,7 +171,7 @@ internal class TemplatesContainer(
 
             templatesPool.put(templateHash, template)
             json.optJSONObject(id)?.let { rawTemplate ->
-                results.add(Template(
+                results.add(AndroidTemplate(
                         id = id,
                         hash = templateHash,
                         template = rawTemplate,

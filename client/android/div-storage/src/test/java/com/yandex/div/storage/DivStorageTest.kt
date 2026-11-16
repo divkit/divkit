@@ -3,7 +3,6 @@ package com.yandex.div.storage
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.storage.DivStorage.LoadDataResult
 import com.yandex.div.storage.DivStorage.RemoveResult
-import com.yandex.div.storage.database.DB_VERSION
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
@@ -21,6 +20,7 @@ private const val METADATA_ID = "metadata_id"
  */
 @RunWith(RobolectricTestRunner::class)
 class DivStorageTest {
+
     private val rawDivData = JSONObject("""
         {
             "log_id": "snapshot_test_card",
@@ -47,7 +47,7 @@ class DivStorageTest {
     @Test
     fun `migration does exist for current database version`() {
         val migrationVersions = underTest.migrations.keys
-        val migrationExist = migrationVersions.any { (_, newVersion) -> newVersion == DB_VERSION }
+        val migrationExist = migrationVersions.any { (_, newVersion) -> newVersion == 3 }
 
         Assert.assertTrue(migrationExist)
     }

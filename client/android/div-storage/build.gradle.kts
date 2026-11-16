@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    api(project(":storage"))
     implementation(project(":assertion"))
     implementation(project(":div-core"))
     implementation(project(":div-data"))
@@ -24,4 +25,12 @@ dependencies {
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.json)
     testImplementation(libs.kotlinx.coroutines.core)
+}
+
+metalava {
+    // These public types moved to the API dependency while retaining their JVM names.
+    additionalSourceSets.from(
+        project(":storage").file("src/commonMain/kotlin"),
+        project(":storage").file("src/jvmAndAndroidMain/kotlin"),
+    )
 }

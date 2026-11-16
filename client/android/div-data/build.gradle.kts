@@ -21,7 +21,7 @@ metalava {
 }
 
 dependencies {
-    api(project(":storage-common"))
+    api(project(":storage"))
     implementation(project(":assertion"))
     implementation(project(":div-core"))
     implementation(project(":div-evaluable"))
