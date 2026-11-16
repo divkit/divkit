@@ -1,11 +1,18 @@
 package com.yandex.div.coil
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Canvas
+import android.graphics.Picture
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.widget.ImageView
 import coil3.EventListener
+import coil3.Image
 import coil3.ImageLoader
 import coil3.annotation.ExperimentalCoilApi
+import coil3.asDrawable
 import coil3.decode.DataSource
 import coil3.load
 import coil3.network.cachecontrol.CacheControlCacheStrategy
@@ -23,8 +30,8 @@ import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadErro
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.internal.coil.GifDecoderFactory
-import com.yandex.div.internal.coil.asDivDrawable
-import com.yandex.div.internal.coil.svg.addSvgDecoderFactoryIfAvailable
+import com.yandex.div.internal.coil.svg.LazySvgDecoderFactory
+import com.yandex.div.internal.coil.svg.SvgImage
 import okhttp3.OkHttpClient
 import kotlin.math.max
 import kotlin.time.ExperimentalTime
@@ -64,7 +71,8 @@ class CoilDivImageLoader private constructor(
         limitImageBitmapSizeEnabled: Boolean,
     ) : this(context, { okHttpClientBuilder.build() }, limitImageBitmapSizeEnabled)
 
-    private val maxDisplaySize = context.resources.displayMetrics.let { max(it.widthPixels, it.heightPixels) }
+    private val maxDisplaySize = context.resources.displayMetrics
+        .let { max(it.widthPixels, it.heightPixels) }
 
     @OptIn(ExperimentalCoilApi::class, ExperimentalTime::class)
     private val imageLoader = ImageLoader.Builder(context)
@@ -76,7 +84,7 @@ class CoilDivImageLoader private constructor(
                 )
             )
             add(GifDecoderFactory)
-            addSvgDecoderFactoryIfAvailable(context)
+            add(LazySvgDecoderFactory(maxDisplaySize))
         }
         .build()
 
@@ -88,9 +96,7 @@ class CoilDivImageLoader private constructor(
     @Deprecated("This method is not used in DivKit")
     override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference {
         val imageUri = Uri.parse(imageUrl)
-
         val result = imageView.load(imageUri, imageLoader)
-
         return LoadReference {
             result.dispose()
         }
@@ -98,7 +104,6 @@ class CoilDivImageLoader private constructor(
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         val imageUri = Uri.parse(imageUrl)
-
         val request = ImageRequest.Builder(context)
             .data(imageUri)
             .allowHardware(false)
@@ -150,5 +155,21 @@ private fun DataSource.toBitmapSource(): BitmapSource {
         DataSource.DISK -> BitmapSource.DISK
         DataSource.NETWORK -> BitmapSource.NETWORK
         DataSource.MEMORY_CACHE -> BitmapSource.MEMORY
+    }
+}
+
+private fun Image.asDivDrawable(resources: Resources, maxBitmapSize: Int): Drawable {
+    return if (this is SvgImage) {
+        // Coil's generic ImageDrawable loses the SVG's intrinsic dimensions.
+        ScalablePictureDrawable(asPicture(maxBitmapSize))
+    } else {
+        asDrawable(resources)
+    }
+}
+
+private class ScalablePictureDrawable(source: Picture) : PictureDrawable(source) {
+
+    override fun draw(canvas: Canvas) {
+        picture?.let { canvas.drawPicture(it, bounds) }
     }
 }

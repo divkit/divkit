@@ -3,10 +3,12 @@ package com.yandex.div.internal.coil.svg
 import android.graphics.Canvas
 import android.graphics.Picture
 import coil3.Image
+import com.yandex.div.core.annotations.InternalApi
 import java.lang.ref.WeakReference
 import coil3.svg.SvgImage as CoilSvgImage
 
-internal class SvgImage(
+@InternalApi
+class SvgImage(
     private val image: CoilSvgImage,
     private val viewportWidth: Float,
     private val viewportHeight: Float,

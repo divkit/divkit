@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.AssetManager
 import com.yandex.div.compose.font.AndroidDivFontFamilyFactory
 import com.yandex.div.compose.font.DivFontFamilyFactory
+import com.yandex.div.compose.images.AndroidImageLoaderConfiguration
+import com.yandex.div.compose.images.PlatformImageLoaderConfiguration
 import com.yandex.div.render.common.animation.SystemAnimationConfiguration
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
@@ -16,6 +18,11 @@ internal interface DivContextPlatformModule {
 
     @Binds
     fun bindFontFamilyFactory(impl: AndroidDivFontFamilyFactory): DivFontFamilyFactory
+
+    @Binds
+    fun bindImageLoaderConfiguration(
+        impl: AndroidImageLoaderConfiguration
+    ): PlatformImageLoaderConfiguration
 
     companion object {
         @DivContextScope
