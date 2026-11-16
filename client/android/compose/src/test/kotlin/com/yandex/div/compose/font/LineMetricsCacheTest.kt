@@ -3,7 +3,6 @@ package com.yandex.div.compose.font
 import android.content.Context
 import android.graphics.Typeface
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -40,9 +39,16 @@ class LineMetricsCacheTest {
 
     @Test
     fun `metrics are measured from the font`() {
-        val metrics = getOrCreate()
-
-        assertEquals(LineMetrics(ascent = 15.sp, descent = 4.sp, ascentPx = 30, descentPx = 8, fontAscentPx = 29.6875f), metrics)
+        assertEquals(
+            LineMetrics(
+                ascent = 15.sp,
+                descent = 4.sp,
+                ascentPx = 30,
+                descentPx = 8,
+                fontAscentPx = 29.6875f,
+            ),
+            getOrCreate()
+        )
     }
 
     @Test
@@ -149,6 +155,5 @@ class LineMetricsCacheTest {
         fontFamily = fontFamily,
         fontWeight = fontWeight,
         letterSpacing = letterSpacing.em,
-        platformStyle = PlatformTextStyle(includeFontPadding = false),
     )
 }

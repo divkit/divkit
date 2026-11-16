@@ -1,7 +1,6 @@
 package com.yandex.div.compose.text
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
@@ -60,7 +59,6 @@ internal fun observeBaseTextStyle(
         textDirection = TextDirection.Content,
         lineHeight = resolvedLineHeight ?: TextUnit.Unspecified,
         lineHeightStyle = lineHeightStyle(resolvedLineHeight, textSize),
-        platformStyle = PlatformTextStyle(includeFontPadding = false),
         fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
     )
 }
