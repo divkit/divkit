@@ -15,8 +15,8 @@ import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
+import com.yandex.div.compose.images.transformations.observedTransformations
 import com.yandex.div.compose.utils.observedAlignment
-import com.yandex.div.compose.views.image.observedTransformations
 import com.yandex.div2.DivImageBackground
 import kotlin.math.roundToInt
 

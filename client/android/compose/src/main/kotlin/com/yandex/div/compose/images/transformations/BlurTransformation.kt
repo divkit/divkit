@@ -1,4 +1,4 @@
-package com.yandex.div.compose.views.image
+package com.yandex.div.compose.images.transformations
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -24,8 +24,6 @@ internal class BlurTransformation(
 
     override val cacheKey: String = "blur_${radiusDp}_$density"
 
-    val maxRadiusDp = 25f
-
     override suspend fun transform(input: Bitmap, size: CoilSize): Bitmap {
         if (radiusDp <= 0 || input.width <= 0 || input.height <= 0) {
             return input
@@ -33,12 +31,12 @@ internal class BlurTransformation(
 
         val mutableBitmap = input.copy(Bitmap.Config.ARGB_8888, true) ?: return input
 
-        if (radiusDp <= maxRadiusDp) {
+        if (radiusDp <= MAX_RADIUS_DP) {
             return applyRenderScriptBlur(mutableBitmap, radiusDp.toFloat())
         }
 
         val scaledBitmap = scaleBitmap(mutableBitmap)
-        val blurredScaled = applyRenderScriptBlur(scaledBitmap, maxRadiusDp)
+        val blurredScaled = applyRenderScriptBlur(scaledBitmap, MAX_RADIUS_DP)
 
         val result = blurredScaled.scale(mutableBitmap.width, mutableBitmap.height)
 
@@ -59,7 +57,7 @@ internal class BlurTransformation(
         val output = Allocation.createTyped(renderScript, input.type)
 
         val scriptBlur = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript))
-        scriptBlur.setRadius(radius.coerceIn(0.1f, 25f))
+        scriptBlur.setRadius(radius.coerceIn(0.1f, MAX_RADIUS_DP))
         scriptBlur.setInput(input)
         scriptBlur.forEach(output)
 
@@ -74,9 +72,11 @@ internal class BlurTransformation(
     }
 
     private fun scaleBitmap(bitmap: Bitmap): Bitmap {
-        val scaleFactor = maxRadiusDp / radiusDp
+        val scaleFactor = MAX_RADIUS_DP / radiusDp
         val scaledWidth = (bitmap.width * scaleFactor).toInt().coerceAtLeast(1)
         val scaledHeight = (bitmap.height * scaleFactor).toInt().coerceAtLeast(1)
         return bitmap.scale(scaledWidth, scaledHeight)
     }
 }
+
+private const val MAX_RADIUS_DP = 25f

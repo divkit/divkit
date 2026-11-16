@@ -8,6 +8,7 @@ import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
+import com.yandex.div.compose.images.transformations.TransformationFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.network.NetworkRestorationController
 import com.yandex.div.compose.state.DivStateStorage
@@ -44,6 +45,7 @@ internal fun mockLocalComponent(
     reporter: DivReporter = TestReporter(),
     networkRestorationController: NetworkRestorationController? = null,
     stateStorage: DivStateStorage = DivStateStorage(),
+    transformationFactory: TransformationFactory = mock(),
     variableController: DivVariableController = DivVariableController(),
     visibilityActionTracker: VisibilityActionTracker = mock(),
 ): DivLocalComponent {
@@ -63,6 +65,7 @@ internal fun mockLocalComponent(
         on { this.expressionResolver } doReturn expressionResolver
         on { this.reporter } doReturn reporter
         on { this.stateStorage } doReturn stateStorage
+        on { this.transformationFactory } doReturn transformationFactory
         on { this.variableProvider } doReturn variableProvider
         on { this.visibilityActionTracker } doReturn visibilityActionTracker
         networkRestorationController?.let {

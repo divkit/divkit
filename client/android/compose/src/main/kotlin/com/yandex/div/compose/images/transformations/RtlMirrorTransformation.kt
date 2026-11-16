@@ -1,4 +1,4 @@
-package com.yandex.div.compose.views.image
+package com.yandex.div.compose.images.transformations
 
 import android.graphics.Bitmap
 import android.graphics.Matrix

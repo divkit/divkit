@@ -8,6 +8,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.observedContentScale
+import com.yandex.div.compose.images.transformations.observedTransformations
 import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div2.DivBlendMode
