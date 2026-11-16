@@ -274,6 +274,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],

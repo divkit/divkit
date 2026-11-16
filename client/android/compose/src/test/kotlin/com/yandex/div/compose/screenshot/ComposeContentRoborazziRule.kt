@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -122,22 +123,18 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
     @OptIn(ExperimentalRoborazziApi::class)
     fun captureScreenshot(
         fileName: String,
-        id: String? = null,
+        target: SemanticsNodeInteraction? = null,
         roborazziOptions: RoborazziOptions = provideRoborazziContext().options,
     ) {
         val file = File("src/test/screenshots/$fileName.webp")
         file.parentFile?.mkdirs()
 
-        val target = id?.let {
-            composeRule
-                .onNodeWithTag(id, useUnmergedTree = true)
-                .assertExists("Failed to find screenshot target: $id")
-        } ?: let {
+        val node = target ?: let {
             val emptyView = composeRule.onNodeWithTag(EMPTY_VIEW_TAG)
             if (emptyView.isDisplayed()) emptyView else composeRule.onRoot()
         }
 
-        target.captureRoboImage(file.path, roborazziOptions)
+        node.captureRoboImage(file.path, roborazziOptions)
     }
 }
 

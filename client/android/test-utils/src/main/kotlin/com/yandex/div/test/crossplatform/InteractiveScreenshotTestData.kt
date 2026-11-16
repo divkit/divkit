@@ -14,14 +14,14 @@ class InteractiveScreenshotTestData(
     sealed class Step {
         class Action(val action: DivAction) : Step()
 
-        class Tap(val id: String) : Step()
+        class Tap(val target: Target) : Step()
 
-        class DoubleTap(val id: String) : Step()
+        class DoubleTap(val target: Target) : Step()
 
-        class LongTap(val id: String) : Step()
+        class LongTap(val target: Target) : Step()
 
         class Swipe(
-            val id: String,
+            val target: Target,
             val from: PointF,
             val to: PointF,
             val holdDurationMs: Long,
@@ -29,11 +29,21 @@ class InteractiveScreenshotTestData(
 
         class Wait(val delay: Long) : Step()
 
-        class VerifySnapshot(val name: String, val id: String? = null) : Step()
+        class VerifySnapshot(val name: String, val target: Target? = null) : Step()
 
-        class VerifyText(val id: String, val text: String) : Step()
+        class VerifyText(val target: Target, val text: String) : Step()
 
-        class VerifyFocus(val id: String, val focused: Boolean) : Step()
+        class VerifyFocus(val target: Target, val focused: Boolean) : Step()
+    }
+
+    sealed class Target {
+        class DivId(val id: String) : Target() {
+            override fun toString() = "div '$id'"
+        }
+
+        class Text(val text: String) : Target() {
+            override fun toString() = "text '$text'"
+        }
     }
 
     companion object {
@@ -57,11 +67,11 @@ class InteractiveScreenshotTestData(
                     )
                 }
 
-                "tap" -> Step.Tap(parseTargetId(step))
+                "tap" -> Step.Tap(parseTarget(step))
 
-                "double_tap" -> Step.DoubleTap(parseTargetId(step))
+                "double_tap" -> Step.DoubleTap(parseTarget(step))
 
-                "long_tap" -> Step.LongTap(parseTargetId(step))
+                "long_tap" -> Step.LongTap(parseTarget(step))
 
                 "swipe" -> parseSwipe(step)
 
@@ -78,24 +88,32 @@ class InteractiveScreenshotTestData(
                     if (name.isEmpty()) {
                         throw JSONException("verify_snapshot name must not be empty")
                     }
-                    Step.VerifySnapshot(name, if (step.has("target")) parseTargetId(step) else null)
+                    Step.VerifySnapshot(name, if (step.has("target")) parseTarget(step) else null)
                 }
 
-                "verify_text" -> Step.VerifyText(parseTargetId(step), step.getString("text"))
+                "verify_text" -> Step.VerifyText(parseTarget(step), step.getString("text"))
 
-                "verify_focus" -> Step.VerifyFocus(parseTargetId(step), step.getBoolean("focused"))
+                "verify_focus" -> Step.VerifyFocus(parseTarget(step), step.getBoolean("focused"))
 
                 else -> throw JSONException("Unknown interactive step type: $type")
             }
         }
 
-        private fun parseTargetId(step: JSONObject): String {
+        private fun parseTarget(step: JSONObject): Target {
             val target = step.getJSONObject("target")
-            val targetType = target.getString("type")
-            if (targetType != "div_id") {
-                throw JSONException("Unsupported ${step.getString("type")} target type: $targetType")
+            return when (val targetType = target.getString("type")) {
+                "div_id" -> Target.DivId(target.getNonBlankString("id"))
+                "text" -> Target.Text(target.getNonBlankString("text"))
+                else -> throw JSONException("Unsupported ${step.getString("type")} target type: $targetType")
             }
-            return target.getString("id")
+        }
+
+        private fun JSONObject.getNonBlankString(name: String): String {
+            val value = getString(name)
+            if (value.isBlank()) {
+                throw JSONException("target $name must not be empty")
+            }
+            return value
         }
 
         private const val SWIPE_DIRECTION = "direction"
@@ -105,7 +123,7 @@ class InteractiveScreenshotTestData(
         private const val DEFAULT_SWIPE_HOLD_DURATION_MS = 0L
 
         private fun parseSwipe(step: JSONObject): Step.Swipe {
-            val id = parseTargetId(step)
+            val target = parseTarget(step)
             val holdDurationMs = parseHoldDurationMs(step)
             return if (step.has(SWIPE_DIRECTION)) {
                 if (step.has(SWIPE_FROM) || step.has(SWIPE_TO)) {
@@ -121,11 +139,11 @@ class InteractiveScreenshotTestData(
                     else -> throw JSONException("Unsupported swipe direction: $value")
                 }
                 val to = PointF(1f - from.x, 1f - from.y)
-                Step.Swipe(id, from, to, holdDurationMs)
+                Step.Swipe(target, from, to, holdDurationMs)
             } else {
                 val from = parsePoint(step.getJSONObject(SWIPE_FROM))
                 val to = parsePoint(step.getJSONObject(SWIPE_TO))
-                Step.Swipe(id, from, to, holdDurationMs)
+                Step.Swipe(target, from, to, holdDurationMs)
             }
         }
 

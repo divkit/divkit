@@ -4,14 +4,16 @@ import android.graphics.PointF
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.toAndroidRectF
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.TouchInjectionScope
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
@@ -22,6 +24,7 @@ import com.yandex.div.test.INTERACTIVE_SCREENSHOT_CASES_PATH
 import com.yandex.div.test.ScreenshotTests
 import com.yandex.div.test.composeIgnoredInteractiveScreenshotCases
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
+import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Target
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.div.test.crossplatform.clipSwipeToBounds
@@ -77,9 +80,9 @@ class RoborazziInteractiveScreenshotTest(
                 is Step.Action ->
                     contentRule.divContext.debugFeatures.performAction(data, step.action)
 
-                is Step.Tap -> performTap(step.id)
-                is Step.DoubleTap -> onNodeWithTag(step.id).performTouchInput { doubleClick() }
-                is Step.LongTap -> onNodeWithTag(step.id).performTouchInput { longClick() }
+                is Step.Tap -> performTap(step.target)
+                is Step.DoubleTap -> onTarget(step.target).performTouchInput { doubleClick() }
+                is Step.LongTap -> onTarget(step.target).performTouchInput { longClick() }
                 is Step.Swipe -> performSwipe(step)
                 is Step.VerifyText -> verifyText(step)
                 is Step.VerifyFocus -> verifyFocus(step)
@@ -97,15 +100,18 @@ class RoborazziInteractiveScreenshotTest(
         assertEquals(count, errors.size, "Expected $count error(s), got: $errors")
     }
 
-    private fun onNodeWithTag(tag: String) = composeRule.onNodeWithTag(tag)
+    private fun onTarget(target: Target) = when (target) {
+        is Target.DivId -> composeRule.onNode(hasTestTag(target.id) and isPlaced())
+        is Target.Text -> composeRule.onNode(hasText(target.text) and isPlaced(), useUnmergedTree = true)
+    }
 
-    private fun performTap(id: String) {
-        onNodeWithTag(id).performClick()
+    private fun performTap(target: Target) {
+        onTarget(target).performClick()
         composeRule.mainClock.advanceTimeBy(contentRule.viewConfiguration.doubleTapTimeoutMillis)
     }
 
     private fun performSwipe(step: Step.Swipe) {
-        val target = onNodeWithTag(step.id)
+        val target = onTarget(step.target)
         val node = target.fetchSemanticsNode()
         val size = node.size
         val from = PointF(size.width * step.from.x, size.height * step.from.y)
@@ -125,12 +131,12 @@ class RoborazziInteractiveScreenshotTest(
     }
 
     private fun verifyText(step: Step.VerifyText) {
-        onNodeWithTag(step.id).assertTextEquals(step.text)
+        onTarget(step.target).assertTextEquals(step.text)
     }
 
     private fun verifyFocus(step: Step.VerifyFocus) {
         val isFocusMatcher = isFocused() or hasAnyDescendant(isFocused())
-        onNodeWithTag(step.id)
+        onTarget(step.target)
             .assert(if (step.focused) isFocusMatcher else !isFocusMatcher)
     }
 
@@ -153,7 +159,13 @@ class RoborazziInteractiveScreenshotTest(
 
         contentRule.captureScreenshot(
             fileName = "interactive/${configuration.baseConfiguration.name}/${step.name}",
-            id = step.id,
+            target = when (val target = step.target) {
+                is Target.DivId -> composeRule
+                    .onNode(hasTestTag(target.id) and isPlaced(), useUnmergedTree = true)
+                    .assertExists("Failed to find screenshot target: ${target.id}")
+                is Target.Text -> onTarget(target)
+                null -> null
+            },
             roborazziOptions = options.copy(taskType = taskType, compareOptions = compareOptions),
         )
     }
@@ -204,3 +216,6 @@ private fun TouchInjectionScope.swipeAndHold(start: Offset, end: Offset, holdDur
 }
 
 private const val SWIPE_DURATION_MS = 200L
+
+// Div-tabs measures pages in compositions that are never placed, so their nodes duplicate visible ones.
+private fun isPlaced() = SemanticsMatcher("is placed") { it.layoutInfo.isPlaced }

@@ -11,6 +11,7 @@ import com.yandex.div.internal.KLog
 import com.yandex.div.rule.UiReadyChecker
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
+import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Target
 import com.yandex.div.view.ViewActions.doubleTapWithRetries
 import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
@@ -46,11 +47,11 @@ internal class InteractiveScreenshotSteps {
                 when (step) {
                     is Step.Action -> performAction(scenario, step.action)
 
-                    is Step.Tap -> performTap(step.id)
+                    is Step.Tap -> performTap(step.target)
 
-                    is Step.DoubleTap -> performDoubleTap(step.id)
+                    is Step.DoubleTap -> performDoubleTap(step.target)
 
-                    is Step.LongTap -> performLongTap(step.id)
+                    is Step.LongTap -> performLongTap(step.target)
 
                     is Step.Swipe -> performSwipe(step)
 
@@ -78,20 +79,20 @@ internal class InteractiveScreenshotSteps {
         }
     }
 
-    private fun performTap(id: String) = step("Tap div '$id'") {
-        onView(id).perform(tapWithRetries())
+    private fun performTap(target: Target) = step("Tap $target") {
+        onView(target).perform(tapWithRetries())
     }
 
-    private fun performDoubleTap(id: String) = step("Double tap div '$id'") {
-        onView(id).perform(doubleTapWithRetries())
+    private fun performDoubleTap(target: Target) = step("Double tap $target") {
+        onView(target).perform(doubleTapWithRetries())
     }
 
-    private fun performLongTap(id: String) = step("Long tap div '$id'") {
-        onView(id).perform(longTapWithRetries())
+    private fun performLongTap(target: Target) = step("Long tap $target") {
+        onView(target).perform(longTapWithRetries())
     }
 
-    private fun performSwipe(swipe: Step.Swipe) = step("Swipe div '${swipe.id}'") {
-        onView(swipe.id).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to, swipe.holdDurationMs))
+    private fun performSwipe(swipe: Step.Swipe) = step("Swipe ${swipe.target}") {
+        onView(swipe.target).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to, swipe.holdDurationMs))
     }
 
     private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {
@@ -100,18 +101,23 @@ internal class InteractiveScreenshotSteps {
 
     private fun verifyText(
         verification: Step.VerifyText
-    ) = step("Verify text '${verification.text}' in div '${verification.id}'") {
-        onView(verification.id).waitUntilVisible(withText(verification.text))
+    ) = step("Verify text '${verification.text}' in ${verification.target}") {
+        onView(verification.target).waitUntilVisible(withText(verification.text))
     }
 
     private fun verifyFocus(
         verification: Step.VerifyFocus
-    ) = step("Verify focused=${verification.focused} in div '${verification.id}'") {
+    ) = step("Verify focused=${verification.focused} in ${verification.target}") {
         val focused = if (verification.focused) hasFocus() else doesNotHaveFocus()
-        onView(verification.id).waitUntilVisible(focused)
+        onView(verification.target).waitUntilVisible(focused)
     }
 
-    private fun onView(id: String) = onView(withTagValue(equalTo(id)))
+    private fun onView(target: Target) = onView(
+        when (target) {
+            is Target.DivId -> withTagValue(equalTo(target.id))
+            is Target.Text -> withText(target.text)
+        }
+    )
 
     private fun verifySnapshot(
         scenario: ActivityScenario<DivScreenshotActivity>,
@@ -121,11 +127,18 @@ internal class InteractiveScreenshotSteps {
         artifactsRelativePath: String
     ) = step("Verify screenshot step$snapshotIndex") {
         var screenshotView: View? = null
-        scenario.onActivity { activity ->
-            screenshotView = verification.id?.let {
-                activity.divView.findViewWithTag(it)
-                    ?: throw AssertionError("Failed to find screenshot target with div_id '$it'")
-            } ?: activity.divView
+        when (val target = verification.target) {
+            is Target.Text -> onView(target).check { view, noViewFoundException ->
+                noViewFoundException?.let { throw it }
+                screenshotView = view
+            }
+
+            is Target.DivId -> scenario.onActivity { activity ->
+                screenshotView = activity.divView.findViewWithTag(target.id)
+                    ?: throw AssertionError("Failed to find screenshot target with div_id '${target.id}'")
+            }
+
+            null -> scenario.onActivity { activity -> screenshotView = activity.divView }
         }
         val view = screenshotView ?: throw AssertionError("Screenshot view is unavailable")
 
