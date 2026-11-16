@@ -3,10 +3,12 @@ package com.yandex.div.core.view2.divs
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.Picture
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.images.BitmapSource
@@ -22,6 +24,9 @@ import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBlendMode
+import com.yandex.div2.DivBlur
+import com.yandex.div2.DivFadeTransition
+import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImage
 import org.junit.Assert
 import org.junit.Before
@@ -282,6 +287,121 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `tint applied to drawable loaded after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ff0000", tintMode = DivBlendMode.MULTIPLY)
+        binder.bindView(view, divImage, divView)
+        val tinted = createTestDiv(tintColor = "#ff0000", tintMode = DivBlendMode.MULTIPLY)
+        binder.bindView(view, tinted, divView)
+
+        whenDrawableLoaded(divImage)
+
+        val expected = PorterDuffColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY)
+        Assert.assertEquals(expected, view.colorFilter)
+    }
+
+    @Test
+    fun `current tint applied to bitmap loaded after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ff0000", tintMode = DivBlendMode.MULTIPLY)
+        binder.bindView(view, divImage, divView)
+        val tinted = createTestDiv(tintColor = "#0000ff", tintMode = DivBlendMode.SCREEN)
+        binder.bindView(view, tinted, divView)
+
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+
+        val expected = PorterDuffColorFilter(Color.BLUE, PorterDuff.Mode.SCREEN)
+        Assert.assertEquals(expected, view.colorFilter)
+    }
+
+    @Test
+    fun `current filters applied to bitmap loaded after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv()
+        binder.bindView(view, divImage, divView)
+        val blurred = createTestDiv(filters = listOf(DivFilter.Blur(DivBlur(5L.asExpression()))))
+        binder.bindView(view, blurred, divView)
+        val bitmap = mock<Bitmap>()
+
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            mock<BitmapDrawable> { on { this.bitmap } doReturn bitmap },
+        )
+
+        Assert.assertSame(bitmap, view.currentBitmapWithoutFilters)
+    }
+
+    @Test
+    fun `current alpha applied to image loaded after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv()
+        binder.bindView(view, divImage, divView)
+        binder.bindView(view, createTestDiv(alpha = 0.5), divView)
+
+        whenDrawableLoaded(divImage)
+
+        Assert.assertEquals(0.5f, view.alpha)
+    }
+
+    @Test
+    fun `current appearance animation applied to image loaded after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv()
+        binder.bindView(view, divImage, divView)
+        val faded = createTestDiv(appearanceAnimation = DivFadeTransition(0.2.asExpression()))
+        binder.bindView(view, faded, divView)
+
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            source = BitmapSource.NETWORK,
+        )
+
+        Assert.assertEquals(0.2f, view.alpha)
+    }
+
+    @Test
+    fun `svg rasterized for tint of current div after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv()
+        binder.bindView(view, divImage, divView)
+        val tinted = createTestDiv(tintColor = "#ff0000", tintMode = DivBlendMode.MULTIPLY)
+        binder.bindView(view, tinted, divView)
+        val picture = Picture().apply {
+            beginRecording(10, 10)
+            endRecording()
+        }
+
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            PictureDrawable(picture),
+        )
+
+        Assert.assertTrue(view.drawable is BitmapDrawable)
+        val expected = PorterDuffColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY)
+        Assert.assertEquals(expected, view.colorFilter)
+    }
+
+    @Test
+    fun `svg kept vector without tint of current div after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ff0000", tintMode = DivBlendMode.MULTIPLY)
+        binder.bindView(view, divImage, divView)
+        binder.bindView(view, createTestDiv(), divView)
+        val picture = Picture().apply {
+            beginRecording(10, 10)
+            endRecording()
+        }
+
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            PictureDrawable(picture),
+        )
+
+        Assert.assertFalse(view.drawable is BitmapDrawable)
+        Assert.assertNull(view.colorFilter)
+    }
+
+    @Test
     fun `tint color applied to drawable after loading`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(tintColor = "#ffffff")
@@ -364,10 +484,11 @@ class DivImageBinderTest : DivBinderTest() {
         drawable: Drawable = mock<BitmapDrawable> {
             on { bitmap } doReturn mock()
         },
+        source: BitmapSource = BitmapSource.MEMORY,
     ) {
         val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
-        val cachedImage = DivCachedImage.Drawable(drawable, BitmapSource.MEMORY)
+        val cachedImage = DivCachedImage.Drawable(drawable, source)
         imageDownloadCallbackCaptor.firstValue.onSuccess(cachedImage)
     }
 
@@ -398,8 +519,14 @@ class DivImageBinderTest : DivBinderTest() {
         highPriorityPreviewShow: Boolean = false,
         tintColor: String? = null,
         tintMode: DivBlendMode = DivBlendMode.SOURCE_IN,
+        alpha: Double = 1.0,
+        filters: List<DivFilter>? = null,
+        appearanceAnimation: DivFadeTransition? = null,
     ): DivBlock.Image {
         return Div.Image(DivImage(
+            alpha = alpha.asExpression(),
+            appearanceAnimation = appearanceAnimation,
+            filters = filters,
             imageUrl = Uri.parse(imageUrl).asExpression(),
             preview = preview?.asExpression(),
             highPriorityPreviewShow = highPriorityPreviewShow.asExpression(),

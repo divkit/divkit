@@ -56,7 +56,6 @@ internal class DivImageBinder @Inject constructor(
         oldDivBlock: DivBlock.Image?,
         divView: Div2View,
     ) {
-        imageLoadGeneration++
         val div = divBlock.divValue
         val oldDiv = oldDivBlock?.divValue
         val expressionResolver = divBlock.expressionResolver
@@ -80,7 +79,7 @@ internal class DivImageBinder @Inject constructor(
         bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
         bindImageScale(div, oldDiv, expressionResolver)
         bindContentAlignment(div, oldDiv, expressionResolver)
-        bindPreviewAndImage(div, oldDiv, expressionResolver, divView, errorCollector)
+        bindPreviewAndImage(divBlock, oldDiv, divView, errorCollector)
         bindTint(div, oldDiv, expressionResolver)
         bindFilters(div, oldDiv, expressionResolver, divView)
     }
@@ -310,12 +309,13 @@ internal class DivImageBinder @Inject constructor(
 
     //region Image
     private fun DivImageView.bindPreviewAndImage(
-        newDiv: DivImage,
+        block: DivBlock.Image,
         oldDiv: DivImage?,
-        resolver: ExpressionResolver,
         divView: Div2View,
         errorCollector: ErrorCollector
     ) {
+        val newDiv = block.divValue
+        val resolver = block.expressionResolver
         val newImageUrl = newDiv.imageUrl
         val imageUrlChanged = !newImageUrl.equalsToConstant(oldDiv?.imageUrl)
         val placeholdersChanged = !(newDiv.preview.equalsToConstant(oldDiv?.preview)
@@ -331,12 +331,12 @@ internal class DivImageBinder @Inject constructor(
         if (imageUrlChanged && newImageUrl != null && !newImageUrl.isConstant()) {
             addSubscription(
                 newImageUrl.observe(resolver) {
-                    applyImage(newDiv, resolver, divView, errorCollector)
+                    applyImage(block, divView, errorCollector)
                 }
             )
         }
 
-        val applyImageWorkSkipped = !applyImage(newDiv, resolver, divView, errorCollector)
+        val applyImageWorkSkipped = !applyImage(block, divView, errorCollector)
         if (applyImageWorkSkipped && needPlaceholdersUpdate) {
             applyPlaceholders(
                 newDiv,
@@ -349,17 +349,16 @@ internal class DivImageBinder @Inject constructor(
     }
 
     private fun DivImageView.applyImage(
-        div: DivImage,
-        resolver: ExpressionResolver,
+        block: DivBlock.Image,
         divView: Div2View,
         errorCollector: ErrorCollector
     ): Boolean {
+        val div = block.divValue
+        val resolver = block.expressionResolver
         val imageUrl = div.imageUrl?.evaluate(resolver)
         if (imageUrl == this.imageUrl) {
             return false
         }
-
-        val loadGeneration = imageLoadGeneration
 
         // Called before resetImageLoaded() to ignore high priority preview if image was previously loaded.
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
@@ -380,32 +379,19 @@ internal class DivImageBinder @Inject constructor(
             imageUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {
 
-                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
-                    applyScaleAndFiltersAndSetBitmap(bitmap, div.scale, div.filters, resolver, divView)
-                    applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
-                    imageLoaded()
-                    if (loadGeneration == imageLoadGeneration) {
-                        applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
-                    }
-                    invalidate()
-                }
+                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) =
+                    onBitmapLoaded(bitmap, source, divBlock ?: block, divView)
 
-                override fun onSuccess(drawable: Drawable, source: BitmapSource) {
-                    setImageDrawable(divView, drawable)
-                    applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
-
-                    imageLoaded()
-                    if (loadGeneration == imageLoadGeneration) {
-                        applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
-                    }
-                    invalidate()
-                }
+                override fun onSuccess(drawable: Drawable, source: BitmapSource) =
+                    onDrawableLoaded(drawable, source, divBlock ?: block, divView)
 
                 override fun onSuccess(pictureDrawable: PictureDrawable, source: BitmapSource) {
-                    if (div.isVectorCompatible()) {
-                        return super.onSuccess(pictureDrawable, source)
+                    val current = divBlock ?: block
+                    if (current.divValue.isVectorCompatible()) {
+                        onDrawableLoaded(pictureDrawable, source, current, divView)
+                    } else {
+                        onBitmapLoaded(pictureDrawable.toBitmap(), source, current, divView)
                     }
-                    onSuccess(pictureDrawable.toBitmap(), source)
                 }
 
                 override fun onError(e: Throwable?) {
@@ -418,6 +404,37 @@ internal class DivImageBinder @Inject constructor(
         divView.addLoadReference(reference, this)
         loadReference = reference
         return true
+    }
+
+    private fun DivImageView.onBitmapLoaded(
+        bitmap: Bitmap,
+        source: BitmapSource,
+        block: DivBlock.Image,
+        divView: Div2View,
+    ) {
+        val div = block.divValue
+        val resolver = block.expressionResolver
+        applyScaleAndFiltersAndSetBitmap(bitmap, div.scale, div.filters, resolver, divView)
+        onImageLoaded(block, source)
+    }
+
+    private fun DivImageView.onDrawableLoaded(
+        drawable: Drawable,
+        source: BitmapSource,
+        block: DivBlock.Image,
+        divView: Div2View,
+    ) {
+        setImageDrawable(divView, drawable)
+        onImageLoaded(block, source)
+    }
+
+    private fun DivImageView.onImageLoaded(block: DivBlock.Image, source: BitmapSource) {
+        val div = block.divValue
+        val resolver = block.expressionResolver
+        applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
+        imageLoaded()
+        applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+        invalidate()
     }
 
     private fun DivImageView.applyScaleAndFiltersAndSetBitmap(
@@ -520,7 +537,7 @@ internal class DivImageBinder @Inject constructor(
     //endregion
 
     fun loadImage(view: DivImageView, divBlock: DivBlock.Image, divView: Div2View) =
-        view.applyImage(divBlock.divValue, divBlock.expressionResolver, divView, divView.errorCollector)
+        view.applyImage(divBlock, divView, divView.errorCollector)
 
     private fun DivImageView.setImageDrawable(divView: Div2View, drawable: Drawable?) {
         divView.runMainThreadAction(BindingTaskType.DATA) {
