@@ -41,7 +41,7 @@ internal class InputFocus @Inject constructor() {
         override fun onFocusEvent(focusState: FocusState) {
             if (!focusState.isFocused) return forget()
 
-            val inputFocus = currentValueOf(LocalDivContext).component.inputFocus
+            val inputFocus = LocalDivContext.currentValueOf(this).component.inputFocus
             inputFocus.focusedInputs += this
             this.inputFocus = inputFocus
         }

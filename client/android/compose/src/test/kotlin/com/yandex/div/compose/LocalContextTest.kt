@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
@@ -114,6 +115,25 @@ class LocalContextTest {
         rule.activity.setContentView(host.composeView)
 
         rule.onNodeWithText("Inner").assertIsDisplayed()
+    }
+
+    @Test
+    fun `DivViewHost follows a nested LocalContext change during recomposition`() {
+        val outerContext = contextWithValue("Outer")
+        val currentContext = mutableStateOf(contextWithValue("First"))
+        val nestedCard = data(text(text = expression("@{value}")))
+        val host = DivViewHost(outerContext)
+        host.setContent {
+            CompositionLocalProvider(LocalContext provides currentContext.value) {
+                DivView(nestedCard)
+            }
+        }
+        rule.activity.setContentView(host.composeView)
+        rule.onNodeWithText("First").assertIsDisplayed()
+
+        rule.runOnIdle { currentContext.value = contextWithValue("Second") }
+
+        rule.onNodeWithText("Second").assertIsDisplayed()
     }
 
     @Test
