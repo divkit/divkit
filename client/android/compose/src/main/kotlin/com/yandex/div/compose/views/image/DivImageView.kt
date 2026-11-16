@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.images.ImagePreview
 import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.images.transformations.observedTransformations
 import com.yandex.div.compose.utils.observedAlignment
@@ -37,7 +38,13 @@ internal fun DivImageView(
         highPriorityPreviewShow = data.highPriorityPreviewShow,
         preview = {
             val component = LocalComponent.current
-            data.preview?.observedValue(transform = component.imagePreviewDecoder::decodePreview)
+            when (val preview = data.preview?.observedValue(
+                transform = component.imagePreviewDecoder::decodePreview
+            )) {
+                is ImagePreview.Url -> preview.uri
+                is ImagePreview.Base64 -> preview.bytes
+                null -> null
+            }
         }
     )
 }

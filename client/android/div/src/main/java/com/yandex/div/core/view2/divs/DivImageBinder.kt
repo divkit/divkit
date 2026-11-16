@@ -4,11 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
+import android.net.Uri
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
@@ -24,6 +26,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
+import com.yandex.div.core.view2.divs.widgets.ViewImagePreviewLoader
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.core.widget.LoadableImageView
@@ -236,9 +239,7 @@ internal class DivImageBinder @Inject constructor(
         divView: Div2View,
         errorCollector: ErrorCollector
     ) {
-        val callback = callback@{ _: Any ->
-            if (isImageLoaded) return@callback
-
+        val callback = { _: Any ->
             applyPlaceholders(
                 newDiv,
                 resolver,
@@ -259,10 +260,23 @@ internal class DivImageBinder @Inject constructor(
         synchronous: Boolean,
         errorCollector: ErrorCollector
     ) {
+        if (isImageLoaded) {
+            return
+        }
+
+        val previewLoader = previewLoader ?: ViewImagePreviewLoader(imageLoader).also {
+            this.previewLoader = it
+        }
+        previewLoader.cancel()
+        getLoadingTask()?.cancel(true)
+        cleanLoadingTask()
+        val preview = div.preview?.evaluate(resolver)
+        val previewUri = preview?.let(Uri::parse)
+        val isUrlPreview = previewUri?.scheme != null && !previewUri.scheme.equals("data", ignoreCase = true)
         placeholderLoader.applyPlaceholder(
             this,
             errorCollector,
-            div.preview?.evaluate(resolver),
+            preview.takeUnless { isUrlPreview },
             div.placeholderColor.evaluate(resolver),
             synchronous = synchronous,
             onSetPlaceholder = { drawable ->
@@ -271,24 +285,84 @@ internal class DivImageBinder @Inject constructor(
                 }
             },
             onSetPreview = {
-                if (!isImageLoaded) {
-                    when (it) {
-                        is ImageRepresentation.Bitmap -> setPreview(it.value, div, resolver, divView)
-
-                        is ImageRepresentation.PictureDrawable -> {
-                            if (div.isVectorCompatible()) {
-                                previewLoaded()
-                                setImageDrawable(divView, it.value)
-                            } else {
-                                setPreview(it.value.toBitmap(), div, resolver, divView)
-                            }
-                        }
-
-                        is ImageRepresentation.Error -> Unit
-                    }
-                }
+                setDecodedPreview(it, div, resolver, divView)
             }
         )
+        if (isUrlPreview && preview != null) {
+            loadPreview(div, resolver, divView, preview, previewLoader)
+        }
+    }
+
+    private fun DivImageView.setDecodedPreview(
+        preview: ImageRepresentation,
+        div: DivImage,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) {
+        if (isImageLoaded) {
+            return
+        }
+        when (preview) {
+            is ImageRepresentation.Bitmap -> setPreview(preview.value, div, resolver, divView)
+
+            is ImageRepresentation.PictureDrawable -> {
+                if (div.isVectorCompatible()) {
+                    previewLoaded()
+                    setImageDrawable(divView, preview.value)
+                } else {
+                    setPreview(preview.value.toBitmap(), div, resolver, divView)
+                }
+            }
+
+            is ImageRepresentation.Error -> Unit
+        }
+    }
+
+    private fun DivImageView.loadPreview(
+        div: DivImage,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+        url: String,
+        previewLoader: ViewImagePreviewLoader,
+    ) {
+        val request = previewLoader.load(
+            url = url,
+            onLoaded = { image, request ->
+                divView.runMainThreadAction(BindingTaskType.DATA) {
+                    if (!request.isCurrent() || isImageLoaded) {
+                        return@runMainThreadAction
+                    }
+                    when (image) {
+                        is DivCachedImage.Bitmap ->
+                            setPreview(image.bitmap, div, resolver, divView, request)
+                        is DivCachedImage.Drawable ->
+                            setPreview(image.drawable, div, resolver, divView, request)
+                    }
+                }
+            },
+            onError = { error, _ -> error?.let(divView::logError) }
+        )
+        divView.addLoadReference(request, this)
+    }
+
+    private fun DivImageView.setPreview(
+        drawable: Drawable,
+        div: DivImage,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+        previewRequest: ViewImagePreviewLoader.Request,
+    ) {
+        when {
+            drawable is BitmapDrawable ->
+                setPreview(drawable.bitmap, div, resolver, divView, previewRequest)
+            drawable is PictureDrawable && !div.isVectorCompatible() ->
+                setPreview(drawable.toBitmap(), div, resolver, divView, previewRequest)
+            else -> {
+                previewLoaded()
+                setImageDrawable(drawable)
+                applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+            }
+        }
     }
 
     private fun DivImageView.setPreview(
@@ -296,8 +370,11 @@ internal class DivImageBinder @Inject constructor(
         div: DivImage,
         resolver: ExpressionResolver,
         divView: Div2View,
+        previewRequest: ViewImagePreviewLoader.Request? = null,
     ) {
-        applyScaleAndFiltersAndSetBitmap(bitmap, div.scale, div.filters, resolver, divView)
+        applyScaleAndFiltersAndSetBitmap(
+            bitmap, div.scale, div.filters, resolver, divView, previewRequest,
+        )
         previewLoaded()
         applyTint(
             div.tintColor?.evaluate(resolver),
@@ -337,7 +414,7 @@ internal class DivImageBinder @Inject constructor(
         }
 
         val applyImageWorkSkipped = !applyImage(block, divView, errorCollector)
-        if (applyImageWorkSkipped && needPlaceholdersUpdate) {
+        if (applyImageWorkSkipped && placeholdersChanged) {
             applyPlaceholders(
                 newDiv,
                 resolver,
@@ -443,14 +520,18 @@ internal class DivImageBinder @Inject constructor(
         divFilters: List<DivFilter>?,
         resolver: ExpressionResolver,
         divView: Div2View,
+        previewRequest: ViewImagePreviewLoader.Request? = null,
     ) {
-        if (divFilters.isNullOrEmpty()) return setImageBitmap(divView, bitmap)
+        if (divFilters.isNullOrEmpty()) {
+            setImageBitmap(divView, bitmap, previewRequest)
+            return
+        }
 
         val scale = divScale.evaluate(resolver)
         val filters = divFilters.toFilters(resolver)
         currentBitmapWithoutFilters = bitmap
         bitmap.applyScaleAndFilters(divView, this, scale, filters) {
-            setImageBitmap(divView, it)
+            setImageBitmap(divView, it, previewRequest)
         }
     }
 
@@ -545,9 +626,15 @@ internal class DivImageBinder @Inject constructor(
         }
     }
 
-    private fun DivImageView.setImageBitmap(divView: Div2View, bitmap: Bitmap?) {
+    private fun DivImageView.setImageBitmap(
+        divView: Div2View,
+        bitmap: Bitmap?,
+        previewRequest: ViewImagePreviewLoader.Request? = null,
+    ) {
         divView.runMainThreadAction(BindingTaskType.DATA) {
-            setImageBitmap(bitmap)
+            if (previewRequest == null || (previewRequest.isCurrent() && !isImageLoaded)) {
+                setImageBitmap(bitmap)
+            }
         }
     }
 

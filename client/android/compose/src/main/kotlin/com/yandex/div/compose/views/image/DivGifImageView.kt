@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.images.ImagePreview
 import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div2.DivGifImage
@@ -26,8 +27,13 @@ internal fun DivGifImageView(
         placeholderColor = data.placeholderColor.observedColorValue(),
         preview = {
             val component = LocalComponent.current
-            data.preview?.observedValue(transform = component.imagePreviewDecoder::decodePreview)
-                ?: data.previewUrl?.observedValue()
+            when (val preview = data.preview?.observedValue(
+                transform = component.imagePreviewDecoder::decodePreview
+            )) {
+                is ImagePreview.Url -> preview.uri
+                is ImagePreview.Base64 -> preview.bytes
+                null -> data.previewUrl?.observedValue()
+            }
         }
     )
 }

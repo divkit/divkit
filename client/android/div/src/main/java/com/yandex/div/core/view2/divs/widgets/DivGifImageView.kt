@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
-import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.widget.DivExtendableView
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.DivBlock
@@ -20,7 +19,7 @@ internal open class DivGifImageView @JvmOverloads constructor(
     MediaReleasable {
 
     internal var gifUrl: Uri? = null
-    internal var loadPreviewReference: LoadReference? = null
+    internal var previewLoader: ViewImagePreviewLoader? = null
     internal var previewUrl: Uri? = null
     private var animationsEnabled = true
 
@@ -58,6 +57,8 @@ internal open class DivGifImageView @JvmOverloads constructor(
     }
 
     override fun releaseMedia() {
+        previewLoader?.cancel()
+        previewUrl = null
         super<LoadableImageView>.release()
         gifUrl = null
     }

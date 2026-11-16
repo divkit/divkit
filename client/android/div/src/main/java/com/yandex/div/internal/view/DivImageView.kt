@@ -12,6 +12,7 @@ import com.yandex.div.core.extension.DivExtensionView
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivHolderViewMixin
 import com.yandex.div.core.view2.divs.widgets.MediaReleasable
+import com.yandex.div.core.view2.divs.widgets.ViewImagePreviewLoader
 import com.yandex.div.core.view2.divs.widgets.drawBorderClipped
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.DivBlock
@@ -29,6 +30,8 @@ open class DivImageView @JvmOverloads constructor(
     MediaReleasable {
 
     internal var imageUrl: Uri? = null
+
+    internal var previewLoader: ViewImagePreviewLoader? = null
 
     var baseTouchListener: OnTouchListener? = null
         private set
@@ -71,6 +74,7 @@ open class DivImageView @JvmOverloads constructor(
     }
 
     override fun releaseMedia() {
+        previewLoader?.cancel()
         super<LoadableImageView>.release()
         imageUrl = null
     }

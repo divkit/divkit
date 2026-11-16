@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -94,7 +95,8 @@ internal fun DivImageContent(
     } else {
         // Keep this preview's priority when SideEffect enables high priority for later previews.
         val useHighPriority = remember(imageUrl, previewModel) { canShowHighPriorityPreview.value }
-        val synchronous = useHighPriority && highPriorityPreviewShow.observedValue(false)
+        val synchronous = previewModel is ByteArray && useHighPriority &&
+            highPriorityPreviewShow.observedValue(false)
         rememberImageRequest(
             ImageRequestParams(
                 data = previewModel,
@@ -111,13 +113,6 @@ internal fun DivImageContent(
         }
     }
 
-    val hasPlaceholder = !isImageLoaded && previewRequest == null
-    val backgroundModifier = if (hasPlaceholder) {
-        modifier.background(placeholderColor)
-    } else {
-        modifier
-    }
-
     val previewPainter = if (!isImageLoaded && previewRequest != null) {
         rememberAsyncImagePainter(
             model = previewRequest,
@@ -126,6 +121,14 @@ internal fun DivImageContent(
         )
     } else {
         null
+    }
+    val previewState = previewPainter?.state?.collectAsState()?.value
+    val isPreviewLoaded = previewState is AsyncImagePainter.State.Success
+    val hasPlaceholder = !isImageLoaded && !isPreviewLoaded
+    val backgroundModifier = if (hasPlaceholder) {
+        modifier.background(placeholderColor)
+    } else {
+        modifier
     }
 
     Box(

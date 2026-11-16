@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,6 +13,7 @@ import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.binding.BindingTaskType
@@ -22,6 +24,7 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
+import com.yandex.div.core.view2.divs.widgets.ViewImagePreviewLoader
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.KLog
@@ -87,7 +90,22 @@ internal class DivGifImageBinder @Inject constructor(
             div.contentAlignmentVertical
         )
 
+        bindPreviewAndImage(divView, expressionResolver, div, errorCollector)
+    }
+
+    private fun DivGifImageView.bindPreviewAndImage(
+        divView: Div2View,
+        expressionResolver: ExpressionResolver,
+        div: DivGifImage,
+        errorCollector: ErrorCollector,
+    ) {
         val url = div.gifUrl
+        val onPlaceholderChanged = { _: Any ->
+            applyPlaceholders(divView, expressionResolver, div, errorCollector)
+        }
+        addSubscription(div.preview?.observe(expressionResolver, onPlaceholderChanged))
+        addSubscription(div.previewUrl?.observe(expressionResolver, onPlaceholderChanged))
+        addSubscription(div.placeholderColor.observe(expressionResolver, onPlaceholderChanged))
         if (url == null) {
             applyPlaceholders(divView, expressionResolver, div, errorCollector)
         } else {
@@ -127,6 +145,7 @@ internal class DivGifImageBinder @Inject constructor(
     ) {
         val newGifUrl = div.gifUrl?.evaluate(resolver)
         if (newGifUrl == gifUrl) {
+            applyPlaceholders(divView, resolver, div, errorCollector)
             return
         }
 
@@ -140,9 +159,13 @@ internal class DivGifImageBinder @Inject constructor(
             return
         }
 
+        loadAnimatedImage(divView, newGifUrl)
+    }
+
+    private fun DivGifImageView.loadAnimatedImage(divView: Div2View, url: Uri) {
         // we don't reuse this because not all clients has bytes cache
         val reference = imageLoader.loadAnimatedImage(
-            newGifUrl.toString(),
+            url.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {
 
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
@@ -186,8 +209,49 @@ internal class DivGifImageBinder @Inject constructor(
         div: DivGifImage,
         errorCollector: ErrorCollector,
     ) {
-        val preview = div.preview?.evaluate(resolver)
+        if (isImageLoaded) {
+            return
+        }
 
+        val preview = div.preview?.evaluate(resolver)
+        val previewUri = preview?.let(Uri::parse)
+        val isUrlPreview = previewUri?.scheme != null && !previewUri.scheme.equals("data", ignoreCase = true)
+        val newPreviewUrl = if (isUrlPreview) {
+            previewUri
+        } else if (preview == null) {
+            div.previewUrl?.evaluate(resolver)
+        } else {
+            null
+        }
+        if (newPreviewUrl != null && isImagePreview && previewUrl == newPreviewUrl) {
+            return
+        }
+        val previewLoader = previewLoader ?: ViewImagePreviewLoader(imageLoader).also {
+            this.previewLoader = it
+        }
+        previewLoader.cancel()
+        previewUrl = newPreviewUrl
+        getLoadingTask()?.cancel(true)
+        cleanLoadingTask()
+
+        applyBase64PreviewAndPlaceholder(
+            divView, resolver, div, errorCollector, preview.takeUnless { isUrlPreview }
+        )
+
+        if (newPreviewUrl == null || isImageLoaded) {
+            return
+        }
+
+        applyPreviewUrl(divView, newPreviewUrl.toString(), previewLoader)
+    }
+
+    private fun DivGifImageView.applyBase64PreviewAndPlaceholder(
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        div: DivGifImage,
+        errorCollector: ErrorCollector,
+        preview: String?,
+    ) {
         // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
         placeholderLoader.applyPlaceholder(
             imageView = this,
@@ -210,46 +274,35 @@ internal class DivGifImageBinder @Inject constructor(
                 }
             }
         )
-
-        val newPreviewUrl = div.previewUrl?.evaluate(resolver)
-        if (preview != null ||
-            newPreviewUrl == null ||
-            isImageLoaded ||
-            (isImagePreview && previewUrl == newPreviewUrl)
-        ) return
-
-        previewUrl = newPreviewUrl
-        applyPreviewUrl(divView, newPreviewUrl.toString())
     }
 
-    private fun DivGifImageView.applyPreviewUrl(divView: Div2View, newPreviewUrl: String) {
-        loadPreviewReference?.cancel()
-
-        val reference = imageLoader.loadImage(
-            newPreviewUrl,
-            object : DivIdLoggingImageDownloadCallback(divView) {
-
-                override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
-                    if (!isImageLoaded) {
-                        setPreview(divView, bitmap)
+    private fun DivGifImageView.applyPreviewUrl(
+        divView: Div2View,
+        newPreviewUrl: String,
+        previewLoader: ViewImagePreviewLoader,
+    ) {
+        val request = previewLoader.load(
+            url = newPreviewUrl,
+            onLoaded = { image, request ->
+                divView.runMainThreadAction(BindingTaskType.DATA) {
+                    if (!request.isCurrent() || isImageLoaded) {
+                        return@runMainThreadAction
                     }
-                }
-
-                override fun onSuccess(drawable: Drawable, source: BitmapSource) {
-                    if (!isImageLoaded) {
-                        setPreview(divView, drawable)
+                    when (image) {
+                        is DivCachedImage.Bitmap -> setPreview(image.bitmap)
+                        is DivCachedImage.Drawable -> setPreview(image.drawable)
                     }
+                    previewLoaded()
                 }
-
-                override fun onError(e: Throwable?) {
-                    super.onError(e)
+            },
+            onError = { error, request ->
+                error?.let(divView::logError)
+                if (request.isCurrent()) {
                     previewUrl = null
                 }
-            }
+            },
         )
-
-        divView.addLoadReference(reference, this)
-        loadPreviewReference = reference
+        divView.addLoadReference(request, this)
     }
 
     fun loadGifImage(view: DivGifImageView, divBlock: DivBlock.GifImage, divView: Div2View) =
@@ -345,16 +398,20 @@ internal class DivGifImageBinder @Inject constructor(
 
         private fun DivGifImageView.setPreview(divView: Div2View, drawable: Drawable?) {
             divView.runMainThreadAction(BindingTaskType.DATA) {
-                setPreview(drawable)
+                if (!isImageLoaded) {
+                    setPreview(drawable)
+                    previewLoaded()
+                }
             }
-            previewLoaded()
         }
 
         private fun DivGifImageView.setPreview(divView: Div2View, bitmap: Bitmap?) {
             divView.runMainThreadAction(BindingTaskType.DATA) {
-                setPreview(bitmap)
+                if (!isImageLoaded) {
+                    setPreview(bitmap)
+                    previewLoaded()
+                }
             }
-            previewLoaded()
         }
 
         private fun DivGifImageView.setImage(divView: Div2View, bitmap: Bitmap?) {

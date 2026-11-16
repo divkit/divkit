@@ -19,6 +19,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.images.ImagePreview
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.reportError
@@ -99,13 +100,18 @@ private fun ObserveElapsedTimeVariable(player: DivVideoPlayer, variableName: Str
 }
 
 @Composable
-private fun VideoPreviewImage(preview: ByteArray, scale: DivVideoScale) {
+private fun VideoPreviewImage(preview: ImagePreview, scale: DivVideoScale) {
     val component = LocalDivContext.current.component
     Image(
         modifier = Modifier.fillMaxSize(),
         painter = rememberAsyncImagePainter(
             model = rememberImageRequest(
-                ImageRequestParams(data = preview)
+                ImageRequestParams(
+                    data = when (preview) {
+                        is ImagePreview.Url -> preview.uri
+                        is ImagePreview.Base64 -> preview.bytes
+                    }
+                )
             ),
             imageLoader = component.imageLoader,
             onState = component.debugConfiguration.imagePainterStateListener

@@ -1,0 +1,67 @@
+{
+  "description": "URL and Base64 previews without a main image are shown vertically with labels.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "card": {
+    "log_id": "image_preview_url",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Preview: Base64",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "image",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "preview": "iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQAAAAB0CZXLAAAAUElEQVRoge3OsQ0AIAwDQfZfGliAOi90blLkJHvtm3Xzus8HAADfg8oOAAB6YLofAIAuqOwAAKAHpvsBAOiCyg4AAHpguh8AgC6o7AAAIAcOimnw4rmUcccAAAAASUVORK5CYII=",
+              "placeholder_color": "#FF00FF"
+            },
+            {
+              "type": "text",
+              "text": "Preview: URL",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "image",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "preview": "https://yastatic.net/s3/home/divkit/chess.png",
+              "placeholder_color": "#FF00FF"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
