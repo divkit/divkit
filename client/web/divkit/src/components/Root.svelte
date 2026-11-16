@@ -1177,7 +1177,7 @@
 
         let val = value;
 
-        if (!name || !val || !type || !lifetime) {
+        if (!name || val === null || val === undefined || !type || lifetime === null || lifetime === undefined) {
             log(wrapError(new Error('Missing required params for set_stored_value')));
             return;
         }
@@ -1186,7 +1186,7 @@
             return;
         }
 
-        if (type === 'boolean') {
+        if (type === 'boolean' && typeof val === 'string') {
             val = val === 'true' || val === '1';
         }
 

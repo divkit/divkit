@@ -11016,6 +11016,7 @@
   "client/web/divkit/tests/hermione/json/regression/visibility_actions_performed_and_logged_in_pager.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/regression/visibility_actions_performed_and_logged_in_pager.hermione.js",
   "client/web/divkit/tests/hermione/json/regression/visible.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/regression/visible.hermione.js",
   "client/web/divkit/tests/hermione/json/regression/visiblity_actions_first_page.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/regression/visiblity_actions_first_page.hermione.js",
+  "client/web/divkit/tests/hermione/json/stored-value.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/stored-value.hermione.js",
   "client/web/divkit/tests/hermione/json/title-with-constant-expression.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/title-with-constant-expression.hermione.js",
   "client/web/divkit/tests/hermione/json/truncate-policy.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/truncate-policy.hermione.js",
   "client/web/divkit/tests/hermione/json/ui_test_data/action_scope_id.hermione.js":"divkit/public/client/web/divkit/tests/hermione/json/ui_test_data/action_scope_id.hermione.js",
