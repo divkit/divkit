@@ -12,6 +12,11 @@ class RecordingLegacyAnimationView: UIView, @MainActor AsyncSourceAnimatableView
 
   private let holdSource: Bool
   private var sourceContinuation: CheckedContinuation<Void, Never>?
+  private var isSourceInstalled = false {
+    didSet {
+      sourceFinished.fulfill()
+    }
+  }
 
   init(holdSource: Bool) {
     self.holdSource = holdSource
@@ -24,13 +29,11 @@ class RecordingLegacyAnimationView: UIView, @MainActor AsyncSourceAnimatableView
   }
 
   func play() {
-    isPlaying = true
-    configured.fulfill()
+    setPlayingState(true)
   }
 
   func pause() {
-    isPlaying = false
-    configured.fulfill()
+    setPlayingState(false)
   }
 
   func setSourceAsync(_: AnimationSourceType) async {
@@ -43,11 +46,19 @@ class RecordingLegacyAnimationView: UIView, @MainActor AsyncSourceAnimatableView
     } else {
       sourceReceived.fulfill()
     }
-    sourceFinished.fulfill()
+
+    isSourceInstalled = true
   }
 
   func completeSource() {
     sourceContinuation?.resume()
     sourceContinuation = nil
+  }
+
+  private func setPlayingState(_ isPlaying: Bool) {
+    self.isPlaying = isPlaying
+    if isSourceInstalled {
+      configured.fulfill()
+    }
   }
 }
