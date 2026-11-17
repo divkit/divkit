@@ -1,4 +1,4 @@
-package com.yandex.div.render.common.text
+package com.yandex.div.render.common.gradient
 
 import com.yandex.div.core.annotations.InternalApi
 import kotlin.jvm.JvmStatic
@@ -8,7 +8,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 @InternalApi
-public object AnimatedTextGradientMath {
+public object AnimatedGradientMath {
 
     @PublishedApi
     internal const val DEGREES_TO_RADIANS: Double = PI / 180.0
@@ -20,8 +20,8 @@ public object AnimatedTextGradientMath {
     }
 
     /**
-     * Passes the linear gradient translation to [consumer], so that callers updating it on every frame
-     * don't allocate.
+     * Passes the linear gradient translation to [consumer], so that callers updating it on every
+     * frame don't allocate.
      */
     public inline fun <R> linearTranslation(
         angleDegrees: Float,

@@ -7,7 +7,7 @@ import android.view.View
 import com.yandex.div.core.view2.divs.availableWidth
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
-import com.yandex.div.render.common.text.AnimatedTextGradientMath
+import com.yandex.div.render.common.gradient.AnimatedGradientMath
 import kotlin.math.ceil
 
 internal class AnimatedTextGradientController(
@@ -94,7 +94,7 @@ internal class AnimatedTextGradientController(
             return
         }
 
-        val phase = AnimatedTextGradientMath.phase(frameTimeNanos / NANOS_IN_MILLISECOND, gradientData.duration)
+        val phase = AnimatedGradientMath.phase(frameTimeNanos / NANOS_IN_MILLISECOND, gradientData.duration)
         updateShader(phase)
         view.postInvalidateOnAnimation()
         choreographer.postFrameCallback(this)
@@ -145,7 +145,7 @@ internal class AnimatedTextGradientController(
         if (phase != STATIC_PHASE && animationsEnabled) {
             when (val gradient = gradientData.gradient) {
                 is AnimatedTextGradientData.Gradient.Linear -> {
-                    AnimatedTextGradientMath.linearTranslation(
+                    AnimatedGradientMath.linearTranslation(
                         angleDegrees = gradient.angle,
                         width = width.toFloat(),
                         height = height.toFloat(),
@@ -154,7 +154,7 @@ internal class AnimatedTextGradientController(
                 }
                 is AnimatedTextGradientData.Gradient.Radial -> {
                     shaderMatrix.setTranslate(
-                        AnimatedTextGradientMath.radialTranslation(width.toFloat(), phase),
+                        AnimatedGradientMath.radialTranslation(width.toFloat(), phase),
                         0f,
                     )
                 }

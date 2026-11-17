@@ -3,7 +3,6 @@ package com.yandex.div.compose.utils.gradient
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
@@ -22,52 +21,59 @@ import com.yandex.div2.DivRadialGradientRadius
 
 @Composable
 internal fun DivLinearGradient.observeLinearGradient(animationPhase: Float? = null): Brush? {
-    val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
-    val colorMap = observedColorMap(points, colors) ?: return null
-    return LinearGradientBrush(
-        angle = angle.observedIntValue(),
-        colorMap = colorMap,
-        animationPhase = animationPhase,
-    )
+    return observedBrush(
+        colorMap = colorMap?.map {
+            it.position.observedFloatValue() to it.color.observedColorValue()
+        },
+        fallbackColors = colors,
+    ) { colors, colorStops ->
+        LinearGradientBrush(
+            angle = angle.observedIntValue(),
+            colors = colors,
+            colorStops = colorStops,
+            animationPhase = animationPhase,
+        )
+    }
 }
 
 @Composable
 internal fun DivRadialGradient.observeRadialGradient(animationPhase: Float? = null): Brush? {
-    val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
-    val colorMap = observedColorMap(points, colors) ?: return null
-    return RadialGradientBrush(
-        centerX = centerX.observeCenter(),
-        centerY = centerY.observeCenter(),
-        radius = radius.observeRadius(),
-        colorMap = colorMap,
-        animationPhase = animationPhase,
-    )
+    return observedBrush(
+        colorMap = colorMap?.map {
+            it.position.observedFloatValue() to it.color.observedColorValue()
+        },
+        fallbackColors = colors,
+    ) { colors, colorStops ->
+        RadialGradientBrush(
+            centerX = centerX.observedCenter(),
+            centerY = centerY.observedCenter(),
+            radius = radius.observedRadius(),
+            colors = colors,
+            colorStops = colorStops,
+            animationPhase = animationPhase,
+        )
+    }
 }
 
 @Composable
-private fun observedColorMap(
-    points: List<Pair<Float, Color>>?,
+private inline fun observedBrush(
+    colorMap: List<Pair<Float, Color>>?,
     fallbackColors: ExpressionList<Int>?,
-): ColorMap? {
-    if (points != null) {
-        val sorted = points.sortedBy { it.first }
-        return ColorMap(
-            colors = IntArray(sorted.size) { sorted[it].second.toArgb() },
-            positions = FloatArray(sorted.size) { sorted[it].first },
-        )
+    createBrush: (List<Color>, List<Float>?) -> Brush,
+): Brush? {
+    if (colorMap != null) {
+        val sorted = colorMap.sortedBy { it.first }
+        return createBrush(sorted.map { it.second }, sorted.map { it.first })
     }
 
     val colors = fallbackColors?.observedValue()
         ?.map { it.toColor() }
         ?: return null
-    return ColorMap(
-        colors = IntArray(colors.size) { colors[it].toArgb() },
-        positions = null,
-    )
+    return createBrush(colors, null)
 }
 
 @Composable
-private fun DivRadialGradientCenter.observeCenter(): Center {
+private fun DivRadialGradientCenter.observedCenter(): Center {
     return when (this) {
         is DivRadialGradientCenter.Fixed ->
             Center.Fixed(value.value.observedPxValue(value.unit))
@@ -78,7 +84,7 @@ private fun DivRadialGradientCenter.observeCenter(): Center {
 }
 
 @Composable
-private fun DivRadialGradientRadius.observeRadius(): Radius {
+private fun DivRadialGradientRadius.observedRadius(): Radius {
     return when (this) {
         is DivRadialGradientRadius.FixedSize ->
             Radius.Fixed(value.observedValue().toPx())

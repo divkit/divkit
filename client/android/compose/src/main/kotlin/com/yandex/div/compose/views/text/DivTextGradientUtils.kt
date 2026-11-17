@@ -12,7 +12,7 @@ import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
-import com.yandex.div.render.common.text.AnimatedTextGradientMath
+import com.yandex.div.render.common.gradient.AnimatedGradientMath
 import com.yandex.div2.DivAnimatedTextGradient
 import com.yandex.div2.DivStaticTextGradient
 import com.yandex.div2.DivTextGradient
@@ -53,7 +53,7 @@ private fun rememberAnimatedTextGradientPhase(
         }
         while (true) {
             withFrameMillis { frameTimeMillis ->
-                phase = AnimatedTextGradientMath.phase(frameTimeMillis, durationMillis)
+                phase = AnimatedGradientMath.phase(frameTimeMillis, durationMillis)
             }
         }
     }

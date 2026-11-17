@@ -1,6 +1,5 @@
 package com.yandex.div.compose.views.text
 
-import android.graphics.Matrix
 import android.graphics.Shader
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -12,21 +11,22 @@ import com.yandex.div.compose.setContent
 import com.yandex.div.compose.utils.gradient.LinearGradientBrush
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.json.expressions.Expression
-import com.yandex.div.render.common.text.AnimatedTextGradientMath
+import com.yandex.div.render.common.gradient.AnimatedGradientMath
 import com.yandex.div.test.data.animatedTextGradient
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
-import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.Before
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
+import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Before
+import org.junit.Rule
+import org.junit.runner.RunWith
+import org.robolectric.util.ReflectionHelpers.getField
 
 @RunWith(AndroidJUnit4::class)
 class AnimatedTextGradientTest {
@@ -49,7 +49,7 @@ class AnimatedTextGradientTest {
     }
 
     @Test
-    fun `zero duration keeps static gradient with identity transform`() {
+    fun `zero duration keeps static gradient`() {
         render(animatedText(duration = 0L))
 
         rule.mainClock.advanceTimeBy(HALF_CYCLE_MILLIS)
@@ -66,8 +66,8 @@ class AnimatedTextGradientTest {
         rule.mainClock.advanceTimeByFrame()
 
         val brush = assertIs<LinearGradientBrush>(renderedText().spanStyles.single().item.brush)
-        val phase = AnimatedTextGradientMath.phase(rule.mainClock.currentTime, DURATION_MILLIS)
-        val expectedTranslation = AnimatedTextGradientMath.linearTranslation(
+        val phase = AnimatedGradientMath.phase(rule.mainClock.currentTime, DURATION_MILLIS)
+        val expectedTranslation = AnimatedGradientMath.linearTranslation(
             angleDegrees = 0f,
             width = GRADIENT_SIZE.width,
             height = GRADIENT_SIZE.height,
@@ -77,7 +77,7 @@ class AnimatedTextGradientTest {
     }
 
     @Test
-    fun `disabled animations keep static gradient with identity transform`() {
+    fun `disabled animations keep static gradient`() {
         val animationsEnabledState = MutableStateFlow(false)
         val configuration = DivConfiguration(
             animationsEnabledProvider = object : DivAnimationsEnabledProvider {
@@ -129,12 +129,7 @@ class AnimatedTextGradientTest {
         textGradient = animatedTextGradient(duration = Expression.constant(duration)),
     )
 
-    private fun Shader.translationX(): Float {
-        val matrix = Matrix()
-        @Suppress("DEPRECATION")
-        getLocalMatrix(matrix)
-        return FloatArray(9).also(matrix::getValues)[Matrix.MTRANS_X]
-    }
+    private fun Shader.translationX(): Float = getField(this, "mX0")
 
     private companion object {
         const val TEXT_ID = "text"
