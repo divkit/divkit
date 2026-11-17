@@ -4,6 +4,11 @@ import com.yandex.div.core.annotations.InternalApi
 import java.text.BreakIterator
 import java.util.Locale
 
+@InternalApi
+public actual fun TextTruncation(text: String): TextTruncation {
+    return TextTruncation(text, Locale.getDefault())
+}
+
 /**
  * Creates truncation using the platform's locale-aware grapheme and line boundaries.
  */

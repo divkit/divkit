@@ -3,6 +3,12 @@ package com.yandex.div.render.common.text
 import com.yandex.div.core.annotations.InternalApi
 
 /**
+ * Creates truncation using the platform's default locale and text boundaries.
+ */
+@InternalApi
+public expect fun TextTruncation(text: String): TextTruncation
+
+/**
  * Selects logical text boundaries; the renderer owns shaping, spans and the width budget.
  */
 @InternalApi

@@ -12,7 +12,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import com.yandex.div.render.common.text.TextTruncation
 import com.yandex.div2.DivText
-import java.util.Locale
 
 /**
  * Resolves end truncation for a measured Compose text layout. It applies the requested word or
@@ -163,10 +162,7 @@ private class EndTextEllipsizer(
         ) ?: return TextEllipsisResult.Render(AnnotatedText(AnnotatedString(""), emptyList()))
         val lineStart = sourceLayout.getLineStart(lastVisibleLine)
         val nativeOffset = sourceLayout.getLineEnd(lastVisibleLine, visibleEnd = true)
-        val safeOffset = TextTruncation(
-            text = text.text.text,
-            locale = style.resolveLocale(),
-        ).findOffset(
+        val safeOffset = TextTruncation(text.text.text).findOffset(
             lineStart = lineStart,
             lineEnd = nativeOffset,
             byWord = false,
@@ -196,10 +192,7 @@ private class EndTextEllipsizer(
         policy: DivText.TruncatePolicy,
         placeholders: List<AnnotatedString.Range<Placeholder>>,
     ): Int? {
-        val truncation = TextTruncation(
-            text = text.text.text,
-            locale = style.resolveLocale(),
-        )
+        val truncation = TextTruncation(text.text.text)
         return truncation.findOffset(
             lineStart = visibleBounds.lineStart,
             lineEnd = visibleBounds.lineEnd,
@@ -363,11 +356,6 @@ internal fun List<AnnotatedString.Range<Placeholder>>.splitsPlaceholder(offset: 
     return any { placeholder ->
         placeholder.start < offset && placeholder.end > offset
     }
-}
-
-private fun TextStyle.resolveLocale(): Locale {
-    val primaryLocale = localeList?.get(0) ?: return Locale.getDefault()
-    return Locale.forLanguageTag(primaryLocale.toLanguageTag())
 }
 
 private fun AnnotatedText.isStandardEllipsis(): Boolean {
