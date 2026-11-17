@@ -1255,7 +1255,8 @@
         "The same as in step 2",
         "The text shows 'Последнее действие: tap'"
       ],
-      "file": "accessibility/menu.json"
+      "file": "accessibility/menu.json",
+      "case_id": 539
     },
     {
       "title": "Actions on tap",
@@ -3848,7 +3849,8 @@
         "The tooltip and the substrate stay open",
         "The tooltip and the substrate are closed"
       ],
-      "file": "tooltips/tooltip-non-modal-keep-on-tap-outside.json"
+      "file": "tooltips/tooltip-non-modal-keep-on-tap-outside.json",
+      "case_id": 540
     },
     {
       "title": "Tooltip with bring to top view",
@@ -4439,7 +4441,8 @@
       "expected_results": [
         "Element disappears"
       ],
-      "file": "state/swipe_out_actions.json"
+      "file": "state/swipe_out_actions.json",
+      "case_id": 541
     },
     {
       "title": "Input inside pager",
@@ -5477,7 +5480,8 @@
         "The validated field is announced as \"Password. Password is too short\" while it has fewer than six characters, then as \"Password\". The error text under the field is visible only while the password is invalid.",
         "After the toggle the fields are regular text fields: the field with hint is announced by its text, the field with description is still announced only as \"Secret code\", and the container is announced as \"Account qwerty123\" because its field is no longer secure. After toggling back the typed values are not read again, and the container is announced as \"Account\"."
       ],
-      "file": "accessibility/input_password.json"
+      "file": "accessibility/input_password.json",
+      "case_id": 542
     }
   ]
 }
