@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
@@ -74,16 +72,18 @@ internal fun Div.observeHorizontalChildAlignment(): Alignment.Horizontal? =
     value().alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
 
 internal fun Modifier.reduceMaxConstraint(
-    reductionAmount: Dp,
+    reductionPx: Int,
     isWidth: Boolean,
 ): Modifier {
-    if (reductionAmount <= 0.dp) return this
+    if (reductionPx <= 0) return this
     return layout { measurable, constraints ->
-        val reductionPx = reductionAmount.roundToPx()
-        val adjustedConstraints = if (isWidth) {
-            constraints.copy(maxWidth = (constraints.maxWidth - reductionPx).coerceAtLeast(0))
-        } else {
-            constraints.copy(maxHeight = (constraints.maxHeight - reductionPx).coerceAtLeast(0))
+        // An unbounded size has nothing to take the reduction from.
+        val adjustedConstraints = when {
+            isWidth && constraints.hasBoundedWidth ->
+                constraints.copy(maxWidth = (constraints.maxWidth - reductionPx).coerceAtLeast(0))
+            !isWidth && constraints.hasBoundedHeight ->
+                constraints.copy(maxHeight = (constraints.maxHeight - reductionPx).coerceAtLeast(0))
+            else -> constraints
         }
         val placeable = measurable.measure(adjustedConstraints)
         layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
@@ -96,6 +96,7 @@ internal inline fun LinearContainer(
     components: Map<Div, DivLocalComponent>?,
     separator: DivContainer.Separator?,
     separatorVisibility: SeparatorVisibility,
+    spacingAsItems: Boolean = false,
     renderSeparator: @Composable (DivContainer.Separator) -> Unit,
     renderSpacing: @Composable () -> Unit,
     crossinline renderItem: @Composable (Div) -> Unit,
@@ -104,6 +105,7 @@ internal inline fun LinearContainer(
         items = items,
         separator = separator,
         separatorVisibility = separatorVisibility,
+        spacingAsItems = spacingAsItems || separatorVisibility.hasAnySeparator,
         renderSeparator = renderSeparator,
         renderSpacing = renderSpacing,
     ) { item ->
@@ -116,6 +118,7 @@ private inline fun LinearContainerContent(
     items: List<Div>,
     separator: DivContainer.Separator?,
     separatorVisibility: SeparatorVisibility,
+    spacingAsItems: Boolean,
     renderSeparator: @Composable (DivContainer.Separator) -> Unit,
     renderSpacing: @Composable () -> Unit,
     renderItem: @Composable (Div) -> Unit,
@@ -136,7 +139,7 @@ private inline fun LinearContainerContent(
         if (isNotLastItem) {
             when {
                 separatorVisibility.showBetween && separator != null -> renderSeparator(separator)
-                separatorVisibility.hasAnySeparator -> renderSpacing()
+                spacingAsItems -> renderSpacing()
             }
         }
     }

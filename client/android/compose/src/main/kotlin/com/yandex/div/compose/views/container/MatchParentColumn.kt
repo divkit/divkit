@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -28,12 +29,14 @@ import kotlin.math.roundToInt
 
 /**
  * A Column for a container with match_parent children along its definite height. The other
- * children are measured first, in order and within the space left, as in a Column; the
+ * children are measured first, with constrained children following fixed and unconstrained
+ * siblings when minimum sizes reserve space. The
  * match_parent children then share what remains the way the View renderer does: by weight, with a
  * child clamped by its min_size or max_size leaving the pool and the rest shared again. A Column
  * sizes a weighted child once by its share, so a max_size clamp would leave a gap. The margins of
  * a match_parent child are reserved before anything is shared, so its share sizes the content, as
- * in the View renderer. Every child is measured once, at its final size.
+ * in the View renderer. A constrained child also leaves the match_parent children their min_size.
+ * Every child is measured once, at its final size.
  */
 @Composable
 internal fun MatchParentColumn(
@@ -55,29 +58,37 @@ internal fun MatchParentColumn(
 internal fun Modifier.alignInMatchParentColumn(alignment: Alignment.Horizontal): Modifier =
     then(MatchParentColumnAlignModifier(alignment))
 
+/** Marks a constrained child of [MatchParentColumn]: it leaves its match_parent siblings their min_size. */
+internal fun Modifier.constrainedInMatchParentColumn(): Modifier = then(MatchParentColumnConstrainedModifier)
+
 /**
  * Marks a child of [MatchParentColumn] as a match_parent child with the bounds and weight of [size];
- * [margins] is the child's vertical margins, kept outside its share and inside its measured size.
+ * the child's vertical margins are kept outside its share and inside its measured size.
  */
 @Composable
-internal fun Modifier.matchParentHeight(size: DivMatchParentSize, margins: Dp): Modifier {
-    val minSize = size.minSize?.let { it.value.observedDpValue(it.unit) } ?: 0.dp
-    val maxSize = size.maxSize?.let { it.value.observedDpValue(it.unit) }
+internal fun Modifier.matchParentHeight(size: DivMatchParentSize, topMargin: Dp, bottomMargin: Dp): Modifier =
+    then(MatchParentColumnSpecModifier(size.observeMatchParentSpec(topMargin, bottomMargin)))
+
+@Composable
+internal fun DivMatchParentSize.observeMatchParentSpec(beforeMargin: Dp, afterMargin: Dp): MatchParentSpec {
+    val minSize = this.minSize?.let { it.value.observedDpValue(it.unit) } ?: 0.dp
+    val maxSize = this.maxSize?.let { it.value.observedDpValue(it.unit) }
     val hasValidBounds = maxSize == null || minSize <= maxSize
-    val spec = MatchParentSpec(
-        weight = size.weight?.observedFloatValue()?.takeIf { it > 0f } ?: 1f,
+    return MatchParentSpec(
+        weight = weight?.observedFloatValue()?.takeIf { it > 0f } ?: 1f,
         minSize = if (hasValidBounds) minSize else 0.dp,
         maxSize = if (hasValidBounds) maxSize else null,
-        margins = margins,
+        // Each margin is rounded on its own, as the padding that applies it rounds it.
+        marginsPx = with(LocalDensity.current) { beforeMargin.roundToPx() + afterMargin.roundToPx() },
     )
-    return then(MatchParentColumnSpecModifier(spec))
 }
 
-internal data class MatchParentSpec(val weight: Float, val minSize: Dp, val maxSize: Dp?, val margins: Dp)
+internal data class MatchParentSpec(val weight: Float, val minSize: Dp, val maxSize: Dp?, val marginsPx: Int)
 
 private data class MatchParentColumnChild(
     val alignment: Alignment.Horizontal? = null,
     val spec: MatchParentSpec? = null,
+    val isConstrained: Boolean = false,
 )
 
 private data class MatchParentColumnAlignModifier(private val alignment: Alignment.Horizontal) : ParentDataModifier {
@@ -90,8 +101,16 @@ private data class MatchParentColumnSpecModifier(private val spec: MatchParentSp
         (parentData as? MatchParentColumnChild ?: MatchParentColumnChild()).copy(spec = spec)
 }
 
+private object MatchParentColumnConstrainedModifier : ParentDataModifier {
+    override fun Density.modifyParentData(parentData: Any?): Any =
+        (parentData as? MatchParentColumnChild ?: MatchParentColumnChild()).copy(isConstrained = true)
+}
+
 private val IntrinsicMeasurable.matchParentSpec: MatchParentSpec?
     get() = (parentData as? MatchParentColumnChild)?.spec
+
+private val IntrinsicMeasurable.isConstrained: Boolean
+    get() = (parentData as? MatchParentColumnChild)?.isConstrained == true
 
 private class MatchParentColumnMeasurePolicy(
     private val arrangement: Arrangement.Vertical,
@@ -102,12 +121,14 @@ private class MatchParentColumnMeasurePolicy(
         val childConstraints = Constraints(maxWidth = constraints.maxWidth)
         val placeables = arrayOfNulls<Placeable>(measurables.size)
         val specs = measurables.mapNotNull { it.matchParentSpec }
-        var fixedSpace = spacingTotal(measurables.size) + specs.sumOf { it.margins.roundToPx() }
+        var fixedSpace = spacingTotal(measurables.size) + specs.sumOf { it.marginsPx }
+        val minSizes = specs.sumOf { it.minSize.roundToPx() }
 
-        measurables.forEachIndexed { index, measurable ->
-            if (measurable.matchParentSpec != null) return@forEachIndexed
+        measurables.forEachUnweighted(constrainedLast = minSizes > 0) { index, measurable ->
             val remaining = if (constraints.hasBoundedHeight) {
-                (constraints.maxHeight - fixedSpace).coerceAtLeast(0)
+                // A constrained child shrinks so that the match_parent children keep their min_size.
+                val reserved = if (measurable.isConstrained) minSizes else 0
+                (constraints.maxHeight - fixedSpace - reserved).coerceAtLeast(0)
             } else {
                 Constraints.Infinity
             }
@@ -122,7 +143,7 @@ private class MatchParentColumnMeasurePolicy(
         var matchParentIndex = 0
         measurables.forEachIndexed { index, measurable ->
             val spec = measurable.matchParentSpec ?: return@forEachIndexed
-            val size = sizes[matchParentIndex++] + spec.margins.roundToPx()
+            val size = sizes[matchParentIndex++] + spec.marginsPx
             placeables[index] = measurable.measure(childConstraints.copy(minHeight = size, maxHeight = size))
         }
 
@@ -176,14 +197,14 @@ private class MatchParentColumnMeasurePolicy(
                 width = max(width, measurable.intrinsicWidth(childHeight))
             } else {
                 totalWeight += spec.weight
-                fixedSpace += spec.margins.roundToPx()
+                fixedSpace += spec.marginsPx
             }
         }
         if (totalWeight == 0f) return width
         val unit = (height - fixedSpace).coerceAtLeast(0) / totalWeight
         measurables.forEach { measurable ->
             val spec = measurable.matchParentSpec ?: return@forEach
-            val share = (unit * spec.weight).roundToInt() + spec.margins.roundToPx()
+            val share = (unit * spec.weight).roundToInt() + spec.marginsPx
             width = max(width, measurable.intrinsicWidth(share))
         }
         return width
@@ -201,7 +222,7 @@ private class MatchParentColumnMeasurePolicy(
             if (spec == null) {
                 fixedSpace += measurable.intrinsicHeight()
             } else {
-                val margins = spec.margins.roundToPx()
+                val margins = spec.marginsPx
                 totalWeight += spec.weight
                 fixedSpace += margins
                 unit = max(unit, ((measurable.intrinsicHeight() - margins) / spec.weight).roundToInt())
@@ -214,13 +235,29 @@ private class MatchParentColumnMeasurePolicy(
         arrangement.spacing.roundToPx() * (childCount - 1).coerceAtLeast(0)
 }
 
+private inline fun <T : IntrinsicMeasurable> List<T>.forEachUnweighted(
+    constrainedLast: Boolean,
+    action: (Int, T) -> Unit,
+) {
+    forEachIndexed { index, measurable ->
+        if (measurable.matchParentSpec == null && (!constrainedLast || !measurable.isConstrained)) {
+            action(index, measurable)
+        }
+    }
+    if (constrainedLast) {
+        forEachIndexed { index, measurable ->
+            if (measurable.matchParentSpec == null && measurable.isConstrained) action(index, measurable)
+        }
+    }
+}
+
 /**
  * Shares [space] among [specs] by weight, resolving min_size and max_size the way flexbox resolves
  * flexible lengths: each round every child not yet frozen takes its share clamped to its bounds;
  * if the clamps add space, the children held at min_size are frozen, if they take space, those held
  * at max_size are, and the rest share again. Without space to share every child keeps its min_size.
  */
-private fun allocateMatchParentSizes(specs: List<MatchParentSpec>, space: Int, density: Density): IntArray {
+internal fun allocateMatchParentSizes(specs: List<MatchParentSpec>, space: Int, density: Density): IntArray {
     val minSizes = IntArray(specs.size) { with(density) { specs[it].minSize.roundToPx() } }
     if (space <= 0) return minSizes
     val maxSizes = IntArray(specs.size) { with(density) { specs[it].maxSize?.roundToPx() ?: Int.MAX_VALUE } }

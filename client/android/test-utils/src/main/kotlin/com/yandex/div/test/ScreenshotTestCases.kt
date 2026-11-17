@@ -99,9 +99,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     "div-container/size_provider.json",
     "div-container/size_provider_recursive.json",
 
-    // match_parent min_size next to wrap_content constrained siblings not supported, DIVKIT-10714
-    "div-container/match-parent-min-size-with-constrained-siblings.json",
-
     // markdown extension not supported
     "div-text/markdown-extension.json",
 

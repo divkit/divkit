@@ -22,6 +22,10 @@ fun matchParent(
     maxSize = maxSize?.let { DivSizeUnitValue(value = constant(it.toLong())) },
 ))
 
+fun matchParent(minSize: Expression<Long>): DivSize = DivSize.MatchParent(
+    DivMatchParentSize(minSize = DivSizeUnitValue(value = minSize))
+)
+
 fun wrapContent(
     constrained: Boolean = false,
     minSize: Int? = null,

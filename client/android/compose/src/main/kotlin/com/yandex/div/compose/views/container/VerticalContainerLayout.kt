@@ -26,7 +26,7 @@ import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
 import com.yandex.div.compose.utils.observeIsConstrained
-import com.yandex.div.compose.utils.observeVerticalMarginsSum
+import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
@@ -212,18 +212,21 @@ private fun VerticalScope.VerticalContainerItems(
 private interface VerticalScope {
     fun Modifier.alignInColumn(alignment: Alignment.Horizontal): Modifier
 
-    /** A share of the height for a constrained child when the children have no match_parent sibling. */
-    fun Modifier.shareHeight(): Modifier
+    /**
+     * Shrinks a constrained child of a definite height: without match_parent siblings it shares the
+     * height with the other children, with them it leaves them their min_size.
+     */
+    fun Modifier.constrainHeight(): Modifier
 }
 
 private class ColumnVerticalScope(private val scope: ColumnScope) : VerticalScope {
     override fun Modifier.alignInColumn(alignment: Alignment.Horizontal): Modifier = with(scope) { align(alignment) }
-    override fun Modifier.shareHeight(): Modifier = with(scope) { weight(1f, fill = false) }
+    override fun Modifier.constrainHeight(): Modifier = with(scope) { weight(1f, fill = false) }
 }
 
 private object MatchParentColumnScope : VerticalScope {
     override fun Modifier.alignInColumn(alignment: Alignment.Horizontal): Modifier = alignInMatchParentColumn(alignment)
-    override fun Modifier.shareHeight(): Modifier = this
+    override fun Modifier.constrainHeight(): Modifier = constrainedInMatchParentColumn()
 }
 
 private class VerticalChildrenSizing(
@@ -329,10 +332,12 @@ private fun VerticalScope.makeVerticalChildModifier(
         childSize.isMatchParent && containerSize.isWrapContent && !hasAspect ->
             // TODO: Needs warning match_parent child and wrap_content container.
             Modifier
-        childSize is DivSize.MatchParent ->
-            Modifier.matchParentHeight(childSize.value, margins = child.observeVerticalMarginsSum())
+        childSize is DivSize.MatchParent -> {
+            val (topMargin, bottomMargin) = child.margins.observeVerticalInsets()
+            Modifier.matchParentHeight(childSize.value, topMargin, bottomMargin)
+        }
         childSize is DivSize.WrapContent && childSize.value.constrained?.observedValue() == true -> when {
-            hasAspect || containerSize.observeIsConstrained() -> Modifier.shareHeight()
+            hasAspect || containerSize.observeIsConstrained() -> Modifier.constrainHeight()
             else -> Modifier
         }
         else -> Modifier

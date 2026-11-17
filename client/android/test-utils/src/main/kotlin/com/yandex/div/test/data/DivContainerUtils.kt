@@ -44,6 +44,7 @@ fun container(
     height: DivSize = wrapContent(),
     id: String? = null,
     itemBuilder: DivCollectionItemBuilder? = null,
+    itemSpacing: Long = 0,
     items: List<Div> = emptyList(),
     layoutMode: DivContainer.LayoutMode = DivContainer.LayoutMode.NO_WRAP,
     layoutProvider: DivLayoutProvider? = null,
@@ -75,6 +76,7 @@ fun container(
             height = height,
             id = id,
             itemBuilder = itemBuilder,
+            itemSpacing = constant(itemSpacing),
             items = items,
             layoutMode = constant(layoutMode),
             layoutProvider = layoutProvider,
@@ -92,13 +94,21 @@ fun container(
     )
 }
 
-fun containerSeparator(width: Expression<Long>): DivContainer.Separator = DivContainer.Separator(
+fun containerSeparator(
+    width: Expression<Long>,
+    height: Int = 0,
+    showBetween: Boolean = true,
+    showAtEnd: Boolean = false,
+): DivContainer.Separator = DivContainer.Separator(
+    showBetween = constant(showBetween),
+    showAtEnd = constant(showAtEnd),
     style = DivDrawable.Shape(
         DivShapeDrawable(
             shape = DivShape.RoundedRectangle(
                 DivRoundedRectangleShape(
                     backgroundColor = constant(Color.BLACK),
                     itemWidth = DivFixedSize(value = width),
+                    itemHeight = DivFixedSize(value = constant(height.toLong())),
                 )
             )
         )
