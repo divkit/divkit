@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.derivedStateOf
@@ -21,7 +20,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -175,17 +173,14 @@ internal fun PagerContent(
     // Read when a gesture settles, so a value change never re-creates the limiter in the middle of a drag.
     val multiPageScroll by rememberUpdatedState(pager.multiPageScroll.observedValue())
     val isParentScrollRestricted = pager.restrictParentScroll.observedValue()
-    val gestureSlop = rememberPagerGestureSlop(isParentScrollRestricted)
-    val pagingTouchSlopExtra = gestureSlop.pagingTouchSlopExtra
     val swipeLimiter = remember(
-        listState, snapPosition, itemKeys, neighbourSize, layoutDirection, pagingTouchSlopExtra
+        listState, snapPosition, itemKeys, neighbourSize, layoutDirection
     ) {
         PagerSwipeLimiter(
             listState = listState,
             snapPosition = snapPosition,
             neighbourSize = neighbourSize,
             layoutDirection = layoutDirection,
-            pagingTouchSlopExtra = pagingTouchSlopExtra,
             multiPageScroll = { multiPageScroll },
             settledPage = { settledPage.intValue },
             onTargetPageCalculated = { page ->
@@ -202,44 +197,40 @@ internal fun PagerContent(
     }
     BindPagerScrollActions(id = pager.id, items = items, layout = scrollLayout)
 
-    CompositionLocalProvider(LocalViewConfiguration provides gestureSlop.listViewConfiguration) {
-        OrientedLazyList(
-            isHorizontal = isHorizontal,
-            modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes)
-                .applyIf(isParentScrollRestricted) { restrictParentScroll(isHorizontal) }
-                .pagerSwipe(swipeLimiter)
-                .commitPagerCrossAxisSizes(crossAxisSizes),
-            listState = listState,
-            contentPadding = paddings,
-            itemSpacing = itemSpacing,
-            crossAxisAlignment = crossAlignment,
-            flingBehavior = rememberPagerFlingBehavior(swipeLimiter),
-        ) {
-            items(
-                count = itemWindow.itemCount,
-                key = { index -> pageKey(itemKeys, itemWindow, infiniteScroll, index) },
-                contentType = { itemWindow },
-            ) { index ->
-                CompositionLocalProvider(LocalViewConfiguration provides gestureSlop.contentViewConfiguration) {
-                    val item = items[itemWindow.realIndex(index)]
-                    ScrollableChildItem(
-                        item,
-                        components?.get(item),
-                        childModifier
-                            .trackPagerPageSize(neighbourSizes, index, isHorizontal)
-                            .pageTransformation(
-                                transformation, transformationPosition, index, listState, isHorizontal, layoutDirection
-                            ),
-                        isHorizontal,
-                        crossAlignment,
-                        contentModifier = Modifier.trackPagerCrossAxisSize(
-                            sizes = crossAxisSizes,
-                            isHorizontal = isHorizontal,
-                            isMatchParent = item.value().crossAxisSize(isHorizontal).isMatchParent,
-                        ),
-                    )
-                }
-            }
+    OrientedLazyList(
+        isHorizontal = isHorizontal,
+        modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes)
+            .applyIf(isParentScrollRestricted) { restrictParentScroll(isHorizontal) }
+            .pagerSwipe(swipeLimiter)
+            .commitPagerCrossAxisSizes(crossAxisSizes),
+        listState = listState,
+        contentPadding = paddings,
+        itemSpacing = itemSpacing,
+        crossAxisAlignment = crossAlignment,
+        flingBehavior = rememberPagerFlingBehavior(swipeLimiter),
+    ) {
+        items(
+            count = itemWindow.itemCount,
+            key = { index -> pageKey(itemKeys, itemWindow, infiniteScroll, index) },
+            contentType = { itemWindow },
+        ) { index ->
+            val item = items[itemWindow.realIndex(index)]
+            ScrollableChildItem(
+                item,
+                components?.get(item),
+                childModifier
+                    .trackPagerPageSize(neighbourSizes, index, isHorizontal)
+                    .pageTransformation(
+                        transformation, transformationPosition, index, listState, isHorizontal, layoutDirection
+                    ),
+                isHorizontal,
+                crossAlignment,
+                contentModifier = Modifier.trackPagerCrossAxisSize(
+                    sizes = crossAxisSizes,
+                    isHorizontal = isHorizontal,
+                    isMatchParent = item.value().crossAxisSize(isHorizontal).isMatchParent,
+                ),
+            )
         }
     }
 }

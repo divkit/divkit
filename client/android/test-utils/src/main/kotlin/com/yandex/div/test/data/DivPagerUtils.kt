@@ -13,34 +13,43 @@ import com.yandex.div2.DivPercentageSize
 import com.yandex.div2.DivSize
 
 fun pager(
-    id: String? = null,
-    itemBuilder: DivCollectionItemBuilder? = null,
-    items: List<Div>? = emptyList(),
-    height: DivSize = wrapContent(),
-    width: DivSize = matchParent(),
     defaultItem: Long = 0,
+    extensions: List<DivExtension>? = null,
+    height: DivSize = wrapContent(),
+    id: String? = null,
     infiniteScroll: Boolean = false,
+    itemBuilder: DivCollectionItemBuilder? = null,
+    itemCountVariable: String? = null,
+    itemSpacing: Expression<Long> = constant(0L),
+    items: List<Div>? = emptyList(),
     layoutMode: DivPagerLayoutMode = DivPagerLayoutMode.PageContentSize(DivPageContentSize()),
     orientation: DivPager.Orientation = DivPager.Orientation.HORIZONTAL,
+    restrictParentScroll: Expression<Boolean> = constant(false),
     scrollAxisAlignment: DivPager.ItemAlignment = DivPager.ItemAlignment.CENTER,
-    itemCountVariable: String? = null,
-    extensions: List<DivExtension>? = null,
-    itemSpacing: Expression<Long> = constant(0L),
-): Div.Pager = Div.Pager(DivPager(
-    defaultItem = constant(defaultItem),
-    extensions = extensions,
-    infiniteScroll = constant(infiniteScroll),
-    itemCountVariable = itemCountVariable,
-    id = id,
-    itemBuilder = itemBuilder,
-    itemSpacing = DivFixedSize(value = itemSpacing),
-    items = items,
-    height = height,
-    width = width,
-    layoutMode = layoutMode,
-    orientation = constant(orientation),
-    scrollAxisAlignment = constant(scrollAxisAlignment),
-))
+    width: DivSize = matchParent(),
+): Div.Pager {
+    return Div.Pager(
+        DivPager(
+            defaultItem = constant(defaultItem),
+            extensions = extensions,
+            height = height,
+            id = id,
+            infiniteScroll = constant(infiniteScroll),
+            itemCountVariable = itemCountVariable,
+            itemBuilder = itemBuilder,
+            itemSpacing = DivFixedSize(value = itemSpacing),
+            items = items,
+            width = width,
+            layoutMode = layoutMode,
+            orientation = constant(orientation),
+            restrictParentScroll = restrictParentScroll,
+            scrollAxisAlignment = constant(scrollAxisAlignment),
+        )
+    )
+}
 
-fun pageSize(percentage: Double): DivPagerLayoutMode =
-    DivPagerLayoutMode.PageSize(DivPageSize(pageWidth = DivPercentageSize(value = constant(percentage))))
+fun pageSize(percentage: Double): DivPagerLayoutMode {
+    return DivPagerLayoutMode.PageSize(
+        DivPageSize(pageWidth = DivPercentageSize(value = constant(percentage)))
+    )
+}

@@ -92,18 +92,14 @@ private fun Modifier.trackTouches(limiter: PagerSwipeLimiter): Modifier = pointe
 /**
  * Limits a touch drag and its settling animation to the pages adjacent to its starting page.
  *
- * The pages start moving [pagingTouchSlopExtra] after the list claims the gesture, which is how a pager that
- * claims at the default touch slop still waits for ViewPager2's paging touch slop (see [PagerGestureSlop]);
- * a pager whose list waits for the paging slop itself passes 0 here. With [multiPageScroll] the drag stays
- * limited while the settling target follows the gesture (see [calculateMultiPageSnap]). Scrolls without a
- * touch, such as page keys and mouse wheels, are not limited.
+ * With [multiPageScroll] the drag stays limited while the settling target follows the gesture
+ * (see [calculateMultiPageSnap]). Scrolls without a touch, such as page keys and mouse wheels, are not limited.
  */
 internal class PagerSwipeLimiter(
     private val listState: LazyListState,
     snapPosition: SnapPosition,
     neighbourSize: (Int) -> Int?,
     private val layoutDirection: LayoutDirection,
-    private val pagingTouchSlopExtra: Float,
     val multiPageScroll: () -> Boolean,
     settledPage: () -> Int,
     private val onTargetPageCalculated: (Int) -> Unit,
@@ -112,9 +108,6 @@ internal class PagerSwipeLimiter(
     private var touchActive = false
     /** The page where the current drag started. */
     private var origin: Int? = null
-    /** Pointer movement inside the paging touch slop, before the pages start moving. */
-    private var pagingSlopOffset = 0f
-    private var pastPagingSlop = false
     /** Pointer movement past the adjacent pages, which the pointer has to return before the pages move back. */
     private var dragOverflow = 0f
     /**
@@ -145,22 +138,11 @@ internal class PagerSwipeLimiter(
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         // Nested children scroll this list through raw deltas without opening its scroll session.
         if (!touchActive || source != NestedScrollSource.UserInput || !listState.isScrollInProgress) return Offset.Zero
-        val eventDelta = available.mainAxis() * direction
-        if (eventDelta == 0f) return Offset.Zero
-        dragForward = eventDelta > 0f
-        var delta = eventDelta
-        if (!pastPagingSlop) {
-            pagingSlopOffset += eventDelta
-            if (abs(pagingSlopOffset) < pagingTouchSlopExtra) return axisOffset(available.mainAxis())
-            pastPagingSlop = true
-            // The pages start where the pointer leaves the paging touch slop, as RecyclerView does with its own.
-            delta = pagingSlopOffset - pagingSlopOffset.sign * pagingTouchSlopExtra
-        }
-        // The distance the paging touch slop swallowed is consumed too: the list must not scroll it either.
-        val swallowed = eventDelta - delta
+        val delta = available.mainAxis() * direction
+        if (delta == 0f) return Offset.Zero
+        dragForward = delta > 0f
         if (origin == null) origin = snapTargets.closestPage()
-        // Without pages to drag nothing else can consume the event either; the slop distance stays consumed.
-        val anchors = dragAnchors() ?: return axisOffset(swallowed * direction)
+        val anchors = dragAnchors() ?: return Offset.Zero
 
         // ViewPager2 pages span the viewport, so dragging by the viewport size turns one page.
         val pixelsPerPage = snapTargets.viewportSizePx.coerceAtLeast(1).toFloat()
@@ -179,8 +161,7 @@ internal class PagerSwipeLimiter(
         // A page that shares the origin's snap position turns without a scroll. The pointer distance is consumed
         // all the same: an ancestor that scrolls along the same axis must not move together with the page.
         val consumedInput = (anchors.toPages(consumed - anchors.origin) + tiedProgress) * pixelsPerPage - position
-        val eventRange = min(eventDelta, 0f)..max(eventDelta, 0f)
-        return axisOffset((swallowed + delta - allowed + consumedInput).coerceIn(eventRange) * direction)
+        return axisOffset((delta - allowed + consumedInput).coerceIn(deltaRange) * direction)
     }
 
     /**
@@ -213,8 +194,6 @@ internal class PagerSwipeLimiter(
         dragOverflow = 0f
         tiedProgress = 0f
         dragForward = null
-        pagingSlopOffset = 0f
-        pastPagingSlop = false
     }
 
     private fun Offset.mainAxis(): Float = if (isHorizontal) x else y
