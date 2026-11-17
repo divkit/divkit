@@ -9,6 +9,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.text.FontParams
 import com.yandex.div.compose.text.rememberTypeface
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observedPxValue
@@ -249,17 +250,17 @@ private fun DivStroke.observeStroke(): SliderStroke {
 
 @Composable
 private fun DivSlider.TextStyle.observeTextStyle(): SliderTextStyle {
-    val size = fontSize.observedPxValue(fontSizeUnit)
+    val fontParams = FontParams(
+        family = fontFamily?.observedValue(),
+        weight = fontWeight?.observedValue(),
+        weightValue = fontWeightValue?.observedIntValue(),
+        variationSettings = fontVariationSettings?.observedValue(),
+    )
     return SliderTextStyle(
-        fontSize = size,
+        fontSize = fontSize.observedPxValue(fontSizeUnit),
         letterSpacing = letterSpacing.observedFloatValue() / fontSize.observedValue()
             .coerceAtLeast(1L),
-        typeface = rememberTypeface(
-            fontFamily = fontFamily?.observedValue(),
-            fontWeight = fontWeight?.observedValue(),
-            fontWeightValue = fontWeightValue?.observedIntValue(),
-            fontVariationSettings = fontVariationSettings?.observedValue(),
-        ),
+        typeface = rememberTypeface(fontParams),
         offsetX = offset?.x?.observedPxValue() ?: 0f,
         offsetY = offset?.y?.observedPxValue() ?: 0f,
         color = textColor.observedValue()

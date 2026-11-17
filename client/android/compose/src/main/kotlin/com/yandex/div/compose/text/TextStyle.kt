@@ -2,7 +2,6 @@ package com.yandex.div.compose.text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -43,17 +42,17 @@ internal fun observeBaseTextStyle(
     val textSize = fontSize.toTextUnit(fontSizeUnit)
     val resolvedLineHeight = lineHeight?.toTextUnit(fontSizeUnit)
     val resolvedLetterSpacing = letterSpacing(letterSpacing.observedFloatValue(), fontSize)
-    val resolvedFontFamily = rememberFontFamily(
-        fontFamily = fontFamily?.observedValue(),
-        fontWeight = weight,
-        fontWeightValue = weightValue,
-        fontVariationSettings = fontVariationSettings?.observedValue(),
+    val fontParams = FontParams(
+        family = fontFamily?.observedValue(),
+        weight = weight,
+        weightValue = weightValue,
+        variationSettings = fontVariationSettings?.observedValue(),
     )
     return TextStyle(
         color = textColor.observedColorValue(),
         fontSize = textSize,
-        fontFamily = resolvedFontFamily,
-        fontWeight = weight.toFontWeight(weightValue),
+        fontFamily = rememberFontFamily(fontParams),
+        fontWeight = fontParams.weight,
         letterSpacing = resolvedLetterSpacing,
         textAlign = textAlignmentHorizontal.toTextAlign(isRtlLayout),
         textDirection = TextDirection.Content,
@@ -91,21 +90,6 @@ private fun DivAlignmentHorizontal.toTextAlign(
 
         DivAlignmentHorizontal.END ->
             if (isRtlLayout) TextAlign.Left else TextAlign.Right
-    }
-}
-
-internal fun DivFontWeight?.toFontWeight(
-    fontWeightValue: Int?,
-): FontWeight? {
-    if (fontWeightValue != null) {
-        return FontWeight(fontWeightValue.coerceIn(1, 1000))
-    }
-    return when (this) {
-        DivFontWeight.LIGHT -> FontWeight.Light
-        DivFontWeight.REGULAR -> FontWeight.Normal
-        DivFontWeight.MEDIUM -> FontWeight.Medium
-        DivFontWeight.BOLD -> FontWeight.Bold
-        null -> null
     }
 }
 

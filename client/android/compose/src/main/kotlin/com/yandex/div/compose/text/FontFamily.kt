@@ -9,24 +9,19 @@ import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.resolveAsTypeface
 import com.yandex.div.compose.LocalDivContext
-import com.yandex.div2.DivFontWeight
-import org.json.JSONObject
 
 @Composable
-internal fun rememberFontFamily(
-    fontFamily: String?,
-    fontWeight: DivFontWeight?,
-    fontWeightValue: Int?,
-    fontVariationSettings: JSONObject? = null,
-): FontFamily {
+internal fun rememberFontFamily(font: FontParams): FontFamily {
     val component = LocalDivContext.current.component
     val provider = component.fontSourceProvider
     val cache = component.fontFamilyCache
-    return remember(fontFamily, fontWeight, fontWeightValue, fontVariationSettings) {
-        val weight = fontWeight.toFontWeight(fontWeightValue) ?: FontWeight.Normal
-        val variations = buildFontVariationSettings(fontWeight, fontWeightValue, fontVariationSettings)
-        val source = provider.getFontSource(fontFamily, weight)
-        cache.getOrCreate(source, weight, variations)
+    return remember(font) {
+        val weight = font.weight ?: FontWeight.Normal
+        cache.getOrCreate(
+            source = provider.getFontSource(font.family, weight),
+            weight = weight,
+            variations = buildFontVariationSettings(font),
+        )
     }
 }
 
@@ -35,38 +30,34 @@ internal fun rememberFontFamily(
  * for text drawn with a native [android.graphics.Paint] instead of a Compose text composable.
  */
 @Composable
-internal fun rememberTypeface(
-    fontFamily: String?,
-    fontWeight: DivFontWeight?,
-    fontWeightValue: Int?,
-    fontVariationSettings: JSONObject? = null,
-): Typeface {
-    val family = rememberFontFamily(fontFamily, fontWeight, fontWeightValue, fontVariationSettings)
-    val resolver = LocalFontFamilyResolver.current
-    return remember(family, resolver) {
-        resolver.resolveAsTypeface(family, fontWeight.toFontWeight(fontWeightValue)
-            ?: FontWeight.Normal).value
+internal fun rememberTypeface(font: FontParams): Typeface {
+    val fontFamily = rememberFontFamily(font)
+    val fontFamilyResolver = LocalFontFamilyResolver.current
+    return remember(fontFamily, fontFamilyResolver) {
+        fontFamilyResolver.resolveAsTypeface(
+            fontFamily = fontFamily,
+            fontWeight = font.weight ?: FontWeight.Normal,
+        ).value
     }
 }
 
-private fun buildFontVariationSettings(
-    fontWeight: DivFontWeight?,
-    fontWeightValue: Int?,
-    fontVariations: JSONObject?,
-): FontVariation.Settings? {
-    val hasVariations = fontVariations != null && fontVariations.length() > 0
-    val hasWeight = fontWeight != null || fontWeightValue != null
-    if (!hasVariations && !hasWeight) return null
-
-    val settings = mutableListOf<FontVariation.Setting>()
-    if (hasWeight && fontVariations?.has(WEIGHT_AXIS) != true) {
-        settings += FontVariation.weight(getTypefaceWeight(fontWeight, fontWeightValue))
+private fun buildFontVariationSettings(font: FontParams): FontVariation.Settings? {
+    val weight = font.weight
+    val hasWeight = weight != null
+    val variations = font.variationSettings
+    val hasVariations = variations != null && variations.length() > 0
+    if (!hasWeight && !hasVariations) {
+        return null
     }
 
-    if (fontVariations != null) {
-        for (axis in fontVariations.keys()) {
-            val raw = fontVariations.opt(axis) as? Number ?: continue
-            
+    val settings = mutableListOf<FontVariation.Setting>()
+    if (hasWeight && variations?.has(WEIGHT_AXIS) != true) {
+        settings += FontVariation.weight(weight.weight)
+    }
+
+    if (variations != null) {
+        for (axis in variations.keys()) {
+            val raw = variations.opt(axis) as? Number ?: continue
             settings += if (axis == WEIGHT_AXIS) {
                 FontVariation.weight(raw.toInt().coerceIn(1, 1000))
             } else {
@@ -75,18 +66,7 @@ private fun buildFontVariationSettings(
         }
     }
 
-    if (settings.isEmpty()) return null
-    return FontVariation.Settings(*settings.toTypedArray())
-}
-
-private fun getTypefaceWeight(fontWeight: DivFontWeight?, fontWeightValue: Int?): Int {
-    fontWeightValue?.let { return it.coerceIn(1, 1000) }
-    return when (fontWeight) {
-        DivFontWeight.LIGHT -> 300
-        DivFontWeight.MEDIUM -> 500
-        DivFontWeight.BOLD -> 700
-        DivFontWeight.REGULAR, null -> 400
-    }
+    return if (settings.isEmpty()) null else FontVariation.Settings(*settings.toTypedArray())
 }
 
 private const val WEIGHT_AXIS = "wght"

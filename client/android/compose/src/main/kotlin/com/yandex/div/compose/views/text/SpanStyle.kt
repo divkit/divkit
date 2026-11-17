@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.text.FontParams
 import com.yandex.div.compose.text.letterSpacing
 import com.yandex.div.compose.text.observedTextDecoration
 import com.yandex.div.compose.text.rememberFontFamily
@@ -81,16 +82,17 @@ private fun DivText.Range.observeFontFamily(
     if (fontFamily == null && !hasFontWeight && fontVariationSettings == null) {
         return null
     }
-    return rememberFontFamily(
-        fontFamily = fontFamily?.observedValue(component) ?: text.fontFamily?.observedValue(),
-        fontWeight = if (hasFontWeight) rangeFontWeight else text.fontWeight?.observedValue(),
-        fontWeightValue = if (hasFontWeight) {
+    val fontParams = FontParams(
+        family = fontFamily?.observedValue(component) ?: text.fontFamily?.observedValue(),
+        weight = if (hasFontWeight) rangeFontWeight else text.fontWeight?.observedValue(),
+        weightValue = if (hasFontWeight) {
             rangeFontWeightValue
         } else {
             text.fontWeightValue?.observedIntValue()
         },
-        fontVariationSettings = fontVariationSettings?.observedValue(component),
+        variationSettings = fontVariationSettings?.observedValue(component),
     )
+    return rememberFontFamily(fontParams)
 }
 
 @Composable

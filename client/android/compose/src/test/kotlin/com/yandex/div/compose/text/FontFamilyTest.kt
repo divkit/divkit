@@ -30,7 +30,14 @@ class FontFamilyTest {
         val fontFamily = mutableStateOf("serif")
         var typeface: Typeface? = null
         rule.setContentWithDivContext(configuration) {
-            typeface = rememberTypeface(fontFamily = fontFamily.value, fontWeight = null, fontWeightValue = null)
+            typeface = rememberTypeface(
+                FontParams(
+                    family = fontFamily.value,
+                    weight = null,
+                    weightValue = null,
+                    variationSettings = null,
+                )
+            )
         }
         val serifTypeface = typeface
 
