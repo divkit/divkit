@@ -1,6 +1,7 @@
 package com.yandex.div.render.common.text
 
 import com.yandex.div.core.annotations.InternalApi
+import kotlin.jvm.JvmStatic
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos

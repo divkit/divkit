@@ -1,5 +1,5 @@
 plugins {
-    id("divkit.convention.library-kmp")
+    id("divkit.convention.library-kmp-ios")
     id("divkit.convention.publishing-module-kmp")
 }
 
@@ -19,6 +19,9 @@ kotlin {
             compileOnly(libs.androidx.annotation)
         }
         commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+        jvmTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }
