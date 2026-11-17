@@ -1,12 +1,11 @@
 package com.yandex.div.compose.views.gallery
 
-import android.R
 import androidx.compose.foundation.ScrollIndicatorState
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -14,7 +13,6 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -33,14 +31,7 @@ internal fun Modifier.galleryScrollbar(
     if (scrollbar.observedValue() == DivGallery.Scrollbar.NONE) return this
     val state = scrollState.scrollIndicatorState ?: return this
 
-    val context = LocalContext.current
-    val color = remember(context) {
-        val attributes = context.obtainStyledAttributes(intArrayOf(R.attr.colorControlNormal))
-        val color = Color(attributes.getColor(0, android.graphics.Color.GRAY))
-        attributes.recycle()
-        color.copy(alpha = color.alpha * .5f)
-    }
-
+    val color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
     return drawWithCache {
         val left = contentPadding.calculateLeftPadding(layoutDirection).toPx()
         val right = contentPadding.calculateRightPadding(layoutDirection).toPx()
