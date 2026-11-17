@@ -6734,6 +6734,8 @@
   "client/android/render-common/src/commonTest/kotlin/com/yandex/div/render/common/text/TextRangeParticleSystemTest.kt":"divkit/public/client/android/render-common/src/commonTest/kotlin/com/yandex/div/render/common/text/TextRangeParticleSystemTest.kt",
   "client/android/render-common/src/commonTest/kotlin/com/yandex/div/render/common/text/TextTruncationTest.kt":"divkit/public/client/android/render-common/src/commonTest/kotlin/com/yandex/div/render/common/text/TextTruncationTest.kt",
   "client/android/render-common/src/iosMain/kotlin/com/yandex/div/render/common/text/TextCharacterProperties.ios.kt":"divkit/public/client/android/render-common/src/iosMain/kotlin/com/yandex/div/render/common/text/TextCharacterProperties.ios.kt",
+  "client/android/render-common/src/iosMain/kotlin/com/yandex/div/render/common/text/TextTruncation.ios.kt":"divkit/public/client/android/render-common/src/iosMain/kotlin/com/yandex/div/render/common/text/TextTruncation.ios.kt",
+  "client/android/render-common/src/iosTest/kotlin/com/yandex/div/render/common/text/TextTruncationIosTest.kt":"divkit/public/client/android/render-common/src/iosTest/kotlin/com/yandex/div/render/common/text/TextTruncationIosTest.kt",
   "client/android/render-common/src/jvmMain/kotlin/com/yandex/div/render/common/text/TextTruncation.jvm.kt":"divkit/public/client/android/render-common/src/jvmMain/kotlin/com/yandex/div/render/common/text/TextTruncation.jvm.kt",
   "client/android/render-common/src/jvmTest/kotlin/com/yandex/div/render/common/text/TextTruncationJvmTest.kt":"divkit/public/client/android/render-common/src/jvmTest/kotlin/com/yandex/div/render/common/text/TextTruncationJvmTest.kt",
   "client/android/sample/README.md":"divkit/public/client/android/sample/README.md",
