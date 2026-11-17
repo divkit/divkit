@@ -43,6 +43,10 @@ private const val TOLERANCE = 0.5f
 // Long enough for the first swipe to start settling, short enough to interrupt it.
 private const val SETTLING_PART_MS = 32L
 
+private const val DRAG_STEPS = 10
+private const val DRAG_STEP_MS = 16L
+private const val DRAG_HOLD_MS = 200L
+
 @RunWith(AndroidJUnit4::class)
 class PagerSwipeTest {
 
@@ -118,7 +122,64 @@ class PagerSwipeTest {
         assertEquals(listOf("0", "1", "2"), selectedPages())
     }
 
-    private fun setPagerContent(pageWidth: Int, focusablePages: Boolean = false) {
+    @Test
+    fun `slow drag by most of the pager selects the page that shares the snap position`() {
+        setTiedPagesContent(multiPageScroll = false)
+
+        drag(pagerBounds().width * 0.75f)
+        release()
+
+        assertEquals(listOf("1", "0"), selectedPages())
+    }
+
+    @Test
+    fun `slow drag by a quarter of the pager keeps the page that shares the snap position`() {
+        setTiedPagesContent(multiPageScroll = false)
+
+        drag(pagerBounds().width * 0.25f)
+        release()
+
+        assertEquals(listOf("1"), selectedPages())
+    }
+
+    @Test
+    fun `slow drag back to the origin keeps the page that shares the snap position`() {
+        setTiedPagesContent(multiPageScroll = false)
+
+        drag(pagerBounds().width * 0.75f)
+        drag(-pagerBounds().width * 0.75f)
+        release()
+
+        assertEquals(listOf("1"), selectedPages())
+    }
+
+    @Test
+    fun `slow multi-page drag selects the page that shares the snap position`() {
+        setTiedPagesContent(multiPageScroll = true)
+
+        drag(pagerBounds().width * 0.75f)
+        release()
+
+        assertEquals(listOf("1", "0"), selectedPages())
+    }
+
+    /** Centred pages a third of the pager wide: the first two share the snap position at the list start. */
+    private fun setTiedPagesContent(multiPageScroll: Boolean) {
+        setPagerContent(
+            pageWidth = PAGER_WIDTH / 3,
+            alignment = DivPager.ItemAlignment.CENTER,
+            defaultItem = 1,
+            multiPageScroll = multiPageScroll,
+        )
+    }
+
+    private fun setPagerContent(
+        pageWidth: Int,
+        focusablePages: Boolean = false,
+        alignment: DivPager.ItemAlignment = DivPager.ItemAlignment.START,
+        defaultItem: Long = 0,
+        multiPageScroll: Boolean = false,
+    ) {
         val data = data(
             Div.Pager(
                 value = DivPager(
@@ -135,7 +196,9 @@ class PagerSwipeTest {
                         )
                     },
                     layoutMode = DivPagerLayoutMode.PageContentSize(DivPageContentSize()),
-                    scrollAxisAlignment = constant(DivPager.ItemAlignment.START),
+                    defaultItem = constant(defaultItem),
+                    multiPageScroll = constant(multiPageScroll),
+                    scrollAxisAlignment = constant(alignment),
                     width = fixed(PAGER_WIDTH),
                 )
             )
@@ -161,10 +224,12 @@ class PagerSwipeTest {
         composeRule.waitForIdle()
     }
 
+    /** Moves the pointer in small steps and holds it, so that a release has no fling velocity. */
     private fun drag(dx: Float) {
         composeRule.onNodeWithTag("pager").performTouchInput {
             if (currentPosition() == null) down(center)
-            moveBy(Offset(dx, 0f))
+            repeat(DRAG_STEPS) { moveBy(Offset(dx / DRAG_STEPS, 0f), delayMillis = DRAG_STEP_MS) }
+            moveBy(Offset.Zero, delayMillis = DRAG_HOLD_MS)
         }
     }
 

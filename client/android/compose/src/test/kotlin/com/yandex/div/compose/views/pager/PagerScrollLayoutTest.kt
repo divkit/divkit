@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.pager
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.render.common.pager.PagerItemWindow
 import kotlin.test.Test
@@ -18,7 +19,7 @@ class PagerScrollLayoutTest {
         val layout = PagerScrollLayout(
             listState = listState,
             itemWindow = PagerItemWindow(5),
-            initialPage = 2,
+            settledPage = mutableIntStateOf(2),
             snapPosition = SnapPosition.Center,
             pageSize = { null },
             selectedActionsHandler = {},

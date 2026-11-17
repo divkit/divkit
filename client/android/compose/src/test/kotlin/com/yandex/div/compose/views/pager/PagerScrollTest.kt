@@ -282,6 +282,16 @@ class PagerScrollTest {
     }
 
     @Test
+    fun `center aligned pager selects the pages that share the snap position one by one`() {
+        setPagerContent(pageSize = 100, alignment = DivPager.ItemAlignment.CENTER)
+
+        perform(action(url = "div-action://set_next_item?id=pager&animated=false"))
+        perform(action(url = "div-action://set_next_item?id=pager&animated=false"))
+
+        assertEquals(listOf("0", "1", "2"), selectedPages())
+    }
+
+    @Test
     fun `programmatic scroll selects the target page`() {
         setPagerContent()
 

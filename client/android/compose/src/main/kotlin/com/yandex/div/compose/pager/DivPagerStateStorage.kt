@@ -3,6 +3,7 @@ package com.yandex.div.compose.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.IntState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
@@ -43,9 +44,10 @@ internal fun DivPagerStateStorage.rememberAndStoreState(
     snapPosition: SnapPosition,
     initialPage: Int,
     infiniteScroll: Boolean,
+    settledPage: IntState? = null,
 ) {
-    val pagerState = remember(pager, pageCount, listState, snapPosition, initialPage, infiniteScroll) {
-        DivPagerState(pageCount, listState, snapPosition, initialPage, infiniteScroll)
+    val pagerState = remember(pager, pageCount, listState, snapPosition, initialPage, infiniteScroll, settledPage) {
+        DivPagerState(pageCount, listState, snapPosition, initialPage, infiniteScroll, settledPage)
     }
 
     put(pager, pagerState)

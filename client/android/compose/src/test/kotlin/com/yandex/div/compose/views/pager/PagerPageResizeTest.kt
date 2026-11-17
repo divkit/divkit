@@ -5,8 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.unit.dp
@@ -73,6 +75,33 @@ class PagerPageResizeTest {
 
         assertTrue(distanceToPagerCenter("item1") < distanceToPagerCenter("item0"))
         assertEquals(listOf("0"), selectedPages())
+    }
+
+    @Test
+    fun `previous page that shrinks out of the viewport keeps the selected page at the snap position`() {
+        resizedPageWidth.set(250)
+        itemSpacing.set(10)
+        setPagerContent(pageCount = 5, defaultItem = 1, resizedPage = 0)
+
+        resizedPageWidth.set(100)
+        composeRule.waitForIdle()
+
+        assertEquals(0f, distanceToPagerCenter("item1"), absoluteTolerance = 0.5f)
+        assertEquals(listOf("1"), selectedPages())
+    }
+
+    @Test
+    fun `scroll without animation frames reaches a page resized while it was out of the composition`() {
+        setPagerContent(pageCount = 12, defaultItem = 0, resizedPage = 0)
+        composeRule.onNode(hasScrollToIndexAction()).performScrollToIndex(6)
+        composeRule.waitForIdle()
+        resizedPageWidth.set(250)
+        composeRule.waitForIdle()
+
+        composeRule.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+        composeRule.waitForIdle()
+
+        assertEquals(listOf("0", "7", "0"), selectedPages())
     }
 
     @Test

@@ -8,11 +8,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -31,10 +34,9 @@ import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.PagerWindowState
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.pagerPosition
+import com.yandex.div.compose.pager.reachableSnapOffset
 import com.yandex.div.compose.pager.rememberAndStoreState
-import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.pager.snappedItem
-import com.yandex.div.compose.pager.visibleItemSizes
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.observedValue
@@ -107,6 +109,9 @@ internal fun PagerContent(
         viewportSize,
         itemWindow.itemCount,
     )
+    // Raw index of the page the pager settled on last: pages that cannot reach their snap positions at a list edge
+    // share one, and the layout alone does not tell which of them is the current page.
+    val settledPage = rememberSaveable(listState) { mutableIntStateOf(rawDefaultItem) }
 
     stateStorage.rememberAndStoreState(
         pager = pager,
@@ -115,6 +120,16 @@ internal fun PagerContent(
         snapPosition = snapPosition,
         initialPage = initialDefaultItem,
         infiniteScroll = infiniteScroll,
+        settledPage = settledPage,
+    )
+
+    val crossAxisSizes = rememberPagerCrossAxisSizes(listState, enabled = !crossAxisBounded)
+    val transformation = observePageTransformation(pageTransformation)
+    val overlap = transformation?.overlap == true
+    // Pages of different sizes, overlapped pages and a pager wrapping its pages need their neighbours outside
+    // the viewport.
+    val neighbourSizes = rememberPagerNeighbourSizes(
+        listState, itemKeys, enabled = pageSize == null || overlap || crossAxisSizes != null
     )
 
     val alignmentReady = rememberCurrentPageAlignment(
@@ -123,6 +138,8 @@ internal fun PagerContent(
         itemKeys = itemKeys,
         defaultItem = initialDefaultItem,
         alignment = PagerAlignment(snapPosition, startPadding, endPadding, itemSpacing, pageSize, viewportSize),
+        settledPage = settledPage,
+        neighbourSizes = neighbourSizes,
     )
 
     val needsInitialAlignment = pageSize == null && initialSnapPosition != SnapPosition.Start
@@ -142,24 +159,18 @@ internal fun PagerContent(
         snapPosition = snapPosition,
         itemWindow = itemWindow,
         viewportSize = viewportSize,
+        settledPage = settledPage,
+        neighbourSizes = neighbourSizes,
         enabled = initialPositionAdjusted && alignmentReady,
     )
 
-    val crossAxisSizes = rememberPagerCrossAxisSizes(listState, enabled = !crossAxisBounded)
     val childModifier = childModifier(isHorizontal, viewportSize, crossAxisSizes, pageSize, startPadding, endPadding)
-    val transformation = observePageTransformation(pageTransformation)
-    val overlap = transformation?.overlap == true
-    // Pages of different sizes, overlapped pages and a pager wrapping its pages need their neighbours outside
-    // the viewport.
-    val neighbourSizes = rememberPagerNeighbourSizes(
-        listState, itemKeys, enabled = pageSize == null || overlap || crossAxisSizes != null
-    )
     val pageSizePx = pageSize?.let { with(density) { it.roundToPx() } }
     val neighbourSize: (Int) -> Int? = remember(neighbourSizes, pageSizePx) {
         { index -> neighbourSizes?.get(index) ?: pageSizePx }
     }
     val transformationPosition = rememberPageTransformationPosition(
-        listState, snapPosition, rawDefaultItem, neighbourSize
+        listState, snapPosition, settledPage, neighbourSize
     )
     // Read when a gesture settles, so a value change never re-creates the limiter in the middle of a drag.
     val multiPageScroll by rememberUpdatedState(pager.multiPageScroll.observedValue())
@@ -176,14 +187,18 @@ internal fun PagerContent(
             layoutDirection = layoutDirection,
             pagingTouchSlopExtra = pagingTouchSlopExtra,
             multiPageScroll = { multiPageScroll },
-            onTargetPageCalculated = selectedActionsHandler::onTargetPageCalculated,
+            settledPage = { settledPage.intValue },
+            onTargetPageCalculated = { page ->
+                settledPage.intValue = page
+                selectedActionsHandler.onTargetPageCalculated(page)
+            },
         )
     }
 
     val scrollLayout = remember(
-        listState, itemWindow, rawDefaultItem, snapPosition, neighbourSize, selectedActionsHandler
+        listState, itemWindow, settledPage, snapPosition, neighbourSize, selectedActionsHandler
     ) {
-        PagerScrollLayout(listState, itemWindow, rawDefaultItem, snapPosition, neighbourSize, selectedActionsHandler)
+        PagerScrollLayout(listState, itemWindow, settledPage, snapPosition, neighbourSize, selectedActionsHandler)
     }
     BindPagerScrollActions(id = pager.id, items = items, layout = scrollLayout)
 
@@ -245,6 +260,8 @@ private fun rememberCurrentPageAlignment(
     itemKeys: List<Long>,
     defaultItem: Int,
     alignment: PagerAlignment,
+    settledPage: MutableIntState,
+    neighbourSizes: PagerNeighbourSizes?,
 ): Boolean {
     val isPositionAvailable by remember(listState) {
         derivedStateOf { listState.layoutInfo.visibleItemsInfo.isNotEmpty() }
@@ -261,11 +278,12 @@ private fun rememberCurrentPageAlignment(
     val viewportSizePx = with(density) { alignment.viewportSize.roundToPx() }
     var ready by remember(listState, itemWindow, itemKeys, alignment, density) { mutableStateOf(false) }
 
-    LaunchedEffect(listState, itemWindow, itemKeys, alignment, density, isPositionAvailable) {
+    LaunchedEffect(listState, itemWindow, itemKeys, alignment, density, isPositionAvailable, neighbourSizes) {
         if (!isPositionAvailable) return@LaunchedEffect
 
         val snapPosition = alignment.snapPosition
         suspend fun snapPage(rawPage: Int) {
+            settledPage.intValue = rawPage
             try {
                 listState.scrollToSnappedPage(rawPage, snapPosition)
             } catch (e: CancellationException) {
@@ -274,19 +292,22 @@ private fun rememberCurrentPageAlignment(
         }
 
         snapshotFlow { listState.layoutInfo }.first { alignment.matchesLayout(it, density) }
-        val rawPage = listState.pagerPosition(snapPosition).first
+        val rawPage = listState.pagerPosition(snapPosition, settledPage.intValue).first
         state.update(itemWindow, rawPage, isPositionAvailable, itemKeys, alignment)?.let { snapPage(it) }
         ready = true
 
-        // The closest page of the latest layout in which the list stood still, with the sizes of the visible pages.
+        // The latest layout in which the list stood still.
         var standing: PagerLayoutSnapshot? = null
-        snapshotFlow { listState.layoutSnapshot(snapPosition, viewportSizePx) }
+        snapshotFlow {
+            val resizeCount = neighbourSizes?.resizeCount ?: 0
+            listState.layoutSnapshot(snapPosition, viewportSizePx, settledPage.intValue, resizeCount)
+        }
             .filterNotNull()
             .collect { layout ->
                 val previous = standing
                 if (previous?.page != null && layout.isResizeOf(previous)) {
                     snapPage(previous.page)
-                    standing = previous.copy(itemSizes = layout.itemSizes)
+                    standing = previous.copy(resizeCount = layout.resizeCount)
                     return@collect
                 }
                 layout.page?.let { rawPage ->
@@ -298,21 +319,28 @@ private fun rememberCurrentPageAlignment(
                         alignment = alignment,
                     )
                 }
-                standing = layout.takeIf { it.itemSizes.isNotEmpty() }
+                standing = layout.takeIf { it.resizeCount != null }
             }
     }
     return ready
 }
 
 /**
- * The page closest to its snap position with the sizes of the visible pages, which are omitted while the list
- * scrolls, or null while the layout still has a previous viewport size.
+ * The page the list stands on with [resizeCount], which is omitted while the list scrolls, or null while the
+ * layout still has a previous viewport size.
  */
-private fun LazyListState.layoutSnapshot(snapPosition: SnapPosition, viewportSizePx: Int): PagerLayoutSnapshot? {
+private fun LazyListState.layoutSnapshot(
+    snapPosition: SnapPosition,
+    viewportSizePx: Int,
+    settledPage: Int,
+    resizeCount: Int,
+): PagerLayoutSnapshot? {
     val info = layoutInfo
     if (info.mainAxisViewportSize != viewportSizePx) return null
-    val itemSizes = if (isScrollInProgress) emptyList() else info.visibleItemSizes()
-    return PagerLayoutSnapshot(info.snappedItem(snapPosition)?.index, itemSizes)
+    return PagerLayoutSnapshot(
+        page = info.snappedItem(snapPosition, settledPage)?.index,
+        resizeCount = resizeCount.takeUnless { isScrollInProgress },
+    )
 }
 
 private suspend fun LazyListState.scrollToSnappedPage(targetRawPage: Int, snapPosition: SnapPosition) {
@@ -324,7 +352,7 @@ private suspend fun LazyListState.scrollToSnappedPage(targetRawPage: Int, snapPo
 
     val info = layoutInfo
     val targetItem = info.visibleItemsInfo.firstOrNull { it.index == targetRawPage } ?: return
-    val offset = info.snapOffset(targetItem, snapPosition)
+    val offset = info.reachableSnapOffset(targetItem, snapPosition)
     if (abs(offset) >= 1f) {
         scroll { scrollBy(offset) }
     }

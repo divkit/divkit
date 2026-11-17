@@ -8,12 +8,13 @@ import androidx.compose.foundation.lazy.LazyLayoutScrollScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MutableIntState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.pager.mainAxisViewportSize
-import com.yandex.div.compose.pager.snapOffset
+import com.yandex.div.compose.pager.reachableSnapOffset
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
@@ -71,19 +72,18 @@ private fun DivReporter.reportOffsetIgnored(id: String, offset: Int) {
 internal class PagerScrollLayout(
     private val listState: LazyListState,
     val itemWindow: PagerItemWindow,
-    /** Raw index of the page the pager opens on. */
-    private val initialPage: Int,
+    private val settledPage: MutableIntState,
     private val snapPosition: SnapPosition,
     /** Main axis size of a page that is not laid out, when known. */
     private val pageSize: (Int) -> Int?,
     private val selectedActionsHandler: PagerSelectedActionsHandler,
 ) {
     /**
-     * Raw index of the page closest to its snap position. Before the first layout it is the initial page: the
+     * Raw index of the page the pager stands on. Before the first layout it is the initial page: the
      * first visible item is not the page itself when the page is centred or end-aligned.
      */
     val currentPage: Int
-        get() = listState.layoutInfo.snappedItem(snapPosition)?.index ?: initialPage
+        get() = listState.layoutInfo.snappedItem(snapPosition, settledPage.intValue)?.index ?: settledPage.intValue
 
     /**
      * Moves to [page]: instantly, over an explicit [duration], or with the lazy list's own smooth scroll. The page
@@ -91,6 +91,7 @@ internal class PagerScrollLayout(
      */
     suspend fun scrollToPage(page: Int, animated: Boolean, duration: Int?) {
         if (!animated || duration == null) selectedActionsHandler.onTargetPageCalculated(page)
+        settledPage.intValue = page
         val scrollOffset = snapScrollOffset(page)
         when {
             !animated -> listState.scrollToItem(page, scrollOffset)
@@ -111,7 +112,7 @@ internal class PagerScrollLayout(
         val info = listState.layoutInfo
         val size = info.visibleItemsInfo.firstOrNull { it.index == page }?.size
             ?: pageSize(page)
-            ?: info.snappedItem(snapPosition)?.size
+            ?: info.snappedItem(snapPosition, settledPage.intValue)?.size
             ?: 0
         return -snapPosition.position(
             layoutSize = info.mainAxisViewportSize,
@@ -127,7 +128,7 @@ internal class PagerScrollLayout(
     private suspend fun alignPage(page: Int) {
         val info = listState.layoutInfo
         val item = info.visibleItemsInfo.firstOrNull { it.index == page } ?: return
-        val offset = info.snapOffset(item, snapPosition)
+        val offset = info.reachableSnapOffset(item, snapPosition)
         if (abs(offset) >= 1f) listState.scrollBy(offset)
     }
 }

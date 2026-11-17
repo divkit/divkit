@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.IntState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +20,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.util.lerp
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.pager.maxScrollOffset
+import com.yandex.div.compose.pager.minScrollOffset
 import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.utils.toEasing
 import com.yandex.div2.DivPageTransformation
@@ -122,11 +125,11 @@ private fun LazyListLayoutInfo.placementOffset(
 internal fun rememberPageTransformationPosition(
     listState: LazyListState,
     snapPosition: SnapPosition,
-    defaultItem: Int,
+    settledPage: IntState,
     neighbourSize: (Int) -> Int?,
-): State<PageTransformationPosition> = remember(listState, snapPosition, defaultItem, neighbourSize) {
+): State<PageTransformationPosition> = remember(listState, snapPosition, settledPage, neighbourSize) {
     derivedStateOf {
-        listState.layoutInfo.pageTransformationPosition(snapPosition, defaultItem, neighbourSize)
+        listState.layoutInfo.pageTransformationPosition(snapPosition, settledPage.intValue, neighbourSize)
     }
 }
 
@@ -161,54 +164,35 @@ internal class PageOffset(val layout: Int, val snap: Float)
 
 private fun LazyListLayoutInfo.pageTransformationPosition(
     snapPosition: SnapPosition,
-    defaultItem: Int,
+    settledPage: Int,
     neighbourSize: (Int) -> Int?,
 ): PageTransformationPosition {
     val items = itemsWithNeighbours(neighbourSize)
-    if (items.isEmpty()) return PageTransformationPosition(defaultItem)
+    if (items.isEmpty()) return PageTransformationPosition(settledPage)
     val snapOffsets = items.associate { it.index to PageOffset(it.offset, snapOffset(it, snapPosition)) }
 
-    val (minOffset, maxOffset) = scrollRange(items)
+    val minOffset = minScrollOffset(items)
+    val maxOffset = maxScrollOffset(items)
     if (minOffset == maxOffset) {
         return PageTransformationPosition(
-            defaultItem, snapOffsets = snapOffsets, edgeShift = -(snapOffsets[defaultItem]?.snap ?: 0f)
+            settledPage, snapOffsets = snapOffsets, edgeShift = -(snapOffsets[settledPage]?.snap ?: 0f)
         )
     }
     // Snap targets that the list cannot scroll to are clamped to its scroll range.
     val targets = items.map { item ->
         SnapTarget(item.index, item.size, snapOffsets.getValue(item.index).snap.coerceIn(minOffset, maxOffset))
     }
-    val lower = targets.targetAt(targets.filter { it.offset <= 0 }.maxOfOrNull { it.offset }, defaultItem, maxOffset)
-    val upper = targets.targetAt(targets.filter { it.offset >= 0 }.minOfOrNull { it.offset }, defaultItem, maxOffset)
+    val lower = targets.targetAt(targets.filter { it.offset <= 0 }.maxOfOrNull { it.offset }, settledPage)
+    val upper = targets.targetAt(targets.filter { it.offset >= 0 }.minOfOrNull { it.offset }, settledPage)
     return interpolatePagePosition(lower, upper, snapOffsets, mainAxisItemSpacing)
-}
-
-/** The scroll distances to the list edges, or infinities while the edge pages are not laid out. */
-private fun LazyListLayoutInfo.scrollRange(items: List<LazyListItemInfo>): Pair<Float, Float> {
-    val first = items.first()
-    val last = items.last()
-    val minOffset = if (first.index == 0) first.offset.toFloat() else Float.NEGATIVE_INFINITY
-    val maxOffset = if (last.index == totalItemsCount - 1) {
-        val contentSize = viewportEndOffset - afterContentPadding
-        (last.offset.toFloat() + last.size - contentSize).coerceAtLeast(minOffset)
-    } else {
-        Float.POSITIVE_INFINITY
-    }
-    return minOffset to maxOffset
 }
 
 /** A page with the scroll distance to its snap target, clamped to the list's scroll range. */
 private class SnapTarget(val index: Int, val size: Int, val offset: Float)
 
-/**
- * Pages clamped to the same snap target resolve to the default page,
- * then to the last page at the end of the list and to the first page elsewhere.
- */
-private fun List<SnapTarget>.targetAt(offset: Float?, defaultItem: Int, maxOffset: Float): SnapTarget? {
-    val ties = filter { it.offset == offset }
-    ties.firstOrNull { it.index == defaultItem }?.let { return it }
-    return if (offset == maxOffset) ties.lastOrNull() else ties.firstOrNull()
-}
+/** Pages clamped to the same snap target resolve to the one closest by index to the settled page. */
+private fun List<SnapTarget>.targetAt(offset: Float?, settledPage: Int): SnapTarget? =
+    filter { it.offset == offset }.minByOrNull { abs(it.index - settledPage) }
 
 private fun interpolatePagePosition(
     lower: SnapTarget?,

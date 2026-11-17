@@ -105,9 +105,10 @@ internal class PagerSwipeLimiter(
     private val layoutDirection: LayoutDirection,
     private val pagingTouchSlopExtra: Float,
     val multiPageScroll: () -> Boolean,
+    settledPage: () -> Int,
     private val onTargetPageCalculated: (Int) -> Unit,
 ) : NestedScrollConnection {
-    val snapTargets = PagerSnapTargets(listState, snapPosition, neighbourSize)
+    val snapTargets = PagerSnapTargets(listState, snapPosition, neighbourSize, settledPage)
     private var touchActive = false
     /** The page where the current drag started. */
     private var origin: Int? = null
@@ -116,6 +117,11 @@ internal class PagerSwipeLimiter(
     private var pastPagingSlop = false
     /** Pointer movement past the adjacent pages, which the pointer has to return before the pages move back. */
     private var dragOverflow = 0f
+    /**
+     * Drag progress in pages towards a page that shares the origin's snap position at a list edge. The list does
+     * not scroll towards such a page, so the progress is kept here rather than in the layout.
+     */
+    private var tiedProgress = 0f
     /** Whether the last pointer movement of the current drag went towards the next page. */
     private var dragForward: Boolean? = null
     private val isHorizontal: Boolean get() = listState.layoutInfo.orientation == Orientation.Horizontal
@@ -154,7 +160,7 @@ internal class PagerSwipeLimiter(
         val swallowed = eventDelta - delta
         if (origin == null) origin = snapTargets.closestPage()
         // Without pages to drag nothing else can consume the event either; the slop distance stays consumed.
-        val anchors = origin?.let(snapTargets::dragAnchors) ?: return axisOffset(swallowed * direction)
+        val anchors = dragAnchors() ?: return axisOffset(swallowed * direction)
 
         // ViewPager2 pages span the viewport, so dragging by the viewport size turns one page.
         val pixelsPerPage = snapTargets.viewportSizePx.coerceAtLeast(1).toFloat()
@@ -166,9 +172,13 @@ internal class PagerSwipeLimiter(
         dragOverflow = requested - allowed
         // This callback runs inside LazyList's drag scroll session. Consume in page coordinates
         // and return the consumed pointer distance, leaving edge overflow to nested parents.
-        val scroll = anchors.origin + anchors.toPixels((position + allowed) / pixelsPerPage)
-        val consumed = listState.dispatchRawDelta(scroll)
-        val consumedInput = anchors.toPages(consumed - anchors.origin) * pixelsPerPage - position
+        val progress = (position + allowed) / pixelsPerPage
+        val scrollProgress = anchors.scrollableProgress(progress)
+        tiedProgress = progress - scrollProgress
+        val consumed = listState.dispatchRawDelta(anchors.origin + anchors.toPixels(scrollProgress))
+        // A page that shares the origin's snap position turns without a scroll. The pointer distance is consumed
+        // all the same: an ancestor that scrolls along the same axis must not move together with the page.
+        val consumedInput = (anchors.toPages(consumed - anchors.origin) + tiedProgress) * pixelsPerPage - position
         val eventRange = min(eventDelta, 0f)..max(eventDelta, 0f)
         return axisOffset((swallowed + delta - allowed + consumedInput).coerceIn(eventRange) * direction)
     }
@@ -178,7 +188,7 @@ internal class PagerSwipeLimiter(
      * The target is reported before settling to keep ViewPager2's selection order for interrupted flings.
      */
     fun calculateSnapOffset(velocity: Float): Float {
-        val anchors = origin?.let(snapTargets::dragAnchors)
+        val anchors = dragAnchors()
         endDrag()
         val target = snapTargets.adjacentPage(velocity, anchors)
         target.page?.let(onTargetPageCalculated)
@@ -187,7 +197,7 @@ internal class PagerSwipeLimiter(
 
     /** Returns the settling target of a multi-page gesture, reported before settling like [calculateSnapOffset]. */
     fun calculateMultiPageSnap(flingDistance: Float): SettlingTarget {
-        val anchors = origin?.let(snapTargets::dragAnchors)
+        val anchors = dragAnchors()
         // A release below the fling threshold carries no usable velocity; its direction is the pointer's.
         val forward = if (flingDistance != 0f) flingDistance > 0f else dragForward
         endDrag()
@@ -196,9 +206,12 @@ internal class PagerSwipeLimiter(
         return target
     }
 
+    private fun dragAnchors(): DragAnchors? = origin?.let { snapTargets.dragAnchors(it, tiedProgress) }
+
     private fun endDrag() {
         origin = null
         dragOverflow = 0f
+        tiedProgress = 0f
         dragForward = null
         pagingSlopOffset = 0f
         pastPagingSlop = false

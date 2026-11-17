@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.unit.IntSize
 import com.yandex.div.render.common.pager.PagerItemWindow
 import org.mockito.kotlin.doReturn
@@ -195,24 +196,124 @@ class DivPagerStateTest {
     }
 
     @Test
-    fun `layout snapshot - page visible in both layouts with a new size is a resize`() {
-        val previous = PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 100))
+    fun `center mode - first page that cannot reach the centre is current at the list start`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Center,
+            visibleItems = listOf(
+                item(index = 0, offset = 0, size = 100),
+                item(index = 1, offset = 100, size = 200),
+            ),
+            viewportEnd = 300,
+        )
 
-        assertTrue(PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 160)).isResizeOf(previous))
+        assertEquals(0, state.currentPage)
+        assertEquals(0f, state.currentPageOffsetFraction, EPSILON)
     }
 
     @Test
-    fun `layout snapshot - other visible pages of the same size are not a resize`() {
-        val previous = PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 100))
+    fun `center mode - offset fraction of the first page counts the distance to the next snap position`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Center,
+            visibleItems = listOf(
+                item(index = 0, offset = -10, size = 100),
+                item(index = 1, offset = 90, size = 200),
+            ),
+            viewportEnd = 300,
+        )
 
-        assertFalse(PagerLayoutSnapshot(page = 3, itemSizes = listOf(2 to 100, 3 to 50)).isResizeOf(previous))
+        assertEquals(0, state.currentPage)
+        assertEquals(-0.2f, state.currentPageOffsetFraction, EPSILON)
     }
 
     @Test
-    fun `layout snapshot - scrolling layout without sizes is not a resize`() {
-        val previous = PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 100))
+    fun `center mode - pages sharing the snap position at the list start resolve to the first one`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Center,
+            visibleItems = listOf(
+                item(index = 0, offset = 0, size = 100),
+                item(index = 1, offset = 100, size = 100),
+                item(index = 2, offset = 200, size = 100),
+            ),
+            viewportEnd = 300,
+        )
 
-        assertFalse(PagerLayoutSnapshot(page = 2, itemSizes = emptyList()).isResizeOf(previous))
+        assertEquals(0, state.currentPage)
+    }
+
+    @Test
+    fun `center mode - pages sharing the snap position resolve to the settled page`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Center,
+            visibleItems = listOf(
+                item(index = 0, offset = 0, size = 100),
+                item(index = 1, offset = 100, size = 100),
+                item(index = 2, offset = 200, size = 100),
+            ),
+            viewportEnd = 300,
+            settledPage = 1,
+        )
+
+        assertEquals(1, state.currentPage)
+    }
+
+    @Test
+    fun `center mode - pages sharing the snap position resolve to the one next to the settled page`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Center,
+            visibleItems = listOf(
+                item(index = 0, offset = 0, size = 100),
+                item(index = 1, offset = 100, size = 100),
+                item(index = 2, offset = 200, size = 100),
+            ),
+            viewportEnd = 300,
+            settledPage = 2,
+        )
+
+        assertEquals(1, state.currentPage)
+    }
+
+    @Test
+    fun `center mode - pages sharing the snap position at the list end resolve to the one next to the settled page`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Center,
+            visibleItems = listOf(
+                item(index = 2, offset = 0, size = 100),
+                item(index = 3, offset = 100, size = 100),
+                item(index = 4, offset = 200, size = 100),
+            ),
+            viewportEnd = 300,
+            settledPage = 2,
+        )
+
+        assertEquals(3, state.currentPage)
+    }
+
+    @Test
+    fun `layout snapshot - new resize count between standing layouts is a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, resizeCount = 0)
+
+        assertTrue(PagerLayoutSnapshot(page = 3, resizeCount = 1).isResizeOf(previous))
+    }
+
+    @Test
+    fun `layout snapshot - another page with the same resize count is not a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, resizeCount = 1)
+
+        assertFalse(PagerLayoutSnapshot(page = 3, resizeCount = 1).isResizeOf(previous))
+    }
+
+    @Test
+    fun `layout snapshot - scrolling layout is not a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, resizeCount = 0)
+
+        assertFalse(PagerLayoutSnapshot(page = 2, resizeCount = null).isResizeOf(previous))
+    }
+
+    @Test
+    fun `layout snapshot - standing layout after a scrolling one is not a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, resizeCount = null)
+
+        assertFalse(PagerLayoutSnapshot(page = 3, resizeCount = 1).isResizeOf(previous))
     }
 
     private companion object {
@@ -228,6 +329,7 @@ class DivPagerStateTest {
             afterContentPadding: Int = 0,
             infiniteScroll: Boolean = false,
             initialPage: Int = 0,
+            settledPage: Int? = null,
         ): DivPagerState {
             val layoutInfo = object : LazyListLayoutInfo {
                 override val visibleItemsInfo = visibleItems
@@ -249,6 +351,7 @@ class DivPagerStateTest {
                 snapPosition = snapPosition,
                 initialPage = initialPage,
                 infiniteScroll = infiniteScroll,
+                settledPage = settledPage?.let(::mutableIntStateOf),
             )
         }
 

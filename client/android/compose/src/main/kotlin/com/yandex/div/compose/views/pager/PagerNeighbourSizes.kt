@@ -3,8 +3,11 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.BeyondBoundsLayout
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -54,6 +57,10 @@ internal class PagerNeighbourSizes(
     private var visibleRange: IntRange? = null
     private var updating = false
     private var viewportVisible = false
+
+    /** How many times a composed page changed its main axis size, in or outside the viewport. */
+    var resizeCount by mutableIntStateOf(0)
+        private set
 
     operator fun get(index: Int): Int? = sizes[index]
 
@@ -138,12 +145,22 @@ internal class PagerNeighbourSizes(
 
         override fun onDetach() {
             owner.unregister(this)
+            // LazyList keeps the node of a page that left the composition; its next measurement is a first one.
+            size = null
         }
 
         override fun onRemeasured(size: IntSize) {
+            val previous = this.size
             this.size = size
-            owner.sizes[index] = if (isHorizontal) size.width else size.height
+            if (previous != null && previous.mainAxis() != size.mainAxis()) owner.resizeCount++
+            publishSize(size)
         }
+
+        private fun publishSize(size: IntSize) {
+            owner.sizes[index] = size.mainAxis()
+        }
+
+        private fun IntSize.mainAxis(): Int = if (isHorizontal) width else height
 
         override fun onGloballyPositioned(coordinates: LayoutCoordinates) {
             val layout = findNearestBeyondBoundsLayoutAncestor() ?: return
@@ -163,7 +180,7 @@ internal class PagerNeighbourSizes(
             this.isHorizontal = isHorizontal
             this.container = container
             if (registrationChanged && isAttached) owner.register(this)
-            size?.let(::onRemeasured)
+            size?.let(::publishSize)
         }
 
         fun pin(): Boolean {
