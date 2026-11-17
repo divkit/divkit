@@ -1,41 +1,12 @@
 {
   "description": "With no pager IDs or indicator pager_id, each indicator auto-binds to its nearest pager. Three real swipes and whole-card snapshots check independent upper/lower page and indicator selections of 1/0 and 1/2.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],
   "div_data": {
     "templates": {
-      "pager_item": {
-        "type": "container",
-        "width": {
-          "type": "fixed",
-          "value": 200
-        },
-        "height": {
-          "type": "fixed",
-          "value": 200
-        },
-        "content_alignment_vertical": "center",
-        "background": [
-          {
-            "type": "solid",
-            "color": "#0e000000"
-          }
-        ],
-        "items": [
-          {
-            "type": "text",
-            "$text": "item_text",
-            "font_size": 20,
-            "text_color": "#000000",
-            "text_alignment_horizontal": "center"
-          }
-        ],
-        "border": {
-          "corner_radius": 16
-        }
-      },
       "pager_block": {
         "type": "pager",
         "layout_mode": {
@@ -46,16 +17,94 @@
         },
         "items": [
           {
-            "type": "pager_item",
-            "item_text": "Item 0"
+            "type": "container",
+            "width": {
+              "type": "fixed",
+              "value": 200
+            },
+            "height": {
+              "type": "fixed",
+              "value": 200
+            },
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#0e000000"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Item 0",
+                "font_size": 20,
+                "text_color": "#000000",
+                "text_alignment_horizontal": "center"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            }
           },
           {
-            "type": "pager_item",
-            "item_text": "Item 1"
+            "type": "container",
+            "width": {
+              "type": "fixed",
+              "value": 200
+            },
+            "height": {
+              "type": "fixed",
+              "value": 200
+            },
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#0e000000"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Item 1",
+                "font_size": 20,
+                "text_color": "#000000",
+                "text_alignment_horizontal": "center"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            }
           },
           {
-            "type": "pager_item",
-            "item_text": "Item 2"
+            "type": "container",
+            "width": {
+              "type": "fixed",
+              "value": 200
+            },
+            "height": {
+              "type": "fixed",
+              "value": 200
+            },
+            "content_alignment_vertical": "center",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#0e000000"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Item 2",
+                "font_size": 20,
+                "text_color": "#000000",
+                "text_alignment_horizontal": "center"
+              }
+            ],
+            "border": {
+              "corner_radius": 16
+            }
           }
         ],
         "item_spacing": {

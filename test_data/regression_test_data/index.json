@@ -4783,6 +4783,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -4998,6 +4999,7 @@
       "file": "indicator_auto_binding_no_ids.json",
       "case_id": 520,
       "automated": [
+        "android",
         "ios",
         "web"
       ]
@@ -5021,6 +5023,7 @@
       "file": "indicator_auto_binding_same_ids.json",
       "case_id": 521,
       "automated": [
+        "android",
         "ios",
         "web"
       ]

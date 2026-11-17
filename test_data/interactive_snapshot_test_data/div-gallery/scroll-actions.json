@@ -1,6 +1,7 @@
 {
   "description": "Scroll actions",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

@@ -1,6 +1,7 @@
 {
   "description": "Pager with item_builder.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

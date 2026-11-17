@@ -68,6 +68,9 @@ val viewDeviceIgnoredScreenshotCases = listOf(
     "interactive_snapshot_test_data/div-select/popup-geometry.json",
     "snapshot_test_data/div-text/all_attributes.json",
     "snapshot_test_data/div-container/baseline-with-images.json",
+
+    // View stops ring scroll_backward/scroll_forward in a gallery at a wrong offset; Compose, iOS and Web match.
+    "interactive_snapshot_test_data/div-gallery/scroll-actions.json",
 )
 
 // Run only tests that are not supported by RoborazziScreenshotTest.

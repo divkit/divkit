@@ -1,6 +1,7 @@
 {
   "description": "#141 Disabled input: focus both inputs while enabled, disable them with the original button and verify that tapping each does not focus it, then enable and focus both inputs again.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

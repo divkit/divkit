@@ -1,6 +1,7 @@
 {
   "description": "#165 Clear focus: tap the Focus input button to focus the input, then clear focus with a DivKit action.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
