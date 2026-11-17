@@ -6,11 +6,13 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PathFormatException
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionSetState
+import com.yandex.div2.DivData
 import dev.zacsweers.metro.Inject
 
 internal class SetStateActionHandler @Inject constructor(
     private val reporter: DivReporter,
-    private val stateStorage: DivStateStorage
+    private val stateStorage: DivStateStorage,
+    private val data: DivData,
 ) {
 
     fun handle(context: DivActionHandlingContext, action: DivActionSetState) {
@@ -28,11 +30,11 @@ internal class SetStateActionHandler @Inject constructor(
             reporter.reportError("Invalid set_state path: $path")
             return
         }
-        if (statePath.pathToLastState.isNullOrEmpty()) {
-            reporter.reportError("Missing state in set_state path: $path")
+        if (data.states.none { it.stateId == statePath.topLevelStateId }) {
+            reporter.reportError("Root state with id '${statePath.topLevelStateId}' not found")
             return
         }
-        if (statePath.lastStateId.isNullOrEmpty()) {
+        if (!statePath.isRootPath() && statePath.lastStateId.isNullOrEmpty()) {
             reporter.reportError("Empty state id in set_state path: $path")
             return
         }

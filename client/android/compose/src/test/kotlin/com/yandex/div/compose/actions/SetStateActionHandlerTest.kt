@@ -7,10 +7,13 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.setStateAction
+import com.yandex.div.test.data.text
 import com.yandex.div2.DivAction
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,7 +22,7 @@ import kotlin.test.assertNull
 @RunWith(AndroidJUnit4::class)
 class SetStateActionHandlerTest {
     private val actionHandlerEnvironment = ActionHandlerEnvironment()
-    private val stateStorage = DivStateStorage()
+    private val stateStorage = DivStateStorage(data = mock(), viewContextStorage = mock())
 
     private val reporter: TestReporter
         get() = actionHandlerEnvironment.reporter
@@ -34,7 +37,8 @@ class SetStateActionHandlerTest {
         actionHandlerEnvironment.init(
             setStateActionHandler = SetStateActionHandler(
                 reporter = reporter,
-                stateStorage = stateStorage
+                stateStorage = stateStorage,
+                data = data(text(text = "Root")),
             )
         )
     }
@@ -116,15 +120,6 @@ class SetStateActionHandlerTest {
     }
 
     @Test
-    fun `error on path with no state`() {
-        reporter.failOnError = false
-
-        handle(action(typed = setStateAction("0")))
-
-        assertEquals("Missing state in set_state path: 0", reporter.lastError)
-    }
-
-    @Test
     fun `error on path with empty state id`() {
         reporter.failOnError = false
 
@@ -141,15 +136,6 @@ class SetStateActionHandlerTest {
         handle(action(url = "div-action://set_state?state_id=abc"))
 
         assertEquals("Invalid set_state path: abc", reporter.lastError)
-    }
-
-    @Test
-    fun `div-action error on path with no state`() {
-        reporter.failOnError = false
-
-        handle(action(url = "div-action://set_state?state_id=0"))
-
-        assertEquals("Missing state in set_state path: 0", reporter.lastError)
     }
 
     private fun handle(action: DivAction) = actionHandlerEnvironment.handle(action)

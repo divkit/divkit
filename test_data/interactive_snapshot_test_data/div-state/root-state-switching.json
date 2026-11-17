@@ -1,0 +1,136 @@
+{
+  "description": "Root state switching by root id and by a full path to a non-first nested state.",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "root_state_switching",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "id": "root_state",
+                "text": "First state",
+                "actions": [
+                  {
+                    "log_id": "switch_root_state",
+                    "typed": {
+                      "type": "set_state",
+                      "state_id": "1"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "id": "switch_to_details",
+                "text": "Open second state details",
+                "actions": [
+                  {
+                    "log_id": "switch_nested_state",
+                    "typed": {
+                      "type": "set_state",
+                      "state_id": "1/menu/details"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "state_id": 1,
+          "div": {
+            "type": "state",
+            "id": "menu",
+            "states": [
+              {
+                "state_id": "main",
+                "div": {
+                  "type": "text",
+                  "id": "root_state",
+                  "text": "Second state",
+                  "actions": [
+                    {
+                      "log_id": "return_to_first_state",
+                      "url": "div-action://set_state?state_id=0"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "details",
+                "div": {
+                  "type": "text",
+                  "id": "root_state",
+                  "text": "Second state details"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_state"
+      },
+      "text": "First state"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "root_state"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_state"
+      },
+      "text": "Second state"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "root_state"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_state"
+      },
+      "text": "First state"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "switch_to_details"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_state"
+      },
+      "text": "Second state details"
+    }
+  ]
+}

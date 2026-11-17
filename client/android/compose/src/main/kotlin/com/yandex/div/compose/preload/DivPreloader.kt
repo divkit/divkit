@@ -40,7 +40,7 @@ internal class DivPreloader @Inject constructor(
         val viewContext = viewContextFactory.getOrCreate(data)
         val states = viewContext.component.states.value
         val statesToPreload = if (activeStateOnly) {
-            listOfNotNull(states.firstOrNull())
+            listOfNotNull(viewContext.activeRootState)
         } else {
             states
         }

@@ -16126,6 +16126,8 @@
   "test_data/interactive_snapshot_test_data/div-state/patch_state_partial.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/patch_state_partial.json",
   "test_data/interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/patch_state_transactional_broken.json",
   "test_data/interactive_snapshot_test_data/div-state/patch_state_transactional_success.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/patch_state_transactional_success.json",
+  "test_data/interactive_snapshot_test_data/div-state/root-state-full-path.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/root-state-full-path.json",
+  "test_data/interactive_snapshot_test_data/div-state/root-state-switching.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/root-state-switching.json",
   "test_data/interactive_snapshot_test_data/div-state/state_id_variable.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/state_id_variable.json",
   "test_data/interactive_snapshot_test_data/div-state/swipe-out-fling.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/swipe-out-fling.json",
   "test_data/interactive_snapshot_test_data/div-state/visibility.json":"divkit/public/test_data/interactive_snapshot_test_data/div-state/visibility.json",

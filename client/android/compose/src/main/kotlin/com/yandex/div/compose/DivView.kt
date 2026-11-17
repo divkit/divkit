@@ -2,6 +2,7 @@ package com.yandex.div.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
@@ -45,22 +46,19 @@ fun DivView(
             LocalDivViewContext provides viewContext,
             LocalComponent provides localComponent
         ) {
-            val states = component.states.value
-            if (states.size > 1) {
-                reportError("Multiple root states not supported")
-            }
-
-            val rootState = states.firstOrNull()
-            if (rootState == null) {
+            val activeRootState = viewContext.activeRootState
+            if (activeRootState == null) {
                 reportError("Empty data")
                 return@CompositionLocalProvider
             }
 
-            WithRootStatePath(rootState.stateId) {
-                DivBlockView(
-                    data = rootState.div,
-                    modifier = boundModifier
-                )
+            WithRootStatePath(activeRootState.stateId) {
+                key(activeRootState.stateId) {
+                    DivBlockView(
+                        data = activeRootState.div,
+                        modifier = boundModifier
+                    )
+                }
                 TooltipsHost()
             }
         }

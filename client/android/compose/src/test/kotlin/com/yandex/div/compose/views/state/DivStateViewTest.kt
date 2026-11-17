@@ -34,6 +34,7 @@ import com.yandex.div2.DivFadeTransition
 import com.yandex.div2.DivState
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -45,7 +46,7 @@ class DivStateViewTest {
     val composeRule = createComposeRule()
 
     private val reporter = TestReporter()
-    private val storage = DivStateStorage()
+    private val storage = DivStateStorage(data = mock(), viewContextStorage = mock())
     private val variableController = DivVariableController()
 
     private val localComponent = mockLocalComponent(

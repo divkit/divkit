@@ -17,8 +17,8 @@ import com.yandex.div2.DivIndicator
 internal fun DivIndicatorView(modifier: Modifier, data: DivIndicator) {
     val style = data.observeIndicatorStyle()
     val viewContext = LocalDivViewContext.current
-    val rootDiv = viewContext.rootDiv
-    val pager = remember(rootDiv, data) { rootDiv?.let { findNearestPager(it, data) } }
+    val activeRootDiv = viewContext.activeRootState?.div
+    val pager = remember(activeRootDiv, data) { activeRootDiv?.let { findNearestPager(it, data) } }
     val pagerState = pager?.let { viewContext.pagerStateStorage.get(it) }
     val itemsCount = pagerState?.pageCount ?: 0
     val isRtlLayout = isRtlLayout

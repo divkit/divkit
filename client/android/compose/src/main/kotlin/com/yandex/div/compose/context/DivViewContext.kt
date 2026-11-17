@@ -20,16 +20,16 @@ import com.yandex.div.compose.visibility.bind
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
-import com.yandex.div2.Div
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivData
 
 internal class DivViewContext(
     internal val component: DivViewComponent
 ) {
     private var compositionCount = 0
 
-    val rootDiv: Div?
-        get() = component.states.value.firstOrNull()?.div
+    val activeRootState: DivData.State?
+        get() = component.stateStorage.getActiveRootState(component.states.value)
 
     val pagerStateStorage: DivPagerStateStorage
         get() = component.pagerStateStorage

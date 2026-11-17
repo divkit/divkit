@@ -1,0 +1,103 @@
+{
+  "description": "A full state path switches the root and both nested states, updating the bound variable.",
+  "platforms": [
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "nested_root_switch",
+      "variables": [
+        {
+          "name": "menu_state",
+          "type": "string",
+          "value": "main"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "id": "open_details",
+            "text": "State: 0\nOpen 1/menu/details/footer/compact",
+            "actions": [
+              {
+                "log_id": "open_details",
+                "typed": {
+                  "type": "set_state",
+                  "state_id": "1/menu/details/footer/compact"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "state_id": 1,
+          "div": {
+            "type": "state",
+            "id": "menu",
+            "state_id_variable": "menu_state",
+            "states": [
+              {
+                "state_id": "main",
+                "div": {
+                  "type": "text",
+                  "text": "State: 1/menu/main"
+                }
+              },
+              {
+                "state_id": "details",
+                "div": {
+                  "type": "state",
+                  "id": "footer",
+                  "states": [
+                    {
+                      "state_id": "full",
+                      "div": {
+                        "type": "text",
+                        "text": "State: 1/menu/details/footer/full"
+                      }
+                    },
+                    {
+                      "state_id": "compact",
+                      "div": {
+                        "type": "text",
+                        "id": "result",
+                        "text": "State: 1/menu/details/footer/compact"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "open_details"
+      },
+      "text": "State: 0\nOpen 1/menu/details/footer/compact"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "open_details"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "result"
+      },
+      "text": "State: 1/menu/details/footer/compact"
+    }
+  ]
+}

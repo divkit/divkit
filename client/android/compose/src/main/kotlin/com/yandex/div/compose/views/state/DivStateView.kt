@@ -248,8 +248,8 @@ private fun DivState.rememberActiveState(
     }
 
     val expressionResolver = component.expressionResolver
-    val activeStateId = variableState?.value
-        ?: storedStateId
+    val activeStateId = storedStateId
+        ?: variableState?.value
         ?: remember(defaultStateId, expressionResolver) {
             defaultStateId?.evaluate(expressionResolver)
         }

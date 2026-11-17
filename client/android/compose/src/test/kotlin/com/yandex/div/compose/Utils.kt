@@ -44,7 +44,7 @@ internal fun rootVariableProvider(
 internal fun mockLocalComponent(
     reporter: DivReporter = TestReporter(),
     networkRestorationController: NetworkRestorationController? = null,
-    stateStorage: DivStateStorage = DivStateStorage(),
+    stateStorage: DivStateStorage = DivStateStorage(data = mock(), viewContextStorage = mock()),
     transformationFactory: TransformationFactory = mock(),
     variableController: DivVariableController = DivVariableController(),
     visibilityActionTracker: VisibilityActionTracker = mock(),

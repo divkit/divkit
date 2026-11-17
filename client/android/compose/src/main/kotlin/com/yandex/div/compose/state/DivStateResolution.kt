@@ -6,8 +6,8 @@ import com.yandex.div2.DivState
 
 /**
  * Resolves the active [DivState.State] using the same priority as [com.yandex.div.compose.views.state.DivStateView]:
- * 1. [DivState.stateIdVariable]
- * 2. value stored in [DivStateStorage]
+ * 1. selection stored in [DivStateStorage] before variable binding
+ * 2. [DivState.stateIdVariable]
  * 3. [DivState.defaultStateId]
  * 4. first item in [DivState.states]
  */
@@ -22,9 +22,8 @@ internal fun DivState.resolveActiveStateId(
     stateStorage: DivStateStorage,
     parentPath: DivStatePath,
 ): String? {
-    return stateIdVariable
-        ?.let { resolver.getVariable(it)?.getValue()?.toString() }
-        ?: id?.let { stateStorage.getActiveState(parentPath, it) }
+    return id?.let { stateStorage.getActiveState(parentPath, it) }
+        ?: stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
         ?: defaultStateId?.evaluate(resolver)
 }
 

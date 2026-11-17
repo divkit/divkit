@@ -8,10 +8,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class DivStateStorageTest {
-    private val storage = DivStateStorage()
+    private val storage = DivStateStorage(data = mock(), viewContextStorage = mock())
     private val rootPath = DivStatePath.fromState(0L)
 
     @Test
