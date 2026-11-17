@@ -8,7 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.internal.DivDebugConfiguration
-import com.yandex.div.compose.visibility.CheckVisibilityCallback
+import com.yandex.div.compose.visibility.VisibilityHost
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.image
 import com.yandex.div.test.data.text
@@ -70,8 +70,8 @@ class DivViewHostTest {
         val host = createHost()
         var firstCount = 0
         var secondCount = 0
-        lateinit var firstCallback: CheckVisibilityCallback
-        lateinit var secondCallback: CheckVisibilityCallback
+        lateinit var firstCallback: VisibilityHost.Callback
+        lateinit var secondCallback: VisibilityHost.Callback
         firstCallback = visibilityCallback(
             onContentUnboundBlock = {
                 firstCount++
@@ -302,10 +302,9 @@ class DivViewHostTest {
     private fun visibilityCallback(
         onContentUnboundBlock: () -> Unit = {},
         checkVisibilityBlock: () -> Unit,
-    ): CheckVisibilityCallback {
-        return object : CheckVisibilityCallback {
+    ): VisibilityHost.Callback {
+        return object : VisibilityHost.Callback {
             override fun checkVisibility() = checkVisibilityBlock()
-
             override fun onContentUnbound() = onContentUnboundBlock()
         }
     }

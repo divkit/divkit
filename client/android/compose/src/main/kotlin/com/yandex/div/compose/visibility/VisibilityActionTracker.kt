@@ -6,7 +6,6 @@ import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.di.Names
-import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.internal.util.duration
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
@@ -100,21 +99,19 @@ internal class VisibilityActionTracker @Inject constructor(
 }
 
 /**
-
  * A sight action together with the scope of the element that declares it.
-
  */
 private data class TrackedAction(val context: DivActionHandlingContext, val action: DivSightAction)
 
 @Suppress("ComposableNaming")
 @Composable
 internal fun VisibilityActionTracker.bind() {
-    val divViewHost = LocalDivViewHost.current ?: return
-    DisposableEffect(this, divViewHost) {
+    val host = LocalVisibilityHost.current ?: return
+    DisposableEffect(this, host) {
         val contentUnboundCallback = { onContentUnbound() }
-        divViewHost.addContentUnboundCallback(contentUnboundCallback)
+        host.addContentUnboundCallback(contentUnboundCallback)
         onDispose {
-            divViewHost.removeContentUnboundCallback(contentUnboundCallback)
+            host.removeContentUnboundCallback(contentUnboundCallback)
         }
     }
 }

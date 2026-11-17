@@ -7,8 +7,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.platform.ComposeView
-import com.yandex.div.compose.host.LocalDivViewHost
-import com.yandex.div.compose.visibility.CheckVisibilityCallback
+import com.yandex.div.compose.visibility.LocalVisibilityHost
+import com.yandex.div.compose.visibility.VisibilityHost
 import com.yandex.div2.DivData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -49,11 +49,35 @@ class DivViewHost(
 ) {
     val composeView = ComposeView(divContext, attrs, defStyleAttr)
 
-    private val callbacks = mutableSetOf<CheckVisibilityCallback>()
+    private val callbacks = mutableSetOf<VisibilityHost.Callback>()
     private val contentUnboundCallbacks = mutableSetOf<() -> Unit>()
 
-    private var layoutListener: View.OnLayoutChangeListener? = null
+    private val visibilityHost = object : VisibilityHost {
+        override fun getVisibleRectInWindow(): Rect? {
+            val globalRect = android.graphics.Rect()
+            return if (composeView.getGlobalVisibleRect(globalRect)) {
+                globalRect.toComposeRect()
+            } else {
+                null
+            }
+        }
 
+        override fun addCallback(callback: VisibilityHost.Callback) =
+            this@DivViewHost.addCallback(callback)
+
+        override fun removeCallback(callback: VisibilityHost.Callback) =
+            this@DivViewHost.removeCallback(callback)
+
+        override fun addContentUnboundCallback(callback: () -> Unit) {
+            contentUnboundCallbacks.add(callback)
+        }
+
+        override fun removeContentUnboundCallback(callback: () -> Unit) {
+            contentUnboundCallbacks.remove(callback)
+        }
+    }
+
+    private var layoutListener: View.OnLayoutChangeListener? = null
     private var preloadJob: Job? = null
 
     private val attachListener = object : View.OnAttachStateChangeListener {
@@ -101,19 +125,6 @@ class DivViewHost(
         setHostContent(content)
     }
 
-    private fun setHostContent(content: @Composable () -> Unit) {
-        composeView.setContent {
-            CompositionLocalProvider(LocalDivViewHost provides this) {
-                content()
-            }
-        }
-    }
-
-    private fun cancelPreload() {
-        preloadJob?.cancel()
-        preloadJob = null
-    }
-
     fun onVisibleBoundsChanged() {
         trackVisibility()
     }
@@ -132,41 +143,40 @@ class DivViewHost(
         contentUnboundCallbacksSnapshot.forEach { it() }
     }
 
-    internal fun addCallback(callback: CheckVisibilityCallback) {
+    internal fun addCallback(callback: VisibilityHost.Callback) {
         callbacks.add(callback)
         addOnLayoutChangeListener()
     }
 
-    internal fun removeCallback(callback: CheckVisibilityCallback) {
+    internal fun removeCallback(callback: VisibilityHost.Callback) {
         callbacks.remove(callback)
         if (callbacks.isEmpty()) {
             removeOnLayoutChangeListener()
         }
     }
 
-    internal fun addContentUnboundCallback(callback: () -> Unit) {
-        contentUnboundCallbacks.add(callback)
-    }
-
-    internal fun removeContentUnboundCallback(callback: () -> Unit) {
-        contentUnboundCallbacks.remove(callback)
-    }
-
-    internal fun trackVisibility() {
-        callbacks.toList().forEach { it.checkVisibility() }
-    }
-
-    internal fun getVisibleRectInWindow(): Rect? {
-        val globalRect = android.graphics.Rect()
-        return if (composeView.getGlobalVisibleRect(globalRect)) {
-            globalRect.toComposeRect()
-        } else {
-            null
+    private fun setHostContent(content: @Composable () -> Unit) {
+        composeView.setContent {
+            CompositionLocalProvider(LocalVisibilityHost provides visibilityHost) {
+                content()
+            }
         }
     }
 
+    private fun cancelPreload() {
+        preloadJob?.cancel()
+        preloadJob = null
+    }
+
+    private fun trackVisibility() {
+        callbacks.toList().forEach { it.checkVisibility() }
+    }
+
     private fun addOnLayoutChangeListener() {
-        if (layoutListener != null || callbacks.isEmpty()) return
+        if (layoutListener != null || callbacks.isEmpty()) {
+            return
+        }
+
         layoutListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
             trackVisibility()
         }.also { composeView.addOnLayoutChangeListener(it) }
