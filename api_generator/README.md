@@ -7,9 +7,20 @@ The script takes a JSON schema at the input and generates the code of objects de
 ```json
 {
 	"lang": "[kotlin|kotlinDsl|swift|typescript|python|documentation]",
-	"header": "// Header of every generated file. Generated code. Do not modify.\nimport some.lib\nimport other.lib\n\n"
+	"header": [
+		"// Header of every generated file. Generated code. Do not modify.",
+		"import some.lib",
+		"import other.lib",
+		"",
+		""
+	]
 }
 ```
+
+`header` and `serializersHeader` accept either a string or a list of strings. List entries
+are joined with `\n`; use empty entries for blank lines and a final empty entry for
+a trailing newline. Existing string values are used unchanged. Omitted or empty headers
+produce no header.
 
 ## Commands
 

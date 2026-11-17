@@ -542,6 +542,7 @@
   "api_generator/tests/test_api_generator.py":"divkit/public/api_generator/tests/test_api_generator.py",
   "api_generator/tests/test_api_generator_documentation_toc.py":"divkit/public/api_generator/tests/test_api_generator_documentation_toc.py",
   "api_generator/tests/test_api_generator_multiplatform_flag.py":"divkit/public/api_generator/tests/test_api_generator_multiplatform_flag.py",
+  "api_generator/tests/test_config.py":"divkit/public/api_generator/tests/test_config.py",
   "api_generator/tests/utils.py":"divkit/public/api_generator/tests/utils.py",
   "client/android/.gitignore":"divkit/public/client/android/.gitignore",
   "client/android/CODESTYLE.md":"divkit/public/client/android/CODESTYLE.md",

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Text, List, Optional
+from typing import Text, List, Optional, Union
 import json
 from enum import Enum, auto
 from .utils import sha256_file, sha256_dir, sha256_text, print_warning
@@ -67,8 +67,8 @@ class Config:
     class GenerationConfig:
         def __init__(self, dictionary):
             self.lang: GeneratedLanguage = GeneratedLanguage(dictionary['lang'])
-            self.header: Text = dictionary.get('header') or ''
-            self.serializers_header: Text = dictionary.get('serializersHeader') or ''
+            self.header: Text = _parse_header(dictionary.get('header'))
+            self.serializers_header: Text = _parse_header(dictionary.get('serializersHeader'))
             self.model_package: str = dictionary.get('modelPackage') or ''
             self.errors_collectors: List[str] = dictionary.get('errorsCollectors') or []
             self.kotlin_annotations: Config.KotlinAnnotations = Config.KotlinAnnotations(dictionary.get('kotlinAnnotations') or {})
@@ -135,6 +135,12 @@ class Config:
 
         self.stored_input_hash = _stored_sha256(os.path.join(output_path, 'input_hash'))
         self.stored_output_hash = _stored_sha256(os.path.join(output_path, 'output_hash'))
+
+
+def _parse_header(header: Optional[Union[str, List[str]]]) -> str:
+    if isinstance(header, list):
+        return '\n'.join(header)
+    return header or ''
 
 
 def _stored_sha256(path: str) -> Optional[str]:

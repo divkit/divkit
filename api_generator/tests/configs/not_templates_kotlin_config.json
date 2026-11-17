@@ -1,6 +1,22 @@
 {
   "lang": "kotlin",
-  "header": "// Generated code. Do not modify.\n\npackage com.yandex.div.reference\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.data.*\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.Expression\nimport com.yandex.div.json.expressions.ExpressionsList\nimport com.yandex.div.json.schema.*\nimport org.json.JSONArray\nimport org.json.JSONObject\n",
+  "header": [
+    "// Generated code. Do not modify.",
+    "",
+    "package com.yandex.div.reference",
+    "",
+    "import android.graphics.Color",
+    "import android.net.Uri",
+    "import androidx.annotation.ColorInt",
+    "import com.yandex.div.data.*",
+    "import com.yandex.div.json.*",
+    "import com.yandex.div.json.expressions.Expression",
+    "import com.yandex.div.json.expressions.ExpressionsList",
+    "import com.yandex.div.json.schema.*",
+    "import org.json.JSONArray",
+    "import org.json.JSONObject",
+    ""
+  ],
   "generateTemplates": false,
   "kotlinAnnotations": {
     "classes": [],
