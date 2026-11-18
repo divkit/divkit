@@ -1,6 +1,12 @@
+@file:Suppress("UnstableApiUsage")
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+
 plugins {
     id("divkit.convention.library-kmp")
     id("divkit.convention.publishing-module-kmp")
+    id("divkit.convention.jvm-api-check")
 }
 
 val generateFunctionProvider = tasks.register<JavaExec>("generateFunctionProvider") {
@@ -21,6 +27,14 @@ val generateFunctionProvider = tasks.register<JavaExec>("generateFunctionProvide
 }
 
 kotlin {
+    // The generator needs common declarations without its own generated output as an input.
+    val generatorCommonMain = sourceSets.create("generatorCommonMain") {
+        kotlin.srcDir("src/commonMain/kotlin")
+        dependencies {
+            implementation(project(":core"))
+        }
+    }
+
     android {
         namespace = "com.yandex.div.evaluable"
     }
@@ -28,13 +42,27 @@ kotlin {
     jvm {
         compilations.create("generator") {
             defaultSourceSet {
-                kotlin.srcDir("src/commonMain/kotlin")
+                dependsOn(generatorCommonMain)
+                kotlin.srcDir("src/jvmAndAndroidMain/kotlin")
                 dependencies {
-                    implementation(project(":core"))
                     implementation(libs.kotlinpoet)
                 }
             }
         }
+    }
+
+    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+    applyDefaultHierarchyTemplate {
+        common {
+            group("jvmAndAndroid") {
+                withJvm()
+                withCompilations { it.platformType == KotlinPlatformType.androidJvm }
+            }
+        }
+    }
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
     sourceSets {

@@ -1,33 +1,14 @@
 package com.yandex.div.evaluable.types
 
-import java.util.TimeZone
+public expect class DateTime : Comparable<DateTime> {
 
-public class DateTime(
-    internal val timestampMillis: Long,
-    internal val timezone: TimeZone,
-) : Comparable<DateTime> {
+    internal val timestampMillis: Long
 
-    override fun toString(): String {
-        return DateTimeFormatter.format(timezone, timestampMillis)
-    }
+    override fun toString(): String
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+    override fun equals(other: Any?): Boolean
 
-        if (other !is DateTime) {
-            return false
-        }
+    override fun hashCode(): Int
 
-        return timestampMillis == other.timestampMillis
-    }
-
-    override fun hashCode(): Int {
-        return timestampMillis.hashCode()
-    }
-
-    override fun compareTo(other: DateTime): Int {
-        return timestampMillis.compareTo(other.timestampMillis)
-    }
+    override fun compareTo(other: DateTime): Int
 }

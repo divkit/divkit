@@ -1,5 +1,7 @@
 package com.yandex.div.evaluable.function
 
+import com.yandex.div.core.text.DecimalFormatter
+import com.yandex.div.core.text.DecimalSymbols
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
@@ -11,9 +13,6 @@ import com.yandex.div.evaluable.REASON_INDEXES_ORDER
 import com.yandex.div.evaluable.REASON_OUT_OF_BOUNDS
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Locale
 
 internal object StringLength : Function() {
 
@@ -470,9 +469,9 @@ internal object IntegerDecimalFormat : AbsDecimalFormat<Long>() {
 
     override fun getValue(valueArgument: Any): Long  = valueArgument as Long
 
-    override fun getLocale(args: List<Any>): Locale = Locale.getDefault()
+    override fun getLocaleTag(args: List<Any>): String? = null
 
-    override fun format(formatter: DecimalFormat, value: Long): String = formatter.format(value)
+    override fun format(formatter: DecimalFormatter, value: Long): String = formatter.format(value)
 }
 
 internal object LocalizedIntegerDecimalFormat : AbsDecimalFormat<Long>() {
@@ -487,9 +486,9 @@ internal object LocalizedIntegerDecimalFormat : AbsDecimalFormat<Long>() {
 
     override fun getValue(valueArgument: Any): Long  = valueArgument as Long
 
-    override fun getLocale(args: List<Any>): Locale = Locale.forLanguageTag(args[2] as String)
+    override fun getLocaleTag(args: List<Any>): String = args[2] as String
 
-    override fun format(formatter: DecimalFormat, value: Long): String = formatter.format(value)
+    override fun format(formatter: DecimalFormatter, value: Long): String = formatter.format(value)
 }
 
 internal object NumberDecimalFormat : AbsDecimalFormat<Double>() {
@@ -503,11 +502,10 @@ internal object NumberDecimalFormat : AbsDecimalFormat<Double>() {
 
     override fun getValue(valueArgument: Any): Double  = valueArgument as Double
 
-    override fun getLocale(args: List<Any>): Locale = Locale.getDefault()
+    override fun getLocaleTag(args: List<Any>): String? = null
 
-    override fun format(formatter: DecimalFormat, value: Double): String {
-        // toFloat() ensures correct rounding, as binary to ASCII conversion of the value becomes exact.
-        return formatter.format(value.toFloat())
+    override fun format(formatter: DecimalFormatter, value: Double): String {
+        return formatter.format(value)
     }
 }
 
@@ -523,11 +521,10 @@ internal object LocalizedNumberDecimalFormat : AbsDecimalFormat<Double>() {
 
     override fun getValue(valueArgument: Any): Double  = valueArgument as Double
 
-    override fun getLocale(args: List<Any>): Locale = Locale.forLanguageTag(args[2] as String)
+    override fun getLocaleTag(args: List<Any>): String = args[2] as String
 
-    override fun format(formatter: DecimalFormat, value: Double): String  {
-        // toFloat() ensures correct rounding, as binary to ASCII conversion of the value becomes exact.
-        return formatter.format(value.toFloat())
+    override fun format(formatter: DecimalFormatter, value: Double): String  {
+        return formatter.format(value)
     }
 }
 
@@ -543,7 +540,7 @@ internal abstract class AbsDecimalFormat<T : Number> : Function() {
     ): Any {
         val value = getValue(args[0])
         val pattern = args[1] as String
-        val locale = getLocale(args)
+        val localeTag = getLocaleTag(args)
 
         if (pattern.isEmpty()) {
             throwIllegalFormatException(expressionContext, args)
@@ -553,9 +550,9 @@ internal abstract class AbsDecimalFormat<T : Number> : Function() {
             throwIllegalFormatException(expressionContext, args)
         }
 
-        val symbols = DecimalFormatSymbols.getInstance(locale)
+        val symbols = DecimalSymbols(localeTag)
         val formatter = try {
-            DecimalFormat(pattern, symbols)
+            DecimalFormatter(pattern, symbols)
         } catch (e: Exception) {
             throwIllegalFormatException(expressionContext, args, cause = e)
         }
@@ -564,9 +561,9 @@ internal abstract class AbsDecimalFormat<T : Number> : Function() {
 
     protected abstract fun getValue(valueArgument: Any): T
 
-    protected abstract fun getLocale(args: List<Any>): Locale
+    protected abstract fun getLocaleTag(args: List<Any>): String?
 
-    protected abstract fun format(formatter: DecimalFormat, value: T): String
+    protected abstract fun format(formatter: DecimalFormatter, value: T): String
 
     private fun throwIllegalFormatException(
         expressionContext: ExpressionContext,

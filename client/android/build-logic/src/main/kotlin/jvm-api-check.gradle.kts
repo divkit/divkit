@@ -14,6 +14,14 @@ pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
         tasks.named { taskName ->
             taskName.contains(checkTarget.name, ignoreCase = true) || taskName == "downloadKotlinNativeDistribution"
         }.configureEach { enabled = false }
+
+        // Kotlin adds Native libraries while finalizing the DSL. This disabled target needs no
+        // classpath; leaving it resolvable makes Metalava require the disabled Native download.
+        gradle.projectsEvaluated {
+            checkTarget.compilations.configureEach {
+                compileDependencyFiles = files()
+            }
+        }
     }
 
     tasks.register(checkTaskName) {

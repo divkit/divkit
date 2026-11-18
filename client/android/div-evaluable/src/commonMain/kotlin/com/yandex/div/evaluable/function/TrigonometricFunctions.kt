@@ -40,7 +40,7 @@ internal object RadiansToDegrees : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>,
     ): Any {
-        return Math.toDegrees(args.first() as Double)
+        return radiansToDegrees(args.first() as Double)
     }
 }
 
@@ -55,7 +55,7 @@ internal object DegreesToRadians : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>,
     ): Any {
-        return Math.toRadians(args.first() as Double)
+        return degreesToRadians(args.first() as Double)
     }
 }
 

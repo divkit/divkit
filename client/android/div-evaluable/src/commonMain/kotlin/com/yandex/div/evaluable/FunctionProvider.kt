@@ -13,6 +13,7 @@ public interface FunctionProvider {
 
     public companion object {
         @JvmField
+        @Deprecated("Will be removed in the next major release")
         public val STUB: FunctionProvider = object : FunctionProvider {
             override fun get(name: String, args: List<EvaluableType>) = Function.STUB
             override fun getMethod(name: String, args: List<EvaluableType>): Function = Function.STUB

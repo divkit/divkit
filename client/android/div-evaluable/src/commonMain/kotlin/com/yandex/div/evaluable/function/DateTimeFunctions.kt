@@ -1,5 +1,6 @@
 package com.yandex.div.evaluable.function
 
+import com.yandex.div.core.util.currentTimeMillis
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
@@ -8,12 +9,6 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.DateTime
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.GregorianCalendar
-import java.util.Locale
-import java.util.TimeZone
 
 internal object ParseUnixTime : Function() {
 
@@ -30,10 +25,7 @@ internal object ParseUnixTime : Function() {
     ): Any {
         val first = args.first()
         val timestampInSeconds = first as Long
-        return DateTime(
-            timestampMillis = timestampInSeconds * 1000L,
-            timezone = TimeZone.getTimeZone("UTC"),
-        )
+        return DateTime(timestampInSeconds * MILLIS_PER_SECOND, isLocal = false)
     }
 }
 
@@ -52,10 +44,7 @@ internal object ParseUnixTimeAsLocal : Function() {
     ): Any {
         val first = args.first()
         val timestampInSeconds = first as Long
-        return DateTime(
-            timestampMillis = timestampInSeconds * 1000L,
-            timezone = TimeZone.getDefault(),
-        )
+        return DateTime(timestampInSeconds * MILLIS_PER_SECOND, isLocal = true)
     }
 }
 
@@ -72,10 +61,7 @@ internal object NowLocal : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        return DateTime(
-            timestampMillis = System.currentTimeMillis(),
-            timezone = TimeZone.getDefault(),
-        )
+        return DateTime(currentTimeMillis(), isLocal = true)
     }
 }
 
@@ -98,10 +84,7 @@ internal object AddMillis : Function() {
         val datetime = args[0] as DateTime
         val millis = args[1] as Long
 
-        return DateTime(
-            timestampMillis = datetime.timestampMillis + millis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(datetime.timestampMillis + millis)
     }
 }
 
@@ -124,13 +107,10 @@ internal object SetYear : Function() {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
-        val calendar = datetime.toCalendar()
-        calendar.set(Calendar.YEAR, value.toInt())
+        val calendar = Calendar(datetime)
+        calendar.set(Calendar.Field.YEAR, value.toInt())
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -157,13 +137,10 @@ internal object SetMonth : Function() {
         if (value > 12 || value < 1) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting month in [1..12], instead got $value.")
         }
-        val calendar = datetime.toCalendar()
-        calendar.set(Calendar.MONTH, (value - 1).toInt())
+        val calendar = Calendar(datetime)
+        calendar.set(Calendar.Field.MONTH, (value - 1).toInt())
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -187,18 +164,15 @@ internal object SetDay : Function() {
         val datetime = args[0] as DateTime
         val value = args[1] as Long
 
-        val calendar = datetime.toCalendar()
-        val daysInMonth: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val calendar = Calendar(datetime)
+        val daysInMonth: Int = calendar.getActualMaximum(Calendar.Field.DAY_OF_MONTH)
         when (value) {
-            in 1..daysInMonth -> calendar.set(Calendar.DAY_OF_MONTH, value.toInt())
-            -1L -> calendar.set(Calendar.DAY_OF_MONTH, 0)
+            in 1..daysInMonth -> calendar.set(Calendar.Field.DAY_OF_MONTH, value.toInt())
+            -1L -> calendar.set(Calendar.Field.DAY_OF_MONTH, 0)
             else -> throwExceptionOnFunctionEvaluationFailed(name, args, "Unable to set day $value for date $datetime.")
         }
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -225,14 +199,11 @@ internal object SetHours : Function() {
         if (value > 23 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting hours in [0..23], instead got $value.")
         }
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
         calendar.timeInMillis = datetime.timestampMillis
-        calendar.set(Calendar.HOUR_OF_DAY, value.toInt())
+        calendar.set(Calendar.Field.HOUR_OF_DAY, value.toInt())
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -259,13 +230,10 @@ internal object SetMinutes : Function() {
         if (value > 59 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting minutes in [0..59], instead got $value.")
         }
-        val calendar = datetime.toCalendar()
-        calendar.set(Calendar.MINUTE, value.toInt())
+        val calendar = Calendar(datetime)
+        calendar.set(Calendar.Field.MINUTE, value.toInt())
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -292,13 +260,10 @@ internal object SetSeconds : Function() {
         if (value > 59 || value < 0) {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting seconds in [0..59], instead got $value.")
         }
-        val calendar = datetime.toCalendar()
-        calendar.set(Calendar.SECOND, value.toInt())
+        val calendar = Calendar(datetime)
+        calendar.set(Calendar.Field.SECOND, value.toInt())
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -326,13 +291,10 @@ internal object SetMillis : Function() {
             throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting millis in [0..999], instead got $value.")
         }
 
-        val calendar = datetime.toCalendar()
-        calendar.set(Calendar.MILLISECOND, value.toInt())
+        val calendar = Calendar(datetime)
+        calendar.set(Calendar.Field.MILLISECOND, value.toInt())
 
-        return DateTime(
-            timestampMillis = calendar.timeInMillis,
-            timezone = datetime.timezone,
-        )
+        return datetime.withTimestampMillis(calendar.timeInMillis)
     }
 }
 
@@ -354,9 +316,9 @@ internal object GetYear : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return calendar.get(Calendar.YEAR).toLong()
+        return calendar.get(Calendar.Field.YEAR).toLong()
     }
 }
 
@@ -378,9 +340,9 @@ internal object GetMonth : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return (calendar.get(Calendar.MONTH) + 1).toLong()
+        return (calendar.get(Calendar.Field.MONTH) + 1).toLong()
     }
 }
 
@@ -402,9 +364,9 @@ internal object GetDay : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return calendar.get(Calendar.DAY_OF_MONTH).toLong()
+        return calendar.get(Calendar.Field.DAY_OF_MONTH).toLong()
     }
 }
 
@@ -426,9 +388,9 @@ internal object GetDayOfWeek : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
+        val dayOfWeek = calendar.get(Calendar.Field.DAY_OF_WEEK) - 1
 
         return if (dayOfWeek == 0) 7L else dayOfWeek.toLong()
     }
@@ -452,9 +414,9 @@ internal object GetHours : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return calendar.get(Calendar.HOUR_OF_DAY).toLong()
+        return calendar.get(Calendar.Field.HOUR_OF_DAY).toLong()
     }
 }
 
@@ -476,9 +438,9 @@ internal object GetMinutes : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return calendar.get(Calendar.MINUTE).toLong()
+        return calendar.get(Calendar.Field.MINUTE).toLong()
     }
 }
 
@@ -500,9 +462,9 @@ internal object GetSeconds : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return calendar.get(Calendar.SECOND).toLong()
+        return calendar.get(Calendar.Field.SECOND).toLong()
     }
 }
 
@@ -524,9 +486,9 @@ internal object GetMillis : Function() {
     ): Any {
         val datetime = args[0] as DateTime
 
-        val calendar = datetime.toCalendar()
+        val calendar = Calendar(datetime)
 
-        return calendar.get(Calendar.MILLISECOND).toLong()
+        return calendar.get(Calendar.Field.MILLISECOND).toLong()
     }
 }
 
@@ -569,10 +531,7 @@ internal object FormatDateAsLocal : Function() {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
 
-        val date = datetime.toDate()
-        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
-        sdf.timeZone = TimeZone.getDefault()
-        return sdf.format(date)
+        return formatDateTime(datetime, pattern, local = true, localeTag = null)
     }
 }
 
@@ -595,10 +554,7 @@ internal object FormatDateAsUTC : Function() {
         val datetime = args[0] as DateTime
         val pattern = args[1] as String
 
-        val date = datetime.toDate()
-        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-        return sdf.format(date)
+        return formatDateTime(datetime, pattern, local = false, localeTag = null)
     }
 }
 
@@ -623,10 +579,7 @@ internal object FormatDateAsLocalWithLocale : Function() {
         val pattern = args[1] as String
         val locale = args[2] as String
 
-        val date = datetime.toDate()
-        val sdf = SimpleDateFormat(pattern, Locale.Builder().setLanguageTag(locale).build())
-        sdf.timeZone = TimeZone.getDefault()
-        return sdf.format(date)
+        return formatDateTime(datetime, pattern, local = true, localeTag = locale)
     }
 }
 
@@ -651,21 +604,6 @@ internal object FormatDateAsUTCWithLocale : Function() {
         val pattern = args[1] as String
         val locale = args[2] as String
 
-        val date = datetime.toDate()
-        val sdf = SimpleDateFormat(pattern, Locale.Builder().setLanguageTag(locale).build())
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-        return sdf.format(date)
+        return formatDateTime(datetime, pattern, local = false, localeTag = locale)
     }
-}
-
-internal fun DateTime.toCalendar(): Calendar {
-    val calendar = GregorianCalendar.getInstance()
-    calendar.timeZone = timezone
-    calendar.timeInMillis = timestampMillis
-
-    return calendar
-}
-
-internal fun DateTime.toDate(): Date {
-    return Date(timestampMillis)
 }
