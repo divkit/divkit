@@ -9,6 +9,7 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import com.yandex.div.compose.font.LineMetrics
@@ -85,7 +86,7 @@ private fun TextLayoutResult.paragraphs(
 ): List<AnnotatedString.Range<ParagraphStyle>> {
     val result = mutableListOf<AnnotatedString.Range<ParagraphStyle>>()
     lines.zip(boxes) { line, box ->
-        val style = box.paragraphStyle(fontSizePx, getParagraphDirection(line.start))
+        val style = box.paragraphStyle(fontSizePx, layoutInput.density, getParagraphDirection(line.start))
         val last = result.lastOrNull()
         if (last?.item == style && text[line.start - 1] != '\n') {
             result[result.lastIndex] = last.copy(end = line.end)
@@ -273,6 +274,7 @@ private fun LineMetrics.shiftStyle(shiftPx: Int): SpanStyle {
 
 private fun LineBox.paragraphStyle(
     fontSizePx: Float,
+    density: Density,
     direction: ResolvedTextDirection,
 ): ParagraphStyle {
     val textDirection = when (direction) {
@@ -298,7 +300,11 @@ private fun LineBox.paragraphStyle(
     }
     return ParagraphStyle(
         textDirection = textDirection,
-        lineHeight = exactLineHeight(height.toFloat(), fontSizePx),
+        lineHeight = if (fontSizePx > 0) {
+            exactLineHeight(height.toFloat(), fontSizePx)
+        } else {
+            with(density) { height.toSp() }
+        },
         lineHeightStyle = lineHeightStyle,
     )
 }

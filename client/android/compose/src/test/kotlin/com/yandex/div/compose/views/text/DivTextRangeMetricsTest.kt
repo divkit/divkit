@@ -362,6 +362,51 @@ class DivTextRangeMetricsTest {
         const val IMAGE_URL = "https://image"
     }
 
+    @Test
+    fun `zero font size text keeps line height with a range font size`() {
+        setContent(
+            text(
+                fontSize = 0,
+                id = "text",
+                lineHeight = 20,
+                ranges = listOf(textRange(fontSize = 12)),
+                text = constant("First\nSecond"),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertHeightIsEqualTo(40.dp)
+    }
+
+    @Test
+    fun `zero font size text keeps range line height`() {
+        setContent(
+            text(
+                fontSize = 0,
+                id = "text",
+                lineHeight = 20,
+                ranges = listOf(textRange(end = 5, lineHeight = constant(30))),
+                text = constant("First\nSecond"),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertHeightIsEqualTo(50.dp)
+    }
+
+    @Test
+    fun `zero font size text keeps line height with a taller inline image`() {
+        setContent(
+            text(
+                fontSize = 0,
+                id = "text",
+                images = listOf(textImage(url = IMAGE_URL, start = 2, height = 32)),
+                lineHeight = 20,
+                text = constant("Text"),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertHeightIsEqualTo(20.dp)
+    }
+
     private fun setContent(content: Div) {
         rule.setContent(configuration = configuration, data = data(content))
     }
