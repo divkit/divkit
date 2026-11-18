@@ -2,6 +2,7 @@ package com.yandex.div.compose.histogram
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
@@ -61,9 +62,8 @@ internal class DivViewHistogramReporter(
                 }
             )
             onCompositionFinished()
-            DisposableEffect(measurement) {
+            SideEffect {
                 onEffectsApplied()
-                onDispose {}
             }
         }
     }

@@ -95,7 +95,7 @@ class DivViewHistogramReporterTest {
                 "DivCompose.Render.Prepare.Cold" to 1_000L,
                 "DivCompose.Render.Composition.Cold" to 6_000L,
                 "DivCompose.Render.ApplyChanges.Cold" to 8_000L,
-                "DivCompose.Render.Effects.Cold" to 32_000L,
+                "DivCompose.Render.Effects.Cold" to 48_000L,
                 "DivCompose.Render.Total.Cold" to 254_000L,
             ),
             histogramBridge.histograms
