@@ -2,12 +2,10 @@ package com.yandex.div.compose.views.text
 
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.IntrinsicMeasurable
 import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.Measurable
@@ -144,12 +142,12 @@ internal fun Modifier.textHeightLimit(
     } else {
         null
     }
-    val clipsContent = remember { mutableStateOf(false) }
-    return graphicsLayer { clip = clipsContent.value }
+    val overflow = remember { ClipOverflow() }
+    return clipOverflow(overflow)
         .then(TextHeightLimitElement(
             autoEllipsize = limits.autoEllipsize,
             hiddenLines = hiddenLines,
-            clipsContent = clipsContent,
+            overflow = overflow,
         ))
 }
 
@@ -248,7 +246,7 @@ private data class HiddenLines(
 private data class TextHeightLimitElement(
     val autoEllipsize: Boolean,
     val hiddenLines: HiddenLines?,
-    val clipsContent: MutableState<Boolean>,
+    val overflow: ClipOverflow,
 ) : ModifierNodeElement<TextHeightLimitNode>() {
     override fun create() = TextHeightLimitNode(this)
 
@@ -275,7 +273,7 @@ private class TextHeightLimitNode(
             )
         )
         val height = constraints.constrainHeight(placeable.height)
-        params.clipsContent.value = height < placeable.height
+        params.overflow.clips = height < placeable.height
         return layout(placeable.width, height) {
             placeable.placeRelative(0, 0)
         }
