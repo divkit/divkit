@@ -1,103 +1,61 @@
 package com.yandex.div.storage
 
-import com.yandex.div.storage.database.StorageException
+import com.yandex.div.storage.ActionOnError as CommonActionOnError
+import com.yandex.div.storage.internal.DivStorage as CommonDivStorage
+import com.yandex.div.storage.internal.RawJsonRepository as CommonRawJsonRepository
+import com.yandex.div.storage.internal.RawJsonRepositoryResult as CommonRepositoryResult
+import com.yandex.div.storage.internal.rawjson.RawJson as CommonRawJson
 import com.yandex.div.storage.rawjson.RawJson
-import java.util.concurrent.ConcurrentHashMap
+import org.json.JSONObject
 
-private typealias JsonId = String
-
-internal class RawJsonRepositoryImpl(
-    private val divStorage: DivStorage,
-) : RawJsonRepository {
-    private val inMemoryData = ConcurrentHashMap<JsonId, RawJson>()
-
-    private var areJsonsSynchronizedWithInMemory = false
-    private var jsonIdsWithErrors = setOf<JsonId>()
+internal class RawJsonRepositoryImpl(divStorage: CommonDivStorage<JSONObject>) : RawJsonRepository {
+    private val delegate = CommonRawJsonRepository(object : CommonDivStorage<JSONObject> by divStorage {
+        override fun readRawJsons(
+            rawJsonIds: Set<String>,
+        ): CommonDivStorage.LoadDataResult<CommonRawJson<JSONObject>> {
+            val result = divStorage.readRawJsons(rawJsonIds)
+            return CommonDivStorage.LoadDataResult(
+                result.restoredData.map { AndroidRawJson(RawJson(it.id, it.data)) }, result.errors
+            )
+        }
+    })
 
     override fun put(payload: RawJsonRepository.Payload): RawJsonRepositoryResult {
-        val rawJsons = payload.jsons
-        rawJsons.forEach { inMemoryData[it.id] = it }
-
-        val divStorageErrors = divStorage.saveRawJsons(rawJsons, payload.actionOnError).errors
-        val exceptions = mutableListOf<RawJsonRepositoryException>()
-        exceptions.addAll(divStorageErrors.toRawJsonRepositoryExceptions())
-
-        return RawJsonRepositoryResult(rawJsons, exceptions)
+        val result = delegate.put(
+            CommonRawJsonRepository.Payload(
+                payload.jsons.map { AndroidRawJson(it) },
+                when (payload.actionOnError) {
+                    DivDataRepository.ActionOnError.ABORT_TRANSACTION ->
+                        CommonActionOnError.ABORT_TRANSACTION
+                    DivDataRepository.ActionOnError.SKIP_ELEMENT -> CommonActionOnError.SKIP_ELEMENT
+                },
+            )
+        )
+        return RawJsonRepositoryResult(payload.jsons, result.errors)
     }
 
-    override fun get(ids: List<JsonId>): RawJsonRepositoryResult {
-        if (ids.isEmpty()) {
-            return RawJsonRepositoryResult.EMPTY
-        }
+    override fun get(ids: List<String>): RawJsonRepositoryResult =
+        if (ids.isEmpty()) RawJsonRepositoryResult.EMPTY else delegate.get(ids).asAndroid()
 
-        val idsToLoad = ids.toMutableSet()
-        val inMemoryResults = ArrayList<RawJson>(ids.size)
-        ids.forEach { id ->
-            inMemoryData[id]?.let {
-                inMemoryResults.add(it)
-                idsToLoad.remove(id)
-            }
-        }
-
-        if (idsToLoad.isNotEmpty()) {
-            val storageResults = loadFromStorage(idsToLoad)
-            storageResults.resultData.forEach { inMemoryData[it.id] = it }
-            return storageResults.addData(inMemoryResults)
-        }
-        return RawJsonRepositoryResult(inMemoryResults, emptyList())
-    }
-
-    override fun getAll(): RawJsonRepositoryResult {
-        if (areJsonsSynchronizedWithInMemory && jsonIdsWithErrors.isEmpty()) {
-            return RawJsonRepositoryResult(inMemoryData.values.toList(), emptyList())
-        }
-        val jsonsToRequest = if (areJsonsSynchronizedWithInMemory) {
-            jsonIdsWithErrors
-        } else {
-            emptySet()
-        }
-
-        val storageResults = loadFromStorage(jsonsToRequest)
-        val resultsWithInMemory = storageResults.addData(inMemoryData.values)
-
-        storageResults.resultData.forEach { inMemoryData[it.id] = it }
-        areJsonsSynchronizedWithInMemory = true
-
-        jsonIdsWithErrors = storageResults.errors.groupBy { it.jsonId }.getKeysNotNull()
-
-        return resultsWithInMemory
-    }
+    override fun getAll(): RawJsonRepositoryResult = delegate.getAll().asAndroid()
 
     override fun remove(predicate: (RawJson) -> Boolean): RawJsonRepositoryRemoveResult {
-        val (deletedIds, storageExceptions) = divStorage.removeRawJsons(predicate)
-        val exceptions = storageExceptions.toRawJsonRepositoryExceptions()
-        removeFromInMemory(deletedIds)
-        return RawJsonRepositoryRemoveResult(deletedIds, exceptions)
+        val result = delegate.remove { predicate(it.asAndroid()) }
+        return RawJsonRepositoryRemoveResult(result.ids, result.errors)
     }
-
-    private fun loadFromStorage(ids: Set<JsonId>): RawJsonRepositoryResult {
-        val exceptions = mutableListOf<RawJsonRepositoryException>()
-        val (rawJsons, storageExceptions) = divStorage.readRawJsons(ids)
-        exceptions.addAll(storageExceptions.toRawJsonRepositoryExceptions())
-        return RawJsonRepositoryResult(rawJsons, exceptions)
-    }
-
-    private fun removeFromInMemory(deletedRecords: Set<JsonId>) {
-        deletedRecords.forEach {
-            inMemoryData.remove(it)
-        }
-    }
-
-    private fun <K, V> Map<K?, V>.getKeysNotNull(): Set<K> {
-        val filteredKeys = mutableSetOf<K>()
-        for ((key, _) in entries) {
-            if (key != null) {
-                filteredKeys.add(key)
-            }
-        }
-        return filteredKeys
-    }
-
-    private fun List<StorageException>.toRawJsonRepositoryExceptions() =
-        this.map { RawJsonRepositoryException(it) }
 }
+
+private class AndroidRawJson(val source: RawJson) : CommonRawJson<JSONObject> {
+    override val id get() = source.id
+    override val data get() = source.data
+}
+
+private fun CommonRawJson<JSONObject>.asAndroid(): RawJson =
+    if (this is AndroidRawJson) source else object : RawJson {
+        override val id get() = this@asAndroid.id
+        override val data get() = this@asAndroid.data
+    }
+
+private fun CommonRepositoryResult<JSONObject>.asAndroid(): RawJsonRepositoryResult =
+    RawJsonRepositoryResult(resultData.map { it.asAndroid() }, errors)
+

@@ -21,7 +21,7 @@ internal class AndroidDivStorage(
     openHelperProvider: AndroidDatabaseOpenHelperProvider,
     databaseNamePrefix: String = "",
 ) : DivStorage {
-    private val delegate = CommonDivStorage(
+    internal val delegate = CommonDivStorage(
         codec = object : StorageCodec<JSONObject> {
             override fun encode(value: JSONObject): ByteArray = value.toString().encodeToByteArray()
             override fun decode(bytes: ByteArray): JSONObject = JSONObject(bytes.decodeToString())

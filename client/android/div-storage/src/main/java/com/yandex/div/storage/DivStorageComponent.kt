@@ -85,7 +85,7 @@ interface DivStorageComponent {
                     cardErrorLoggerFactory,
             )
             val rawJsonRepository = RawJsonRepositoryImpl(
-                    divStorage,
+                    divStorage.delegate,
             )
             return InternalStorageComponent(
                     repository = repository,
