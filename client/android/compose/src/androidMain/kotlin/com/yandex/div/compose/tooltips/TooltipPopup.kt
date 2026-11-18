@@ -22,6 +22,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -30,6 +31,7 @@ import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.internal.tooltip.TouchEventDispatcher
 import com.yandex.div.internal.tooltip.hasTooltipActions
+import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
@@ -100,7 +102,7 @@ internal fun TooltipPopup(
             LocalTooltipTouchDispatcher provides touchDispatcher,
         ) {
             TooltipPopupContent(
-                tooltip = tooltip,
+                anchorEntry = anchorEntry,
                 positionProvider = positionProvider,
                 isVisible = isVisible,
                 enterTransition = enterTransition,
@@ -184,7 +186,7 @@ private fun TooltipAnchorEntry.observedPositionProvider(
 
 @Composable
 private fun TooltipPopupContent(
-    tooltip: DivTooltip,
+    anchorEntry: TooltipAnchorEntry,
     positionProvider: TooltipPositionProvider,
     isVisible: Boolean,
     enterTransition: EnterTransition,
@@ -193,6 +195,7 @@ private fun TooltipPopupContent(
     onShown: () -> Unit,
     onDismissed: () -> Unit,
 ) {
+    val tooltip = anchorEntry.tooltip
     val substrate = tooltip.substrateDiv
     if (substrate == null) {
         AnimatedVisibility(
@@ -201,7 +204,7 @@ private fun TooltipPopupContent(
             exit = exitTransition,
         ) {
             TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
-            DivBlockView(data = tooltip.div)
+            anchorEntry.TooltipDiv(tooltip.div)
         }
         return
     }
@@ -224,7 +227,7 @@ private fun TooltipPopupContent(
                 tooltip.observedSubstrateExitTransition()
             },
         ) {
-            DivBlockView(
+            anchorEntry.TooltipDiv(
                 data = substrate,
                 layoutParams = DivBlockLayoutParams(blockTapPropagation = handlesSubstrateTaps),
             )
@@ -237,11 +240,18 @@ private fun TooltipPopupContent(
             exit = exitTransition,
         ) {
             TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
-            DivBlockView(
-                data = tooltip.div,
-                layoutParams = DivBlockLayoutParams(blockTapPropagation = true),
-            )
+            anchorEntry.TooltipDiv(tooltip.div, DivBlockLayoutParams(blockTapPropagation = true))
         }
+    }
+}
+
+@Composable
+private fun TooltipAnchorEntry.TooltipDiv(
+    data: Div,
+    layoutParams: DivBlockLayoutParams = DivBlockLayoutParams.Default,
+) {
+    WithLocalComponent(localComponent) {
+        DivBlockView(data = data, layoutParams = layoutParams)
     }
 }
 

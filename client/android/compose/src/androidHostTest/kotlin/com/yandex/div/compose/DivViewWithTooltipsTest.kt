@@ -2,6 +2,7 @@ package com.yandex.div.compose
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertIsDisplayed
@@ -21,13 +22,19 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.insets
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.matchParent
+import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.showTooltipAction
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
+import com.yandex.div2.DivEvaluableType
+import com.yandex.div2.DivFunction
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
@@ -83,6 +90,118 @@ class DivViewWithTooltipsTest {
         rule.onNodeWithText("Show tooltip").performClick()
 
         rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+    }
+
+    @Test
+    fun `tooltip reads and updates the declaring node's local context`() {
+        fun scopeName(name: String) = DivFunction(
+            name = "scopeName",
+            arguments = emptyList(),
+            returnType = DivEvaluableType.STRING,
+            body = "@{'$name'}",
+        )
+
+        val anchor = text(
+            id = "anchor",
+            variables = listOf(variable("label", "Before")),
+            functions = listOf(scopeName("Anchor")),
+            text = expression("@{label}"),
+            tooltips = listOf(DivTooltip(
+                id = "tooltip",
+                position = constant(DivTooltip.Position.BOTTOM),
+                duration = constant(0L),
+                div = text(
+                    id = "bubble",
+                    text = expression("@{scopeName()} / @{label}"),
+                    action = action(url = "div-action://set_variable?name=label&value=After"),
+                ),
+            )),
+        )
+        setContent(data(
+            content = container(items = listOf(
+                text(
+                    id = "open",
+                    text = expression("@{label}"),
+                    action = action(typed = showTooltipAction("tooltip")),
+                ),
+                anchor,
+            )),
+            variables = listOf(variable("label", "Card")),
+            functions = listOf(scopeName("Root")),
+        ))
+
+        rule.onNodeWithTag("open").performClick()
+        rule.onNodeWithTag("bubble").assertTextEquals("Anchor / Before")
+
+        rule.onNodeWithTag("bubble").performClick()
+        rule.onNodeWithTag("bubble").assertTextEquals("Anchor / After")
+        rule.onNodeWithTag("anchor").assertTextEquals("After")
+        rule.onNodeWithTag("open").assertTextEquals("Card")
+    }
+
+    @Test
+    fun `tooltip uses its new local scope after rebinding the card to another context`() {
+        val tooltip = DivTooltip(
+            id = "tooltip",
+            position = constant(DivTooltip.Position.CENTER),
+            duration = constant(0L),
+            div = text(
+                id = "bubble",
+                text = expression("@{label}"),
+                action = action(url = "div-action://set_variable?name=label&value=Updated"),
+            ),
+        )
+        val card = data(text(
+            id = "anchor",
+            text = expression("@{label}"),
+            variables = listOf(variable("label", "Initial")),
+            action = action(typed = showTooltipAction("tooltip")),
+            tooltips = listOf(tooltip),
+        ))
+        val boundContext = mutableStateOf(divContext)
+        rule.setContent {
+            CompositionLocalProvider(LocalDivContext provides boundContext.value) {
+                DivView(card)
+            }
+        }
+        rule.onNodeWithTag("anchor").performClick()
+        rule.onNodeWithTag("bubble").performClick()
+        rule.onNodeWithTag("anchor").assertTextEquals("Updated")
+
+        rule.runOnIdle {
+            boundContext.value = DivContext(activity, divConfiguration { reporter = TestReporter() })
+        }
+        rule.onNodeWithTag("anchor").assertTextEquals("Initial").performClick()
+
+        rule.onNodeWithTag("bubble").assertTextEquals("Initial").performClick()
+        rule.onNodeWithTag("anchor").assertTextEquals("Updated")
+    }
+
+    @Test
+    fun `tooltip content and substrate read the generated anchor's item index`() {
+        val tooltip = DivTooltip(
+            id = "tooltip",
+            position = constant(DivTooltip.Position.CENTER),
+            div = text(id = "bubble", text = expression("Item @{index}")),
+            substrateDiv = text(id = "substrate", text = expression("Item @{index}")),
+        )
+        val anchor = text(
+            text = "Show tooltip",
+            action = action(typed = showTooltipAction("tooltip")),
+            tooltips = listOf(tooltip),
+        )
+        setContent(data(
+            content = container(itemBuilder = itemBuilder(
+                data = jsonArray(jsonObject()),
+                prototypes = listOf(prototype(div = anchor)),
+            )),
+            variables = listOf(variable("index", 9L)),
+        ))
+
+        rule.onNodeWithText("Show tooltip").performClick()
+
+        rule.onNodeWithTag("bubble").assertTextEquals("Item 0")
+        rule.onNodeWithTag("substrate").assertTextEquals("Item 0")
     }
 
     @Test
@@ -428,8 +547,10 @@ class DivViewWithTooltipsTest {
         rule.onNodeWithText("Show tooltip").performClick()
     }
 
-    private fun setContent(content: Div) {
-        divData = data(content)
+    private fun setContent(content: Div) = setContent(data(content))
+
+    private fun setContent(data: DivData) {
+        divData = data
         activity.setContentView(
             ComposeView(context = divContext.component.baseContext).apply {
                 setContent {

@@ -3,6 +3,7 @@ package com.yandex.div.compose.tooltips
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.text
 import com.yandex.div2.DivTooltip
+import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -47,6 +48,7 @@ class TooltipStateStorageTest {
             position = constant(DivTooltip.Position.CENTER),
             div = text(text = "Tooltip"),
         ),
+        localComponent = mock(),
     )
 
     private companion object {

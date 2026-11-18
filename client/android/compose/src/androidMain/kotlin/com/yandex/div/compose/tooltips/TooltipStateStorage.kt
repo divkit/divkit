@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.geometry.Rect
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div2.DivTooltip
 import dev.zacsweers.metro.Inject
@@ -98,5 +99,6 @@ internal class TooltipStateStorage @Inject constructor() {
 
 internal data class TooltipAnchorEntry(
     val tooltip: DivTooltip,
+    val localComponent: DivLocalComponent,
     val bounds: MutableState<Rect?> = mutableStateOf(null),
 )

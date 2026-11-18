@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div2.DivTooltip
 
 @Composable
@@ -15,8 +16,9 @@ internal fun Modifier.tooltipAnchors(tooltips: List<DivTooltip>?): Modifier {
     }
 
     val tooltipStateStorage = LocalDivViewContext.current.component.tooltipStateStorage
-    val entries = remember(tooltips) {
-        TooltipAnchorEntries(tooltips, tooltipStateStorage)
+    val localComponent = LocalComponent.current
+    val entries = remember(tooltips, localComponent) {
+        TooltipAnchorEntries(tooltips, localComponent, tooltipStateStorage)
     }
     return onGloballyPositioned { coordinates ->
         entries.updateBounds(coordinates.boundsInWindow())
