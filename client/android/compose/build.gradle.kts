@@ -1,67 +1,113 @@
+import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
 import dev.detekt.gradle.Detekt
 import java.io.File
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
-    alias(libs.plugins.android.library)
+    id("divkit.convention.library-kmp")
+    id("divkit.convention.publishing-module-kmp")
+    id("divkit.convention.stub-aar")
+    alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.metro)
     alias(libs.plugins.roborazzi)
-    id("divkit.convention.abi-validation")
 }
 
-apply(from = "../div-library.gradle")
-apply(from = "../div-tests.gradle")
-apply(from = "../publish-android.gradle")
+kotlin {
+    // Preserve the existing Android API while moving its source set.
+    // TODO(https://st.yandex-team.ru/DIVKIT-11051): Restore strict explicit API mode.
+    explicitApi = ExplicitApiMode.Disabled
 
-android {
-    namespace = "com.yandex.div.compose"
-
-    sourceSets.getByName("test").assets.srcDir("../test-utils/src/main/res/font")
-
-    testOptions {
-        unitTests {
+    android {
+        namespace = "com.yandex.div.compose"
+        androidResources.enable = true
+        lint {
+            // Keep the workaround from div-common.gradle until AGP 9.2+.
+            disable.add("WrongConstant")
+        }
+        withHostTest {
             isIncludeAndroidResources = true
-            all {
-                it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
-            }
+        }
+    }
+
+    sourceSets {
+        androidMain.dependencies {
+            api(project(":core"))
+            api(project(":div-data"))
+
+            implementation(project(":coil-core"))
+            implementation(project(":div-core"))
+            implementation(project(":div-evaluable"))
+            implementation(project(":div-storage"))
+            implementation(project(":render-common"))
+
+            implementation(project.dependencies.platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.compose.foundation.layout)
+            implementation(libs.androidx.compose.material3)
+            implementation(libs.androidx.core)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network)
+        }
+
+        getByName("androidHostTest").dependencies {
+            implementation(project(":div-histogram"))
+            implementation(project(":fonts"))
+            implementation(project(":test-utils"))
+
+            implementation(libs.androidx.test.ext.junit)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.mockito.kotlin)
+            implementation(libs.robolectric)
+            implementation(libs.androidx.compose.ui.test.junit4)
+            implementation(libs.androidx.compose.ui.test.manifest)
+            implementation(libs.json)
+            implementation(libs.kotlin.test)
+            implementation(libs.roborazzi)
+            implementation(libs.roborazzi.compose)
+            implementation(libs.roborazzi.junit.rule)
+            implementation(libs.webp.imageio)
+
+            // SVG is optional for Compose consumers; enable it here to test SVG rendering.
+            implementation(libs.coil.svg)
         }
     }
 }
 
+extensions.configure<KotlinMultiplatformAndroidComponentsExtension> {
+    onVariants { variant ->
+        variant.hostTests.values.forEach { test ->
+            test.sources.assets?.addStaticSourceDirectory("../test-utils/src/main/res/font")
+        }
+    }
+}
+
+// Android KMP has one variant: preview tooling must not enter published dependencies.
 dependencies {
-    api(project(":core"))
-    api(project(":div-data"))
+    add("androidRuntimeClasspath", libs.androidx.compose.ui.tooling)
+}
 
-    implementation(project(":coil-core"))
-    implementation(project(":div-core"))
-    implementation(project(":div-evaluable"))
-    implementation(project(":div-storage"))
-    implementation(project(":render-common"))
+val screenshotRun = providers.gradleProperty("roborazzi-tests").isPresent
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.core)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network)
-
-    debugImplementation(libs.androidx.compose.ui.tooling)
-
-    testImplementation(project(":div-histogram"))
-    testImplementation(project(":fonts"))
-    testImplementation(project(":test-utils"))
-
-    testImplementation(libs.androidx.compose.ui.test.junit4)
-    testImplementation(libs.androidx.compose.ui.test.manifest)
-    testImplementation(libs.json)
-    testImplementation(libs.kotlin.test)
-    testImplementation(libs.roborazzi)
-    testImplementation(libs.roborazzi.compose)
-    testImplementation(libs.roborazzi.junit.rule)
-    testImplementation(libs.webp.imageio)
-
-    // SVG is optional for Compose consumers; enable it here to test SVG rendering.
-    testImplementation(libs.coil.svg)
+tasks.withType<Test>().configureEach {
+    inputs.dir(rootProject.file("../../test_data"))
+        .withPropertyName("divkitTestData")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.dir(rootProject.file("../../expression-api"))
+        .withPropertyName("divkitExpressionApi")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    maxHeapSize = "4g"
+    testLogging {
+        events("passed", "skipped", "failed", "standardOut", "standardError")
+    }
+    systemProperty("robolectric.pixelCopyRenderMode", "hardware")
+    useJUnit {
+        if (screenshotRun) {
+            includeCategories("com.yandex.div.test.ScreenshotTests")
+        } else {
+            excludeCategories("com.yandex.div.test.ScreenshotTests")
+        }
+    }
+    failOnNoDiscoveredTests = screenshotRun
 }
 
 // Measurement entry point for ai/scripts/code_complexity: the same engine with
@@ -69,14 +115,14 @@ dependencies {
 // complexity and length. The scorer points it at an export of the revision it measures
 // and reads the report back, one invocation per side.
 val metricsInput = providers.gradleProperty("detektMetricsInput")
-    .getOrElse("src/main/kotlin")
+    .getOrElse("src/androidMain/kotlin")
 val metricsReport = providers.gradleProperty("detektMetricsReport")
     .getOrElse("build/reports/detekt/metrics.xml")
 
 tasks.register<Detekt>("detektMetrics") {
     group = "verification"
     description = "Reports cognitive complexity and length for every function in " +
-        "-PdetektMetricsInput (default src/main/kotlin)."
+        "-PdetektMetricsInput (default src/androidMain/kotlin)."
     buildUponDefaultConfig = true
     config.setFrom(rootProject.file("config/detekt/detekt-metrics.yml"))
     // A baseline would hide exactly the functions this task exists to measure.

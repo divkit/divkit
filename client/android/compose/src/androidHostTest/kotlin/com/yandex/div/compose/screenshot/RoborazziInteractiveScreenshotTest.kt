@@ -41,12 +41,12 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Verify interactive screenshots:
  * ```
- * ./gradlew :compose:verifyRoborazziDebug -Proborazzi-tests --tests "*.RoborazziInteractiveScreenshotTest"
+ * ./gradlew :compose:verifyRoborazziAndroidHostTest -Proborazzi-tests --tests "*.RoborazziInteractiveScreenshotTest"
  * ```
  *
  * Record golden screenshots:
  * ```
- * ./gradlew :compose:verifyAndRecordRoborazziDebug -Proborazzi-tests --tests "*.RoborazziInteractiveScreenshotTest"
+ * ./gradlew :compose:verifyAndRecordRoborazziAndroidHostTest -Proborazzi-tests --tests "*.RoborazziInteractiveScreenshotTest"
  * ```
  *
  * Use `-PdivkitTestFilter=div-action/base.json` to select a single scenario.

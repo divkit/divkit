@@ -47,6 +47,7 @@ androidx-appcompat = "1.6.1"
 androidx-benchmark = "1.5.0"
 androidx-collection = "1.6.0"
 androidx-compose-bom = "2026.06.01"
+compose-multiplatform = "1.10.0"
 androidx-constraintlayout = "2.2.2"
 androidx-core = "1.16.0"
 androidx-espresso = "3.7.0"
@@ -203,6 +204,7 @@ zxing-core = { module = "com.google.zxing:core", version = "3.5.4" }
 zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = "4.3.0" }
 
 [plugins]
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 allure-adapter-base = { id = "io.qameta.allure-adapter-base", version.ref = "allure-plugin" }
 allure-report = { id = "io.qameta.allure-report", version.ref = "allure-plugin" }
 android-application = { id = "com.android.application", version.ref = "agp" }

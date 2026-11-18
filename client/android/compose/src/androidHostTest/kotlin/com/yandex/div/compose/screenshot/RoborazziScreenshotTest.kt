@@ -18,12 +18,12 @@ import kotlin.test.Test
  *
  * Verify against goldens:
  * ```
- * ./gradlew :compose:verifyRoborazziDebug -Proborazzi-tests --tests "*.RoborazziScreenshotTest"
+ * ./gradlew :compose:verifyRoborazziAndroidHostTest -Proborazzi-tests --tests "*.RoborazziScreenshotTest"
  * ```
  *
  * Record golden screenshots:
  * ```
- * ./gradlew :compose:verifyAndRecordRoborazziDebug -Proborazzi-tests --tests "*.RoborazziScreenshotTest"
+ * ./gradlew :compose:verifyAndRecordRoborazziAndroidHostTest -Proborazzi-tests --tests "*.RoborazziScreenshotTest"
  * ```
  *
  * Use `-PdivkitTestFilter=div-text/font_weight.json` to select a single scenario.
