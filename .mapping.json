@@ -1171,6 +1171,7 @@
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/DivInputState.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/DivInputState.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/DivInputValidator.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/DivInputValidator.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/DivInputView.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/DivInputView.kt",
+  "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/EnterInputInterceptor.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/EnterInputInterceptor.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/InputConfig.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/InputConfig.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/InputKeyboard.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/InputKeyboard.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/MaxLengthInputTransformation.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/views/input/MaxLengthInputTransformation.kt",
