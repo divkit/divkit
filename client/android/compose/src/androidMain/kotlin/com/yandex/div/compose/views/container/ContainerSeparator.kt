@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Shape
@@ -41,8 +40,7 @@ internal fun ContainerSeparator(
                         reportError("Separator color not defined")
                         return
                     }
-                    val radius = rect.cornerRadius.observedValue()
-                    val outline = remember(radius) { RoundedCornerShape(radius) }
+                    val outline = RoundedCornerShape(rect.cornerRadius.observedValue())
                     Spacer(
                         modifier = modifier
                             .width(rect.itemWidth.observedValue())
@@ -96,11 +94,12 @@ private fun Modifier.circleSeparatorStroke(stroke: DivStroke?): Modifier {
 }
 
 /**
- * Shape drawables use solid strokes regardless of [DivStroke.style], matching View, iOS and web.
+ * Shape drawables use solid strokes regardless of [DivStroke.style].
  */
 @Composable
 internal fun DivStroke.observeSeparatorStroke(): BorderStroke {
-    val color = color.observedColorValue()
-    val width = width.observedDpValue(unit)
-    return remember(color, width) { BorderStroke(width, color) }
+    return BorderStroke(
+        width = width.observedDpValue(unit),
+        color = color.observedColorValue(),
+    )
 }

@@ -183,9 +183,7 @@ private fun List<Cell>.rememberSpannedTracks(
         val weight = if (size is DivSize.MatchParent) cell.observedWeight(size) else 0f
         val lineIndex = if (isColumn) cell.columnIndex else cell.rowIndex
         val span = if (isColumn) cell.columnSpan else cell.rowSpan
-        remember(lineIndex, contentSize, marginSize, span, weight) {
-            GridItemMeasurement(lineIndex, contentSize, contentSize + marginSize, span, weight)
-        }
+        GridItemMeasurement(lineIndex, contentSize, contentSize + marginSize, span, weight)
     }
     return remember(lineCount, measurements, isWrapContent) {
         SpannedAxisTracks(lineCount, measurements, isWrapContent)

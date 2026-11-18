@@ -30,11 +30,10 @@ internal data class ObservedTextMetrics(
 
 @Composable
 internal fun DivText.observeTextMetrics(): ObservedTextMetrics {
-    val fontSizeUnit = fontSizeUnit.observedValue()
-    val lineHeight = lineHeight?.observedIntValue()?.takeIf { it > 0 }
-    return remember(fontSizeUnit, lineHeight) {
-        ObservedTextMetrics(fontSizeUnit, lineHeight)
-    }
+    return ObservedTextMetrics(
+        fontSizeUnit = fontSizeUnit.observedValue(),
+        lineHeight = lineHeight?.observedIntValue()?.takeIf { it > 0 },
+    )
 }
 
 @Composable

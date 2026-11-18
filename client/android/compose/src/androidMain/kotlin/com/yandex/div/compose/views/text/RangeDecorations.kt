@@ -133,27 +133,21 @@ internal fun DivText.Range.observeDecoration(
     if (background == null && border?.stroke == null && mask == null) return null
 
     val followsGlyphs = fontSize != null && mask == null
-    return remember(start, end, background, border, mask, followsGlyphs) {
-        TextRangeDecoration(start, end, background, border, mask, followsGlyphs)
-    }
+    return TextRangeDecoration(start, end, background, border, mask, followsGlyphs)
 }
 
 @Composable
 private fun DivTextRangeBackground.observeBackground(component: DivLocalComponent): RangeBackground {
     return when (this) {
-        is DivTextRangeBackground.Solid -> {
-            val color = value.color.observedValue(component).toColor()
-            remember(color) { RangeBackground.Solid(color) }
-        }
+        is DivTextRangeBackground.Solid ->
+            RangeBackground.Solid(value.color.observedValue(component).toColor())
 
-        is DivTextRangeBackground.Cloud -> {
-            val color = value.color.observedValue(component).toColor()
-            val cornerRadiusPx = value.cornerRadius.observedPxValue(DivSizeUnit.DP, component)
-            val paddingsPx = value.paddings.observePaddings(component)
-            remember(color, cornerRadiusPx, paddingsPx) {
-                RangeBackground.Cloud(color, cornerRadiusPx, paddingsPx)
-            }
-        }
+        is DivTextRangeBackground.Cloud ->
+            RangeBackground.Cloud(
+                color = value.color.observedValue(component).toColor(),
+                cornerRadiusPx = value.cornerRadius.observedPxValue(DivSizeUnit.DP, component),
+                paddingsPx = value.paddings.observePaddings(component),
+            )
     }
 }
 
@@ -163,9 +157,9 @@ private fun DivTextRangeBorder.observeBorder(component: DivLocalComponent): Rang
     val stroke = stroke?.let { stroke ->
         val color = stroke.color.observedValue(component).toColor()
         val widthPx = stroke.width.observedPxValue(stroke.unit, component)
-        remember(color, widthPx) { RangeStroke(color, widthPx) }
+        RangeStroke(color, widthPx)
     }
-    return remember(cornerRadiusPx, stroke) { RangeBorder(cornerRadiusPx, stroke) }
+    return RangeBorder(cornerRadiusPx, stroke)
 }
 
 @Composable
@@ -173,20 +167,18 @@ private fun DivTextRangeMask.observeMask(component: DivLocalComponent): RangeMas
     return when (this) {
         is DivTextRangeMask.Solid -> {
             if (!value.isEnabled.observedValue(component)) return null
-            val color = value.color.observedValue(component).toColor()
-            remember(color) { RangeMask.Solid(color) }
+            RangeMask.Solid(value.color.observedValue(component).toColor())
         }
 
         is DivTextRangeMask.Particles -> {
             if (!value.isEnabled.observedValue(component)) return null
-            val color = value.color.observedValue(component).toColor()
-            val densityValue = value.density.observedValue(component).toFloat()
-            val isAnimated = value.isAnimated.observedValue(component)
             val particleSize = value.particleSize
-            val particleSizePx = particleSize.value.observedPxValue(particleSize.unit, component)
-            remember(color, densityValue, isAnimated, particleSizePx) {
-                RangeMask.Particles(color, densityValue, isAnimated, particleSizePx)
-            }
+            RangeMask.Particles(
+                color = value.color.observedValue(component).toColor(),
+                density = value.density.observedValue(component).toFloat(),
+                isAnimated = value.isAnimated.observedValue(component),
+                particleSizePx = particleSize.value.observedPxValue(particleSize.unit, component)
+            )
         }
     }
 }
@@ -214,9 +206,7 @@ private fun DivEdgeInsets?.observePaddings(component: DivLocalComponent): RangeP
         leftPx = left.observedPxValue(unit, component)
         rightPx = right.observedPxValue(unit, component)
     }
-    return remember(leftPx, topPx, rightPx, bottomPx) {
-        RangePaddings(leftPx, topPx, rightPx, bottomPx)
-    }
+    return RangePaddings(leftPx, topPx, rightPx, bottomPx)
 }
 
 @Composable

@@ -97,10 +97,9 @@ private fun DivText.Range.observeFontFamily(
 
 @Composable
 internal fun rememberMaskedSpanStyle(): SpanStyle {
-    val brush = remember { Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)) }
-    return remember(brush) {
+    return remember {
         SpanStyle(
-            brush = brush,
+            brush = Brush.verticalGradient(listOf(Color.Transparent, Color.Transparent)),
             textDecoration = TextDecoration.None,
             shadow = Shadow.None,
         )
