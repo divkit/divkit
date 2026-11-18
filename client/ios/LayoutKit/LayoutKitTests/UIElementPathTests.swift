@@ -1,3 +1,4 @@
+import Foundation
 import LayoutKit
 import XCTest
 
@@ -20,6 +21,17 @@ final class UIElementPathTests: XCTestCase {
   func test_root_SingleElement() {
     let path = UIElementPath("root")
     XCTAssertEqual("root", path.root)
+  }
+
+  func test_codable_PreservesPathRepresentation() throws {
+    let data = Data(#"{"address":{"next":{"value":"root"},"value":"element"}}"#.utf8)
+    let path = try JSONDecoder().decode(UIElementPath.self, from: data)
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = [.sortedKeys]
+
+    XCTAssertEqual(path.root, "root")
+    XCTAssertEqual(path, UIElementPath("root") + "element")
+    XCTAssertEqual(try encoder.encode(path), data)
   }
 
   func test_parent() {

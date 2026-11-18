@@ -41,8 +41,8 @@ public final class DivVariablesStorage {
     .getInternalPropertiesStorage(token: AccessToken())
 
   private let globalStorage: DivVariableStorage
-  private var localStorages: [UIElementPath: DivVariableStorage] = [:]
-  private var propertiesStorages: [UIElementPath: DivPropertiesStorage] = [:]
+  private var localStorages: [DivCardID: [UIElementPath: DivVariableStorage]] = [:]
+  private var propertiesStorages: [DivCardID: [UIElementPath: DivPropertiesStorage]] = [:]
   private let lock = AllocatedUnfairLock()
 
   private let changeEventsPipe = SignalPipe<ChangeEvent>()
@@ -93,7 +93,7 @@ public final class DivVariablesStorage {
 
   public func hasValue(cardId: DivCardID, name: DivVariableName) -> Bool {
     let localStorage = lock.withLock {
-      localStorages[cardId.path]
+      localStorages[cardId]?[cardId.path]
     }
     return localStorage?.hasValue(name) ?? globalStorage.hasValue(name)
   }
@@ -107,11 +107,11 @@ public final class DivVariablesStorage {
   ) {
     let localStorage = lock.withLock {
       let path = cardId.path
-      if let localStorage = localStorages[path] {
+      if let localStorage = localStorages[cardId]?[path] {
         return localStorage
       }
       let localStorage = DivVariableStorage(outerStorage: globalStorage, initialPath: path)
-      localStorages[path] = localStorage
+      localStorages[cardId, default: [:]][path] = localStorage
       return localStorage
     }
 
@@ -137,7 +137,7 @@ public final class DivVariablesStorage {
     triggerUpdate: Bool = true
   ) {
     let oldVariables = lock.withLock {
-      localStorages[cardId.path]?.values ?? [:]
+      localStorages[cardId]?[cardId.path]?.values ?? [:]
     }
     let resultVariables = replaceExisting ?
       oldVariables + newVariables :
@@ -165,7 +165,7 @@ public final class DivVariablesStorage {
   @_spi(Legacy)
   public func makeVariables(for cardId: DivCardID) -> DivVariables {
     lock.withLock {
-      localStorages[cardId.path]?.allValues ?? globalStorage.allValues
+      localStorages[cardId]?[cardId.path]?.allValues ?? globalStorage.allValues
     }
   }
 
@@ -179,12 +179,8 @@ public final class DivVariablesStorage {
 
   public func reset(cardId: DivCardID) {
     lock.withLock {
-      localStorages.keys
-        .filter { $0.root == cardId.rawValue }
-        .forEach { localStorages[$0] = nil }
-      propertiesStorages.keys
-        .filter { $0.root == cardId.rawValue }
-        .forEach { propertiesStorages[$0] = nil }
+      localStorages[cardId] = nil
+      propertiesStorages[cardId] = nil
     }
   }
 
@@ -198,11 +194,11 @@ public final class DivVariablesStorage {
   ) {
     let propertiesStorage = lock.withLock {
       let path = cardId.path
-      if let propertiesStorage = propertiesStorages[path] {
+      if let propertiesStorage = propertiesStorages[cardId]?[path] {
         return propertiesStorage
       }
       let propertiesStorage = DivPropertiesStorage(outerStorage: nil, initialPath: path)
-      propertiesStorages[path] = propertiesStorage
+      propertiesStorages[cardId, default: [:]][path] = propertiesStorage
       return propertiesStorage
     }
 
@@ -215,7 +211,7 @@ public final class DivVariablesStorage {
     replaceExisting: Bool = true
   ) {
     let oldProperties = lock.withLock {
-      propertiesStorages[cardId.path]?.values ?? [:]
+      propertiesStorages[cardId]?[cardId.path]?.values ?? [:]
     }
     let resultProperties = replaceExisting ?
       oldProperties + newProperties :
@@ -225,9 +221,9 @@ public final class DivVariablesStorage {
 
   func getOnlyElementVariables(cardId: DivCardID, elementId: String) -> DivVariables? {
     lock.withLock {
-      let storages = localStorages.filter {
-        $0.key.leaf == elementId && $0.key.cardId == cardId
-      }.map(\.value)
+      let storages = localStorages[cardId]?.filter {
+        $0.key.leaf == elementId
+      }.map(\.value) ?? []
 
       guard let storage = storages.first else {
         DivKitLogger.error("Element with id \(elementId) not found")
@@ -254,7 +250,7 @@ public final class DivVariablesStorage {
 
   func getOnlyElementVariables(path: UIElementPath) -> DivVariables? {
     lock.withLock {
-      guard let storage = localStorages[path] else {
+      guard let storage = localStorages[path.cardId]?[path] else {
         return [:]
       }
 
@@ -294,34 +290,38 @@ public final class DivVariablesStorage {
     properties: DivProperties = [:]
   ) {
     lock.withLock {
-      if localStorages[path] == nil {
+      let cardId = path.cardId
+      if localStorages[cardId]?[path] == nil {
         let nearestStorage = getNearestStorage(path.parent)
         if variables.isEmpty {
           // optimization that allows to access the local storage for one operation
-          localStorages[path] = nearestStorage
+          localStorages[cardId, default: [:]][path] = nearestStorage
         } else {
           let localStorage = DivVariableStorage(outerStorage: nearestStorage, initialPath: path)
           localStorage.replaceAll(variables, notifyObservers: false)
-          localStorages[path] = localStorage
+          localStorages[cardId, default: [:]][path] = localStorage
         }
       }
-      if propertiesStorages[path] == nil {
+      if propertiesStorages[cardId]?[path] == nil {
         let nearestStorage = getNearestPropertiesStorage(path.parent)
-        if properties.isEmpty {
-          propertiesStorages[path] = nearestStorage
-        } else {
+        if !properties.isEmpty {
           let localStorage = DivPropertiesStorage(outerStorage: nearestStorage, initialPath: path)
           localStorage.replaceAll(properties)
-          propertiesStorages[path] = localStorage
+          propertiesStorages[cardId, default: [:]][path] = localStorage
+        } else if let nearestStorage {
+          propertiesStorages[cardId, default: [:]][path] = nearestStorage
         }
       }
     }
   }
 
   func getNearestStorage(_ path: UIElementPath?) -> DivVariableStorage {
+    guard let path, let cardStorages = localStorages[path.cardId] else {
+      return globalStorage
+    }
     var currentPath: UIElementPath? = path
     while let path = currentPath {
-      let localStorage = localStorages[path]
+      let localStorage = cardStorages[path]
       if let localStorage {
         return localStorage
       }
@@ -331,9 +331,12 @@ public final class DivVariablesStorage {
   }
 
   func getNearestPropertiesStorage(_ path: UIElementPath?) -> DivPropertiesStorage? {
+    guard let path, let cardStorages = propertiesStorages[path.cardId] else {
+      return nil
+    }
     var currentPath: UIElementPath? = path
     while let path = currentPath {
-      let localStorage = propertiesStorages[path]
+      let localStorage = cardStorages[path]
       if let localStorage {
         return localStorage
       }
@@ -343,9 +346,9 @@ public final class DivVariablesStorage {
   }
 
   private func getOnlyElementProperties(cardId: DivCardID, elementId: String) -> DivProperties? {
-    let storages = propertiesStorages.filter {
-      $0.key.leaf == elementId && $0.key.cardId == cardId
-    }.map(\.value)
+    let storages = propertiesStorages[cardId]?.filter {
+      $0.key.leaf == elementId
+    }.map(\.value) ?? []
 
     guard let storage = storages.first else {
       DivKitLogger.error("Element with id \(elementId) not found")
@@ -364,7 +367,7 @@ public final class DivVariablesStorage {
   }
 
   private func getOnlyElementProperties(path: UIElementPath) -> DivProperties? {
-    guard let storage = propertiesStorages[path] else {
+    guard let storage = propertiesStorages[path.cardId]?[path] else {
       return nil
     }
 

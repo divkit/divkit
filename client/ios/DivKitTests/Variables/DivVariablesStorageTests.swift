@@ -455,6 +455,63 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertNil(storage.getVariableValue(path: cardId.path + "element_id", name: "string_var"))
   }
 
+  func test_reset_RemovesNestedStorageAndAliasesOnlyForTheTargetCard() {
+    let otherCardId: DivCardID = "other_card"
+    let elementPath = cardId.path + "element"
+    let otherElementPath = otherCardId.path + "element"
+    let property = DivProperty(
+      expressionResolver: ExpressionResolver(
+        path: elementPath,
+        variablesStorage: DivVariablesStorage(),
+        functionsStorage: nil,
+        persistentValuesStorage: DivPersistentValuesStorage(),
+        reporter: DefaultDivReporter()
+      ),
+      actionHandler: nil,
+      getValue: "property value",
+      newValueVariableName: "new_value",
+      valueType: .string,
+      actions: []
+    )
+
+    for path in [elementPath, otherElementPath] {
+      storage.initializeIfNeeded(
+        path: path,
+        variables: variables,
+        properties: ["property": property]
+      )
+      storage.initializeIfNeeded(path: path + "child", variables: [:])
+    }
+    let propertyBeforeReset: String? = storage.getVariableValue(
+      path: elementPath + "child",
+      name: "property"
+    )
+    XCTAssertEqual(propertyBeforeReset, "property value")
+
+    storage.reset(cardId: cardId)
+
+    let clearedVariable: String? = storage.getVariableValue(
+      path: elementPath + "child",
+      name: "string_var"
+    )
+    let clearedProperty: String? = storage.getVariableValue(
+      path: elementPath + "child",
+      name: "property"
+    )
+    let otherVariable: String? = storage.getVariableValue(
+      path: otherElementPath + "child",
+      name: "string_var"
+    )
+    let otherProperty: String? = storage.getVariableValue(
+      path: otherElementPath + "child",
+      name: "property"
+    )
+    XCTAssertNil(clearedVariable)
+    XCTAssertNil(clearedProperty)
+    XCTAssertEqual(otherVariable, "value")
+    XCTAssertEqual(otherProperty, "property value")
+  }
+
   func test_getOnlyElementVariables_nonEmptyElementVariables() {
     let cardVariables: DivVariables = [
       "some_card_var": .string("value"),

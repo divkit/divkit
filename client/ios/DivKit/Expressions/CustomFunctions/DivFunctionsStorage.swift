@@ -5,7 +5,7 @@ import VGSL
 public final class DivFunctionsStorage {
   let outerStorage: DivFunctionsStorage?
 
-  private var storages: [UIElementPath: DivFunctionsStorage] = [:]
+  private var storages: [DivCardID: [UIElementPath: DivFunctionsStorage]] = [:]
   private var functionNamesByCard: [DivCardID: Set<String>] = [:]
 
   private var functionSignatures: Set<CustomFunction.Signature> = []
@@ -34,16 +34,18 @@ public final class DivFunctionsStorage {
 
   func setIfNeeded(path: UIElementPath, functions: [DivFunction]) {
     lock.withLock {
-      if storages[path] != nil {
+      let cardId = path.cardId
+      if storages[cardId]?[path] != nil {
         return
       }
 
       let nearestStorage = getNearestStorage(path.parent)
       if functions.isEmpty {
-        storages[path] = nearestStorage
+        if let nearestStorage {
+          storages[cardId, default: [:]][path] = nearestStorage
+        }
       } else {
         let storage = DivFunctionsStorage(outerStorage: nearestStorage)
-        let cardId = path.cardId
         let expressionErrorTracker = reporter.asExpressionErrorTracker(cardId: cardId)
         for function in functions {
           functionNamesByCard[cardId, default: []].insert(function.name)
@@ -52,7 +54,7 @@ public final class DivFunctionsStorage {
             reporter: expressionErrorTracker
           )
         }
-        storages[path] = storage
+        storages[cardId, default: [:]][path] = storage
       }
     }
   }
@@ -90,9 +92,7 @@ public final class DivFunctionsStorage {
 
   func reset(cardId: DivCardID) {
     lock.withLock {
-      storages.keys
-        .filter { $0.root == cardId.rawValue }
-        .forEach { storages[$0] = nil }
+      storages[cardId] = nil
       functionNamesByCard[cardId] = nil
     }
   }
@@ -103,16 +103,26 @@ public final class DivFunctionsStorage {
   /// existing paths and would never add their names back.
   func reset(viewId: DivViewId) {
     lock.withLock {
-      storages.keys
-        .filter { $0.viewId == viewId }
-        .forEach { storages[$0] = nil }
+      let cardId = viewId.cardId
+      guard let paths = storages[cardId]?.keys.filter({ $0.viewId == viewId }) else {
+        return
+      }
+      for path in paths {
+        storages[cardId]?[path] = nil
+      }
+      if storages[cardId]?.isEmpty == true {
+        storages[cardId] = nil
+      }
     }
   }
 
   private func getNearestStorage(_ path: UIElementPath?) -> DivFunctionsStorage? {
+    guard let path, let cardStorages = storages[path.cardId] else {
+      return outerStorage
+    }
     var currentPath: UIElementPath? = path
     while let path = currentPath {
-      if let storage = storages[path] {
+      if let storage = cardStorages[path] {
         return storage
       }
       currentPath = path.parent

@@ -112,8 +112,7 @@ private final class ListNode: Codable {
 
   let value: String
   let next: ListNode?
-
-  private var _root: String?
+  let root: String
 
   private lazy var cachedHash: Int = {
     var hasher = Hasher()
@@ -123,21 +122,18 @@ private final class ListNode: Codable {
     return hasher.finalize()
   }()
 
-  var root: String {
-    if let _root {
-      return _root
-    }
-    guard let next else {
-      return value
-    }
-    let result = next.root
-    _root = result
-    return result
-  }
-
   init(value: String, next: ListNode? = nil) {
     self.value = value
     self.next = next
+    root = next?.root ?? value
+  }
+
+  convenience init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    try self.init(
+      value: container.decode(String.self, forKey: .value),
+      next: container.decodeIfPresent(ListNode.self, forKey: .next)
+    )
   }
 }
 
