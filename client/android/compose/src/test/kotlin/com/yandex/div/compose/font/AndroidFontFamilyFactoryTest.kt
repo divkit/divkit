@@ -25,10 +25,10 @@ import kotlin.test.assertSame
 @OptIn(ExperimentalTextApi::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(AndroidJUnit4::class)
-class AndroidDivFontFamilyFactoryTest {
+class AndroidFontFamilyFactoryTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
-    private val factory = AndroidDivFontFamilyFactory(context.assets, TestReporter())
+    private val factory = AndroidFontFamilyFactory(context.assets, TestReporter())
     private val variations = FontVariation.Settings(
         FontVariation.weight(650),
         FontVariation.width(125f),

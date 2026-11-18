@@ -1,6 +1,5 @@
 package com.yandex.div.compose.font
 
-import android.text.TextPaint
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
@@ -8,7 +7,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
@@ -28,10 +26,11 @@ internal data class LineMetrics(
 }
 
 @DivContextScope
-internal class LineMetricsCache @Inject constructor() {
+internal class LineMetricsCache @Inject constructor(
+    private val measurer: LineMetricsMeasurer,
+) {
 
-    private val cache = HashMap<Key, LineMetrics>()
-    private val paint = TextPaint()
+    private val cache = HashMap<FontMetricsParams, LineMetrics>()
 
     private var resolver: FontFamily.Resolver? = null
     private var density = 0f
@@ -46,7 +45,7 @@ internal class LineMetricsCache @Inject constructor() {
         style: TextStyle,
     ): LineMetrics {
         dropStaleEntries(fontFamilyResolver, density)
-        val key = Key(style, density)
+        val key = FontMetricsParams(style, density)
         return cache.getOrPut(key) { measure(fontFamilyResolver, density, key) }
     }
 
@@ -67,46 +66,47 @@ internal class LineMetricsCache @Inject constructor() {
     private fun measure(
         fontFamilyResolver: FontFamily.Resolver,
         density: Density,
-        key: Key,
+        key: FontMetricsParams,
     ): LineMetrics {
-        val typeface = fontFamilyResolver.resolveAsTypeface(
-            fontFamily = key.fontFamily,
-            fontWeight = key.fontWeight,
-            fontStyle = key.fontStyle,
-            fontSynthesis = key.fontSynthesis,
-        ).value
-        paint.reset()
-        paint.typeface = typeface
-        paint.textSize = key.fontSizePx
-        val metrics = paint.fontMetricsInt
+        val metrics = measurer.measure(fontFamilyResolver, key)
         return with(density) {
             LineMetrics(
-                ascent = (-metrics.ascent).toSp(),
-                descent = metrics.descent.toSp(),
-                ascentPx = -metrics.ascent,
-                descentPx = metrics.descent,
-                fontAscentPx = -paint.ascent(),
+                ascent = metrics.ascentPx.toSp(),
+                descent = metrics.descentPx.toSp(),
+                ascentPx = metrics.ascentPx,
+                descentPx = metrics.descentPx,
+                fontAscentPx = metrics.fontAscentPx,
             )
         }
     }
+}
 
-    private data class Key(
-        val fontFamily: FontFamily?,
-        val fontWeight: FontWeight,
-        val fontStyle: FontStyle,
-        val fontSynthesis: FontSynthesis,
-        val fontSizePx: Float,
-    ) {
-        constructor(style: TextStyle, density: Density) : this(
-            fontFamily = style.fontFamily,
-            fontWeight = style.fontWeight ?: FontWeight.Normal,
-            fontStyle = style.fontStyle ?: FontStyle.Normal,
-            fontSynthesis = style.fontSynthesis ?: FontSynthesis.All,
-            fontSizePx = with(density) {
-                if (style.fontSize.isSpecified) style.fontSize.toPx() else DEFAULT_FONT_SIZE.toPx()
-            },
-        )
-    }
+internal fun interface LineMetricsMeasurer {
+    fun measure(resolver: FontFamily.Resolver, params: FontMetricsParams): FontMetrics
+}
+
+internal data class FontMetrics(
+    val ascentPx: Int,
+    val descentPx: Int,
+    val fontAscentPx: Float,
+)
+
+internal data class FontMetricsParams(
+    val fontFamily: FontFamily?,
+    val fontWeight: FontWeight,
+    val fontStyle: FontStyle,
+    val fontSynthesis: FontSynthesis,
+    val fontSizePx: Float,
+) {
+    constructor(style: TextStyle, density: Density) : this(
+        fontFamily = style.fontFamily,
+        fontWeight = style.fontWeight ?: FontWeight.Normal,
+        fontStyle = style.fontStyle ?: FontStyle.Normal,
+        fontSynthesis = style.fontSynthesis ?: FontSynthesis.All,
+        fontSizePx = with(density) {
+            if (style.fontSize.isSpecified) style.fontSize.toPx() else DEFAULT_FONT_SIZE.toPx()
+        },
+    )
 }
 
 private val DEFAULT_FONT_SIZE = 14.sp

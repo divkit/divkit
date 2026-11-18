@@ -14,6 +14,9 @@ import androidx.compose.ui.unit.sp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.runner.RunWith
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,7 +29,8 @@ class LineMetricsCacheTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val fontFamilyResolver = createFontFamilyResolver(context)
     private val density = Density(density = 2f, fontScale = 1f)
-    private val cache = LineMetricsCache()
+    private val measurer = spy(AndroidLineMetricsMeasurer())
+    private val cache = LineMetricsCache(measurer)
 
     private val defaultFontFamily = FontFamily(Typeface.DEFAULT)
     private val monospaceFontFamily = FontFamily(Typeface.MONOSPACE)
@@ -49,6 +53,17 @@ class LineMetricsCacheTest {
             ),
             getOrCreate()
         )
+    }
+
+    @Test
+    fun `repeated requests do not measure the font again`() {
+        val style = textStyle()
+        cache.getOrCreate(fontFamilyResolver, density, style)
+
+        cache.getOrCreate(fontFamilyResolver, density, style)
+
+        verify(measurer).measure(fontFamilyResolver, FontMetricsParams(style, density))
+        verifyNoMoreInteractions(measurer)
     }
 
     @Test
@@ -126,21 +141,25 @@ class LineMetricsCacheTest {
     fun `changing font family resolver drops previously cached entries`() {
         getOrCreate()
         assertEquals(1, cache.size)
+        val replacement = createFontFamilyResolver(context)
 
-        getOrCreate(resolver = createFontFamilyResolver(context))
+        getOrCreate(resolver = replacement)
 
         assertEquals(1, cache.size)
+        verify(measurer).measure(replacement, FontMetricsParams(textStyle(), density))
     }
 
     @Test
     fun `each cache instance has its own storage`() {
-        val otherCache = LineMetricsCache()
+        val otherCache = LineMetricsCache(AndroidLineMetricsMeasurer())
 
         getOrCreate()
         otherCache.getOrCreate(fontFamilyResolver, density, textStyle())
 
+        otherCache.getOrCreate(fontFamilyResolver, density, textStyle(fontSize = 32f))
+
         assertEquals(1, cache.size)
-        assertEquals(1, otherCache.size)
+        assertEquals(2, otherCache.size)
     }
 
     private fun textStyle(

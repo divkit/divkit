@@ -20,7 +20,7 @@ import kotlin.test.assertTrue
 // Typeface.create with a weight needs the native font stack; the legacy Robolectric shadows do not report the created weight.
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(AndroidJUnit4::class)
-class DivFontFamilyCacheTest {
+class FontFamilyCacheTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val reporter = TestReporter()
@@ -28,8 +28,8 @@ class DivFontFamilyCacheTest {
     private val italicSource = DivFontSource.Typeface(
         Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC)
     )
-    private val factory = AndroidDivFontFamilyFactory(context.assets, reporter)
-    private val cache = DivFontFamilyCache(factory)
+    private val factory = AndroidFontFamilyFactory(context.assets, reporter)
+    private val cache = FontFamilyCache(factory)
     private val fontFamilyResolver = createFontFamilyResolver(context)
 
     @Test
@@ -92,8 +92,8 @@ class DivFontFamilyCacheTest {
     }
 
     @Test
-    fun `each DivFontFamilyCache instance has its own storage`() {
-        val otherCache = DivFontFamilyCache(factory)
+    fun `each FontFamilyCache instance has its own storage`() {
+        val otherCache = FontFamilyCache(factory)
 
         val fromCache = cache.getOrCreate(source, FontWeight.Normal, null)
         val fromOtherCache = otherCache.getOrCreate(source, FontWeight.Normal, null)

@@ -1,16 +1,19 @@
 package com.yandex.div.compose.views.slider
 
-import android.graphics.Typeface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.FontParams
-import com.yandex.div.compose.text.rememberTypeface
+import com.yandex.div.compose.text.rememberFontFamily
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
@@ -35,8 +38,8 @@ internal class SliderStyles(
     val inactiveTrack: SliderDrawable,
     val activeTickMark: SliderDrawable?,
     val inactiveTickMark: SliderDrawable?,
-    val thumbText: SliderTextStyle?,
-    val secondaryThumbText: SliderTextStyle?,
+    val thumbText: SliderTextPainter?,
+    val secondaryThumbText: SliderTextPainter?,
     val ranges: List<SliderVisualRange>,
     private val range: SliderRange
 ) {
@@ -114,10 +117,12 @@ internal class SliderStroke(
     val pathEffect: PathEffect?,
 )
 
-internal class SliderTextStyle(
+@Immutable
+internal data class SliderTextStyle(
     val fontSize: Float,
     val letterSpacing: Float,
-    val typeface: Typeface,
+    val fontFamily: FontFamily,
+    val fontWeight: FontWeight,
     val offsetX: Float,
     val offsetY: Float,
     val color: Int,
@@ -151,8 +156,9 @@ internal fun DivSlider.observeSliderStyles(
         inactiveTrack = inactiveTrack,
         activeTickMark = tickMarkActiveStyle?.observeDrawable(),
         inactiveTickMark = tickMarkInactiveStyle?.observeDrawable(),
-        thumbText = thumbTextStyle?.observeTextStyle(),
-        secondaryThumbText = if (hasSecondary) thumbSecondaryTextStyle?.observeTextStyle() else null,
+        thumbText = thumbTextStyle?.rememberTextPainter(),
+        secondaryThumbText =
+            if (hasSecondary) thumbSecondaryTextStyle?.rememberTextPainter() else null,
         ranges = ranges?.map {
             it.observeRange(
                 activeTrack,
@@ -249,20 +255,22 @@ private fun DivStroke.observeStroke(): SliderStroke {
 }
 
 @Composable
-private fun DivSlider.TextStyle.observeTextStyle(): SliderTextStyle {
+private fun DivSlider.TextStyle.rememberTextPainter(): SliderTextPainter {
     val fontParams = FontParams(
         family = fontFamily?.observedValue(),
         weight = fontWeight?.observedValue(),
         weightValue = fontWeightValue?.observedIntValue(),
         variationSettings = fontVariationSettings?.observedValue(),
     )
-    return SliderTextStyle(
+    val style = SliderTextStyle(
         fontSize = fontSize.observedPxValue(fontSizeUnit),
         letterSpacing = letterSpacing.observedFloatValue() / fontSize.observedValue()
             .coerceAtLeast(1L),
-        typeface = rememberTypeface(fontParams),
+        fontFamily = rememberFontFamily(fontParams),
+        fontWeight = fontParams.weight ?: FontWeight.Normal,
         offsetX = offset?.x?.observedPxValue() ?: 0f,
         offsetY = offset?.y?.observedPxValue() ?: 0f,
         color = textColor.observedValue()
     )
+    return LocalDivContext.current.component.sliderTextPainterFactory.rememberPainter(style)
 }

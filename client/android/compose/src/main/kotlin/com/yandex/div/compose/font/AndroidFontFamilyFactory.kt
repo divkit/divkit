@@ -13,10 +13,10 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class AndroidDivFontFamilyFactory @Inject constructor(
+internal class AndroidFontFamilyFactory @Inject constructor(
     private val assets: AssetManager,
     private val reporter: DivReporter,
-) : DivFontFamilyFactory {
+) : FontFamilyFactory {
 
     @OptIn(ExperimentalTextApi::class)
     override fun create(

@@ -1,14 +1,11 @@
 package com.yandex.div.compose.views.slider
 
-import android.graphics.Paint
-import android.graphics.Rect
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.nativeCanvas
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -47,7 +44,7 @@ internal fun DrawScope.drawSlider(state: SliderState, styles: SliderStyles, isRt
 private fun DrawScope.drawThumb(
     value: Float,
     style: SliderDrawable,
-    textStyle: SliderTextStyle?,
+    textPainter: SliderTextPainter?,
     range: SliderRange,
     trackLength: Float,
     trackStart: Float,
@@ -55,9 +52,9 @@ private fun DrawScope.drawThumb(
 ) {
     val centerX = value.position(range, trackLength, trackStart, isRtl)
     drawSliderDrawable(style, centerX)
-    textStyle?.let {
+    textPainter?.let {
         val text = value.coerceIn(range.minValue, range.maxValue).roundToInt().toString()
-        drawThumbText(text, it, centerX)
+        it.draw(this, text, centerX)
     }
 }
 
@@ -142,18 +139,3 @@ private fun DrawScope.drawSliderDrawable(drawable: SliderDrawable, start: Float,
 private fun Float.shrinkBy(size: Float, strokeWidth: Float): Float =
     this - if (this >= size / 2f) strokeWidth / 2f else 0f
 
-private fun DrawScope.drawThumbText(text: String, style: SliderTextStyle, centerX: Float) {
-    val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = style.fontSize
-        letterSpacing = style.letterSpacing
-        color = style.color
-        typeface = style.typeface
-    }
-    val bounds = Rect().also { paint.getTextBounds(text, 0, text.length, it) }
-    drawContext.canvas.nativeCanvas.drawText(
-        text,
-        centerX - paint.measureText(text) / 2f + style.offsetX,
-        size.height / 2f + bounds.height() / 2f + style.offsetY,
-        paint,
-    )
-}

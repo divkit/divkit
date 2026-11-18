@@ -14,8 +14,8 @@ import dev.zacsweers.metro.Inject
  * confined to the main thread, so a plain [HashMap] is sufficient.
  */
 @DivContextScope
-internal class DivFontFamilyCache @Inject constructor(
-    private val factory: DivFontFamilyFactory,
+internal class FontFamilyCache @Inject constructor(
+    private val factory: FontFamilyFactory,
 ) {
 
     private val cache = HashMap<Key, FontFamily>()

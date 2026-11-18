@@ -3,9 +3,10 @@ package com.yandex.div.compose.font
 import androidx.annotation.FontRes
 
 /**
- * Describes the source of a font supplied by [DivFontSourceProvider]. The Compose
- * rendering layer constructs the actual [androidx.compose.ui.text.font.Font] from
- * this descriptor and applies weight / variation settings on its side.
+ * Platform-specific font source supplied by [DivFontSourceProvider]. Shared font
+ * selection and caching treat it as an opaque descriptor. The platform font factory
+ * constructs the [androidx.compose.ui.text.font.Font] and applies weight / variation
+ * settings.
  */
 sealed class DivFontSource {
 

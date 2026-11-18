@@ -2,8 +2,10 @@ package com.yandex.div.compose.text
 
 import android.graphics.Typeface
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
@@ -26,11 +28,11 @@ class FontFamilyTest {
     )
 
     @Test
-    fun `remembered typeface follows a font family change`() {
+    fun `remembered FontFamily follows a font family name change`() {
         val fontFamily = mutableStateOf("serif")
         var typeface: Typeface? = null
         rule.setContentWithDivContext(configuration) {
-            typeface = rememberTypeface(
+            val family = rememberFontFamily(
                 FontParams(
                     family = fontFamily.value,
                     weight = null,
@@ -38,6 +40,7 @@ class FontFamilyTest {
                     variationSettings = null,
                 )
             )
+            typeface = LocalFontFamilyResolver.current.resolveAsTypeface(family).value
         }
         val serifTypeface = typeface
 

@@ -2,10 +2,14 @@ package com.yandex.div.compose.di
 
 import android.content.Context
 import android.content.res.AssetManager
-import com.yandex.div.compose.font.AndroidDivFontFamilyFactory
-import com.yandex.div.compose.font.DivFontFamilyFactory
+import com.yandex.div.compose.font.AndroidFontFamilyFactory
+import com.yandex.div.compose.font.AndroidLineMetricsMeasurer
+import com.yandex.div.compose.font.FontFamilyFactory
+import com.yandex.div.compose.font.LineMetricsMeasurer
 import com.yandex.div.compose.images.AndroidImageLoaderConfiguration
 import com.yandex.div.compose.images.PlatformImageLoaderConfiguration
+import com.yandex.div.compose.views.slider.AndroidSliderTextPainterFactory
+import com.yandex.div.compose.views.slider.SliderTextPainterFactory
 import com.yandex.div.render.common.animation.SystemAnimationConfiguration
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
@@ -17,7 +21,15 @@ import kotlin.math.max
 internal interface DivContextPlatformModule {
 
     @Binds
-    fun bindFontFamilyFactory(impl: AndroidDivFontFamilyFactory): DivFontFamilyFactory
+    fun bindFontFamilyFactory(impl: AndroidFontFamilyFactory): FontFamilyFactory
+
+    @Binds
+    fun bindLineMetricsMeasurer(impl: AndroidLineMetricsMeasurer): LineMetricsMeasurer
+
+    @Binds
+    fun bindSliderTextPainterFactory(
+        impl: AndroidSliderTextPainterFactory
+    ): SliderTextPainterFactory
 
     @Binds
     fun bindImageLoaderConfiguration(
