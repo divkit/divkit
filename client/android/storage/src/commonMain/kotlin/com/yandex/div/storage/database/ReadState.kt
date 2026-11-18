@@ -18,10 +18,8 @@ internal class ReadState(
         }
 
     override fun close() {
-        val cursor = _cursor
-        if (cursor != null && !cursor.isClosed) {
-            cursor.close()
+        AutoCloseable(onCloseState).use {
+            _cursor?.takeUnless { it.isClosed }?.close()
         }
-        onCloseState()
     }
 }

@@ -5,8 +5,10 @@ import com.yandex.div.storage.StorageCodec
 import com.yandex.div.storage.internal.RawDataAndMetadata
 import com.yandex.div.storage.internal.rawjson.RawJson
 import com.yandex.div.storage.templates.Template
+import com.yandex.div.storage.util.SQL_BIND_LIMIT
 import com.yandex.div.storage.util.bindNullableBlob
 import com.yandex.div.storage.util.getColumnIndexOrThrow
+import com.yandex.div.storage.util.sqlPlaceholders
 
 /**
  * Repository of statements for [com.yandex.div.storage.StorageStatementExecutor.execute].
@@ -126,36 +128,20 @@ internal class StorageStatements<T : Any>(private val codec: StorageCodec<T>) {
         }
     }
 
-    fun deleteCardsAndTemplates(elementIds: Set<String>) = object : StorageStatement {
+    fun deleteCards(elementIds: Set<String>) = deleteByIds(DELETE_CARDS_IDS, elementIds)
+
+    fun deleteRawJsons(elementIds: Set<String>) = deleteByIds(DELETE_RAW_JSON_BY_IDS, elementIds)
+
+    private fun deleteByIds(query: String, elementIds: Set<String>) = object : StorageStatement {
         override fun execute(compiler: SqlCompiler) {
-            val deleteCardsStatement = compiler.compileStatement(
-                    "$DELETE_CARDS_IDS ${elementIds.asSqlList()}")
-            val deleteTemplateUsagesStatement = compiler.compileStatement(
-                    "$DELETE_TEMPLATE_USAGES_BY_CARD_IDS ${elementIds.asSqlList()}")
-
-            deleteCardsStatement.executeUpdateDelete()
-            deleteTemplateUsagesStatement.executeUpdateDelete()
+            elementIds.chunked(SQL_BIND_LIMIT).forEach { ids ->
+                val statement = compiler.compileStatement("$query ${ids.sqlPlaceholders()}")
+                ids.forEachIndexed { index, id -> statement.bindString(index + 1, id) }
+                statement.executeUpdateDelete()
+            }
         }
 
-        override fun toString(): String {
-            return "Deleting cards with ids: $elementIds"
-        }
-    }
-
-    fun deleteRawJsons(elementIds: Set<String>) = object : StorageStatement {
-        override fun execute(compiler: SqlCompiler) {
-            compiler.compileStatement(
-                "$DELETE_RAW_JSON_BY_IDS ${elementIds.asSqlList()}"
-            ).executeUpdateDelete()
-        }
-
-        override fun toString(): String {
-            return "Deleting raw jsons with ids: $elementIds"
-        }
-    }
-
-    private fun <T> Collection<T>.asSqlList(): String {
-        return joinToString(prefix = "('", separator = "', '", postfix = "')")
+        override fun toString(): String = "Deleting ids: $elementIds"
     }
 
     fun isTemplateExists(templateHash: String,
@@ -163,7 +149,7 @@ internal class StorageStatements<T : Any>(private val codec: StorageCodec<T>) {
         override fun execute(compiler: SqlCompiler) {
             val state = compiler.compileQuery(
                     "SELECT 1 FROM $TABLE_TEMPLATES "+
-                    "WHERE $COLUMN_TEMPLATE_HASH == '$templateHash' "
+                    "WHERE $COLUMN_TEMPLATE_HASH == ?", templateHash
             )
             state.use {
                 result.invoke(it.cursor.moveToFirst())
@@ -180,8 +166,8 @@ internal class StorageStatements<T : Any>(private val codec: StorageCodec<T>) {
         override fun execute(compiler: SqlCompiler) {
             val state = compiler.compileQuery(
                     "SELECT 1 FROM $TABLE_CARDS "+
-                    "WHERE $COLUMN_LAYOUT_ID == '$cardId' "+
-                    "AND $COLUMN_GROUP_ID == '$groupId'"
+                    "WHERE $COLUMN_LAYOUT_ID == ? "+
+                    "AND $COLUMN_GROUP_ID == ?", cardId, groupId
             )
             state.use {
                 result.invoke(it.cursor.moveToFirst())

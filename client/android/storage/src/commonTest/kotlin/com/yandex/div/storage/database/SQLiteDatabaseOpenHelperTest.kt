@@ -143,6 +143,62 @@ class SQLiteDatabaseOpenHelperTest {
         }
     }
 
+    @Test
+    fun `new acquisition recovers while an invalidated lease remains open`() {
+        helper.writableDatabase.use { stale ->
+            stale.execSQL("CREATE TABLE records(value TEXT)")
+            driver.failures = mapOf("ROLLBACK" to SQLiteException("rollback failed"))
+            stale.beginTransaction()
+            assertFailsWith<SQLiteException> { stale.endTransaction() }
+            driver.failures = emptyMap()
+
+            helper.writableDatabase.use { recovered ->
+                stale.close()
+                recovered.execSQL("INSERT INTO records VALUES ('recovered')")
+
+                helper.readableDatabase.use { reader ->
+                    reader.rawQuery("SELECT value FROM records", null).use { cursor ->
+                        assertTrue(cursor.moveToFirst())
+                        assertEquals("recovered", cursor.getString(0))
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `schema creation preserves its error when rollback also fails`() {
+        val creationError = SQLiteException("create failed")
+        val rollbackError = SQLiteException("rollback failed")
+        driver.failures = mapOf("ROLLBACK" to rollbackError)
+        val failingHelper = SQLiteDatabaseOpenHelper(
+            driver, path, 1, { throw creationError }, { _, _, _ -> },
+        )
+
+        val error = assertFailsWith<SQLiteException> { failingHelper.writableDatabase }
+
+        assertSame(creationError, error)
+        assertEquals(listOf(rollbackError), error.suppressedExceptions)
+    }
+
+    @Test
+    fun `failed begin does not retain its rollback observer`() {
+        helper.writableDatabase.use { db ->
+            val observed = kotlin.test.assertIs<TransactionOutcomeDatabase>(db)
+            var rollbackCount = 0
+            driver.failures = mapOf("BEGIN EXCLUSIVE TRANSACTION" to SQLiteException("begin failed"))
+            assertFailsWith<SQLiteException> {
+                observed.beginTransaction { rollbackCount++ }
+            }
+            driver.failures = emptyMap()
+
+            db.beginTransaction()
+            db.endTransaction()
+
+            assertEquals(0, rollbackCount)
+        }
+    }
+
     private class FailingDriver : SQLiteDriver, AutoCloseable {
         var failures = emptyMap<String, SQLiteException>()
         var closeError: SQLiteException? = null

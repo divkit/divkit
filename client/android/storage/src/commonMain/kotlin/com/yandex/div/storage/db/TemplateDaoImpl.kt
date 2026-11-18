@@ -9,6 +9,8 @@ import com.yandex.div.storage.db.TemplateQueries.GET_TEMPLATES_BY_CARD_ID_QUERY_
 import com.yandex.div.storage.db.TemplateQueries.GET_TEMPLATES_BY_IDS_QUERY_TEMPLATE_WITHOUT_PLACEHOLDER
 import com.yandex.div.storage.db.TemplateQueries.INSERT_TEMPLATE_QUERY_TEMPLATE
 import com.yandex.div.storage.entity.Template
+import com.yandex.div.storage.util.SQL_BIND_LIMIT
+import com.yandex.div.storage.util.forEachReadBatch
 import com.yandex.div.storage.util.getColumnIndexOrThrow
 
 internal class TemplateDaoImpl(
@@ -28,11 +30,15 @@ internal class TemplateDaoImpl(
     }
 
     override fun getTemplatesByIds(templateIds: List<String>): List<Template> {
-        val queryBuilder = StringBuilder(GET_TEMPLATES_BY_IDS_QUERY_TEMPLATE_WITHOUT_PLACEHOLDER)
-            .appendPlaceholders(templateIds.size)
-        return writableDatabase.rawQuery(queryBuilder.toString(), templateIds.toTypedArray()).use {
-            it.retrieveTemplates()
+        val batches = templateIds.distinct().chunked(SQL_BIND_LIMIT)
+        val templates = mutableListOf<Template>()
+        writableDatabase.forEachReadBatch(batches) { sqlIds, args ->
+            val query = GET_TEMPLATES_BY_IDS_QUERY_TEMPLATE_WITHOUT_PLACEHOLDER + sqlIds
+            writableDatabase.rawQuery(query, args.toTypedArray()).use {
+                templates.addAll(it.retrieveTemplates())
+            }
         }
+        return templates
     }
 
     override fun insertTemplate(template: Template) {

@@ -137,6 +137,15 @@ class DivDatabaseStorageTest {
         assertTrue(templates.isEmpty())
     }
 
+    @Test
+    fun `template selection supports more ids than the bind limit`() {
+        val ids = Array(33000) { "missing-$it" } + arrayOf(TEMPLATE_ID_01, TEMPLATE_ID_02)
+
+        val result = storage.readTemplatesByIds(*ids)
+
+        assertEquals(setOf(TEMPLATE_ID_01, TEMPLATE_ID_02), result.keys)
+    }
+
     private companion object {
 
         private const val CARD_ID_01 = "card_01"

@@ -5,6 +5,8 @@ import android.database.Cursor as AndroidCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteStatement as AndroidStatement
+import android.database.sqlite.SQLiteTransactionListener
+import android.os.Build
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.Assert
@@ -68,7 +70,10 @@ internal class AndroidDatabaseOpenHelper(
 
     private inner class AndroidSQLiteDatabase(
         private val db: SQLiteDatabase
-    ) : DatabaseOpenHelper.Database {
+    ) : TransactionOutcomeDatabase {
+
+        override val supportsReadTransactions: Boolean
+            get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM || !db.isReadOnly
 
         override fun execSQL(sql: String) {
             db.execSQL(sql)
@@ -93,6 +98,24 @@ internal class AndroidDatabaseOpenHelper(
 
         override fun beginTransaction() {
             db.beginTransaction()
+        }
+
+        override fun beginTransaction(onRollback: () -> Unit) {
+            db.beginTransactionWithListener(object : SQLiteTransactionListener {
+                override fun onBegin() = Unit
+                override fun onCommit() = Unit
+                override fun onRollback() = onRollback.invoke()
+            })
+        }
+
+        override fun beginReadTransaction(): Boolean {
+            if (db.inTransaction()) return false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                db.beginTransactionReadOnly()
+            } else {
+                db.beginTransactionNonExclusive()
+            }
+            return true
         }
 
         override fun setTransactionSuccessful() {

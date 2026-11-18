@@ -44,6 +44,22 @@ class DivStorageTest {
 
     private val underTest = DivStorageComponent.createInternal(ApplicationProvider.getApplicationContext()).storage
 
+    @kotlin.test.Test
+    fun `v1 database is recreated without closing the migration connection`() {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val file = context.getDatabasePath("div-storage.db")
+        file.parentFile?.mkdirs()
+        android.database.sqlite.SQLiteDatabase.openOrCreateDatabase(file, null).use {
+            it.execSQL("CREATE TABLE cards(layout_id TEXT PRIMARY KEY)")
+            it.execSQL("INSERT INTO cards VALUES ('legacy')")
+            it.version = 1
+        }
+
+        val result = underTest.loadData()
+
+        kotlin.test.assertTrue(result.errors.isEmpty())
+        kotlin.test.assertTrue(result.restoredData.isEmpty())
+    }
     @Test
     fun `migration does exist for current database version`() {
         val migrationVersions = underTest.migrations.keys

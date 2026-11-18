@@ -5,6 +5,8 @@ import androidx.sqlite.SQLiteDriver
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.execSQL
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.storage.util.closeAll
+import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.locks.ReentrantLock
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.reentrantLock
@@ -27,8 +29,7 @@ public class SQLiteDatabaseOpenHelper(
     private val upgrade: DatabaseOpenHelper.UpgradeCallback,
 ) : DatabaseOpenHelper {
     private val managerLock = SynchronizedObject()
-    private var database: DriverDatabase? = null
-    private var usersCount = 0
+    private var database: SharedDatabase? = null
     private var opening = false
 
     init {
@@ -40,17 +41,24 @@ public class SQLiteDatabaseOpenHelper(
 
     private fun acquireDatabase(): DatabaseOpenHelper.Database = synchronized(managerLock) {
         check(!opening) { "Recursive database initialization" }
-        val db = database ?: run {
+        val shared = database?.takeIf { it.database.isOpen } ?: run {
             opening = true
             try {
-                openDatabase().also { database = it }
+                SharedDatabase(openDatabase()).also { database = it }
             } finally {
                 opening = false
             }
         }
-        usersCount++
-        object : DatabaseOpenHelper.Database by db {
+        shared.usersCount++
+        val db = shared.database
+        object : DatabaseOpenHelper.Database by db, TransactionOutcomeDatabase {
             private var closed = false
+
+            override val supportsReadTransactions: Boolean get() = db.supportsReadTransactions
+
+            override fun beginTransaction(onRollback: () -> Unit) = db.beginTransaction(onRollback)
+
+            override fun beginReadTransaction(): Boolean = db.beginReadTransaction()
 
             override fun close() {
                 val toClose = synchronized(managerLock) {
@@ -58,9 +66,9 @@ public class SQLiteDatabaseOpenHelper(
                         null
                     } else {
                         closed = true
-                        usersCount--
-                        if (usersCount == 0) {
-                            database = null
+                        shared.usersCount--
+                        if (shared.usersCount == 0) {
+                            if (database === shared) database = null
                             db
                         } else null
                     }
@@ -68,6 +76,10 @@ public class SQLiteDatabaseOpenHelper(
                 toClose?.close()
             }
         }
+    }
+
+    private class SharedDatabase(val database: DriverDatabase) {
+        var usersCount = 0
     }
 
     @Suppress("TooGenericExceptionCaught")
@@ -81,7 +93,7 @@ public class SQLiteDatabaseOpenHelper(
             check(oldVersion <= version) { "Cannot downgrade database" }
             if (oldVersion != version) {
                 database.beginTransaction()
-                try {
+                AutoCloseable { database.endTransaction() }.use {
                     val currentVersion = connection.scalar("PRAGMA user_version").toInt()
                     check(currentVersion <= version) { "Cannot downgrade database" }
                     when {
@@ -90,21 +102,22 @@ public class SQLiteDatabaseOpenHelper(
                     }
                     connection.execSQL("PRAGMA user_version = $version")
                     database.setTransactionSuccessful()
-                } finally {
-                    database.endTransaction()
                 }
             }
             return database
         } catch (error: Throwable) {
-            connection.close()
+            closeAll(database, failure = error)
             throw error
         }
     }
 }
 
-private class DriverDatabase(connection: SQLiteConnection) : DatabaseOpenHelper.Database {
+private class DriverDatabase(connection: SQLiteConnection) : TransactionOutcomeDatabase {
+    override val supportsReadTransactions: Boolean get() = true
     private val lock = reentrantLock()
     private val transactions = mutableListOf<Transaction>()
+    private val open = atomic(true)
+    val isOpen: Boolean get() = open.value
     private var openConnection: SQLiteConnection? = connection
     private val connection: SQLiteConnection
         get() = checkNotNull(openConnection) { "Database connection is closed" }
@@ -152,13 +165,32 @@ private class DriverDatabase(connection: SQLiteConnection) : DatabaseOpenHelper.
         }
     }
 
+    override fun beginTransaction() = beginTransaction {}
+
     @Suppress("TooGenericExceptionCaught")
-    override fun beginTransaction() {
+    override fun beginTransaction(onRollback: () -> Unit) {
         lock.lock()
         try {
             check(transactions.lastOrNull()?.successful != true) { "Transaction is already successful" }
             if (transactions.isEmpty()) connection.execSQL("BEGIN EXCLUSIVE TRANSACTION")
-            transactions.add(Transaction())
+            transactions.add(Transaction(onRollback))
+        } catch (error: Throwable) {
+            lock.unlock()
+            throw error
+        }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    override fun beginReadTransaction(): Boolean {
+        lock.lock()
+        if (transactions.isNotEmpty()) {
+            lock.unlock()
+            return false
+        }
+        try {
+            connection.execSQL("BEGIN DEFERRED TRANSACTION")
+            transactions.add(Transaction {})
+            return true
         } catch (error: Throwable) {
             lock.unlock()
             throw error
@@ -181,6 +213,7 @@ private class DriverDatabase(connection: SQLiteConnection) : DatabaseOpenHelper.
             } else if (!successful) {
                 transactions.last().childFailed = true
             }
+            if (!successful) transaction.onRollback()
         } finally {
             lock.unlock()
         }
@@ -197,17 +230,6 @@ private class DriverDatabase(connection: SQLiteConnection) : DatabaseOpenHelper.
         }
     }
 
-    @Suppress("TooGenericExceptionCaught")
-    private inline fun tryCleanup(error: Throwable, cleanup: () -> Unit): Boolean {
-        return try {
-            cleanup()
-            true
-        } catch (cleanupError: Throwable) {
-            if (cleanupError !== error) error.addSuppressed(cleanupError)
-            false
-        }
-    }
-
     override fun compileStatement(sql: String): DatabaseOpenHelper.Statement = lock.withLock {
         DriverStatement({ connection }, connection.prepare(sql), lock)
     }
@@ -215,12 +237,24 @@ private class DriverDatabase(connection: SQLiteConnection) : DatabaseOpenHelper.
     override fun close(): Unit = lock.withLock {
         val database = openConnection ?: return@withLock
         openConnection = null
+        open.value = false
         database.close()
     }
 
-    private class Transaction {
+    private class Transaction(val onRollback: () -> Unit) {
         var successful = false
         var childFailed = false
+    }
+}
+
+@Suppress("TooGenericExceptionCaught")
+private inline fun tryCleanup(error: Throwable, cleanup: () -> Unit): Boolean {
+    return try {
+        cleanup()
+        true
+    } catch (cleanupError: Throwable) {
+        if (cleanupError !== error) error.addSuppressed(cleanupError)
+        false
     }
 }
 

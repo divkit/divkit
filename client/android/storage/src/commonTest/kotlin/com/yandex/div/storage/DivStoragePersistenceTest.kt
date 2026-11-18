@@ -1,7 +1,9 @@
 package com.yandex.div.storage
 
+import androidx.sqlite.SQLiteException
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
+import com.yandex.div.storage.database.DatabaseOpenHelper
 import com.yandex.div.storage.database.DatabaseOpenHelperProvider
 import com.yandex.div.storage.database.SQLiteDatabaseOpenHelper
 import com.yandex.div.storage.internal.DivStorage
@@ -25,6 +27,85 @@ class DivStoragePersistenceTest {
 
     @AfterTest
     fun tearDown() = removeDatabase(path)
+
+    @Test
+    fun `v1 migration recreates schema in the caller owned transaction`() {
+        driver.open(path).use {
+            it.execSQL("CREATE TABLE cards(layout_id TEXT PRIMARY KEY)")
+            it.execSQL("INSERT INTO cards VALUES ('legacy')")
+            it.execSQL("PRAGMA user_version = 1")
+        }
+
+        val result = storage.saveRawJsons(
+            listOf(RawJson("value", byteArrayOf(1))), ActionOnError.ABORT_TRANSACTION
+        )
+
+        assertTrue(result.isSuccessful)
+        assertTrue(storage.loadData(emptyList(), emptyList()).restoredData.isEmpty())
+        assertContentEquals(byteArrayOf(1), storage.readRawJsons(setOf("value")).restoredData.single().data)
+    }
+    @Test
+    fun `raw removal reports predicate failure without deleting prior matches`() {
+        storage.saveRawJsons(
+            listOf(RawJson("first", byteArrayOf(1)), RawJson("second", byteArrayOf(2))),
+            ActionOnError.ABORT_TRANSACTION,
+        )
+        var visited = 0
+
+        val result = storage.removeRawJsons {
+            check(++visited != 2) { "predicate failed" }
+            true
+        }
+
+        assertTrue(result.errors.isNotEmpty())
+        assertTrue(result.ids.isEmpty())
+        assertEquals(setOf("first", "second"), storage.readRawJsons(setOf("first", "second"))
+            .restoredData.map { it.id }.toSet())
+    }
+
+    @Test
+    fun `card removal reports predicate failure without deleting prior matches`() {
+        storage.saveData("group",
+            listOf(RawDataAndMetadata("first", byteArrayOf(1)), RawDataAndMetadata("second", byteArrayOf(2))),
+            emptyList(), ActionOnError.ABORT_TRANSACTION)
+        var visited = 0
+
+        val result = storage.remove {
+            check(++visited != 2) { "predicate failed" }
+            true
+        }
+
+        assertTrue(result.errors.isNotEmpty())
+        assertTrue(result.ids.isEmpty())
+        assertEquals(setOf("first", "second"), storage.loadData(emptyList(), emptyList())
+            .restoredData.map { it.id }.toSet())
+    }
+
+    @Test
+    fun `raw removal reports an acquisition failure`() {
+        storage.saveRawJsons(listOf(RawJson("value", byteArrayOf(1))), ActionOnError.ABORT_TRANSACTION)
+        var fail = true
+        val failingProvider = DatabaseOpenHelperProvider { name, version, create, upgrade ->
+            val helper = provider.provide(name, version, create, upgrade)
+            object : DatabaseOpenHelper by helper {
+                override val writableDatabase: DatabaseOpenHelper.Database
+                    get() {
+                        if (fail) {
+                            fail = false
+                            throw SQLiteException("open failed")
+                        }
+                        return helper.writableDatabase
+                    }
+            }
+        }
+
+        val result = DivStorage(StorageCodec.BYTES, failingProvider).removeRawJsons { true }
+
+        assertTrue(result.errors.isNotEmpty())
+        assertTrue(result.ids.isEmpty())
+        assertEquals(listOf("value"), storage.readRawJsons(setOf("value")).restoredData.map { it.id })
+    }
+
 
     @Test
     fun `raw value survives recreating storage`() {
@@ -155,6 +236,40 @@ class DivStoragePersistenceTest {
 
         assertTrue(result.errors.isEmpty())
         assertEquals(setOf("card"), result.ids)
+    }
+
+    @Test
+    fun `card removal reports rollback when a handled nested removal fails`() {
+        storage.saveData("group", listOf(RawDataAndMetadata("card", byteArrayOf(1))),
+            emptyList(), ActionOnError.ABORT_TRANSACTION)
+
+        val result = storage.remove {
+            val nested = storage.remove { error("nested predicate failed") }
+            assertTrue(nested.errors.isNotEmpty())
+            true
+        }
+
+        assertTrue(result.errors.isNotEmpty())
+        assertTrue(result.ids.isEmpty())
+        assertEquals(listOf("card"), storage.loadData(listOf("card"), emptyList())
+            .restoredData.map { it.id })
+    }
+
+    @Test
+    fun `raw removal reports rollback when a handled nested removal fails`() {
+        storage.saveRawJsons(listOf(RawJson("raw", byteArrayOf(1))),
+            ActionOnError.ABORT_TRANSACTION)
+
+        val result = storage.removeRawJsons {
+            val nested = storage.removeRawJsons { error("nested predicate failed") }
+            assertTrue(nested.errors.isNotEmpty())
+            true
+        }
+
+        assertTrue(result.errors.isNotEmpty())
+        assertTrue(result.ids.isEmpty())
+        assertEquals(listOf("raw"), storage.readRawJsons(setOf("raw"))
+            .restoredData.map { it.id })
     }
 
     @Test

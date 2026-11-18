@@ -7,8 +7,7 @@ import com.yandex.div.storage.DivStorageErrorException
 import com.yandex.div.storage.database.DatabaseOpenHelper.Cursor
 import com.yandex.div.storage.database.DatabaseOpenHelper.Statement as SQLiteStatement
 import com.yandex.div.storage.database.ExecutionResult
-import com.yandex.div.storage.util.closeSilently
-import com.yandex.div.storage.util.endTransactionSilently
+import com.yandex.div.storage.util.closeAll
 import com.yandex.div.storage.util.sqliteException
 
 internal class StorageStatementExecutor(
@@ -19,6 +18,7 @@ internal class StorageStatementExecutor(
      * Executes provided statements one by one in a single transaction.
      */
     @AnyThread
+    @Suppress("TooGenericExceptionCaught")
     @Throws(SQLException::class)
     fun execute(
             actionOnError: ActionOnError,
@@ -26,6 +26,8 @@ internal class StorageStatementExecutor(
     ): ExecutionResult {
         var db: DatabaseOpenHelper.Database? = null
         var compiler: ClosableSqlCompiler? = null
+        var transactionStarted = false
+        var failure: Throwable? = null
         var statementNumber = 1
         var lastStatement: StorageStatement? = null
         val exceptions = mutableListOf<DivStorageErrorException>()
@@ -34,7 +36,8 @@ internal class StorageStatementExecutor(
         try {
             db = dbProvider()
             compiler = ClosableSqlCompiler(db)
-            db.beginTransaction()
+            db.beginObservedTransaction(exceptions)
+            transactionStarted = true
             statements.forEach { statement ->
                 lastStatement = statement
                 executeCatchingSqlException(compiler, statement) { e ->
@@ -54,16 +57,24 @@ internal class StorageStatementExecutor(
             }
             db.setTransactionSuccessful()
         } catch (e: SQLException) {
+            failure = e
             // Ok to catch exception here:
             // statements may throw both SQLiteException or ExecutionException
             // but kotlin does not support multi-catch.
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
         } catch (e: IllegalStateException) {
+            failure = e
             exceptions.add(DivStorageErrorException(executionErrorMessage, e))
+        } catch (error: Throwable) {
+            failure = error
+            throw error
         } finally {
-            db?.endTransactionSilently()
-            compiler?.close()
-            db?.closeSilently()
+            closeAll(
+                if (transactionStarted) AutoCloseable { db?.endTransaction() } else null,
+                compiler,
+                db,
+                failure = failure ?: exceptions.firstOrNull()?.cause,
+            )
         }
         return ExecutionResult(exceptions)
     }
@@ -74,6 +85,20 @@ internal class StorageStatementExecutor(
             vararg statements: StorageStatement
     ): ExecutionResult {
         return execute(ActionOnError.ABORT_TRANSACTION, *statements)
+    }
+
+    private fun DatabaseOpenHelper.Database.beginObservedTransaction(
+        exceptions: MutableList<DivStorageErrorException>,
+    ) {
+        if (this is TransactionOutcomeDatabase) {
+            beginTransaction {
+                if (exceptions.isEmpty()) {
+                    exceptions.add(DivStorageErrorException("Transaction was rolled back"))
+                }
+            }
+        } else {
+            beginTransaction()
+        }
     }
 
     private fun executeCatchingSqlException(
@@ -111,14 +136,9 @@ internal class ClosableSqlCompiler(private val db: DatabaseOpenHelper.Database) 
     }
 
     override fun close() {
-        createdStatements.forEach { it.closeSilently() }
+        val resources = createdStatements + createdCursors.filterNot { it.isClosed }
         createdStatements.clear()
-
-        createdCursors.forEach {
-            if (!it.isClosed) {
-                it.closeSilently()
-            }
-        }
         createdCursors.clear()
+        closeAll(*resources.toTypedArray())
     }
 }

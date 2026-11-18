@@ -21,6 +21,7 @@ import com.yandex.div.storage.database.CREATE_TABLE_CARDS
 import com.yandex.div.storage.database.CREATE_TABLE_RAW_JSON
 import com.yandex.div.storage.database.CREATE_TABLE_TEMPLATES
 import com.yandex.div.storage.database.CREATE_TABLE_TEMPLATE_REFERENCES
+import com.yandex.div.storage.database.ClosableSqlCompiler
 import com.yandex.div.storage.database.DB_VERSION
 import com.yandex.div.storage.database.DELETE_CARDS
 import com.yandex.div.storage.database.DELETE_TEMPLATES
@@ -34,6 +35,7 @@ import com.yandex.div.storage.database.SELECT_RAW_JSONS_BY_IDS
 import com.yandex.div.storage.database.SELECT_TEMPLATES_BY_HASHES
 import com.yandex.div.storage.database.SingleTransactionDataSavePerformer
 import com.yandex.div.storage.database.StorageException
+import com.yandex.div.storage.database.StorageStatement
 import com.yandex.div.storage.database.StorageStatementExecutor
 import com.yandex.div.storage.database.StorageStatements
 import com.yandex.div.storage.database.TABLE_CARDS
@@ -43,9 +45,12 @@ import com.yandex.div.storage.internal.DivStorage.RemoveResult
 import com.yandex.div.storage.internal.rawjson.RawJson
 import com.yandex.div.storage.templates.RawTemplateData
 import com.yandex.div.storage.templates.Template
+import com.yandex.div.storage.util.SQL_BIND_LIMIT
 import com.yandex.div.storage.util.closeSilently
-import com.yandex.div.storage.util.endTransactionSilently
+import com.yandex.div.storage.util.forEachReadBatch
 import com.yandex.div.storage.util.getBlobOrNull
+import com.yandex.div.storage.util.quoteIds
+import com.yandex.div.storage.util.sqlPlaceholders
 import com.yandex.div.storage.util.sqliteException
 
 private const val DB_NAME = "div-storage.db"
@@ -125,8 +130,7 @@ internal class DivStorageImpl<T : Any>(
     @VisibleForTesting
     @Throws(SQLException::class)
     fun dropTables(db: DatabaseOpenHelper.Database) {
-        StorageStatementExecutor(sqlExceptionFactory) { db }
-                .execute(storageStatements.dropAllTables())
+        ClosableSqlCompiler(db).use { storageStatements.dropAllTables().execute(it) }
     }
 
     @AnyThread
@@ -150,34 +154,13 @@ internal class DivStorageImpl<T : Any>(
         ids: List<String>,
         idsToExclude: List<String>,
     ): LoadDataResult<DivStorage.RestoredRawData<T>> {
-        val usedGroups = mutableSetOf<String>()
         val cards = ArrayList<DivStorage.RestoredRawData<T>>(ids.size)
         val exceptions = mutableListOf<StorageException>()
-
-        val selection = when {
-            ids.isEmpty() && idsToExclude.isEmpty() -> null
-            ids.isEmpty() -> "$COLUMN_LAYOUT_ID NOT IN ${idsToExclude.asSqlList()}"
-            idsToExclude.isEmpty() -> "$COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
-            else -> "$COLUMN_LAYOUT_ID NOT IN ${idsToExclude.asSqlList()} AND $COLUMN_LAYOUT_ID IN ${ids.asSqlList()}"
-        }
+        val excludedIds = idsToExclude.toSet()
 
         try {
-            val cardsReadState = readStateFor {
-                query(TABLE_CARDS, null, selection, null, null, null, null, null)
-            }
-            cardsReadState.use {
-                val cursor = it.cursor
-                if (!cursor.moveToFirst()) {
-                    return LoadDataResult(emptyList(), exceptions)
-                }
-
-                do {
-                    val rawData = cursor.getRestoredRawData(exceptions)
-                    if (rawData != null) {
-                        cards.add(rawData)
-                        usedGroups.add(rawData.groupId)
-                    }
-                } while (cursor.moveToNext())
+            openHelper.readableDatabase.use { db ->
+                db.readCards(ids, excludedIds, cards, exceptions)
             }
         } catch (e: SQLException) {
             if (!shouldCatchLoadException(e)) throw e
@@ -189,16 +172,66 @@ internal class DivStorageImpl<T : Any>(
         return LoadDataResult(cards, exceptions)
     }
 
+    private fun DatabaseOpenHelper.Database.readCards(
+        ids: List<String>,
+        excludedIds: Set<String>,
+        cards: MutableList<DivStorage.RestoredRawData<T>>,
+        exceptions: MutableList<StorageException>,
+    ) {
+        if (ids.isEmpty()) {
+            val excluded = excludedIds.toList()
+            val selection = when {
+                excluded.isEmpty() -> null
+                excluded.size <= SQL_BIND_LIMIT ->
+                    "$COLUMN_LAYOUT_ID NOT IN ${excluded.sqlPlaceholders()}"
+                else -> "$COLUMN_LAYOUT_ID NOT IN ${quoteIds(excluded)}"
+            }
+            val selectionArgs = excluded.takeIf { it.size <= SQL_BIND_LIMIT }.orEmpty()
+            readCardBatch(selection, selectionArgs, cards, exceptions)
+            return
+        }
+
+        val includedIds = ids.distinct().filterNot { it in excludedIds }
+        val batches = includedIds.chunked(SQL_BIND_LIMIT).ifEmpty { listOf(emptyList()) }
+        forEachReadBatch(batches) { sqlIds, args ->
+            val selection = if (includedIds.isEmpty()) "0" else "$COLUMN_LAYOUT_ID IN $sqlIds"
+            readCardBatch(selection, args, cards, exceptions)
+        }
+    }
+
+    private fun DatabaseOpenHelper.Database.readCardBatch(
+        selection: String?,
+        selectionArgs: List<String>,
+        cards: MutableList<DivStorage.RestoredRawData<T>>,
+        exceptions: MutableList<StorageException>,
+    ) {
+        query(TABLE_CARDS, null, selection, selectionArgs.toTypedArray(),
+            null, null, null, null).use { cursor ->
+            cursor.readCards(cards, exceptions)
+        }
+    }
+
+    private fun Cursor.readCards(
+        cards: MutableList<DivStorage.RestoredRawData<T>>,
+        exceptions: MutableList<StorageException>,
+    ) {
+        if (!moveToFirst()) return
+        do {
+            getRestoredRawData(exceptions)?.let(cards::add)
+        } while (moveToNext())
+    }
+
     @AnyThread
     @Throws(SQLException::class)
     override fun remove(predicate: (RawDataAndMetadata<T>) -> Boolean): RemoveResult {
-        val ids: Set<String> = collectsRecordsFor(predicate)
-        val exceptions = statementExecutor.execute(
-                ActionOnError.SKIP_ELEMENT,
-                storageStatements.deleteCardsAndTemplates(ids),
-                storageStatements.deleteTemplatesWithoutLinksToCards()
-        ).errors
-        return RemoveResult(ids, exceptions)
+        val ids = mutableSetOf<String>()
+        val result = statementExecutor.execute(
+            ActionOnError.ABORT_TRANSACTION,
+            readMatchingCards(ids, predicate),
+            storageStatements.deleteCards(ids),
+            storageStatements.deleteTemplatesWithoutLinksToCards(),
+        )
+        return RemoveResult(if (result.isSuccessful) ids else emptySet(), result.errors)
     }
 
     @AnyThread
@@ -225,12 +258,13 @@ internal class DivStorageImpl<T : Any>(
 
     @AnyThread
     override fun removeRawJsons(predicate: (RawJson<T>) -> Boolean): RemoveResult {
-        val ids: Set<String> = collectsRawJsonsIdsFor(predicate)
-        val exceptions = statementExecutor.execute(
-            ActionOnError.SKIP_ELEMENT,
-            storageStatements.deleteRawJsons(ids)
-        ).errors
-        return RemoveResult(ids, exceptions)
+        val ids = mutableSetOf<String>()
+        val result = statementExecutor.execute(
+            ActionOnError.ABORT_TRANSACTION,
+            readMatchingRawJsons(ids, predicate),
+            storageStatements.deleteRawJsons(ids),
+        )
+        return RemoveResult(if (result.isSuccessful) ids else emptySet(), result.errors)
     }
 
     @AnyThread
@@ -240,12 +274,14 @@ internal class DivStorageImpl<T : Any>(
         var templates = emptyList<RawTemplateData>()
 
         try {
-            val readState = readStateFor {
-                rawQuery("$SELECT_TEMPLATES_BY_HASHES  ${templateHashes.asSqlList()}", emptyArray())
-            }
-
-            templates = readState.use {
-                it.cursor.getTemplates()
+            templates = openHelper.readableDatabase.use { db ->
+                val restoredTemplates = mutableListOf<RawTemplateData>()
+                val batches = templateHashes.ifEmpty { setOf("") }.chunked(SQL_BIND_LIMIT)
+                db.forEachReadBatch(batches) { sqlIds, args ->
+                    db.rawQuery("$SELECT_TEMPLATES_BY_HASHES $sqlIds", args.toTypedArray())
+                        .use { restoredTemplates.addAll(it.getTemplates()) }
+                }
+                restoredTemplates
             }
         } catch (e: SQLException) {
             exceptions.add(e.toStorageException(actionDesc))
@@ -388,99 +424,78 @@ internal class DivStorageImpl<T : Any>(
 
     @AnyThread
     @Throws(SQLException::class)
-    private fun collectsRecordsFor(predicate: (RawDataAndMetadata<T>) -> Boolean): Set<String> {
-        val results = mutableSetOf<String>()
-        statementExecutor.execute(storageStatements.readData {
-            val cursor = it.cursor
-            if (!cursor.moveToFirst()) {
-                return@readData
+    private fun readMatchingCards(
+        results: MutableSet<String>,
+        predicate: (RawDataAndMetadata<T>) -> Boolean,
+    ): StorageStatement = storageStatements.readData {
+        val cursor = it.cursor
+        while (cursor.moveToNext()) {
+            CursorDrivenRawDataAndMetadata(cursor).use { rawData ->
+                if (predicate(rawData)) results.add(rawData.id)
             }
-
-            do {
-                val rawDataAndMetadata = CursorDrivenRawDataAndMetadata(cursor)
-                if (predicate(rawDataAndMetadata)) {
-                    results.add(rawDataAndMetadata.id)
-                }
-                rawDataAndMetadata.close()
-            } while (cursor.moveToNext())
-        })
-
-        return results
+        }
     }
 
     @AnyThread
     @Throws(SQLException::class)
     private fun collectsRawJsons(rawJsonIds: Set<String>): List<RawJson<T>> {
         val results = ArrayList<RawJson<T>>(rawJsonIds.size)
-        readStateFor {
-            rawQuery(
-                query = "$SELECT_RAW_JSONS_BY_IDS ${rawJsonIds.asSqlList()}",
-                selectionArgs = emptyArray()
-            )
-        }.use {
-            val cursor = it.cursor
-            if (!cursor.moveToFirst()) {
-                return@use
+        // Keep the existing empty-request behavior for repository callers.
+        val batches = rawJsonIds.ifEmpty { setOf("") }.chunked(SQL_BIND_LIMIT)
+        openHelper.readableDatabase.use { db ->
+            db.forEachReadBatch(batches) { sqlIds, args ->
+                db.rawQuery("$SELECT_RAW_JSONS_BY_IDS $sqlIds", args.toTypedArray())
+                    .use { it.readRawJsons(results) }
             }
-
-            do {
-                val cursorRawJson = CursorDrivenRawJson(cursor)
-                val rawJson = with(cursorRawJson) {
-                    RawJson.Ready(id, data)
-                }
-                results.add(rawJson)
-                cursorRawJson.close()
-            } while (cursor.moveToNext())
         }
-
         return results
+    }
+
+    private fun Cursor.readRawJsons(results: MutableList<RawJson<T>>) {
+        while (moveToNext()) {
+            CursorDrivenRawJson(this).use { rawJson ->
+                results.add(RawJson.Ready(rawJson.id, rawJson.data))
+            }
+        }
     }
 
     @AnyThread
     @Throws(SQLException::class)
-    private fun collectsRawJsonsIdsFor(predicate: (RawJson<T>) -> Boolean): Set<String> {
-        val results = mutableSetOf<String>()
-        statementExecutor.execute(storageStatements.readRawJsons {
-            val cursor = it.cursor
-            if (!cursor.moveToFirst()) {
-                return@readRawJsons
+    private fun readMatchingRawJsons(
+        results: MutableSet<String>,
+        predicate: (RawJson<T>) -> Boolean,
+    ): StorageStatement = storageStatements.readRawJsons {
+        val cursor = it.cursor
+        while (cursor.moveToNext()) {
+            CursorDrivenRawJson(cursor).use { rawJson ->
+                if (predicate(rawJson)) results.add(rawJson.id)
             }
-
-            do {
-                val rawJson = CursorDrivenRawJson(cursor)
-                if (predicate(rawJson)) {
-                    results.add(rawJson.id)
-                }
-                rawJson.close()
-            } while (cursor.moveToNext())
-        })
-
-        return results
+        }
     }
 
     @AnyThread
     private fun deleteTablesTransaction(
             actionDesc: String, vararg queries: String
     ): DivStorageErrorException? {
-        var exception: DivStorageErrorException? = null
+        return try {
+            openHelper.writableDatabase.use { it.deleteTables(queries) }
+            null
+        } catch (e: SQLException) {
+            e.toStorageException(actionDesc)
+        } catch (e: IllegalStateException) {
+            e.toStorageException(actionDesc)
+        }
+    }
 
-        with(openHelper.writableDatabase) {
-            val statements = queries.map { compileStatement(it) }
-
-            try {
-                beginTransaction()
+    private fun DatabaseOpenHelper.Database.deleteTables(queries: Array<out String>) {
+        ClosableSqlCompiler(this).use { compiler ->
+            val statements = queries.map { compiler.compileStatement(it) }
+            beginTransaction()
+            AutoCloseable { endTransaction() }.use {
                 statements.forEach { it.executeUpdateDelete() }
                 setTransactionSuccessful()
-            } catch (e: SQLException) {
-                exception = e.toStorageException(actionDesc)
-            } finally {
-                endTransactionSilently()
-                statements.forEach { it.closeSilently() }
-                closeSilently()
             }
         }
-
-        return exception
     }
 
     @Throws(SQLException::class)
@@ -567,11 +582,7 @@ internal class DivStorageImpl<T : Any>(
 
     private fun ByteArray.decodePayload(): T = codec.decode(this)
 
-    companion object {
-        private fun <T> Collection<T>.asSqlList(): String {
-            return joinToString(prefix = "('", separator = "', '", postfix = "')")
-        }
-    }
+
 }
 
 /**
