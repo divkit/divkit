@@ -1,3 +1,4 @@
+import CoreMedia
 @testable @_spi(Internal) import DivKit
 @testable import LayoutKit
 import Testing
@@ -47,7 +48,8 @@ final class SnapshotTestRunner {
       fontProvider: SnapshotFontProvider(),
       imageHolderFactory: TestImageHolderFactory { Issue.record(Comment(rawValue: $0)) },
       layoutDirection: getLayoutDirection(jsonDict),
-      reporter: failOnParsingError ? SnapshotTestReporter() : nil
+      reporter: failOnParsingError ? SnapshotTestReporter() : nil,
+      playerFactory: StubPlayerFactory()
     )
     for (id, state) in statesByElementId {
       let paths = elementPaths(id: id, json: jsonDict)
@@ -287,6 +289,32 @@ private struct SnapshotTestReporter: DivReporter {
       Issue.record(Comment(rawValue: error.prettyMessage))
     }
   }
+}
+
+@MainActor
+private struct StubPlayerFactory: @MainActor PlayerFactory {
+  func makePlayer(data _: VideoData?, config _: PlaybackConfig?) -> Player {
+    StubPlayer()
+  }
+
+  func makePlayerView() -> PlayerView {
+    StubPlayerView()
+  }
+}
+
+private struct StubPlayer: Player {
+  var signal: Signal<PlayerEvent> { .empty }
+
+  func set(data _: VideoData, config _: PlaybackConfig) {}
+  func play() {}
+  func pause() {}
+  func set(isMuted _: Bool) {}
+  func seek(to _: CMTime) {}
+}
+
+private final class StubPlayerView: UIView, @MainActor PlayerView {
+  func attach(player _: Player) {}
+  func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
 }
 
 /// Repeats the path DivKit builds while modeling a card: every div contributes its id
