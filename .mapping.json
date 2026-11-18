@@ -9897,6 +9897,8 @@
   "client/ios/Tests/reference_snapshots/div-input/currency_input_mask_390@3x_step1.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/currency_input_mask_390@3x_step1.png",
   "client/ios/Tests/reference_snapshots/div-input/currency_input_mask_390@3x_step2.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/currency_input_mask_390@3x_step2.png",
   "client/ios/Tests/reference_snapshots/div-input/currency_input_mask_390@3x_step3.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/currency_input_mask_390@3x_step3.png",
+  "client/ios/Tests/reference_snapshots/div-input/edit-text/input-password_390@3x_masked.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/edit-text/input-password_390@3x_masked.png",
+  "client/ios/Tests/reference_snapshots/div-input/edit-text/input-password_390@3x_unmasked.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/edit-text/input-password_390@3x_unmasked.png",
   "client/ios/Tests/reference_snapshots/div-input/edit-text/regex-input-validator_390@3x_empty_allowed_errors_hidden.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/edit-text/regex-input-validator_390@3x_empty_allowed_errors_hidden.png",
   "client/ios/Tests/reference_snapshots/div-input/edit-text/regex-input-validator_390@3x_valid_digits_errors_hidden.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/edit-text/regex-input-validator_390@3x_valid_digits_errors_hidden.png",
   "client/ios/Tests/reference_snapshots/div-input/edit-text/regex-input-validator_390@3x_valid_letters_errors_hidden.png":"divkit/public/client/ios/Tests/reference_snapshots/div-input/edit-text/regex-input-validator_390@3x_valid_letters_errors_hidden.png",

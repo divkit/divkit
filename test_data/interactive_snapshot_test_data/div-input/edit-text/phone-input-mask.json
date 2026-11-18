@@ -205,6 +205,14 @@
       "text": "Raw input: "
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "phone_value"
+      },
+      "text": "Value: "
+    },
+    {
       "type": "edit_text",
       "target": {
         "type": "div_id",

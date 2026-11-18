@@ -3340,6 +3340,9 @@
         "web",
         "ios"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -3352,6 +3355,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivInput"
@@ -3376,6 +3382,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -3394,6 +3403,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -3406,6 +3418,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivInput"
@@ -3422,6 +3437,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivInput"
@@ -4452,6 +4470,9 @@
         "ios",
         "android"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivPager",
         "DivInput"
@@ -4763,6 +4784,9 @@
         "web",
         "ios",
         "android"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivInput"
@@ -5139,6 +5163,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivAction",
