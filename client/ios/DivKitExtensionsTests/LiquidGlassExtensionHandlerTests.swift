@@ -163,6 +163,41 @@ struct LiquidGlassExtensionHandlerTests {
   }
 
   @Test
+  func resolvesUIStyle() {
+    guard #available(iOS 26, *) else { return }
+
+    let glassBlock = applyExtension(["style": "regular", "ui_style": "dark"]) as? LiquidGlassBlock
+
+    #expect(glassBlock?.userInterfaceStyle == .dark)
+  }
+
+  @Test
+  func resolvesUIStyleExpression() {
+    guard #available(iOS 26, *) else { return }
+    let context = makeContext(["is_dark": .bool(false)])
+
+    let glassBlock = applyExtension([
+      "style": "regular",
+      "ui_style": "@{is_dark ? 'dark' : 'light'}",
+    ], context: context) as? LiquidGlassBlock
+
+    #expect(glassBlock?.userInterfaceStyle == .light)
+  }
+
+  @Test
+  func keepsInheritedUIStyleWithoutValidValue() {
+    guard #available(iOS 26, *) else { return }
+
+    let withoutStyle = applyExtension(["style": "regular"]) as? LiquidGlassBlock
+    let withUnknownStyle = applyExtension(
+      ["style": "regular", "ui_style": "dim"]
+    ) as? LiquidGlassBlock
+
+    #expect(withoutStyle?.userInterfaceStyle == nil)
+    #expect(withUnknownStyle?.userInterfaceStyle == nil)
+  }
+
+  @Test
   func writesResolvedInterfaceStyleIntoVariable() {
     guard #available(iOS 26, *) else { return }
     let variableStorage = DivVariableStorage()

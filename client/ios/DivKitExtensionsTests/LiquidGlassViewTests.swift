@@ -79,19 +79,42 @@ struct LiquidGlassViewTests {
     #expect(cornerConfiguration(of: view) == systemConfiguration)
   }
 
+  @Test
+  func appliesUserInterfaceStyle() {
+    guard #available(iOS 26, *) else { return }
+    let view = LiquidGlassBlock.makeBlockView()
+
+    configure(view, userInterfaceStyle: .dark)
+
+    #expect(view.overrideUserInterfaceStyle == .dark)
+  }
+
+  @Test
+  func dropsUserInterfaceStyleWhenItIsRemovedOnTheSameView() {
+    guard #available(iOS 26, *) else { return }
+    let view = LiquidGlassBlock.makeBlockView()
+
+    configure(view, userInterfaceStyle: .light)
+    configure(view, userInterfaceStyle: nil)
+
+    #expect(view.overrideUserInterfaceStyle == .unspecified)
+  }
+
   @available(iOS 26, *)
   private func configure(
     _ view: BlockView,
     isInteractive: Bool? = nil,
     tintColor: Color? = nil,
-    cornerStyle: LiquidGlassBlock.CornerStyle? = nil
+    cornerStyle: LiquidGlassBlock.CornerStyle? = nil,
+    userInterfaceStyle: UserInterfaceStyle? = nil
   ) {
     LiquidGlassBlock(
       child: EmptyBlock.zeroSized,
       effectStyle: .regular,
       isInteractive: isInteractive,
       tintColor: tintColor,
-      cornerStyle: cornerStyle
+      cornerStyle: cornerStyle,
+      userInterfaceStyle: userInterfaceStyle
     ).configureBlockView(
       view,
       observer: nil,

@@ -28,6 +28,7 @@ public final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public let isInteractive: Bool?
   public let tintColor: Color?
   public let cornerStyle: CornerStyle?
+  public let userInterfaceStyle: UserInterfaceStyle?
   public let uiStyleVariableName: String?
   public let uiStyleUpdater: UIStyleUpdater?
 
@@ -37,6 +38,7 @@ public final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
     isInteractive: Bool? = nil,
     tintColor: Color? = nil,
     cornerStyle: CornerStyle? = nil,
+    userInterfaceStyle: UserInterfaceStyle? = nil,
     uiStyleVariableName: String? = nil,
     uiStyleUpdater: UIStyleUpdater? = nil
   ) {
@@ -45,6 +47,7 @@ public final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
     self.isInteractive = isInteractive
     self.tintColor = tintColor
     self.cornerStyle = cornerStyle
+    self.userInterfaceStyle = userInterfaceStyle
     self.uiStyleVariableName = uiStyleVariableName
     self.uiStyleUpdater = uiStyleUpdater
   }
@@ -56,6 +59,7 @@ public final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
       isInteractive: isInteractive,
       tintColor: tintColor,
       cornerStyle: cornerStyle,
+      userInterfaceStyle: userInterfaceStyle,
       uiStyleVariableName: uiStyleVariableName,
       uiStyleUpdater: uiStyleUpdater
     )
@@ -77,6 +81,7 @@ extension LiquidGlassBlock: Equatable {
       lhs.isInteractive == rhs.isInteractive &&
       lhs.tintColor == rhs.tintColor &&
       lhs.cornerStyle == rhs.cornerStyle &&
+      lhs.userInterfaceStyle == rhs.userInterfaceStyle &&
       lhs.uiStyleVariableName == rhs.uiStyleVariableName
   }
 }

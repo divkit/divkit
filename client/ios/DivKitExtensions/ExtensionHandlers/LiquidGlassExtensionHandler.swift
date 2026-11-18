@@ -13,6 +13,10 @@ import VGSL
 /// * `tint_color` - color applied to the glass.
 /// * `corner_style` - `{"type": "capsule", "max_radius": Number}` or
 ///   `{"type": "corners", "top_left": Number, ...}`.
+/// * `ui_style` - `light` or `dark`, overrides the interface style of the glass view. On iOS 27
+///   and newer the material follows it; on iOS 26 the material keeps adapting to the content
+///   beneath it, so the param has no visible effect. Without it the view inherits the style of the
+///   view hierarchy.
 /// * `ui_style_variable` - name of the variable to write `light`/`dark` into. The glass material
 ///   resolves the interface style from the content beneath it, so it may differ from the style of
 ///   the card.
@@ -51,6 +55,7 @@ public final class LiquidGlassExtensionHandler: DivExtensionHandler {
         isInteractive: params.isInteractive,
         tintColor: params.tintColor,
         cornerStyle: params.cornerStyle,
+        userInterfaceStyle: params.uiStyle,
         uiStyleVariableName: params.uiStyleVariable,
         uiStyleUpdater: makeUIStyleUpdater(
           variableName: params.uiStyleVariable,
@@ -85,6 +90,7 @@ struct LiquidGlassExtensionParams {
   let isInteractive: Bool?
   let tintColor: Color?
   let cornerStyle: LiquidGlassBlock.CornerStyle?
+  let uiStyle: UserInterfaceStyle?
   let uiStyleVariable: String?
 
   init(
@@ -110,6 +116,9 @@ struct LiquidGlassExtensionParams {
       params[cornerStyleKey],
       expressionResolver: expressionResolver
     )
+
+    self.uiStyle = (params[uiStyleKey] as? String)
+      .flatMap { expressionResolver.resolveEnum($0) }
 
     self.uiStyleVariable = (params[uiStyleVariableKey] as? String)
       .flatMap { expressionResolver.resolveString($0) }
@@ -187,6 +196,7 @@ private let styleKey = "style"
 private let isInteractiveKey = "is_interactive"
 private let tintColorKey = "tint_color"
 private let cornerStyleKey = "corner_style"
+private let uiStyleKey = "ui_style"
 private let uiStyleVariableKey = "ui_style_variable"
 private let typeKey = "type"
 private let maxRadiusKey = "max_radius"

@@ -26,6 +26,7 @@ extension LiquidGlassBlock {
       isInteractive: isInteractive,
       tintColor: tintColor,
       cornerStyle: cornerStyle,
+      userInterfaceStyle: userInterfaceStyle,
       uiStyleUpdater: uiStyleUpdater
     )
   }
@@ -73,8 +74,11 @@ private final class LiquidGlassView: UIVisualEffectView, BlockViewProtocol,
     isInteractive: Bool?,
     tintColor: Color?,
     cornerStyle: LiquidGlassBlock.CornerStyle?,
+    userInterfaceStyle: UserInterfaceStyle?,
     uiStyleUpdater: LiquidGlassBlock.UIStyleUpdater?
   ) {
+    // A reused view has to drop the style of the previous block when the new one does not set it.
+    overrideUserInterfaceStyle = userInterfaceStyle.map(UIUserInterfaceStyle.init) ?? .unspecified
     self.uiStyleUpdater = uiStyleUpdater
     // The glass material picks its own interface style depending on what is rendered beneath it.
     // That style is not exposed by UIKit, the only way to observe it is to read the trait
@@ -134,6 +138,17 @@ private final class LiquidGlassView: UIVisualEffectView, BlockViewProtocol,
       glassEffect.tintColor = tintColor.systemColor
     }
     return glassEffect
+  }
+}
+
+extension UIUserInterfaceStyle {
+  fileprivate init(_ style: UserInterfaceStyle) {
+    switch style {
+    case .light:
+      self = .light
+    case .dark:
+      self = .dark
+    }
   }
 }
 
