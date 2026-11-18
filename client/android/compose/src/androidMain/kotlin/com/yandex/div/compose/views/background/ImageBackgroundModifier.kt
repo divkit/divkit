@@ -1,4 +1,4 @@
-package com.yandex.div.compose.views.modifiers.image
+package com.yandex.div.compose.views.background
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,7 +8,6 @@ import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.IntSize
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
@@ -30,15 +29,13 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
         data.contentAlignmentVertical
     )
 
-    val component = LocalDivContext.current.component
     val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(
                 data = data.imageUrl.observedValue(),
                 transformations = data.filters.observedTransformations()
             )
-        ),
-        onState = component.debugConfiguration.imagePainterStateListener
+        )
     )
 
     return drawBehind {

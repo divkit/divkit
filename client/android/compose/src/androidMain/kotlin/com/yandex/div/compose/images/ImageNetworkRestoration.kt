@@ -13,7 +13,7 @@ import com.yandex.div.compose.network.isNetworkConnectivityError
 @Composable
 internal fun rememberNetworkRestoringImagePainter(
     model: Any?,
-    onState: ((AsyncImagePainter.State) -> Unit)? = null,
+    onState: ((AsyncImagePainter.State) -> Unit)? = LocalComponent.current.debugConfiguration.imagePainterStateListener,
 ): AsyncImagePainter = key(model) {
     val component = LocalComponent.current
     val networkRestorationController = component.networkRestorationController
@@ -42,7 +42,7 @@ private class ImageNetworkRestoration(
     private var failedInput: AsyncImagePainter.Input? = null
     private var error: AsyncImagePainter.State.Error? = null
 
-    private val retry: () -> Unit = retry@ {
+    private val retry: () -> Unit = retry@{
         val input = failedInput
         val state = error
         clear()

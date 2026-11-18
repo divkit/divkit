@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.collection.observeBuilderDataElements
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.LocalComponent
@@ -326,15 +325,13 @@ private fun InlineImage(image: InlineImageData) {
         return
     }
 
-    val component = LocalDivContext.current.component
     val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(
                 data = image.url,
                 limitToDisplaySize = true,
             )
-        ),
-        onState = component.debugConfiguration.imagePainterStateListener,
+        )
     )
     val lineBounds = LocalLineBounds.current?.takeIf { image.alignsToLine }
     Box(modifier = Modifier.fillMaxSize()) {

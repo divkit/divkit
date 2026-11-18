@@ -20,6 +20,7 @@ import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.views.DivBlockLayoutParams
+import com.yandex.div.compose.views.background.background
 import com.yandex.div.compose.views.divVisibility
 import com.yandex.div.compose.views.transition.StateChangeTransitionModifier
 import com.yandex.div.compose.visibility.visibilityActions

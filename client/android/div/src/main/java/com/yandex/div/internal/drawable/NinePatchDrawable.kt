@@ -7,8 +7,12 @@ import android.graphics.NinePatch
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import androidx.core.graphics.Insets
-import com.yandex.div.render.common.images.toNinePatch
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+
+private const val HEADER_WORDS = 8
+private const val REGION_COUNT = 9
+private const val NO_COLOR = 1
 
 internal class NinePatchDrawable : Drawable() {
 
@@ -17,16 +21,19 @@ internal class NinePatchDrawable : Drawable() {
             field = value
             invalidateSelf()
         }
+
     var left: Int = 0
         set(value) {
             field = value
             invalidateSelf()
         }
+
     var right: Int = 0
         set(value) {
             field = value
             invalidateSelf()
         }
+
     var top: Int = 0
         set(value) {
             field = value
@@ -62,6 +69,22 @@ internal class NinePatchDrawable : Drawable() {
         ninePatch?.draw(canvas, Rect(0, 0, bounds.width(), bounds.height()), paint)
     }
 
-    private fun buildNinePatchFromBitmap(bitmap: Bitmap) =
-        bitmap.toNinePatch(Insets.of(left, top, right, bottom))
+    private fun buildNinePatchFromBitmap(bitmap: Bitmap): NinePatch {
+        // Android's nine-patch chunk has an eight-word header, four slice coordinates and nine
+        // color hints.
+        val chunk = ByteBuffer
+            .allocate((HEADER_WORDS + 4 + REGION_COUNT) * Int.SIZE_BYTES)
+            .order(ByteOrder.nativeOrder())
+        chunk.put(1) // deserialized chunk
+        chunk.put(2) // X divisions
+        chunk.put(2) // Y divisions
+        chunk.put(REGION_COUNT.toByte())
+        repeat(HEADER_WORDS - 1) { chunk.putInt(0) } // array offsets and content padding
+        chunk.putInt(left)
+        chunk.putInt(bitmap.width - right)
+        chunk.putInt(top)
+        chunk.putInt(bitmap.height - bottom)
+        repeat(REGION_COUNT) { chunk.putInt(NO_COLOR) }
+        return NinePatch(bitmap, chunk.array())
+    }
 }

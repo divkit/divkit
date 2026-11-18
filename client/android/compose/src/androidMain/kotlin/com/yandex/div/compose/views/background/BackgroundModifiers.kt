@@ -1,4 +1,4 @@
-package com.yandex.div.compose.views.modifiers
+package com.yandex.div.compose.views.background
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
@@ -6,8 +6,6 @@ import androidx.compose.ui.Modifier
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
-import com.yandex.div.compose.views.modifiers.image.imageBackground
-import com.yandex.div.compose.views.modifiers.image.ninePatchBackground
 import com.yandex.div2.DivBackground
 
 @Composable
