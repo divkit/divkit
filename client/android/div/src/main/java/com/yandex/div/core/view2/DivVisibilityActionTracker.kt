@@ -345,21 +345,39 @@ internal class DivVisibilityActionTracker @Inject constructor(
         }.let { Collections.synchronizedMap(it) }
         trackedTokens.add(logIds)
         val originalDataLogId = scope.logId
+        if (delayMs == 0L) {
+            removeWaitingDisappearActions(view, actions)
+            val originalDataTag = scope.dataTag
+            // Snapshot the actions before visibility tracking can mutate the token.
+            val actionsToDispatch = logIds.values.toTypedArray()
+            handler.post {
+                if (scope.dataTag == originalDataTag && scope.logId == originalDataLogId) {
+                    scope.dataComponent.visibilityActionDispatcher
+                        .dispatchActions(scope, resolver, view, actionsToDispatch)
+                }
+            }
+            return
+        }
+
         /* We use map of CompositeLogId to DivSightAction as token here, so we can cancel
          * individual actions while still execute the rest of it as a bulk. */
         handler.postDelayed(delayInMillis = delayMs, token = logIds) {
             KLog.i(TAG) { "dispatchActions: id=${logIds.keys.joinToString()}" }
-            appearedForDisappearActions[view]?.let { waitingActions ->
-                actions.filterIsInstance<DivDisappearAction>().forEach(waitingActions::remove)
-                if (waitingActions.isEmpty()) {
-                    appearedForDisappearActions.remove(view)
-                    divWithWaitingDisappearActions.remove(view)
-                }
-            }
             if (scope.logId == originalDataLogId) {
+                val actionsToDispatch = logIds.values
+                removeWaitingDisappearActions(view, actionsToDispatch)
                 scope.dataComponent.visibilityActionDispatcher
-                    .dispatchActions(scope, resolver, view, logIds.values.toTypedArray())
+                    .dispatchActions(scope, resolver, view, actionsToDispatch.toTypedArray())
             }
+        }
+    }
+
+    private fun removeWaitingDisappearActions(view: View, actions: Collection<DivSightAction>) {
+        val waitingActions = appearedForDisappearActions[view] ?: return
+        actions.filterIsInstance<DivDisappearAction>().forEach(waitingActions::remove)
+        if (waitingActions.isEmpty()) {
+            appearedForDisappearActions.remove(view)
+            divWithWaitingDisappearActions.remove(view)
         }
     }
 

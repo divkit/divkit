@@ -13,6 +13,7 @@ import com.yandex.div2.DivVisibilityAction
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,9 +70,6 @@ internal class VisibilityActionTracker(
 
     private fun triggerIfNeeded(trackedAction: TrackedAction) {
         val (context, action) = trackedAction
-        if (action is DivDisappearAction) {
-            eligibleDisappearActions.remove(trackedAction)
-        }
         val limit = action.logLimit.evaluate(context.expressionResolver).toInt()
         if (limit == 0) {
             actionHandler.handle(context, action)
@@ -87,10 +85,21 @@ internal class VisibilityActionTracker(
     private fun scheduleAction(trackedAction: TrackedAction) {
         cancelAction(trackedAction)
         val (context, action) = trackedAction
-        pendingActions[trackedAction] = mainCoroutineScope.launch {
-            delay(action.duration.evaluate(context.expressionResolver))
-            pendingActions.remove(trackedAction)
-            triggerIfNeeded(trackedAction)
+        val duration = action.duration.evaluate(context.expressionResolver)
+        if (duration == 0L) {
+            eligibleDisappearActions.remove(trackedAction)
+            // The scope may use Main.immediate and run the action inline during layout.
+            // Queue it on Main to avoid updating the adapter before layout completes.
+            mainCoroutineScope.launch(Dispatchers.Main) {
+                triggerIfNeeded(trackedAction)
+            }
+        } else {
+            pendingActions[trackedAction] = mainCoroutineScope.launch {
+                delay(duration)
+                pendingActions.remove(trackedAction)
+                eligibleDisappearActions.remove(trackedAction)
+                triggerIfNeeded(trackedAction)
+            }
         }
     }
 

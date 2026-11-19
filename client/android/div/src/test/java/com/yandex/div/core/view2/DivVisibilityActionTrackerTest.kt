@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2
 
+import android.os.Looper
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
@@ -11,6 +12,7 @@ import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivDisappearAction
+import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -30,6 +32,8 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.LooperMode
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
@@ -108,6 +112,46 @@ class DivVisibilityActionTrackerTest {
             eq(resolver),
             eq(view1),
             argThat { this.contains(action1) && this.size == 1 }
+        )
+    }
+
+    @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `zero duration visibility action is queued once for a short appearance`() {
+        val action = DivVisibilityAction(
+            logId = "short_appearance".asExpression(),
+            visibilityDuration = 0L.asExpression(),
+        )
+        val div = text(text = "test", visibilityActions = listOf(action))
+
+        trackVisibilityAction(view1, div, 100)
+        trackVisibilityAction(view1, div, 100)
+        trackVisibilityAction(view1, div, 0)
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+
+        shadowOf(Looper.getMainLooper()).idle()
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope), eq(resolver), eq(view1), argThat { contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `zero duration disappear action is queued once for a short disappearance`() {
+        val action = disappearAction(id = "short_disappearance", delayMs = 0, percentage = 50)
+        val div = text(text = "test", disappearActions = listOf(action))
+
+        trackVisibilityAction(view1, div, 100)
+        trackVisibilityAction(view1, div, 0)
+        trackVisibilityAction(view1, div, 0)
+        trackVisibilityAction(view1, div, 100)
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+
+        shadowOf(Looper.getMainLooper()).idle()
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope), eq(resolver), eq(view1), argThat { contentEquals(arrayOf(action)) }
         )
     }
 
@@ -333,6 +377,24 @@ class DivVisibilityActionTrackerTest {
     }
 
     @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `cleanup leaves an already queued disappear action to the main queue`() {
+        val action = disappearAction(id = "cleanup_disappearance", delayMs = 0)
+        val div = text(text = "test", disappearActions = listOf(action))
+        trackVisibilityAction(view1, div, 100)
+        trackVisibilityAction(view1, div, 0)
+
+        visibilityActionTracker.dispatchWaitingDisappearActions(scope, resolver, view1)
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+
+        shadowOf(Looper.getMainLooper()).idle()
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope), eq(resolver), eq(view1), argThat { contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
     fun `dispatchWaitingDisappearActions fires a disappear action that already appeared`() {
         trackVisibilityAction(view5, div5, 100)
         Robolectric.flushForegroundThreadScheduler()
@@ -484,6 +546,30 @@ class DivVisibilityActionTrackerTest {
             eq(resolver),
             eq(view6),
             argThat { this.contains(action) && this.size == 1 }
+        )
+    }
+
+    @Test
+    fun `partially cancelled batch preserves the next disappearance`() {
+        val div = text(
+            text = "test",
+            disappearActions = listOf(disappearAction50, disappearAction90)
+        )
+        val dispatchedActions = argumentCaptor<Array<DivSightAction>>()
+
+        trackVisibilityAction(view6, div, 100)
+        trackVisibilityAction(view6, div, 0)
+        trackVisibilityAction(view6, div, 60)
+        Robolectric.flushForegroundThreadScheduler()
+        trackVisibilityAction(view6, div, 0)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher, times(2)).dispatchActions(
+            eq(scope), eq(resolver), eq(view6), dispatchedActions.capture()
+        )
+        assertEquals(
+            listOf(disappearAction90, disappearAction50),
+            dispatchedActions.allValues.flatMap { it.asList() }
         )
     }
 

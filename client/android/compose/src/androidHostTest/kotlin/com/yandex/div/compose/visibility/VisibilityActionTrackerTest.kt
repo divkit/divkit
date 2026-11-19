@@ -6,20 +6,27 @@ import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.visibilityAction
 import com.yandex.div2.DivSightAction
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class VisibilityActionTrackerTest {
     private val actionHandlingContext = ActionHandlerEnvironment().context
     private val handledActions = mutableListOf<DivSightAction>()
@@ -37,6 +44,16 @@ class VisibilityActionTrackerTest {
         mainCoroutineScope = testScope
     )
 
+    @BeforeTest
+    fun setUp() {
+        Dispatchers.setMain(StandardTestDispatcher(testScope.testScheduler))
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
     fun `onVisibilityChanged() triggers visibility action after delay`() = testScope.runTest {
         val action = visibilityAction(delayMs = 500)
@@ -47,6 +64,19 @@ class VisibilityActionTrackerTest {
         verifyNoActionsHandled()
 
         wait(200)
+
+        verifyHandled(action)
+    }
+
+    @Test
+    fun `short appearance queues one zero duration action`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 0, limit = 0)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = false)
+        verifyNoActionsHandled()
+
+        runCurrent()
 
         verifyHandled(action)
     }
@@ -245,6 +275,36 @@ class VisibilityActionTrackerTest {
         wait(250)
 
         verifyHandled(action1)
+    }
+
+    @Test
+    fun `queued disappear preserves the next appearance`() = testScope.runTest {
+        val action = disappearAction(delayMs = 0, limit = 0)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = false)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+
+        verifyNoActionsHandled()
+        runCurrent()
+        verifyHandled(action)
+
+        tracker.onContentUnbound()
+
+        verifyHandled(action)
+    }
+
+    @Test
+    fun `unbinding keeps a queued zero duration disappear action`() = testScope.runTest {
+        val action = disappearAction(delayMs = 0, limit = 0)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = false)
+
+        tracker.onContentUnbound()
+        verifyNoActionsHandled()
+
+        runCurrent()
+
+        verifyHandled(action)
     }
 
     @Test
