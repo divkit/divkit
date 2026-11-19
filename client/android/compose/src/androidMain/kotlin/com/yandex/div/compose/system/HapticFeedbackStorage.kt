@@ -26,9 +26,9 @@ internal class HapticFeedbackStorage {
     }
 }
 
-@Suppress("ComposableNaming")
 @Composable
-internal fun HapticFeedbackStorage.bind() {
+@Suppress("ComposableNaming")
+internal fun HapticFeedbackStorage.onComposition() {
     val hapticFeedback = LocalHapticFeedback.current
     DisposableEffect(this, hapticFeedback) {
         register(hapticFeedback)

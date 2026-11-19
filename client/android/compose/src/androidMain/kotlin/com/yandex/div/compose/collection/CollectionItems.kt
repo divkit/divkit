@@ -9,7 +9,7 @@ import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.declaresLocalScope
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.triggers.observe
+import com.yandex.div.compose.triggers.onComposition
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
@@ -73,7 +73,7 @@ private fun observeCollectionItems(
     }
     collectionItems.triggerComponents.forEach { triggerComponent ->
         key(triggerComponent) {
-            triggerComponent.triggerStorage.observe()
+            triggerComponent.triggerStorage.onComposition()
         }
     }
     return collectionItems

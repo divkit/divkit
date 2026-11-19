@@ -113,9 +113,9 @@ internal class VisibilityActionTracker(
  */
 private data class TrackedAction(val context: DivActionHandlingContext, val action: DivSightAction)
 
-@Suppress("ComposableNaming")
 @Composable
-internal fun VisibilityActionTracker.bind() {
+@Suppress("ComposableNaming")
+internal fun VisibilityActionTracker.onComposition() {
     val host = LocalVisibilityHost.current ?: return
     DisposableEffect(this, host) {
         val contentUnboundCallback = { onContentUnbound() }

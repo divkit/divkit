@@ -108,7 +108,8 @@ internal class DivPatchCoordinator(
 }
 
 @Composable
-internal fun DivPatchCoordinator.observe() {
+@Suppress("ComposableNaming")
+internal fun DivPatchCoordinator.onComposition() {
     val revision = revision
     if (revision == 0L) return
 

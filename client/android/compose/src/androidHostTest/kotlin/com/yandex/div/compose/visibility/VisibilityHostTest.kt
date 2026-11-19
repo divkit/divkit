@@ -60,7 +60,7 @@ class VisibilityHostTest {
         val tracker = mock<VisibilityActionTracker>()
         rule.setContent {
             CompositionLocalProvider(LocalVisibilityHost provides currentHost.value) {
-                tracker.bind()
+                tracker.onComposition()
             }
         }
         rule.runOnIdle { currentHost.value = secondHost }

@@ -102,7 +102,8 @@ internal class DivTriggerStorage(
 }
 
 @Composable
-internal fun DivTriggerStorage.observe() {
+@Suppress("ComposableNaming")
+internal fun DivTriggerStorage.onComposition() {
     DisposableEffect(this) {
         startObserving()
         onDispose {

@@ -35,8 +35,8 @@ private const val MAX_LAYOUT_UPDATES = 3
  * notifications caused by our own writes do not. Disposing the last binding to a variable removes
  * its subscription. Handlers are registered only after the composition is applied.
  *
- * [observe] supplies the composition's coroutine scope and frame clock, and cancels pending work
- * when the view leaves the composition.
+ * [onComposition] supplies the composition's coroutine scope and frame clock, and cancels pending
+ * work when the view leaves the composition.
  */
 @DivViewScope
 @Inject
@@ -179,7 +179,8 @@ internal class LayoutProviderStorage(
 }
 
 @Composable
-internal fun LayoutProviderStorage.observe() {
+@Suppress("ComposableNaming")
+internal fun LayoutProviderStorage.onComposition() {
     val coroutineScope = rememberCoroutineScope()
     DisposableEffect(this) {
         attach(coroutineScope)

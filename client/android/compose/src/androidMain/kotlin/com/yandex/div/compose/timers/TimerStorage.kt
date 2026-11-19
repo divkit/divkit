@@ -85,7 +85,8 @@ internal class TimerStorage(
 }
 
 @Composable
-internal fun TimerStorage.observe() {
+@Suppress("ComposableNaming")
+internal fun TimerStorage.onComposition() {
     DisposableEffect(this) {
         isEnabled = true
         onDispose {

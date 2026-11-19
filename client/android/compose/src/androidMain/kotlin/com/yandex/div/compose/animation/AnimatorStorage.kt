@@ -273,7 +273,8 @@ internal class AnimatorRunner(
 internal data class AnimatorKey(val scopeId: String, val animatorId: String)
 
 @Composable
-internal fun AnimatorStorage.observe() {
+@Suppress("ComposableNaming")
+internal fun AnimatorStorage.onComposition() {
     val animationsEnabled = animationConfiguration.isEnabledAsState()
     DisposableEffect(this) {
         updateAnimationConfiguration(animationsEnabled)

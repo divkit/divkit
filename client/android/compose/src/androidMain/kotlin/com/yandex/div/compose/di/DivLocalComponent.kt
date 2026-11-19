@@ -12,7 +12,7 @@ import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
 import com.yandex.div.compose.network.NetworkRestorationController
 import com.yandex.div.compose.triggers.DivTriggerStorage
-import com.yandex.div.compose.triggers.observe
+import com.yandex.div.compose.triggers.onComposition
 import com.yandex.div.compose.variables.DivVariableAdapter
 import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -83,7 +83,7 @@ internal inline fun WithLocalComponent(
     if (component === parentComponent) {
         return content()
     }
-    component.triggerStorage.observe()
+    component.triggerStorage.onComposition()
     CompositionLocalProvider(LocalComponent provides component) {
         content()
     }

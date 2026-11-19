@@ -14,8 +14,8 @@ import kotlinx.coroutines.Job
 /**
  * Provides the coroutine scope of the current DivView composition to cached view components.
  *
- * [attach] registers the scope after composition is applied. Compose cancels it when the view
- * leaves composition or its provider changes.
+ * [onComposition] registers the scope after composition is applied. Compose cancels it when the
+ * view leaves composition or its provider changes.
  * The main scope supplies the coroutine context except for the Job, which is owned by Compose.
  */
 @DivViewScope
@@ -37,7 +37,7 @@ internal class DivViewCoroutineScopeProvider(
 
     @Composable
     @Suppress("ComposableNaming")
-    fun attach() {
+    fun onComposition() {
         // Replacing data can change the provider without removing DivView from composition.
         // Key the scope by provider so the previous card's coroutines are canceled.
         key(this) {

@@ -4,19 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
-import com.yandex.div.compose.animation.observe
+import com.yandex.div.compose.animation.onComposition
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewComponent
 import com.yandex.div.compose.di.declaresLocalScope
-import com.yandex.div.compose.layoutprovider.observe
+import com.yandex.div.compose.layoutprovider.onComposition
 import com.yandex.div.compose.pager.DivPagerStateStorage
-import com.yandex.div.compose.patch.observe
-import com.yandex.div.compose.system.bind
-import com.yandex.div.compose.timers.observe
-import com.yandex.div.compose.triggers.observe
+import com.yandex.div.compose.patch.onComposition
+import com.yandex.div.compose.system.onComposition
+import com.yandex.div.compose.timers.onComposition
+import com.yandex.div.compose.triggers.onComposition
 import com.yandex.div.compose.variables.ScopedVariableProvider
 import com.yandex.div.compose.variables.VariableAndConstantProvider
-import com.yandex.div.compose.visibility.bind
+import com.yandex.div.compose.visibility.onComposition
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
@@ -57,15 +57,15 @@ internal class DivViewContext(
         component.apply {
             // must be attached before other components since other components could rely on
             // the coroutine scope
-            coroutineScopeProvider.attach()
-            animatorStorage.observe()
-            hapticFeedbackStorage.bind()
-            layoutProviderStorage.observe()
-            patchCoordinator.observe()
-            timerStorage.observe()
-            visibilityActionTracker.bind()
+            coroutineScopeProvider.onComposition()
+            animatorStorage.onComposition()
+            hapticFeedbackStorage.onComposition()
+            layoutProviderStorage.onComposition()
+            patchCoordinator.onComposition()
+            timerStorage.onComposition()
+            visibilityActionTracker.onComposition()
         }
-        rootLocalComponent.triggerStorage.observe()
+        rootLocalComponent.triggerStorage.onComposition()
     }
 
     /**
