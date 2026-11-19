@@ -11,7 +11,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
@@ -19,6 +18,7 @@ import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -81,11 +81,11 @@ class DivViewWithGalleryItemBuilderTest {
     private val variableController = DivVariableController()
     private val divContext = DivContext(
         getApplicationContext(),
-        DivConfiguration(
-            actionHandler = actionHandler,
-            reporter = reporter,
-            variableController = variableController
-        )
+        divConfiguration {
+            actionHandler = this@DivViewWithGalleryItemBuilderTest.actionHandler
+            reporter = this@DivViewWithGalleryItemBuilderTest.reporter
+            variableController = this@DivViewWithGalleryItemBuilderTest.variableController
+        }
     )
 
     @Test

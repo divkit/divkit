@@ -33,10 +33,10 @@ class DivViewWithExtensionsTest {
 
     private val reporter = TestReporter()
 
-    private val configuration = DivConfiguration(
-        extensionHandlers = mapOf("wrapper" to WrapperExtensionHandler()),
-        reporter = reporter
-    )
+    private val configuration = divConfiguration {
+        extensionHandlers = mapOf("wrapper" to WrapperExtensionHandler())
+        reporter = this@DivViewWithExtensionsTest.reporter
+    }
 
     private val wildcardConfiguration = divConfiguration {
         extensionHandlers = mapOf(

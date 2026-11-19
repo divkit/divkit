@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
@@ -15,6 +14,7 @@ import com.yandex.div.compose.actions.DivActionData
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivExternalActionHandler
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -50,9 +50,11 @@ class DivViewWithItemBuilderTriggerTest {
         val active = Variable.StringVariable("active", "list")
         val controller = DivVariableController().apply { declare(elements, active) }
         val handler = TestExternalActionHandler()
-        val configuration = DivConfiguration(
-            reporter = TestReporter(), variableController = controller, actionHandler = handler,
-        )
+        val configuration = divConfiguration {
+            reporter = TestReporter()
+            variableController = controller
+            actionHandler = handler
+        }
         val content = container(itemBuilder = itemBuilder(
             data = arrayExpression("@{elements}"),
             prototypes = listOf(prototype(id = constant("item"), div = text(
@@ -86,16 +88,16 @@ class DivViewWithItemBuilderTriggerTest {
         var version by mutableIntStateOf(0)
         var appliedVersion = -1
         val actionVersions = mutableListOf<Int>()
-        val configuration = DivConfiguration(
-            reporter = TestReporter(),
-            variableController = controller,
+        val configuration = divConfiguration {
+            reporter = TestReporter()
+            variableController = controller
             // Records which composition was applied when the host is called.
             actionHandler = object : DivExternalActionHandler {
                 override fun handle(context: DivActionHandlingContext, action: DivActionData) {
                     actionVersions.add(appliedVersion)
                 }
-            },
-        )
+            }
+        }
         val card = data(container(itemBuilder = itemBuilder(
             data = arrayExpression("@{elements}"),
             prototypes = listOf(prototype(id = constant("item"), div = text(

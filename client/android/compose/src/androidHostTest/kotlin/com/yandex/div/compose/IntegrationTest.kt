@@ -35,10 +35,10 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         val variableController = DivVariableController()
         val divContext = DivContext(
             baseContext = getApplicationContext(),
-            configuration = DivConfiguration(
-                reporter = Reporter(testCase.logger),
-                variableController = variableController
-            )
+            configuration = divConfiguration {
+                reporter = Reporter(testCase.logger)
+                this.variableController = variableController
+            }
         )
 
         testCase.declareResultVariables(

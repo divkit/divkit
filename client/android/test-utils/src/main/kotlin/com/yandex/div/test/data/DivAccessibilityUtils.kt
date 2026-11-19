@@ -32,7 +32,7 @@ fun accessibilityMenuItem(label: String, actions: List<DivAction>): DivAccessibi
     return DivAccessibilityMenuItem(label = constant(label), actions = actions)
 }
 
-fun accessibilityModeExpression(expression: String): Expression<Mode> {
+fun accessibilityMode(expression: String): Expression<Mode> {
     return Expression.MutableExpression(
         expressionKey = "mode",
         rawExpression = expression,

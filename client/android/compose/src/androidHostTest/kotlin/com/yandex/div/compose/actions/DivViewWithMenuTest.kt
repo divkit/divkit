@@ -10,10 +10,10 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.container
@@ -40,10 +40,10 @@ class DivViewWithMenuTest {
     private val actionHandler = TestExternalActionHandler()
     private val reporter = TestReporter()
 
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = reporter
-    )
+    private val configuration = divConfiguration {
+        actionHandler = this@DivViewWithMenuTest.actionHandler
+        reporter = this@DivViewWithMenuTest.reporter
+    }
 
     @Test
     fun `menu appears when element with menu action is clicked`() {

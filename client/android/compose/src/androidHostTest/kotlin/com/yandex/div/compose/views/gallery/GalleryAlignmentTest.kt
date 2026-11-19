@@ -3,8 +3,8 @@ package com.yandex.div.compose.views.gallery
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.views.gallery.scroll.calculateDesiredScrollOffset
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -106,10 +106,10 @@ class GalleryAlignmentTest {
             declare(alignment)
             declare(defaultItem)
         }
-        val configuration = DivConfiguration(
-            reporter = TestReporter(),
-            variableController = variableController,
-        )
+        val configuration = divConfiguration {
+            reporter = TestReporter()
+            this.variableController = variableController
+        }
 
         composeRule.setContent(
             configuration = configuration,
@@ -164,10 +164,10 @@ class GalleryAlignmentTest {
             declare(alignment)
             declare(defaultItem)
         }
-        val configuration = DivConfiguration(
-            reporter = TestReporter(),
-            variableController = variableController,
-        )
+        val configuration = divConfiguration {
+            reporter = TestReporter()
+            this.variableController = variableController
+        }
 
         composeRule.setContent(
             configuration = configuration,
@@ -230,10 +230,10 @@ class GalleryAlignmentTest {
     ) {
         val defaultItem = Variable.IntegerVariable("default_item", 0)
         val variableController = DivVariableController().apply { declare(defaultItem) }
-        val configuration = DivConfiguration(
-            reporter = TestReporter(),
-            variableController = variableController,
-        )
+        val configuration = divConfiguration {
+            reporter = TestReporter()
+            this.variableController = variableController
+        }
 
         composeRule.setContent(
             configuration = configuration,

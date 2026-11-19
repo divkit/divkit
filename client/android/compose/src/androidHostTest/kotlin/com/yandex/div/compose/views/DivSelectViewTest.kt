@@ -12,8 +12,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -36,10 +36,10 @@ class DivSelectViewTest {
     val rule = createComposeRule()
 
     private val value = Variable.StringVariable("choice", "first")
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(value) },
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = DivVariableController().apply { declare(value) }
+    }
 
     @Test
     fun `select has dropdown role without accessibility block`() {

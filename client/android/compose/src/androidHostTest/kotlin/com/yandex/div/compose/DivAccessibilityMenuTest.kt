@@ -20,7 +20,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.accessibilityMenuItem
-import com.yandex.div.test.data.accessibilityModeExpression
+import com.yandex.div.test.data.accessibilityMode
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
@@ -59,9 +59,10 @@ class DivAccessibilityMenuTest {
     val rule = createAndroidComposeRule<ComponentActivity>()
 
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(), variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivAccessibilityMenuTest.variableController
+    }
     private val content = mutableStateOf(text(text = ""))
 
     @Test
@@ -288,7 +289,7 @@ class DivAccessibilityMenuTest {
             thumbValueVariable = "start", thumbSecondaryValueVariable = "end",
             accessibility = accessibility(description = "Price", menu = listOf(accessibilityMenuItem("Run", listOf(action())))),
             secondaryValueAccessibility = DivAccessibility(
-                mode = accessibilityModeExpression("@{secondary_mode}"),
+                mode = accessibilityMode("@{secondary_mode}"),
             ),
         ))
         val command = rule.onNode(hasContentDescription("Price,Range start"))
@@ -362,7 +363,7 @@ class DivAccessibilityMenuTest {
         val mode = Variable.StringVariable("menu_mode", "default")
         variableController.declare(mode)
         setContent(text(id = "target", text = "Card", accessibility = DivAccessibility(
-            mode = accessibilityModeExpression("@{menu_mode}"),
+            mode = accessibilityMode("@{menu_mode}"),
             menu = listOf(accessibilityMenuItem("Run", listOf(action()))),
         )))
         val command = commands().single()

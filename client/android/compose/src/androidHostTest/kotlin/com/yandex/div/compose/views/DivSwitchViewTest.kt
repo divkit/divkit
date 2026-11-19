@@ -23,8 +23,8 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -54,10 +54,10 @@ class DivSwitchViewTest {
 
     private val isOn = Variable.BooleanVariable("is_on", false)
     private val variableController = DivVariableController().apply { declare(isOn) }
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivSwitchViewTest.variableController
+    }
     private val tag = "switch"
 
     @Test

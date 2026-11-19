@@ -6,8 +6,8 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -59,10 +59,10 @@ class DivViewWithItemBuilderLayoutScopeTest(private val case: Case) {
     @Test
     fun `container reads item visibility and margins in the item scope`() {
         rule.setContent(
-            configuration = DivConfiguration(
-                reporter = TestReporter(),
-                variableController = variableController
-            ),
+            configuration = divConfiguration {
+                reporter = TestReporter()
+                variableController = this@DivViewWithItemBuilderLayoutScopeTest.variableController
+            },
             data = data(case.orientation.container(case.source))
         )
 

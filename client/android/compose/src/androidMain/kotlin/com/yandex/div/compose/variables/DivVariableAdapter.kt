@@ -9,7 +9,8 @@ import com.yandex.div2.DivVariable
 import dev.zacsweers.metro.Inject
 
 @DivLocalScope
-internal class DivVariableAdapter @Inject constructor(
+@Inject
+internal class DivVariableAdapter(
     private val expressionResolver: ExpressionResolver,
     private val parsingErrorLogger: ParsingErrorLogger,
     private val propertyVariableExecutor: DivPropertyVariableExecutor

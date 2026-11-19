@@ -6,7 +6,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class CustomResourcePreloader @Inject constructor(
+@Inject
+internal class CustomResourcePreloader(
     private val factories: Map<String, @JvmSuppressWildcards DivCustomViewFactory>,
 ) {
     suspend fun preload(environment: DivCustomEnvironment): PreloadResult =

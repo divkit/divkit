@@ -10,11 +10,11 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -55,8 +55,8 @@ class DivInputValidatorLabelTest {
     private val labelVisibility = Variable.StringVariable("label_visibility", "visible")
     private val divContext = DivContext(
         getApplicationContext(),
-        DivConfiguration(
-            reporter = reporter,
+        divConfiguration {
+            reporter = this@DivInputValidatorLabelTest.reporter
             variableController = DivVariableController().apply {
                 declare(
                     textVariable,
@@ -66,8 +66,8 @@ class DivInputValidatorLabelTest {
                     labelId,
                     labelVisibility,
                 )
-            },
-        ),
+            }
+        },
     )
     private val field get() = rule.onNode(hasSetTextAction())
 

@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestImageLoaderConfiguration
@@ -18,6 +17,7 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.views.DivBlockLayoutParams
@@ -58,10 +58,10 @@ class ModifierEqualityTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val configuration = DivConfiguration(
-        imageLoaderConfiguration = TestImageLoaderConfiguration(),
+    private val configuration = divConfiguration {
+        imageLoaderConfiguration = TestImageLoaderConfiguration()
         reporter = TestReporter()
-    )
+    }
 
     @Test
     fun simple() {

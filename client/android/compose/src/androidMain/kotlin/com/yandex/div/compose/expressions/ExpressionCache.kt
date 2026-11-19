@@ -22,7 +22,8 @@ import kotlin.reflect.KClass
  * Cache access and expression updates are confined to the main thread.
  */
 @DivLocalScope
-internal class ExpressionCache @Inject constructor(
+@Inject
+internal class ExpressionCache(
     private val expressionResolver: ExpressionResolver
 ) {
 

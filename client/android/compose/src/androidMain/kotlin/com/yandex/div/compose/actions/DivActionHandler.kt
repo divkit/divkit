@@ -17,7 +17,8 @@ import dev.zacsweers.metro.Inject
 import org.json.JSONObject
 
 @DivViewScope
-internal class DivActionHandler @Inject constructor(
+@Inject
+internal class DivActionHandler(
     private val actionMenuHolder: ActionMenuHolder,
     private val animatorActionHandler: AnimatorActionHandler,
     private val externalActionHandler: DivExternalActionHandler,

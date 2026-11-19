@@ -16,9 +16,9 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.pressKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
@@ -49,9 +49,9 @@ class DivViewWithPressActionsTest {
     private val handledActions: List<DivActionData>
         get() = actionHandler.handledActions
 
-    val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-    )
+    val configuration = divConfiguration {
+        actionHandler = this@DivViewWithPressActionsTest.actionHandler
+    }
 
     @Test
     fun `pressStartActions run on down`() {

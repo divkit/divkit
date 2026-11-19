@@ -7,7 +7,8 @@ import com.yandex.div.internal.variables.evaluateAsPrimitive
 import com.yandex.div2.DivActionUpdateStructure
 import dev.zacsweers.metro.Inject
 
-internal class UpdateStructureActionHandler @Inject constructor(
+@Inject
+internal class UpdateStructureActionHandler(
     private val reporter: DivReporter
 ) {
 

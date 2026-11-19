@@ -17,7 +17,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
 @DivContextScope
-internal class CoilImagePreloader @Inject constructor(
+@Inject
+internal class CoilImagePreloader(
     private val imageLoader: ImageLoader,
     private val imageRequestFactory: ImageRequestFactory,
 ) : ImagePreloader {

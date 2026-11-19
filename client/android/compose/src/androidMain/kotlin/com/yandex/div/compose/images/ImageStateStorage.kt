@@ -19,7 +19,8 @@ import dev.zacsweers.metro.Inject
  * shared by the element modifiers and the image content.
  */
 @DivViewScope
-internal class ImageStateStorage @Inject constructor() {
+@Inject
+internal class ImageStateStorage {
     private val loadedElements = mutableStateMapOf<DivBase, ImageRequest>()
     private val appearanceAnimations = mutableMapOf<DivBase, ImageAppearanceAnimation>()
 

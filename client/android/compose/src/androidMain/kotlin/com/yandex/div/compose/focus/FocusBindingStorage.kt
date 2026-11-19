@@ -8,7 +8,8 @@ import com.yandex.div.compose.di.DivViewScope
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class FocusBindingStorage @Inject constructor(
+@Inject
+internal class FocusBindingStorage(
     private val reporter: DivReporter,
 ) {
     class Binding {

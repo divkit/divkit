@@ -9,7 +9,8 @@ import kotlin.time.ExperimentalTime
 
 @DivContextScope
 @OptIn(ExperimentalTime::class)
-internal class DivStoredValuesStorageFactory @Inject constructor(
+@Inject
+internal class DivStoredValuesStorageFactory(
     private val clock: Clock,
     private val reporter: DivReporter,
     private val repository: Lazy<StoredValuesRepository>,

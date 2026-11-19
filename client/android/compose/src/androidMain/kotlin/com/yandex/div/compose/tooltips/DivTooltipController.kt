@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
  * attachment is not tracked separately.
  */
 @DivViewScope
-class DivTooltipController @Inject internal constructor(
+@Inject
+class DivTooltipController internal constructor(
     @Named(Names.CARD_ID)
     private val cardId: String,
     @Named(Names.MAIN_COROUTINE_SCOPE)

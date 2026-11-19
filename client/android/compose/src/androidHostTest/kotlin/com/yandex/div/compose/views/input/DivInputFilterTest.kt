@@ -6,8 +6,8 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -33,10 +33,10 @@ class DivInputFilterTest {
     private val reporter = TestReporter()
     private val source = Variable.StringVariable("text", "")
     private val variableController = DivVariableController().apply { declare(source) }
-    private val configuration = DivConfiguration(
-        reporter = reporter,
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = this@DivInputFilterTest.reporter
+        variableController = this@DivInputFilterTest.variableController
+    }
     private val field get() = rule.onNode(hasSetTextAction())
 
     @Test

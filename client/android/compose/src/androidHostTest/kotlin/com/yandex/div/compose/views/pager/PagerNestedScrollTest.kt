@@ -19,9 +19,9 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
@@ -40,7 +40,7 @@ class PagerNestedScrollTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private val configuration = DivConfiguration(reporter = TestReporter())
+    private val configuration = divConfiguration { reporter = TestReporter() }
     private val parentScroll = ScrollState(0)
 
     @Test

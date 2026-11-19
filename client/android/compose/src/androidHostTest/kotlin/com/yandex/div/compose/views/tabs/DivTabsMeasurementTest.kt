@@ -18,11 +18,11 @@ import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -53,7 +53,7 @@ class DivTabsMeasurementTest {
     private val heights = listOf(100, 200, 300)
     private val selectedTab = Variable.IntegerVariable("selected_tab", 0)
 
-    private val configuration = DivConfiguration(
+    private val configuration = divConfiguration {
         customViewFactories = heights.indices.associate { index ->
             "page-$index" to object : DivCustomViewFactory {
                 @Composable
@@ -65,10 +65,10 @@ class DivTabsMeasurementTest {
                     Box(modifier)
                 }
             }
-        },
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(selectedTab) },
-    )
+        }
+        reporter = TestReporter()
+        variableController = DivVariableController().apply { declare(selectedTab) }
+    }
 
     private var initialHeight = 0.dp
     private var touchSlop = 0f

@@ -5,7 +5,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class ImageLoaderFactory @Inject constructor(
+@Inject
+internal class ImageLoaderFactory(
     private val externalImageLoaderConfiguration: ImageLoaderConfiguration,
     private val platformImageLoaderConfiguration: PlatformImageLoaderConfiguration,
 ) {

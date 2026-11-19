@@ -5,7 +5,8 @@ import com.yandex.div2.DivBase
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class CompositionKeyStorage @Inject constructor() {
+@Inject
+internal class CompositionKeyStorage {
     private val keys = mutableMapOf<DivBase, Long>()
     private var nextKey = 0L
 

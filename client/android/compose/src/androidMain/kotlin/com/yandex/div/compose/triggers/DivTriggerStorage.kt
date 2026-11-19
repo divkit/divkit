@@ -18,7 +18,8 @@ import dev.zacsweers.metro.Inject
  * same scope while the owner is composed.
  */
 @DivLocalScope
-internal class DivTriggerStorage @Inject constructor(
+@Inject
+internal class DivTriggerStorage(
     private val actionHandler: DivActionHandler,
     private val actionHandlingContext: DivActionHandlingContext,
     private val expressionResolver: ExpressionResolver

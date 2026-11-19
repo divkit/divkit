@@ -6,7 +6,8 @@ import com.yandex.div2.DivBase
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class DivLocalComponentStorage @Inject constructor() {
+@Inject
+internal class DivLocalComponentStorage {
     private val items = mutableMapOf<DivBase, Item>()
 
     private class Item(var component: DivLocalComponent? = null)

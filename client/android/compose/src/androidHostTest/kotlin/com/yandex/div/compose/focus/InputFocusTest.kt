@@ -14,10 +14,10 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -46,10 +46,12 @@ class InputFocusTest {
     @get:Rule
     val rules: RuleChain = RuleChain.outerRule(touchMode).around(rule)
 
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(Variable.StringVariable("input", "")) },
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = DivVariableController().apply {
+            declare(Variable.StringVariable("input", ""))
+        }
+    }
     private lateinit var inputFocus: InputFocus
 
     @Test

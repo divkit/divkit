@@ -7,7 +7,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class ImageRequestListener @Inject constructor(
+@Inject
+internal class ImageRequestListener(
     private val configuration: ImageLoaderConfiguration,
     private val reporter: DivReporter
 ) : ImageRequest.Listener {

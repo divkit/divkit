@@ -7,7 +7,8 @@ import com.yandex.div2.DivActionSetCursorPosition
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class SetCursorPositionActionHandler @Inject constructor(
+@Inject
+internal class SetCursorPositionActionHandler(
     private val bindingStorage: FocusBindingStorage,
     private val reporter: DivReporter,
 ) {

@@ -13,7 +13,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class AndroidSliderTextPainterFactory @Inject constructor() : SliderTextPainterFactory {
+@Inject
+internal class AndroidSliderTextPainterFactory : SliderTextPainterFactory {
 
     @Composable
     override fun rememberPainter(style: SliderTextStyle): SliderTextPainter {

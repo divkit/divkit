@@ -31,10 +31,10 @@ class DivViewWithTriggersTest {
     val rule = createComposeRule()
 
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivViewWithTriggersTest.variableController
+    }
 
     @Test
     fun `initially gone child without local variables becomes visible from its trigger`() {

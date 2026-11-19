@@ -16,7 +16,8 @@ import com.yandex.div2.DivPager
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class DivPagerStateStorage @Inject constructor() {
+@Inject
+internal class DivPagerStateStorage {
 
     private val states: SnapshotStateMap<DivPager, DivPagerState> = mutableStateMapOf()
 

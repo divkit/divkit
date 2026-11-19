@@ -6,7 +6,8 @@ import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionTimer
 import dev.zacsweers.metro.Inject
 
-internal class TimerActionHandler @Inject constructor(
+@Inject
+internal class TimerActionHandler(
     private val reporter: DivReporter,
     private val timerStorage: TimerStorage
 ) {

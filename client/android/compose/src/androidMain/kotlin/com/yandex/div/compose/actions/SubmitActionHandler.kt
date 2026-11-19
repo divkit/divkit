@@ -19,7 +19,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 @DivViewScope
-internal class SubmitActionHandler @Inject constructor(
+@Inject
+internal class SubmitActionHandler(
     private val actionHandler: Lazy<DivActionHandler>,
     private val coroutineScopeProvider: DivViewCoroutineScopeProvider,
     private val localComponentStorage: DivLocalComponentStorage,

@@ -13,7 +13,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class AndroidFontFamilyFactory @Inject constructor(
+@Inject
+internal class AndroidFontFamilyFactory(
     private val assets: AssetManager,
     private val reporter: DivReporter,
 ) : FontFamilyFactory {

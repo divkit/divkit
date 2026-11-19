@@ -5,8 +5,8 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -33,13 +33,14 @@ class PagerDefaultItemTest {
 
     private val alignment = Variable.StringVariable("alignment", "center")
     private val defaultItem = Variable.IntegerVariable("default_item", 1)
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
+
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
         variableController = DivVariableController().apply {
             declare(alignment)
             declare(defaultItem)
-        },
-    )
+        }
+    }
 
     @Test
     fun `default item expression is only used for initial position`() {

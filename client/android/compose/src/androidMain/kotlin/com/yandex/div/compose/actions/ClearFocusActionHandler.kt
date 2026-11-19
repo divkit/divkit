@@ -6,7 +6,8 @@ import com.yandex.div.compose.focus.FocusBindingStorage
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class ClearFocusActionHandler @Inject constructor(
+@Inject
+internal class ClearFocusActionHandler(
     private val bindingStorage: FocusBindingStorage,
     private val reporter: DivReporter,
 ) {

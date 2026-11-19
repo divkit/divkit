@@ -6,7 +6,8 @@ import com.yandex.div2.DivActionFocusElement
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class FocusElementActionHandler @Inject constructor(
+@Inject
+internal class FocusElementActionHandler(
     private val bindingStorage: FocusBindingStorage,
 ) {
     fun handle(context: DivActionHandlingContext, action: DivActionFocusElement) {

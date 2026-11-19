@@ -12,7 +12,8 @@ import com.yandex.div2.DivActionArraySetValue
 import dev.zacsweers.metro.Inject
 import org.json.JSONArray
 
-internal class ArrayActionsHandler @Inject constructor(
+@Inject
+internal class ArrayActionsHandler(
     private val reporter: DivReporter
 ) {
 

@@ -6,9 +6,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -44,7 +44,10 @@ class PagerItemCountTest {
         declare(itemCount)
         declare(visibility)
     }
-    private val configuration = DivConfiguration(reporter = reporter, variableController = controller)
+    private val configuration = divConfiguration {
+        reporter = this@PagerItemCountTest.reporter
+        variableController = controller
+    }
 
     @Test
     fun `count includes invisible pages and excludes gone pages`() {

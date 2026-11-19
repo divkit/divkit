@@ -6,7 +6,8 @@ import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionVideo
 import dev.zacsweers.metro.Inject
 
-internal class VideoActionHandler @Inject constructor(
+@Inject
+internal class VideoActionHandler(
     private val videoPlayerStorage: VideoPlayerStorage,
     private val reporter: DivReporter,
 ) {

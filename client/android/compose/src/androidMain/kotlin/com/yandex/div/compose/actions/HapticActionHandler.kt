@@ -6,7 +6,8 @@ import com.yandex.div.compose.system.HapticFeedbackStorage
 import com.yandex.div2.DivActionHaptic
 import dev.zacsweers.metro.Inject
 
-internal class HapticActionHandler @Inject constructor(
+@Inject
+internal class HapticActionHandler(
     private val hapticFeedbackStorage: HapticFeedbackStorage,
     private val reporter: DivReporter,
 ) {

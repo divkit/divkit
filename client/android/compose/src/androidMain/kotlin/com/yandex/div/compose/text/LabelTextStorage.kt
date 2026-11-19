@@ -15,7 +15,8 @@ import dev.zacsweers.metro.Inject
  * the next label takes over when it is removed.
  */
 @DivViewScope
-internal class LabelTextStorage @Inject constructor() {
+@Inject
+internal class LabelTextStorage {
     private val texts: SnapshotStateMap<String, String> = mutableStateMapOf()
     private val labels = mutableMapOf<String, LinkedHashMap<Label, String>>()
 

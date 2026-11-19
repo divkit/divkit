@@ -60,7 +60,10 @@ class DivViewWithTooltipsTest {
     private val divContext by lazy {
         DivContext(
             baseContext = activity,
-            configuration = DivConfiguration(actionHandler = actionHandler, reporter = reporter),
+            configuration = divConfiguration {
+                actionHandler = this@DivViewWithTooltipsTest.actionHandler
+                reporter = this@DivViewWithTooltipsTest.reporter
+            },
         )
     }
     private lateinit var divData: DivData

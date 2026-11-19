@@ -7,10 +7,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.animatorStartAction
 import com.yandex.div.test.data.container
@@ -36,7 +36,7 @@ class DivViewWithAnimatorPatchTest {
 
     private val divContext = DivContext(
         getApplicationContext(),
-        DivConfiguration(),
+        divConfiguration { },
     )
 
     @BeforeTest

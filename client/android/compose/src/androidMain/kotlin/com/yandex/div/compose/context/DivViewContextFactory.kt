@@ -7,7 +7,8 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 
 @DivContextScope
-internal class DivViewContextFactory @Inject constructor(
+@Inject
+internal class DivViewContextFactory(
     private val storage: DivViewContextStorage,
     private val viewComponentBuilderProvider: Provider<DivViewComponent.Builder>,
 ) {

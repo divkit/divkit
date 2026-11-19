@@ -17,7 +17,8 @@ import kotlin.time.ExperimentalTime
 
 @DivViewScope
 @OptIn(ExperimentalTime::class)
-internal class LazyStoredValuesStorage @Inject constructor(
+@Inject
+internal class LazyStoredValuesStorage(
     @param:Named(Names.CARD_ID) private val cardId: String,
     clock: Clock,
     private val reporter: DivReporter,

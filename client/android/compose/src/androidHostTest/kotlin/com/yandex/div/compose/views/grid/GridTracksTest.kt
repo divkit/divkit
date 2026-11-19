@@ -6,9 +6,9 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.Density
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -35,10 +35,10 @@ class GridTracksTest {
     val rule = createComposeRule()
 
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@GridTracksTest.variableController
+    }
 
     @Test
     fun `weighted tracks react to expression changes on both axes`() {

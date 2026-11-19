@@ -15,8 +15,8 @@ import androidx.compose.ui.test.performTextInputSelection
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.text.TextRange
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -47,10 +47,10 @@ class FixedLengthMaskTest {
     private val rawVar = Variable.StringVariable("fixed_raw", "")
     private val displayVar = Variable.StringVariable("fixed_display", "")
     private val variableController = DivVariableController().apply { declare(rawVar, displayVar) }
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@FixedLengthMaskTest.variableController
+    }
     private val field get() = rule.onNode(hasSetTextAction())
 
     @Test

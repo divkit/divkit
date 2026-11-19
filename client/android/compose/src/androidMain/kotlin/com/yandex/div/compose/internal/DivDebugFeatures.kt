@@ -16,7 +16,8 @@ import dev.zacsweers.metro.Inject
  */
 @DivContextScope
 @InternalApi
-class DivDebugFeatures @Inject internal constructor(
+@Inject
+class DivDebugFeatures internal constructor(
     private val viewContextStorage: DivViewContextStorage
 ) {
 

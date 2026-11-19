@@ -7,7 +7,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class FontFamilyProvider @Inject constructor(
+@Inject
+internal class FontFamilyProvider(
     private val sourceProvider: DivFontSourceProvider,
     private val cache: FontFamilyCache,
 ) {

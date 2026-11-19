@@ -26,10 +26,10 @@ class DivViewWithCustomTest {
 
     private val reporter = TestReporter()
 
-    private val configuration = DivConfiguration(
-        customViewFactories = mapOf("custom_text" to CustomTextViewFactory()),
-        reporter = reporter
-    )
+    private val configuration = divConfiguration {
+        customViewFactories = mapOf("custom_text" to CustomTextViewFactory())
+        reporter = this@DivViewWithCustomTest.reporter
+    }
 
     @Test
     fun `error is reported if factory not found`() {
@@ -64,7 +64,7 @@ class DivViewWithCustomTest {
 
 private class CustomTextViewFactory : DivCustomViewFactory {
     @Composable
-    override fun Content(modifer: Modifier, environment: DivCustomEnvironment) {
+    override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
         Text(text = environment.data.customProps?.getString("text") ?: "")
     }
 }

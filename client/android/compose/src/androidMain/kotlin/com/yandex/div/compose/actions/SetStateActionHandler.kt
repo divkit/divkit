@@ -9,7 +9,8 @@ import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivData
 import dev.zacsweers.metro.Inject
 
-internal class SetStateActionHandler @Inject constructor(
+@Inject
+internal class SetStateActionHandler(
     private val reporter: DivReporter,
     private val stateStorage: DivStateStorage,
     private val data: DivData,

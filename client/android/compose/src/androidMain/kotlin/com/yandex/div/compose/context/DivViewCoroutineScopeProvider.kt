@@ -19,7 +19,8 @@ import kotlinx.coroutines.Job
  * The main scope supplies the coroutine context except for the Job, which is owned by Compose.
  */
 @DivViewScope
-internal class DivViewCoroutineScopeProvider @Inject constructor(
+@Inject
+internal class DivViewCoroutineScopeProvider(
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope,
 ) {

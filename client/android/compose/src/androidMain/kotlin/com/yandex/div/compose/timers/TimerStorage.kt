@@ -14,7 +14,8 @@ import kotlin.time.TimeSource
 import kotlinx.coroutines.CoroutineScope
 
 @DivViewScope
-internal class TimerStorage @Inject constructor(
+@Inject
+internal class TimerStorage(
     data: DivData,
     private val actionHandler: Lazy<DivActionHandler>,
     @Named(Names.MAIN_COROUTINE_SCOPE)

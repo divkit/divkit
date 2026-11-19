@@ -70,11 +70,11 @@ class DivViewFocusTest {
         declare(visibility, enabled, captureFocus, Variable.StringVariable("input", ""))
     }
 
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = reporter,
-        variableController = variables,
-    )
+    private val configuration = divConfiguration {
+        actionHandler = this@DivViewFocusTest.actionHandler
+        reporter = this@DivViewFocusTest.reporter
+        variableController = variables
+    }
 
     private val focus = DivFocus(
         onFocus = listOf(action(id = "focus")),

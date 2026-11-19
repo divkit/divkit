@@ -1,10 +1,10 @@
 package com.yandex.div.compose.collection
 
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.patch.copyForPatch
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -33,7 +33,7 @@ import kotlin.test.assertSame
 class CollectionItemScopeStorageTest(private val case: Case) {
     private val divContext = DivContext(
         baseContext = getApplicationContext(),
-        configuration = DivConfiguration(reporter = TestReporter())
+        configuration = divConfiguration { reporter = TestReporter() }
     )
 
     private val viewContext = divContext.getViewContext(data(text(text = "card")))

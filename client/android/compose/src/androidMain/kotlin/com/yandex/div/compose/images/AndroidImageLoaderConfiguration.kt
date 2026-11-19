@@ -12,7 +12,8 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Named
 
 @DivContextScope
-internal class AndroidImageLoaderConfiguration @Inject constructor(
+@Inject
+internal class AndroidImageLoaderConfiguration(
     private val context: PlatformContext,
     @Named(Names.MAX_DISPLAY_SIZE)
     private val maxDisplaySize: Int,

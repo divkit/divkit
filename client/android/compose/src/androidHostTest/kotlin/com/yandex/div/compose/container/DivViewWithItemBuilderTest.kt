@@ -9,11 +9,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -61,11 +61,11 @@ class DivViewWithItemBuilderTest {
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = reporter,
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        actionHandler = this@DivViewWithItemBuilderTest.actionHandler
+        reporter = this@DivViewWithItemBuilderTest.reporter
+        variableController = this@DivViewWithItemBuilderTest.variableController
+    }
 
     @Test
     fun `items are built from data with element and index variables`() {

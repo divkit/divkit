@@ -26,7 +26,8 @@ internal data class LineMetrics(
 }
 
 @DivContextScope
-internal class LineMetricsCache @Inject constructor(
+@Inject
+internal class LineMetricsCache(
     private val measurer: LineMetricsMeasurer,
 ) {
 

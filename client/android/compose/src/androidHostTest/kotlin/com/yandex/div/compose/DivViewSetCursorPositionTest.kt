@@ -42,8 +42,8 @@ class DivViewSetCursorPositionTest {
 
     private val divContext = DivContext(
         RuntimeEnvironment.getApplication(),
-        DivConfiguration(
-            reporter = TestReporter(),
+        divConfiguration {
+            reporter = TestReporter()
             variableController = DivVariableController().apply {
                 declare(
                     Variable.StringVariable("value", "Sample input text"),
@@ -51,8 +51,8 @@ class DivViewSetCursorPositionTest {
                     Variable.StringVariable("phone_raw", "1234567890"),
                     Variable.StringVariable("short", "ab"),
                 )
-            },
-        ),
+            }
+        },
     )
     private val editable = SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText)
     private val field get() = rule.onNode(editable)

@@ -12,10 +12,10 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -54,11 +54,12 @@ class DivTextInlineImagesTest {
 
     private val variableController = DivVariableController()
     private val imageLoaderConfiguration = TestImageLoaderConfiguration()
-    private val configuration = DivConfiguration(
-        imageLoaderConfiguration = imageLoaderConfiguration,
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+
+    private val configuration = divConfiguration {
+        imageLoaderConfiguration = this@DivTextInlineImagesTest.imageLoaderConfiguration
+        reporter = TestReporter()
+        variableController = this@DivTextInlineImagesTest.variableController
+    }
 
     @Test
     fun `inline image keeps animated gradient on the surrounding text`() {

@@ -4,8 +4,8 @@ import android.graphics.Typeface
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.text.font.FontWeight
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.font.DivFontSource
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.setContent
@@ -36,11 +36,12 @@ class SliderStylesTest {
             family,
         )
     }
-    private val configuration = DivConfiguration(
-        fontSourceProvider = fontSourceProvider,
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+
+    private val configuration = divConfiguration {
+        fontSourceProvider = this@SliderStylesTest.fontSourceProvider
+        reporter = TestReporter()
+        variableController = this@SliderStylesTest.variableController
+    }
 
     @Test
     fun `thumb text font is requested from the font source provider with the family and weight`() {

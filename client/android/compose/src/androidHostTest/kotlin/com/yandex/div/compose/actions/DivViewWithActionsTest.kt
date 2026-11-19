@@ -9,10 +9,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
@@ -40,10 +40,10 @@ class DivViewWithActionsTest {
     private val handledActions: List<DivActionData>
         get() = actionHandler.handledActions
 
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = reporter,
-    )
+    private val configuration = divConfiguration {
+        actionHandler = this@DivViewWithActionsTest.actionHandler
+        reporter = this@DivViewWithActionsTest.reporter
+    }
 
     @Test
     fun `text changes when element with set_variable action is clicked`() {

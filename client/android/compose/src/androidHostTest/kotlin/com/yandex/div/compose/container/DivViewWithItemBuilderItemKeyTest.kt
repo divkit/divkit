@@ -3,8 +3,8 @@ package com.yandex.div.compose.container
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -41,10 +41,10 @@ class DivViewWithItemBuilderItemKeyTest(private val case: Case) {
     @Test
     fun `local state follows the item key`() {
         val elements = Variable.ArrayVariable("elements", case.elements)
-        val configuration = DivConfiguration(
-            reporter = TestReporter(),
+        val configuration = divConfiguration {
+            reporter = TestReporter()
             variableController = DivVariableController().apply { declare(elements) }
-        )
+        }
         rule.setContent(configuration = configuration, data = data(editableItems(case.id)))
         rule.onNodeWithText(case.clicked).performClick()
 

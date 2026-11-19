@@ -4,8 +4,8 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -35,10 +35,10 @@ class DivViewWithLayoutProviderTest {
         declare(widthVariable, heightVariable)
     }
 
-    private val configuration = DivConfiguration(
-        reporter = reporter,
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = this@DivViewWithLayoutProviderTest.reporter
+        variableController = this@DivViewWithLayoutProviderTest.variableController
+    }
 
     @get:Rule
     val rule = createComposeRule()

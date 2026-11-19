@@ -12,7 +12,7 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.accessibilityMenuItem
-import com.yandex.div.test.data.accessibilityModeExpression
+import com.yandex.div.test.data.accessibilityMode
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
@@ -305,7 +305,7 @@ class DivAccessibilityMenuTest {
     @Test
     fun `excluded ancestor removes descendant commands and rejects their old id`() {
         bind(container(
-            accessibility = DivAccessibility(mode = accessibilityModeExpression("@{parent_mode}")),
+            accessibility = DivAccessibility(mode = accessibilityMode("@{parent_mode}")),
             items = listOf(commandTarget("Run", "command")),
         ), variables = listOf(variable("parent_mode", "default")))
         val command = target().createAccessibilityNodeInfo().actionList.single { it.label == "Run" }
@@ -320,7 +320,7 @@ class DivAccessibilityMenuTest {
     @Test
     fun `merging an ancestor removes descendant commands`() {
         bind(container(
-            accessibility = DivAccessibility(mode = accessibilityModeExpression("@{parent_mode}")),
+            accessibility = DivAccessibility(mode = accessibilityMode("@{parent_mode}")),
             items = listOf(commandTarget("Run", "command")),
         ), variables = listOf(variable("parent_mode", "default")))
 
@@ -499,7 +499,7 @@ class DivAccessibilityMenuTest {
     @Test
     fun `mode expression hides published commands`() {
         bind(text(id = "target", text = "Card", accessibility = DivAccessibility(
-            mode = accessibilityModeExpression("@{menu_mode}"),
+            mode = accessibilityMode("@{menu_mode}"),
             menu = listOf(accessibilityMenuItem("Run", listOf(action()))),
         )), variables = listOf(variable("menu_mode", "default")))
 

@@ -4,11 +4,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.font.LineMetricsCache
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.Expression.Companion.constant
@@ -27,7 +27,9 @@ class DivTextFontMeasurementTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private val configuration = DivConfiguration(reporter = TestReporter())
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+    }
 
     private lateinit var cache: LineMetricsCache
 

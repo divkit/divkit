@@ -13,9 +13,9 @@ import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.test.data.constant
@@ -43,7 +43,7 @@ class GalleryGridViewTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val configuration = DivConfiguration(reporter = TestReporter())
+    private val configuration = divConfiguration { reporter = TestReporter() }
 
     @Test
     fun `horizontal gallery puts next item in shortest lane when axes are bounded`() {

@@ -30,7 +30,8 @@ import dev.zacsweers.metro.Named
  * updated layout is applied, then releases obsolete components and runs success actions.
  */
 @DivViewScope
-internal class DivPatchCoordinator @Inject constructor(
+@Inject
+internal class DivPatchCoordinator(
     private val collectionItemScopeStorage: CollectionItemScopeStorage,
     private val compositionKeyStorage: CompositionKeyStorage,
     private val localComponentStorage: DivLocalComponentStorage,

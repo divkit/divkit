@@ -17,7 +17,8 @@ import dev.zacsweers.metro.Inject
  * survive leaving and re-entering composition, and are released when data or a patch removes them.
  */
 @DivViewScope
-internal class CollectionItemScopeStorage @Inject constructor() {
+@Inject
+internal class CollectionItemScopeStorage {
     private val builders = HashMap<DivBase, MutableMap<DivLocalComponent, BuilderScopes>>()
     private val staticItems = HashMap<DivLocalComponent, MutableMap<DivBase, CollectionItems>>()
 

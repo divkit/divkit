@@ -12,7 +12,8 @@ import dev.zacsweers.metro.Inject
  * Provides access to the current context menu.
  */
 @DivViewScope
-internal class ActionMenuHolder @Inject constructor() {
+@Inject
+internal class ActionMenuHolder {
     var menuItems: List<DivAction.MenuItem> by mutableStateOf(emptyList())
     var expandedMenuAction: DivAction? by mutableStateOf(null)
 

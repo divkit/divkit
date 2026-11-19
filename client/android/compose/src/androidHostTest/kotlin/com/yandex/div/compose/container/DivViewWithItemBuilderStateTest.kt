@@ -6,8 +6,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -36,10 +36,10 @@ class DivViewWithItemBuilderStateTest {
     val rule = createComposeRule()
 
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivViewWithItemBuilderStateTest.variableController
+    }
 
     @Test
     fun `changing the resolved item id resets local state`() {

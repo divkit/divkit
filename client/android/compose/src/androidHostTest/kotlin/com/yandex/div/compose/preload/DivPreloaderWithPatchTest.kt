@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.test.data.change
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.custom
@@ -55,10 +55,10 @@ class DivPreloaderWithPatchTest {
 
     private val divContext = DivContext(
         baseContext = getApplicationContext(),
-        configuration = DivConfiguration(
-            reporter = TestReporter(),
+        configuration = divConfiguration {
+            reporter = TestReporter()
             customViewFactories = listOf("before", "remaining", "after").associateWith { factory }
-        )
+        }
     )
 
     @Test

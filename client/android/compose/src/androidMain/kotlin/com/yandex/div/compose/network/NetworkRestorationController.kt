@@ -26,7 +26,8 @@ import kotlinx.coroutines.launch
  * batch processing.
  */
 @DivContextScope
-internal class NetworkRestorationController @Inject constructor(
+@Inject
+internal class NetworkRestorationController(
     context: Context,
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope,

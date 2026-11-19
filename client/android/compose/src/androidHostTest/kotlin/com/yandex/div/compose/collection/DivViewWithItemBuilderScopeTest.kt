@@ -3,7 +3,6 @@ package com.yandex.div.compose.collection
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
@@ -11,6 +10,7 @@ import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
@@ -62,11 +62,11 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
     private val actionHandler = TestExternalActionHandler()
     private val divContext = DivContext(
         getApplicationContext(),
-        DivConfiguration(
-            reporter = TestReporter(),
-            actionHandler = actionHandler,
-            variableController = variableController
-        )
+        divConfiguration {
+            reporter = TestReporter()
+            actionHandler = this@DivViewWithItemBuilderScopeTest.actionHandler
+            variableController = this@DivViewWithItemBuilderScopeTest.variableController
+        }
     )
 
     @BeforeTest

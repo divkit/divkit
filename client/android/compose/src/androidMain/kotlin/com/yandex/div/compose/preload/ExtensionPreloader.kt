@@ -15,7 +15,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
 @DivContextScope
-internal class ExtensionPreloader @Inject constructor(
+@Inject
+internal class ExtensionPreloader(
     private val animationConfiguration: AnimationConfiguration,
     private val extensionHandlers: Map<String, @JvmSuppressWildcards DivExtensionHandler>,
     private val reporter: DivReporter,

@@ -14,7 +14,8 @@ import dev.zacsweers.metro.Inject
  * disposal; only the currently composed player for a given id is kept.
  */
 @DivViewScope
-internal class VideoPlayerStorage @Inject constructor() {
+@Inject
+internal class VideoPlayerStorage {
 
     private val players = mutableMapOf<String, DivVideoPlayer>()
 

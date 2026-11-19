@@ -9,7 +9,8 @@ import com.yandex.div2.DivActionDownload
 import com.yandex.div2.DivDownloadCallbacks
 import dev.zacsweers.metro.Inject
 
-internal class DownloadActionHandler @Inject constructor(
+@Inject
+internal class DownloadActionHandler(
     private val actionHandler: Lazy<DivActionHandler>,
     private val downloadManager: DivPatchDownloadManager,
 ) {

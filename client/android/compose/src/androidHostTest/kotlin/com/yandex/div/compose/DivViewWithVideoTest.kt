@@ -48,12 +48,12 @@ class DivViewWithVideoTest {
     private val playerFactory = FakeDivVideoPlayerFactory()
     private val externalActionHandler = RecordingExternalActionHandler()
 
-    private val configuration = DivConfiguration(
-        actionHandler = externalActionHandler,
-        playerFactory = playerFactory,
-        reporter = reporter,
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        actionHandler = externalActionHandler
+        playerFactory = this@DivViewWithVideoTest.playerFactory
+        reporter = this@DivViewWithVideoTest.reporter
+        variableController = this@DivViewWithVideoTest.variableController
+    }
 
     @Test
     fun `error is reported if no sources and no payload`() {

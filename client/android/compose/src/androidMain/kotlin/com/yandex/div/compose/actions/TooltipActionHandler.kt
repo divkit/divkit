@@ -6,7 +6,8 @@ import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionShowTooltip
 import dev.zacsweers.metro.Inject
 
-internal class TooltipActionHandler @Inject constructor(
+@Inject
+internal class TooltipActionHandler(
     private val tooltipStateStorage: TooltipStateStorage
 ) {
 

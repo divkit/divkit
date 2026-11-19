@@ -55,11 +55,11 @@ class DivViewRecompositionCountTest {
 
     private val compositionCounterExtensionHandler = CompositionCounterExtensionHandler()
 
-    private val configuration = DivConfiguration(
-        extensionHandlers = mapOf("composition_counter" to compositionCounterExtensionHandler),
-        reporter = TestReporter(),
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        extensionHandlers = mapOf("composition_counter" to compositionCounterExtensionHandler)
+        reporter = TestReporter()
+        variableController = this@DivViewRecompositionCountTest.variableController
+    }
 
     @Test
     fun `every node is composed once on initial composition`() {

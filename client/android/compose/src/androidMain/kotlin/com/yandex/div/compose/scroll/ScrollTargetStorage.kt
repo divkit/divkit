@@ -8,7 +8,8 @@ import dev.zacsweers.metro.Inject
  * Callers decide how to handle a missing or ambiguous target.
  */
 @DivViewScope
-internal class ScrollTargetStorage @Inject constructor() {
+@Inject
+internal class ScrollTargetStorage {
 
     private val targets = mutableMapOf<String, MutableSet<ScrollTarget>>()
 

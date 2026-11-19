@@ -7,7 +7,8 @@ import com.yandex.div.internal.variables.evaluate
 import com.yandex.div2.DivActionSetVariable
 import dev.zacsweers.metro.Inject
 
-internal class SetVariableActionHandler @Inject constructor(
+@Inject
+internal class SetVariableActionHandler(
     private val reporter: DivReporter
 ) {
 

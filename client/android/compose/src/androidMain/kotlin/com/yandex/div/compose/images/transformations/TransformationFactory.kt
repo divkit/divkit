@@ -6,7 +6,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class TransformationFactory @Inject constructor(
+@Inject
+internal class TransformationFactory(
     private val context: Context,
 ) {
     fun createBlur(radiusDp: Int, density: Float): Transformation {

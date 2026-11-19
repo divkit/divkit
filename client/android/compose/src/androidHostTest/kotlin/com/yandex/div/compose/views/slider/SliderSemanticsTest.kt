@@ -19,9 +19,9 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -47,10 +47,12 @@ class SliderSemanticsTest {
         name = "secondary_value",
         defaultValue = 70,
     )
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(value, secondaryValue) },
-    )
+
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = DivVariableController().apply { declare(value, secondaryValue) }
+    }
+
     private val thumb = SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo)
     private val rangeStart = thumb and hasContentDescription("Range start")
     private val rangeEnd = thumb and hasContentDescription("Range end")

@@ -17,6 +17,7 @@ import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.data.StoredValue
@@ -144,7 +145,7 @@ class DivStoredValuesStorageIntegrationTest {
         val valueName = uniqueName("environment")
         var customValue: StoredValue? = null
         var extensionValue: StoredValue? = null
-        val configuration = DivConfiguration(
+        val configuration = divConfiguration {
             customViewFactories = mapOf(
                 "storage" to object : DivCustomViewFactory {
                     @Composable
@@ -155,7 +156,7 @@ class DivStoredValuesStorageIntegrationTest {
                         )
                     }
                 }
-            ),
+            )
             extensionHandlers = mapOf(
                 "storage" to object : DivExtensionHandler {
                     @Composable
@@ -171,8 +172,8 @@ class DivStoredValuesStorageIntegrationTest {
                         content(modifier)
                     }
                 }
-            ),
-        )
+            )
+        }
         val card = data(
             content = container(
                 items = listOf(
@@ -196,7 +197,7 @@ class DivStoredValuesStorageIntegrationTest {
         assertEquals(expected, extensionValue)
     }
 
-    private fun createContext(configuration: DivConfiguration = DivConfiguration()): DivContext {
+    private fun createContext(configuration: DivConfiguration = divConfiguration { }): DivContext {
         return DivContext(applicationContext, configuration)
     }
 

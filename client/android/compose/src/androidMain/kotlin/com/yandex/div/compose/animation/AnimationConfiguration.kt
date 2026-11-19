@@ -9,7 +9,8 @@ import com.yandex.div.render.common.animation.SystemAnimationConfiguration
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class AnimationConfiguration @Inject constructor(
+@Inject
+internal class AnimationConfiguration(
     private val systemConfiguration: SystemAnimationConfiguration,
     private val provider: DivAnimationsEnabledProvider,
 ) {

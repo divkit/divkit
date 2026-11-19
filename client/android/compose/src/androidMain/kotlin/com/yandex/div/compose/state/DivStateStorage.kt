@@ -20,7 +20,8 @@ import com.yandex.div2.DivState
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class DivStateStorage @Inject constructor(
+@Inject
+internal class DivStateStorage(
     private val data: DivData,
     private val viewContextStorage: DivViewContextStorage,
 ) {

@@ -12,7 +12,8 @@ import com.yandex.div2.DivAction
 import dev.zacsweers.metro.Inject
 
 @DivLocalScope
-internal class DivPropertyVariableExecutor @Inject constructor(
+@Inject
+internal class DivPropertyVariableExecutor(
     private val actionHandler: Lazy<DivActionHandler>,
     private val actionHandlingContext: DivActionHandlingContext,
     private val expressionResolver: DivComposeExpressionResolver,

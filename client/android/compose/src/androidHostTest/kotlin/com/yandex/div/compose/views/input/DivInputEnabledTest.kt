@@ -8,11 +8,11 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -34,13 +34,13 @@ class DivInputEnabledTest {
 
     private val actionHandler = TestExternalActionHandler()
     private val enabled = Variable.BooleanVariable("enabled", true)
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = TestReporter(),
+    private val configuration = divConfiguration {
+        actionHandler = this@DivInputEnabledTest.actionHandler
+        reporter = TestReporter()
         variableController = DivVariableController().apply {
             declare(enabled, Variable.StringVariable("text", ""))
-        },
-    )
+        }
+    }
     private val field get() = rule.onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText))
 
     @Test

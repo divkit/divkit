@@ -8,9 +8,9 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
@@ -47,10 +47,10 @@ class DivViewWithTimersTest {
         declare(elapsedTime)
     }
 
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivViewWithTimersTest.variableController
+    }
 
     private val testScope = TestScope()
 

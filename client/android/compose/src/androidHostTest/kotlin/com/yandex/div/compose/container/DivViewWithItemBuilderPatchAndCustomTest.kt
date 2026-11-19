@@ -11,7 +11,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
@@ -21,6 +20,7 @@ import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -57,12 +57,12 @@ class DivViewWithItemBuilderPatchAndCustomTest {
     private val actionHandler = TestExternalActionHandler()
     private val divContext = DivContext(
         getApplicationContext(),
-        DivConfiguration(
-            reporter = TestReporter(),
-            actionHandler = actionHandler,
-            variableController = variableController,
+        divConfiguration {
+            reporter = TestReporter()
+            actionHandler = this@DivViewWithItemBuilderPatchAndCustomTest.actionHandler
+            variableController = this@DivViewWithItemBuilderPatchAndCustomTest.variableController
             customViewFactories = mapOf("children" to ChildrenFactory())
-        )
+        }
     )
 
     @Test

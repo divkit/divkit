@@ -8,8 +8,8 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.pressKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -30,10 +30,10 @@ class PhoneMaskTest {
 
     private val rawVar = Variable.StringVariable("phone_raw", "")
     private val displayVar = Variable.StringVariable("phone_display", "")
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(rawVar, displayVar) },
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = DivVariableController().apply { declare(rawVar, displayVar) }
+    }
     private val field get() = rule.onNode(hasSetTextAction())
 
     @Test

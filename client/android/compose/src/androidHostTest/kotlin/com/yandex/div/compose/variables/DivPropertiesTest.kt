@@ -12,12 +12,12 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -46,10 +46,10 @@ class DivPropertiesTest {
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
-    private val configuration = DivConfiguration(
-        reporter = reporter,
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = this@DivPropertiesTest.reporter
+        variableController = this@DivPropertiesTest.variableController
+    }
 
     private val context = DivContext(
         baseContext = getApplicationContext(),

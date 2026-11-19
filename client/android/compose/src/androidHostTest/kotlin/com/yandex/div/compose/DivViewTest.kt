@@ -42,10 +42,10 @@ class DivViewTest {
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
-    private val configuration = DivConfiguration(
-        reporter = reporter,
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        reporter = this@DivViewTest.reporter
+        variableController = this@DivViewTest.variableController
+    }
 
     @Test
     fun `error is reported if data is empty`() {

@@ -18,7 +18,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @DivViewScope
-internal class VisibilityActionTracker @Inject constructor(
+@Inject
+internal class VisibilityActionTracker(
     private val actionHandler: DivActionHandler,
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope

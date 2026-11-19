@@ -9,7 +9,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 @DivViewScope
-internal class DivPatchDownloadManager @Inject constructor(
+@Inject
+internal class DivPatchDownloadManager(
     private val coroutineScopeProvider: DivViewCoroutineScopeProvider,
     private val downloader: DivPatchDownloader,
     private val patchCoordinator: DivPatchCoordinator,

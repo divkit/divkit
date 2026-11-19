@@ -39,7 +39,8 @@ private const val MAX_LAYOUT_UPDATES = 3
  * when the view leaves the composition.
  */
 @DivViewScope
-internal class LayoutProviderStorage @Inject constructor(
+@Inject
+internal class LayoutProviderStorage(
     private val reporter: DivReporter,
 ) {
     private val variableHandlers = mutableSetOf<VariableHandler>()

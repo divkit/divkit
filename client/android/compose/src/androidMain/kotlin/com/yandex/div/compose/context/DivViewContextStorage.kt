@@ -5,7 +5,8 @@ import com.yandex.div2.DivData
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class DivViewContextStorage @Inject constructor() {
+@Inject
+internal class DivViewContextStorage {
     private val items = mutableMapOf<DivData, DivViewContext>()
     private val itemsByCardId = mutableMapOf<String, DivViewContext>()
 

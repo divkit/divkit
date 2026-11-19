@@ -9,10 +9,10 @@ import androidx.compose.ui.platform.ViewRootForTest
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
@@ -32,7 +32,10 @@ class DivViewWithHoverActionsTest {
     fun `hover resumes after press end only for a hovering stylus released inside`() {
         val actionHandler = TestExternalActionHandler()
         rule.setContent(
-            configuration = DivConfiguration(actionHandler = actionHandler, reporter = TestReporter()),
+            configuration = divConfiguration {
+                this.actionHandler = actionHandler
+                reporter = TestReporter()
+            },
             data = data(text(
                 id = "button",
                 text = "Button",

@@ -16,7 +16,8 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 @DivContextScope
-internal class DefaultPatchDownloader @Inject constructor(
+@Inject
+internal class DefaultPatchDownloader(
     @Named(Names.IO_DISPATCHER)
     private val ioDispatcher: CoroutineDispatcher,
     private val networkClient: DivNetworkClient,

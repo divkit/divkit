@@ -8,10 +8,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performFirstLinkClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.action
@@ -48,10 +48,10 @@ class DivTextActionsTest {
     private val actionHandler = TestExternalActionHandler()
     private val reporter = TestReporter()
 
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = reporter
-    )
+    private val configuration = divConfiguration {
+        actionHandler = this@DivTextActionsTest.actionHandler
+        reporter = this@DivTextActionsTest.reporter
+    }
 
     @Test
     fun `tap on the ellipsis triggers ellipsis actions`() {

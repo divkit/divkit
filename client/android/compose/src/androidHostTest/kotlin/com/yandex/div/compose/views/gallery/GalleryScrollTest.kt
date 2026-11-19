@@ -33,11 +33,11 @@ import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.views.gallery.scroll.GalleryScrollDestination
 import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -105,16 +105,16 @@ class GalleryScrollTest {
     private val defaultItem = Variable.IntegerVariable("default_item", 8)
     private val paging = Variable.StringVariable("scroll_mode", "default")
     private val startPadding = Variable.IntegerVariable("start_padding", 0)
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
         variableController = DivVariableController().apply {
             declare(alignment)
             declare(visibleItems)
             declare(defaultItem)
             declare(startPadding)
             declare(paging)
-        },
-    )
+        }
+    }
 
     @Test
     fun `list keeps user scroll position when alignment changes`() {

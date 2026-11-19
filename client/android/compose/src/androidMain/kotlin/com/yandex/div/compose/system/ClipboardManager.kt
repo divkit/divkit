@@ -11,7 +11,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class ClipboardManager @Inject constructor(
+@Inject
+internal class ClipboardManager(
     private val context: Context,
     private val reporter: DivReporter,
 ) {

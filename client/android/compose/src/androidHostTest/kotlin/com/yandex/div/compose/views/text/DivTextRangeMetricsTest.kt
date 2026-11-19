@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
 import androidx.compose.ui.unit.width
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -59,11 +59,12 @@ class DivTextRangeMetricsTest {
     val rule = createComposeRule()
 
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        imageLoaderConfiguration = TestImageLoaderConfiguration(),
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+
+    private val configuration = divConfiguration {
+        imageLoaderConfiguration = TestImageLoaderConfiguration()
+        reporter = TestReporter()
+        variableController = this@DivTextRangeMetricsTest.variableController
+    }
 
     @Test
     fun `range line height follows its expression`() {

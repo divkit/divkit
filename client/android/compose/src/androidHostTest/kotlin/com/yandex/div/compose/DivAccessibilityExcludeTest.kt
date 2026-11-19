@@ -13,7 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.accessibility
-import com.yandex.div.test.data.accessibilityModeExpression
+import com.yandex.div.test.data.accessibilityMode
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -36,20 +36,26 @@ class DivAccessibilityExcludeTest {
 
     private val actionHandler = TestExternalActionHandler()
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+
+    private val configuration = divConfiguration {
+        actionHandler = this@DivAccessibilityExcludeTest.actionHandler
+        reporter = TestReporter()
+        variableController = this@DivAccessibilityExcludeTest.variableController
+    }
 
     @Test
     fun `excluded clickable element is hidden from accessibility while accepting touch`() {
-        rule.setContent(configuration, data = data(text(
-            id = "button",
-            text = "Button",
-            accessibility = accessibility(mode = Mode.EXCLUDE),
-            action = action(url = "test://tap"),
-        )))
+        rule.setContent(
+            configuration,
+            data = data(
+                text(
+                    id = "button",
+                    text = "Button",
+                    accessibility = accessibility(mode = Mode.EXCLUDE),
+                    action = action(url = "test://tap"),
+                )
+            )
+        )
         val button = rule.onNodeWithTag("button")
         val id = button.fetchSemanticsNode().id
         val provider = accessibilityProvider()
@@ -69,21 +75,30 @@ class DivAccessibilityExcludeTest {
 
     @Test
     fun `excluded clickable container hides its actionable subtree while accepting touch`() {
-        rule.setContent(configuration, data = data(container(
-            id = "container",
-            accessibility = accessibility(mode = Mode.EXCLUDE),
-            action = action(url = "test://parent"),
-            items = listOf(text(
-                id = "child",
-                text = "Child",
-                action = action(url = "test://child"),
-            )),
-        )))
+        rule.setContent(
+            configuration,
+            data = data(
+                container(
+                    id = "container",
+                    accessibility = accessibility(mode = Mode.EXCLUDE),
+                    action = action(url = "test://parent"),
+                    items = listOf(
+                        text(
+                            id = "child",
+                            text = "Child",
+                            action = action(url = "test://child"),
+                        )
+                    ),
+                )
+            )
+        )
         val child = rule.onNodeWithTag("child", useUnmergedTree = true)
         val provider = accessibilityProvider()
-        val parent = assertNotNull(provider.createAccessibilityNodeInfo(
-            rule.onNodeWithTag("container").fetchSemanticsNode().id,
-        ))
+        val parent = assertNotNull(
+            provider.createAccessibilityNodeInfo(
+                rule.onNodeWithTag("container").fetchSemanticsNode().id,
+            )
+        )
 
         child.performTouchInput { click() }
 
@@ -97,12 +112,16 @@ class DivAccessibilityExcludeTest {
     fun `excluded element becomes available when mode changes to default`() {
         val mode = Variable.StringVariable("mode", "exclude")
         variableController.declare(mode)
-        rule.setContent(configuration, data = data(text(
-            id = "button",
-            text = "Button",
-            accessibility = DivAccessibility(mode = accessibilityModeExpression("@{mode}")),
-            action = action(url = "test://tap"),
-        )))
+        rule.setContent(
+            configuration, data = data(
+                text(
+                    id = "button",
+                    text = "Button",
+                    accessibility = DivAccessibility(mode = accessibilityMode("@{mode}")),
+                    action = action(url = "test://tap"),
+                )
+            )
+        )
 
         rule.runOnIdle { mode.setValueDirectly("default") }
 

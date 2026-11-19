@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.utils.gradient.LinearGradientBrush
 import com.yandex.div.core.DivAnimationsEnabledProvider
@@ -79,11 +80,11 @@ class AnimatedTextGradientTest {
     @Test
     fun `disabled animations keep static gradient`() {
         val animationsEnabledState = MutableStateFlow(false)
-        val configuration = DivConfiguration(
+        val configuration = divConfiguration {
             animationsEnabledProvider = object : DivAnimationsEnabledProvider {
                 override val animationsEnabled = animationsEnabledState
-            },
-        )
+            }
+        }
         render(animatedText(), configuration)
 
         rule.mainClock.advanceTimeBy(HALF_CYCLE_MILLIS)
@@ -109,7 +110,7 @@ class AnimatedTextGradientTest {
 
     private fun render(
         text: Div,
-        configuration: DivConfiguration = DivConfiguration(),
+        configuration: DivConfiguration = divConfiguration { },
     ) {
         rule.setContent(configuration = configuration, data = data(text))
     }

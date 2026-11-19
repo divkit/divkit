@@ -15,7 +15,8 @@ import dev.zacsweers.metro.Named
 import kotlin.coroutines.EmptyCoroutineContext
 
 @DivContextScope
-internal class ImageRequestFactory @Inject constructor(
+@Inject
+internal class ImageRequestFactory(
     private val context: PlatformContext,
     private val imageRequestListener: ImageRequestListener,
     @Named(Names.MAX_DISPLAY_SIZE)

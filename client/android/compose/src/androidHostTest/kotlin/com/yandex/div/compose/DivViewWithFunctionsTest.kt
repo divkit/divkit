@@ -29,10 +29,10 @@ class DivViewWithFunctionsTest {
 
     private val variableController = DivVariableController()
 
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivViewWithFunctionsTest.variableController
+    }
 
     @Test
     fun `expression with DivData-level function`() {

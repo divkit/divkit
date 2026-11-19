@@ -8,7 +8,8 @@ import com.yandex.div2.DivActionDictSetValue
 import dev.zacsweers.metro.Inject
 import org.json.JSONObject
 
-internal class DictSetValueActionHandler @Inject constructor(
+@Inject
+internal class DictSetValueActionHandler(
     private val reporter: DivReporter
 ) {
 

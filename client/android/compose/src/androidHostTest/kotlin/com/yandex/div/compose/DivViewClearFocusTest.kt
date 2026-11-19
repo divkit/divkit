@@ -76,7 +76,10 @@ class DivViewClearFocusTest {
     private val divContext by lazy {
         DivContext(
             baseContext = RuntimeEnvironment.getApplication(),
-            configuration = DivConfiguration(actionHandler = actions, reporter = reporter),
+            configuration = divConfiguration {
+                actionHandler = actions
+                reporter = this@DivViewClearFocusTest.reporter
+            },
         )
     }
     private val clearAction = action(typed = clearFocusAction())

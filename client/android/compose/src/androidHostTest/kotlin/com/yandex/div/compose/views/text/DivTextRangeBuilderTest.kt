@@ -13,10 +13,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -53,11 +53,12 @@ class DivTextRangeBuilderTest {
 
     private val actionHandler = TestExternalActionHandler()
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+
+    private val configuration = divConfiguration {
+        actionHandler = this@DivTextRangeBuilderTest.actionHandler
+        reporter = TestReporter()
+        variableController = this@DivTextRangeBuilderTest.variableController
+    }
 
     @Test
     fun `range is built from data element`() {

@@ -16,7 +16,8 @@ import kotlinx.coroutines.withContext
 /** Applies patches to layouts rendered by [DivView]. */
 @ExperimentalApi
 @DivContextScope
-class DivPatcher @Inject internal constructor(
+@Inject
+class DivPatcher internal constructor(
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope,
     private val viewContextFactory: DivViewContextFactory,

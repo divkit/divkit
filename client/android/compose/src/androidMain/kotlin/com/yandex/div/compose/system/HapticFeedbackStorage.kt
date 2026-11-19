@@ -8,7 +8,8 @@ import com.yandex.div.compose.di.DivViewScope
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class HapticFeedbackStorage @Inject constructor() {
+@Inject
+internal class HapticFeedbackStorage {
 
     private var hapticFeedback: HapticFeedback? = null
 

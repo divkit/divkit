@@ -9,11 +9,11 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.hapticAction
@@ -40,7 +40,7 @@ class DivViewWithHapticTest {
 
     private val divContext = DivContext(
         baseContext = RuntimeEnvironment.getApplication(),
-        configuration = DivConfiguration(reporter = reporter)
+        configuration = divConfiguration { reporter = this@DivViewWithHapticTest.reporter }
     )
 
     @Test

@@ -12,8 +12,8 @@ import androidx.core.graphics.createBitmap
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.size.Size
 import coil3.transform.Transformation
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.test.data.rtlMirrorFilter
@@ -56,7 +56,7 @@ class RtlMirrorTransformationTest {
         var layoutDirection by mutableStateOf(LayoutDirection.Ltr)
         var transformations = emptyList<Transformation>()
 
-        composeRule.setContentWithDivContext(DivConfiguration()) {
+        composeRule.setContentWithDivContext(divConfiguration { }) {
             CompositionLocalProvider(
                 LocalComponent provides mockLocalComponent(
                     transformationFactory = TransformationFactory(context = mock()),

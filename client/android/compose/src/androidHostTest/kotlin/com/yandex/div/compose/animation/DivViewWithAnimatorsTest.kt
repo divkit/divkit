@@ -15,6 +15,7 @@ import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.DivAnimationsEnabledProvider
@@ -1347,16 +1348,16 @@ class DivViewWithAnimatorsTest {
 
     private fun configuration(
         animationsEnabled: MutableStateFlow<Boolean>? = null,
-    ): DivConfiguration = DivConfiguration(
-        actionHandler = externalActionHandler,
+    ): DivConfiguration = divConfiguration {
+        actionHandler = externalActionHandler
         animationsEnabledProvider = animationsEnabled?.let { state ->
             object : DivAnimationsEnabledProvider {
                 override val animationsEnabled = state
             }
-        } ?: DivAnimationsEnabledProvider.DEFAULT,
-        reporter = reporter,
-        variableController = variableController,
-    )
+        } ?: DivAnimationsEnabledProvider.DEFAULT
+        reporter = this@DivViewWithAnimatorsTest.reporter
+        variableController = this@DivViewWithAnimatorsTest.variableController
+    }
 
     private fun target(
         animator: DivAnimator,

@@ -11,7 +11,8 @@ import com.yandex.div2.DivActionScrollTo
 import dev.zacsweers.metro.Inject
 
 @DivViewScope
-internal class ScrollActionHandler @Inject constructor(
+@Inject
+internal class ScrollActionHandler(
     private val animationsEnabledProvider: DivAnimationsEnabledProvider,
     private val reporter: DivReporter,
     private val targetStorage: ScrollTargetStorage,

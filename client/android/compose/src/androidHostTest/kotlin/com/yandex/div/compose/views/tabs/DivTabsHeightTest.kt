@@ -5,8 +5,8 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
@@ -40,7 +40,7 @@ class DivTabsHeightTest {
     @Test
     fun `max_size caps the height match_parent pages are measured with`() {
         rule.setContent(
-            configuration = DivConfiguration(reporter = TestReporter()),
+            configuration = divConfiguration { reporter = TestReporter() },
             data = data(
                 tabs(
                     height = wrapContentUpTo(MAX_SIZE_DP),

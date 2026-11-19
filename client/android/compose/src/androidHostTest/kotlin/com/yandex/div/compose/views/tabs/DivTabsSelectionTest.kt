@@ -12,9 +12,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -41,13 +41,14 @@ class DivTabsSelectionTest {
 
     private val selectedTab = Variable.IntegerVariable("selected_tab", 0)
     private val swipeEnabled = Variable.BooleanVariable("swipe_enabled", true)
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
+
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
         variableController = DivVariableController().apply {
             declare(selectedTab)
             declare(swipeEnabled)
-        },
-    )
+        }
+    }
     private val data = mutableStateOf(tabsData(pages = 3))
 
     @Test

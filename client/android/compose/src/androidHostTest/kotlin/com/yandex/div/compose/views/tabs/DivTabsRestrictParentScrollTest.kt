@@ -19,9 +19,9 @@ import androidx.compose.ui.test.swipeLeft
 import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -46,11 +46,12 @@ class DivTabsRestrictParentScrollTest {
     val rule = createComposeRule()
 
     private val restrictParentScroll = Variable.BooleanVariable("restrict_parent_scroll", false)
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(restrictParentScroll) },
-    )
     private val parentScroll = ScrollState(0)
+
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = DivVariableController().apply { declare(restrictParentScroll) }
+    }
 
     @Test
     fun `tabs with restrict_parent_scroll keep a vertical drag on their content from the parent scroll`() {

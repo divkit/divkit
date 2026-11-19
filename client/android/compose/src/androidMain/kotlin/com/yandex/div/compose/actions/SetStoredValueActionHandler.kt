@@ -9,7 +9,8 @@ import com.yandex.div.internal.storedvalues.toStoredValueScope
 import com.yandex.div2.DivActionSetStoredValue
 import dev.zacsweers.metro.Inject
 
-internal class SetStoredValueActionHandler @Inject constructor(
+@Inject
+internal class SetStoredValueActionHandler(
     private val reporter: DivReporter,
     private val storedValuesStorage: LazyStoredValuesStorage
 ) {

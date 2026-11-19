@@ -73,7 +73,10 @@ class DivViewWithPatchTest {
 
     private val divContext = DivContext(
         getApplicationContext(),
-        DivConfiguration(reporter = reporter, actionHandler = actionHandler)
+        divConfiguration {
+            reporter = this@DivViewWithPatchTest.reporter
+            actionHandler = this@DivViewWithPatchTest.actionHandler
+        }
     )
 
     @Test

@@ -15,12 +15,12 @@ import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.pressKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -45,11 +45,13 @@ class DivInputEnterKeyActionsTest {
     val rule = createComposeRule()
 
     private val actionHandler = TestExternalActionHandler()
-    private val configuration = DivConfiguration(
-        actionHandler = actionHandler,
-        reporter = TestReporter(),
-        variableController = DivVariableController().apply { declare(Variable.StringVariable("text", "")) },
-    )
+    private val configuration = divConfiguration {
+        actionHandler = this@DivInputEnterKeyActionsTest.actionHandler
+        reporter = TestReporter()
+        variableController = DivVariableController().apply {
+            declare(Variable.StringVariable("text", ""))
+        }
+    }
     private val field get() = rule.onNode(hasSetTextAction())
     private var inputRequest: PlatformTextInputMethodRequest? = null
 

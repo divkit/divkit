@@ -43,9 +43,9 @@ class DivViewRecompositionTest {
     fun setUp() {
         divContext = DivContext(
             baseContext = activity,
-            configuration = DivConfiguration(
+            configuration = divConfiguration {
                 reporter = TestReporter()
-            )
+            }
         )
     }
 

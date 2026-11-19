@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.PreloadMode
 import com.yandex.div.compose.TestReporter
@@ -113,14 +112,14 @@ class DivPreloaderTest {
 
     private val divContext = DivContext(
         baseContext = RuntimeEnvironment.getApplication(),
-        configuration = DivConfiguration(
-            customViewFactories = mapOf("test" to customFactory),
+        configuration = divConfiguration {
+            customViewFactories = mapOf("test" to customFactory)
             extensionHandlers = mapOf(
                 "lottie" to extensionHandler,
                 "other" to extensionHandler,
                 "tag" to extensionHandler,
-            ),
-        )
+            )
+        }
     )
 
     private val preloader = DivPreloader(
@@ -668,10 +667,10 @@ class DivPreloaderTest {
         }
         val context = DivContext(
             baseContext = RuntimeEnvironment.getApplication(),
-            configuration = DivConfiguration(
-                customViewFactories = mapOf("storage" to customFactory),
-                extensionHandlers = mapOf("storage" to extensionHandler),
-            ),
+            configuration = divConfiguration {
+                customViewFactories = mapOf("storage" to customFactory)
+                extensionHandlers = mapOf("storage" to extensionHandler)
+            },
         )
         val data = data(
             content = container(

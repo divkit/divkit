@@ -23,7 +23,8 @@ import dev.zacsweers.metro.Inject
  * input in another `ComposeView`.
  */
 @DivContextScope
-internal class InputFocus @Inject constructor() {
+@Inject
+internal class InputFocus {
     private val focusedInputs = mutableSetOf<Input>()
 
     fun clear() {

@@ -17,7 +17,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @DivViewScope
-internal class AnimatorStorage @Inject constructor(
+@Inject
+internal class AnimatorStorage(
     val animationConfiguration: AnimationConfiguration,
     private val coroutineScopeProvider: DivViewCoroutineScopeProvider,
     private val reporter: DivReporter,

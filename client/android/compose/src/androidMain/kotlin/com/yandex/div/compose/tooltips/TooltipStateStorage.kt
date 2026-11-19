@@ -22,7 +22,8 @@ import dev.zacsweers.metro.Inject
  */
 @DivViewScope
 @Suppress("TooManyFunctions")
-internal class TooltipStateStorage @Inject constructor() {
+@Inject
+internal class TooltipStateStorage {
     private val anchors = mutableStateMapOf<String, TooltipAnchorEntry>()
     private val shownTooltips = mutableStateSetOf<String>()
     private val shownTooltipHistory = mutableSetOf<String>()

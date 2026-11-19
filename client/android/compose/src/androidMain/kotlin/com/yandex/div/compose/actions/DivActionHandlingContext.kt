@@ -12,7 +12,8 @@ import dev.zacsweers.metro.Named
  * scoped to the element that triggered the action.
  */
 @DivLocalScope
-class DivActionHandlingContext @Inject internal constructor(
+@Inject
+class DivActionHandlingContext internal constructor(
     @param:Named(Names.CARD_ID) val cardId: String,
     val expressionResolver: ExpressionResolver
 ) {

@@ -46,7 +46,10 @@ class DivViewFocusElementTest {
     )
     private val divContext = DivContext(
         RuntimeEnvironment.getApplication(),
-        DivConfiguration(actionHandler = actions, reporter = reporter),
+        divConfiguration {
+            actionHandler = actions
+            reporter = this@DivViewFocusElementTest.reporter
+        },
     )
 
     @Test

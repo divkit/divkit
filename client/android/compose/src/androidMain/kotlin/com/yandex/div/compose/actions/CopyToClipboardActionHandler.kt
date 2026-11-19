@@ -5,7 +5,8 @@ import com.yandex.div2.DivActionCopyToClipboard
 import com.yandex.div2.DivActionCopyToClipboardContent
 import dev.zacsweers.metro.Inject
 
-internal class CopyToClipboardActionHandler @Inject constructor(
+@Inject
+internal class CopyToClipboardActionHandler(
     private val clipboardManager: ClipboardManager,
 ) {
 

@@ -11,8 +11,8 @@ import androidx.compose.ui.test.performTextInputSelection
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.text.TextRange
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -37,10 +37,10 @@ class DivInputMaxLengthTest {
 
     private val source = Variable.StringVariable("text", "")
     private val variableController = DivVariableController()
-    private val configuration = DivConfiguration(
-        reporter = TestReporter(),
-        variableController = variableController,
-    )
+    private val configuration = divConfiguration {
+        reporter = TestReporter()
+        variableController = this@DivInputMaxLengthTest.variableController
+    }
     private val field get() = rule.onNode(hasSetTextAction())
 
     @Test

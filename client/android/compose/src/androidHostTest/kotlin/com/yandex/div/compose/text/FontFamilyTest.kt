@@ -7,8 +7,8 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.font.DivFontSource
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.setContentWithDivContext
@@ -22,10 +22,10 @@ class FontFamilyTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private val configuration = DivConfiguration(
-        fontSourceProvider = FamilyFontSourceProvider(),
-        reporter = TestReporter(),
-    )
+    private val configuration = divConfiguration {
+        fontSourceProvider = FamilyFontSourceProvider()
+        reporter = TestReporter()
+    }
 
     @Test
     fun `remembered FontFamily follows a font family name change`() {

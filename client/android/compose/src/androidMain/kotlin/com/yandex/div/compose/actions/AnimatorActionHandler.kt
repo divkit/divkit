@@ -5,7 +5,8 @@ import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStop
 import dev.zacsweers.metro.Inject
 
-internal class AnimatorActionHandler @Inject constructor(
+@Inject
+internal class AnimatorActionHandler(
     private val animatorStorage: AnimatorStorage,
 ) {
     fun handle(scopeId: String?, action: DivActionAnimatorStart) {

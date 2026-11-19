@@ -21,7 +21,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
 @DivContextScope
-internal class DivPreloader @Inject constructor(
+@Inject
+internal class DivPreloader(
     private val imagePreloader: ImagePreloader,
     private val customPreloader: CustomResourcePreloader,
     private val extensionPreloader: ExtensionPreloader,

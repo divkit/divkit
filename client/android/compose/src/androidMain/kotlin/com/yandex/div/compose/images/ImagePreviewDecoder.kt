@@ -7,7 +7,8 @@ import dev.zacsweers.metro.Inject
 import kotlin.io.encoding.Base64
 
 @DivContextScope
-internal class ImagePreviewDecoder @Inject constructor(
+@Inject
+internal class ImagePreviewDecoder(
     private val reporter: DivReporter
 ) {
     private val base64 = Base64.Mime.withPadding(Base64.PaddingOption.PRESENT_OPTIONAL)

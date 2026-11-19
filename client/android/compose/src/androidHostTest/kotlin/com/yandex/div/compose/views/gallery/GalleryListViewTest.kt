@@ -4,8 +4,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -24,7 +24,7 @@ class GalleryListViewTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val configuration = DivConfiguration(reporter = TestReporter())
+    private val configuration = divConfiguration { reporter = TestReporter() }
 
     @Test
     fun `gallery in wrap content container with match parent sibling shows items`() {

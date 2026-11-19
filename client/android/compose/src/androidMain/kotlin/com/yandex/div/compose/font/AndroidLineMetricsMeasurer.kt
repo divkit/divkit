@@ -7,7 +7,8 @@ import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
 @DivContextScope
-internal class AndroidLineMetricsMeasurer @Inject constructor() : LineMetricsMeasurer {
+@Inject
+internal class AndroidLineMetricsMeasurer : LineMetricsMeasurer {
 
     private val paint = TextPaint()
 
