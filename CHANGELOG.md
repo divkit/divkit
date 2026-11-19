@@ -1,3 +1,46 @@
+## 33.13.0
+
+### Android Client
+* A fixed `repeat_count` of `0` now repeats the animation infinitely in the Android Compose renderer, as documented.
+* Added URL support in image and GIF previews on Android.
+* Added iOS builds, shared-test CI and Maven artifacts for the KMP core library.
+* Added iOS builds, shared-test CI and Maven artifacts for the KMP render-common library.
+* Added support for color animators in the Android Compose renderer.
+* Compose: support root state switching with typed and URL `set_state` actions.
+* Fixed SQLite storage operations with special identifiers, atomic removal, migration cleanup, and recovery after transaction and storage capacity failures.
+* Fixed TalkBack focusing excluded interactive elements in the Compose renderer.
+* Fixed `animator_stop` sent from a variable trigger on the animator's start value being ignored by the Android Compose renderer.
+* Fixed `div-image` losing `tint_color` (and keeping stale `filters`, `alpha` or `appearance_animation`) when a card is rebound with the same `image_url` before the image finishes loading.
+* Fixed `div-pager` with `layout_mode: wrap_content` making a page 1px smaller than its item along the scroll axis when the free space is odd or the paddings are fractional in px, which clipped the item edge.
+* Fixed `match_parent` minimum sizes next to constrained siblings in horizontal and vertical containers in the Compose renderer.
+* Fixed a Compose crash when tabs are placed inside a container with wrap-content width.
+* Fixed a crash of `div-gallery` placed in `div-tabs` or in a `wrap_content` container with a `match_parent` child in the Compose renderer.
+* Fixed a restart of an animator from its `cancel_actions` or `end_actions` leaving a second running animator in the Android Compose renderer.
+* Fixed an endless relayout of a `match_parent` `div-pager` inside a `wrap_content` container in the Compose renderer.
+* Fixed collapsed lines of a text with `font_size: 0` and `ranges` or inline images in the Compose renderer at the default system font scale.
+* Fixed extra `item_spacing` around the horizontal margins of a `match_parent` child in horizontal containers in the Compose renderer.
+* Fixed tab selection updates when `items` or `selected_tab` change in the Compose renderer.
+* Fixed the active item position of an indicator in the Compose renderer for such pages.
+* Fixed the current page of a pager in the Compose renderer for pages that cannot reach their snap position at the edges of the list, including the default page.
+* Fixed the current page of a pager in the Compose renderer when a previous page shrinks out of the viewport.
+* In the Android View renderer, a horizontal fling of `div-state` with `swipe_out_actions` now swipes it out even when the swipe did not pass half of its width.
+* In the Android View renderer, a swipe of `div-state` with `swipe_out_actions` that starts soon after the previous swipe is no longer ignored as a double tap.
+* In the Android View renderer, the swipe-out animation of `div-state` to the left now takes time proportional to the remaining distance instead of always the full duration.
+* Isolated Android font loading, text metrics, and slider text drawing in the Compose renderer while preserving the public font source API.
+* Moved JVM-specific expression evaluation APIs out of common Kotlin sources to support multiplatform migration.
+* Moved internal card and template database logic to common code.
+* Prepared the Compose renderer module for Kotlin Multiplatform builds while preserving its Android API.
+* Removed an extra context lookup when preparing cards in the Compose renderer.
+* Separated font loading from the font family cache in the Compose renderer without changing the public font source API.
+* Tooltip content and backgrounds (`substrate_div`) in the Compose renderer now read variables, call functions, and run actions in the scope of the element that declares the tooltip.
+
+### iOS Client
+* Added `ui_style` param to the `liquid_glass` extension: `light` or `dark`, expressions allowed. It overrides the interface style of the glass view, and the glass material follows it on iOS 27 and later. Without it the glass keeps the style of the view hierarchy.
+
+### Web Client
+* Fixed `set_stored_value` rejecting zero and empty values and storing typed booleans incorrectly.
+
+
 ## 33.12.0
 
 ### Android Client
