@@ -1,3 +1,8 @@
+## 33.13.0 (November 23, 2026)
+
+* Fixed `set_stored_value` rejecting zero and empty values and storing typed booleans incorrectly.
+
+
 ## 33.12.0 (November 16, 2026)
 
 * Added the optional `hideImagesWithoutUrl` render flag to hide image and GIF elements with an absent or null URL without reserving layout space.
