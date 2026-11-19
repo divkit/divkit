@@ -345,6 +345,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
+  override class var layerClass: AnyClass { VisibilityTrackingLayer.self }
+
   private(set) var childView: BlockView?
 
   fileprivate var model: Model!
@@ -359,6 +361,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private var pendingAnimationWorkItem: DispatchWorkItem?
 
   private var visibilityActionPerformers: VisibilityActionPerformers?
+
   private var isForwardingTouches = false
   private var hasFocused = false
   private var tapRecognizer: UITapGestureRecognizer? {
@@ -418,6 +421,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         }
       }
     }
+  }
+
+  var isPendingLayout: Bool {
+    (layer as? VisibilityTrackingLayer)?.isLayoutPending ?? false
   }
 
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { childView.asArray() }
@@ -1087,6 +1094,31 @@ private final class BlurEffectView: UIVisualEffectView {
       effectInterpolator = animator
     }
     effectInterpolator?.fractionComplete = intensity
+  }
+}
+
+// Keep requests pending until the delegate returns from this view's layoutSubviews.
+// Descendant layout may still be pending: their parents assign their geometry.
+// Core Animation may clear its own flag before invoking this view's delegate.
+private final class VisibilityTrackingLayer: CALayer {
+  private var pendingLayoutRequests: UInt = 0
+
+  var isLayoutPending: Bool {
+    pendingLayoutRequests > 0
+  }
+
+  override func setNeedsLayout() {
+    pendingLayoutRequests += 1
+    super.setNeedsLayout()
+  }
+
+  override func layoutSublayers() {
+    let requestsToComplete = pendingLayoutRequests
+    super.layoutSublayers()
+    // Preserve requests made by the delegate during this layout pass.
+    if pendingLayoutRequests == requestsToComplete {
+      pendingLayoutRequests = 0
+    }
   }
 }
 
