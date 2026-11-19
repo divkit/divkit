@@ -1,6 +1,7 @@
 {
   "description": "Tap, long tap and double tap invoke the corresponding button actions; a tap in the outer spacing around Button 7 invokes its outer action, and a long tap invokes the container action.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

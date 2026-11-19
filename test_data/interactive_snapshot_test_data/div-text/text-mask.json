@@ -1,6 +1,7 @@
 {
   "description": "Tapping each solid or particle mask reveals its text without changing text layout.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
@@ -224,7 +225,7 @@
         "id": "masked_text_1"
       },
       "point": {
-        "x": 0.46,
+        "x": 0.5,
         "y": 0.5
       }
     },
@@ -235,7 +236,7 @@
         "id": "masked_text_2"
       },
       "point": {
-        "x": 0.46,
+        "x": 0.5,
         "y": 0.5
       }
     },
@@ -246,7 +247,7 @@
         "id": "masked_text_3"
       },
       "point": {
-        "x": 0.46,
+        "x": 0.5,
         "y": 0.5
       }
     },
@@ -257,7 +258,7 @@
         "id": "masked_text_4"
       },
       "point": {
-        "x": 0.46,
+        "x": 0.5,
         "y": 0.5
       }
     },

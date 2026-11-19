@@ -14,11 +14,11 @@ class InteractiveScreenshotTestData(
     sealed class Step {
         class Action(val action: DivAction) : Step()
 
-        class Tap(val target: Target) : Step()
+        class Tap(val target: Target, val point: PointF?) : Step()
 
-        class DoubleTap(val target: Target) : Step()
+        class DoubleTap(val target: Target, val point: PointF?) : Step()
 
-        class LongTap(val target: Target) : Step()
+        class LongTap(val target: Target, val point: PointF?) : Step()
 
         class Swipe(
             val target: Target,
@@ -67,11 +67,11 @@ class InteractiveScreenshotTestData(
                     )
                 }
 
-                "tap" -> Step.Tap(parseTarget(step))
+                "tap" -> Step.Tap(parseTarget(step), parseTapPoint(step))
 
-                "double_tap" -> Step.DoubleTap(parseTarget(step))
+                "double_tap" -> Step.DoubleTap(parseTarget(step), parseTapPoint(step))
 
-                "long_tap" -> Step.LongTap(parseTarget(step))
+                "long_tap" -> Step.LongTap(parseTarget(step), parseTapPoint(step))
 
                 "swipe" -> parseSwipe(step)
 
@@ -116,6 +116,8 @@ class InteractiveScreenshotTestData(
             return value
         }
 
+        private const val TAP_POINT = "point"
+
         private const val SWIPE_DIRECTION = "direction"
         private const val SWIPE_FROM = "from"
         private const val SWIPE_TO = "to"
@@ -141,8 +143,8 @@ class InteractiveScreenshotTestData(
                 val to = PointF(1f - from.x, 1f - from.y)
                 Step.Swipe(target, from, to, holdDurationMs)
             } else {
-                val from = parsePoint(step.getJSONObject(SWIPE_FROM))
-                val to = parsePoint(step.getJSONObject(SWIPE_TO))
+                val from = parsePoint(step.getJSONObject(SWIPE_FROM), "Swipe")
+                val to = parsePoint(step.getJSONObject(SWIPE_TO), "Swipe")
                 Step.Swipe(target, from, to, holdDurationMs)
             }
         }
@@ -155,11 +157,19 @@ class InteractiveScreenshotTestData(
             return holdDurationMs
         }
 
-        private fun parsePoint(point: JSONObject): PointF {
+        private fun parseTapPoint(step: JSONObject): PointF? {
+            return if (step.isNull(TAP_POINT)) {
+                null
+            } else {
+                parsePoint(step.getJSONObject(TAP_POINT), "${step.getString("type")} point")
+            }
+        }
+
+        private fun parsePoint(point: JSONObject, name: String): PointF {
             val x = point.getDouble("x").toFloat()
             val y = point.getDouble("y").toFloat()
             if (x !in 0f..1f || y !in 0f..1f) {
-                throw JSONException("Swipe coordinates must be between 0 and 1, got: ($x, $y)")
+                throw JSONException("$name coordinates must be between 0 and 1, got: ($x, $y)")
             }
             return PointF(x, y)
         }

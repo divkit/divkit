@@ -1,6 +1,7 @@
 {
   "description": "Tapping the empty gallery area invokes the parent container action.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

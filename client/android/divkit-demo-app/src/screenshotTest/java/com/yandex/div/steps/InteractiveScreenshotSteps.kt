@@ -1,5 +1,6 @@
 package com.yandex.div.steps
 
+import android.graphics.PointF
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -47,11 +48,11 @@ internal class InteractiveScreenshotSteps {
                 when (step) {
                     is Step.Action -> performAction(scenario, step.action)
 
-                    is Step.Tap -> performTap(step.target)
+                    is Step.Tap -> performTap(step.target, step.point)
 
-                    is Step.DoubleTap -> performDoubleTap(step.target)
+                    is Step.DoubleTap -> performDoubleTap(step.target, step.point)
 
-                    is Step.LongTap -> performLongTap(step.target)
+                    is Step.LongTap -> performLongTap(step.target, step.point)
 
                     is Step.Swipe -> performSwipe(step)
 
@@ -79,17 +80,28 @@ internal class InteractiveScreenshotSteps {
         }
     }
 
-    private fun performTap(target: Target) = step("Tap $target") {
-        onView(target).perform(tapWithRetries())
+    private fun performTap(
+        target: Target,
+        point: PointF?
+    ) = step("Tap $target${point.atPointSuffix()}") {
+        onView(target).perform(tapWithRetries(point))
     }
 
-    private fun performDoubleTap(target: Target) = step("Double tap $target") {
-        onView(target).perform(doubleTapWithRetries())
+    private fun performDoubleTap(
+        target: Target,
+        point: PointF?
+    ) = step("Double tap $target${point.atPointSuffix()}") {
+        onView(target).perform(doubleTapWithRetries(point))
     }
 
-    private fun performLongTap(target: Target) = step("Long tap $target") {
-        onView(target).perform(longTapWithRetries())
+    private fun performLongTap(
+        target: Target,
+        point: PointF?
+    ) = step("Long tap $target${point.atPointSuffix()}") {
+        onView(target).perform(longTapWithRetries(point))
     }
+
+    private fun PointF?.atPointSuffix() = this?.let { " at (${it.x}, ${it.y})" }.orEmpty()
 
     private fun performSwipe(swipe: Step.Swipe) = step("Swipe ${swipe.target}") {
         onView(swipe.target).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to, swipe.holdDurationMs))

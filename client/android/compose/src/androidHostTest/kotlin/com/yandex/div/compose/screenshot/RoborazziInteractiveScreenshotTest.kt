@@ -4,17 +4,18 @@ import android.graphics.PointF
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.toAndroidRectF
+import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.TouchInjectionScope
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
@@ -28,6 +29,7 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Target
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.div.test.crossplatform.clipSwipeToBounds
+import com.yandex.div.test.crossplatform.tapPointWithinBounds
 import org.junit.Rule
 import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
@@ -80,9 +82,9 @@ class RoborazziInteractiveScreenshotTest(
                 is Step.Action ->
                     contentRule.divContext.debugFeatures.performAction(data, step.action)
 
-                is Step.Tap -> performTap(step.target)
-                is Step.DoubleTap -> onTarget(step.target).performTouchInput { doubleClick() }
-                is Step.LongTap -> onTarget(step.target).performTouchInput { longClick() }
+                is Step.Tap -> performTap(step.target, step.point)
+                is Step.DoubleTap -> performGesture(step.target, step.point) { doubleClick(it) }
+                is Step.LongTap -> performGesture(step.target, step.point) { longClick(it) }
                 is Step.Swipe -> performSwipe(step)
                 is Step.VerifyText -> verifyText(step)
                 is Step.VerifyFocus -> verifyFocus(step)
@@ -100,18 +102,41 @@ class RoborazziInteractiveScreenshotTest(
         assertEquals(count, errors.size, "Expected $count error(s), got: $errors")
     }
 
-    private fun onTarget(target: Target) = when (target) {
-        is Target.DivId -> composeRule.onNode(hasTestTag(target.id) and isPlaced())
+    // A clickable parent merges children without own semantics, so gestures use the unmerged tree.
+    private fun onTarget(target: Target, unmerged: Boolean = false) = when (target) {
+        is Target.DivId -> composeRule.onNode(hasTestTag(target.id) and isPlaced(), unmerged)
         is Target.Text -> composeRule.onNode(hasText(target.text) and isPlaced(), useUnmergedTree = true)
     }
 
-    private fun performTap(target: Target) {
-        onTarget(target).performClick()
+    private fun performTap(target: Target, point: PointF?) {
+        performGesture(target, point) { click(it) }
         composeRule.mainClock.advanceTimeBy(contentRule.viewConfiguration.doubleTapTimeoutMillis)
     }
 
+    private fun performGesture(
+        target: Target,
+        point: PointF?,
+        gesture: TouchInjectionScope.(Offset) -> Unit,
+    ) {
+        val interaction = onTarget(target, unmerged = true)
+        val position = point?.let { tapPosition(interaction.fetchSemanticsNode(), it) }
+        interaction.performTouchInput { gesture(position ?: center) }
+    }
+
+    private fun tapPosition(node: SemanticsNode, point: PointF): Offset {
+        val visibleBounds = node.boundsInWindow.translate(-node.positionInWindow)
+        val position = tapPointWithinBounds(
+            point,
+            node.size.width.toFloat(),
+            node.size.height.toFloat(),
+            visibleBounds.toAndroidRectF()
+        )
+        // Touch input coordinates start at the clipped bounds, not at the node position.
+        return node.positionInRoot - node.boundsInRoot.topLeft + Offset(position.x, position.y)
+    }
+
     private fun performSwipe(step: Step.Swipe) {
-        val target = onTarget(step.target)
+        val target = onTarget(step.target, unmerged = true)
         val node = target.fetchSemanticsNode()
         val size = node.size
         val from = PointF(size.width * step.from.x, size.height * step.from.y)

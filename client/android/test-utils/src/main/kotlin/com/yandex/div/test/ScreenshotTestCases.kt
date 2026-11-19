@@ -133,6 +133,9 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-image/blur.json",
     "div-text/background-image-blur.json",
 
+    // Long tap on a child without longtap_actions does not reach the parent, DIVKIT-10433
+    "div-action/button-actions.json",
+
     "div-action/custom-action.json",
     "div-action/scope-id/focus-element.json",
     "div-action/scope-id/set-cursor-position.json",

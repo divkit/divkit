@@ -326,6 +326,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],
@@ -2673,6 +2674,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [

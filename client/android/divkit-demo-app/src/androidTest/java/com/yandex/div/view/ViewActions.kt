@@ -2,6 +2,9 @@
 
 package com.yandex.div.view
 
+import android.graphics.PointF
+import android.graphics.Rect
+import android.graphics.RectF
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
@@ -22,6 +25,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
+import com.yandex.div.test.crossplatform.tapPointWithinBounds
 import com.yandex.div.view.ViewMatchers.isDisplayedForClicking
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -31,13 +35,19 @@ object ViewActions {
 
     private const val TAP_RETRIES = 3
 
-    fun tapWithRetries(): ViewAction = tapWithRetries(Tap.SINGLE, "tap")
+    fun tapWithRetries(point: PointF? = null): ViewAction = tapWithRetries(Tap.SINGLE, "tap", point)
 
-    fun doubleTapWithRetries(): ViewAction = tapWithRetries(Tap.DOUBLE, "double tap")
+    fun doubleTapWithRetries(point: PointF? = null): ViewAction =
+        tapWithRetries(Tap.DOUBLE, "double tap", point)
 
-    fun longTapWithRetries(): ViewAction = tapWithRetries(Tap.LONG, "long tap")
+    fun longTapWithRetries(point: PointF? = null): ViewAction =
+        tapWithRetries(Tap.LONG, "long tap", point)
 
-    private fun tapWithRetries(tap: Tap, gesture: String): ViewAction = actionWithAssertions(object : ViewAction {
+    private fun tapWithRetries(
+        tap: Tap,
+        gesture: String,
+        point: PointF?,
+    ): ViewAction = actionWithAssertions(object : ViewAction {
 
         override fun getConstraints(): Matcher<View> = isDisplayingAtLeast(90)
 
@@ -48,7 +58,11 @@ object ViewActions {
             repeat(TAP_RETRIES + 1) {
                 status = tap.sendTap(
                     uiController,
-                    GeneralLocation.VISIBLE_CENTER.calculateCoordinates(view),
+                    if (point == null) {
+                        GeneralLocation.VISIBLE_CENTER.calculateCoordinates(view)
+                    } else {
+                        tapCoordinates(view, point)
+                    },
                     Press.FINGER.describePrecision(),
                     InputDevice.SOURCE_UNKNOWN,
                     MotionEvent.BUTTON_PRIMARY
@@ -63,6 +77,20 @@ object ViewActions {
                 .build()
         }
     })
+
+    private fun tapCoordinates(view: View, point: PointF): FloatArray {
+        val visibleBounds = Rect()
+        check(view.getLocalVisibleRect(visibleBounds)) { "Tap target has no visible bounds" }
+        val tapPoint = tapPointWithinBounds(
+            point,
+            view.width.toFloat(),
+            view.height.toFloat(),
+            RectF(visibleBounds)
+        )
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        return floatArrayOf(location[0] + tapPoint.x, location[1] + tapPoint.y)
+    }
 
     /**
      * Performs click ignoring 90% visible area constraint
