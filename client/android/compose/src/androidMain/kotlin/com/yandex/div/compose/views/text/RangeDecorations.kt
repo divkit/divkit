@@ -64,7 +64,8 @@ internal data class TextRangeDecoration(
     val glyphBoxes: List<GlyphBox> = emptyList(),
 ) {
     val hidesText: Boolean get() = mask != null
-    val hasFragmentBoxes: Boolean get() = mask == null && background !is RangeBackground.Cloud
+    val hasFragmentBoxes: Boolean
+        get() = background is RangeBackground.Solid || border?.stroke != null
 }
 
 internal fun TextRangeDecoration.withRangeMetrics(metrics: RangeMetricsInput): TextRangeDecoration {
@@ -280,7 +281,12 @@ private fun buildDecorationGeometry(
     particleDrawing: ParticleDrawing?,
 ): DecorationGeometry? {
     val lineRects = layout.lineRects(decoration.start, decoration.end, decoration.glyphBoxes)
-    if (lineRects.isEmpty()) return null
+    val maskRects = if (decoration.mask != null && decoration.glyphBoxes.isNotEmpty()) {
+        layout.lineRects(decoration.start, decoration.end, emptyList())
+    } else {
+        lineRects
+    }
+    if (lineRects.isEmpty() && maskRects.isEmpty()) return null
 
     val backgroundPath = when (val background = decoration.background) {
         is RangeBackground.Solid -> lineRects.toRangePath(decoration.border?.cornerRadiusPx ?: 0f)
@@ -298,8 +304,8 @@ private fun buildDecorationGeometry(
         }
     }
     val borderStroke = decoration.border?.stroke?.widthPx?.let(::Stroke)
-    particleDrawing?.updateBounds(lineRects)
-    return DecorationGeometry(decoration, lineRects, backgroundPath, borderPath, borderStroke, particleDrawing)
+    particleDrawing?.updateBounds(maskRects)
+    return DecorationGeometry(decoration, maskRects, backgroundPath, borderPath, borderStroke, particleDrawing)
 }
 
 private fun TextLayoutResult.lineRects(start: Int, end: Int, glyphBoxes: List<GlyphBox>): List<RangeLine> {
@@ -470,7 +476,7 @@ private fun List<RangeLine>.toCloudPath(cornerRadiusPx: Float, paddings: RangePa
 
 private data class DecorationGeometry(
     val decoration: TextRangeDecoration,
-    val lineRects: List<RangeLine>,
+    val maskRects: List<RangeLine>,
     val backgroundPath: Path?,
     val borderPath: Path?,
     val borderStroke: Stroke?,
@@ -496,7 +502,7 @@ private data class DecorationGeometry(
 
     fun drawMask(scope: DrawScope, frameTimeNanos: Long) = with(scope) {
         when (val mask = decoration.mask) {
-            is RangeMask.Solid -> lineRects.forEach { drawRect(mask.color, it.rect.topLeft, it.rect.size) }
+            is RangeMask.Solid -> maskRects.forEach { drawRect(mask.color, it.rect.topLeft, it.rect.size) }
             is RangeMask.Particles -> particleSystem?.draw(this, mask.color, frameTimeNanos, mask.isAnimated)
             null -> Unit
         }

@@ -1,0 +1,90 @@
+{
+  "description": "Range backgrounds and borders with a smaller font and a raised baseline, shown with the mask disabled, a solid mask, and a particle mask. iOS is excluded because static snapshots intermittently omit the particles mask.",
+  "platforms": [
+    "android",
+    "web"
+  ],
+  "templates": {
+    "sample_text": {
+      "type": "text",
+      "text": "Small Base Raised",
+      "font_size": 28,
+      "margins": {
+        "left": 12,
+        "top": 6,
+        "right": 12,
+        "bottom": 6
+      },
+      "ranges": [
+        {
+          "start": 0,
+          "end": 17,
+          "background": {
+            "type": "solid",
+            "color": "#FFCF86"
+          },
+          "border": {
+            "stroke": {
+              "color": "#922D14",
+              "width": 2
+            }
+          },
+          "$mask": "range_mask"
+        },
+        {
+          "start": 0,
+          "end": 5,
+          "font_size": 14
+        },
+        {
+          "start": 11,
+          "end": 17,
+          "baseline_offset": 6
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "sample_text",
+              "range_mask": {
+                "type": "solid",
+                "color": "#55416EB0",
+                "is_enabled": false
+              }
+            },
+            {
+              "type": "sample_text",
+              "range_mask": {
+                "type": "solid",
+                "color": "#55416EB0"
+              }
+            },
+            {
+              "type": "sample_text",
+              "range_mask": {
+                "type": "particles",
+                "color": "#282828",
+                "density": 0.2
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
