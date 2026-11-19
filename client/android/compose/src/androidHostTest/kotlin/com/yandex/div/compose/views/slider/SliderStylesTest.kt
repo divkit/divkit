@@ -1,7 +1,7 @@
 package com.yandex.div.compose.views.slider
 
-import android.graphics.Typeface
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
@@ -130,7 +130,7 @@ class SliderStylesTest {
 
         override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {
             requests += fontFamilyName to weight
-            return DivFontSource.Typeface(Typeface.DEFAULT)
+            return DivFontSource.FontFamily(FontFamily.Default)
         }
     }
 }

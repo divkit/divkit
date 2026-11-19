@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -23,7 +24,7 @@ class FontFamilyTest {
     val rule = createComposeRule()
 
     private val configuration = divConfiguration {
-        fontSourceProvider = FamilyFontSourceProvider()
+        fontSourceProvider = TestFontSourceProvider()
         reporter = TestReporter()
     }
 
@@ -49,10 +50,16 @@ class FontFamilyTest {
 
         assertNotSame(serifTypeface, typeface)
     }
+}
 
-    private class FamilyFontSourceProvider : DivFontSourceProvider {
-        override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {
-            return DivFontSource.Typeface(if (fontFamilyName == "monospace") Typeface.MONOSPACE else Typeface.SERIF)
-        }
+private class TestFontSourceProvider : DivFontSourceProvider {
+    override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {
+        return DivFontSource.FontFamily(
+            when (fontFamilyName) {
+                "monospace" -> FontFamily.Monospace
+                "serif" -> FontFamily.Serif
+                else -> FontFamily.Default
+            }
+        )
     }
 }

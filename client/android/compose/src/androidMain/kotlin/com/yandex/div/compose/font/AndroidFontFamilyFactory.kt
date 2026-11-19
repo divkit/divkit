@@ -27,16 +27,27 @@ internal class AndroidFontFamilyFactory(
     ): FontFamily {
         val settings = variations ?: FontVariation.Settings()
         return when (source) {
+            is DivFontSource.FontFamily -> {
+                if (variations != null) {
+                    reporter.reportWarning(
+                        "font_variation_settings cannot be applied to a FontFamily. " +
+                                "Use DivFontSource.Resource or DivFontSource.Asset for variable fonts."
+                    )
+                }
+                source.fontFamily
+            }
+
             is DivFontSource.Resource ->
                 FontFamily(Font(source.resId, weight, variationSettings = settings))
+
             is DivFontSource.Asset ->
                 FontFamily(Font(source.path, assets, weight, variationSettings = settings))
+
             is DivFontSource.Typeface -> {
                 if (variations != null) {
                     reporter.reportWarning(
                         "font_variation_settings cannot be applied to a Typeface. " +
-                                "Use DivFontSource.Resource or DivFontSource.Asset " +
-                                "for variable fonts."
+                                "Use DivFontSource.Resource or DivFontSource.Asset for variable fonts."
                     )
                 }
                 FontFamily(source.typeface.withWeight(weight))

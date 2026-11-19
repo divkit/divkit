@@ -13,7 +13,7 @@ class ComposeFontSourceProvider : DivFontSourceProvider {
             "condensed" -> condensedFont(weight)
             "roboto_flex" -> testR.font.roboto_flex
             "text", null -> defaultFont(weight)
-            else -> throw RuntimeException("Invalid font_family: $fontFamilyName")
+            else -> error("Invalid font_family: $fontFamilyName")
         }
         return DivFontSource.Resource(fontRes)
     }

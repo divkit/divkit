@@ -1,6 +1,7 @@
 package com.yandex.div.compose.font
 
 import androidx.annotation.FontRes
+import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
 
 /**
  * Platform-specific font source supplied by [DivFontSourceProvider]. Shared font
@@ -10,10 +11,19 @@ import androidx.annotation.FontRes
  */
 sealed class DivFontSource {
 
-    /** Font is stored as an Android font resource. Supports variation settings. */
+    /**
+     * Font is provided as a [androidx.compose.ui.text.font.FontFamily] instance.
+     */
+    data class FontFamily(val fontFamily: ComposeFontFamily): DivFontSource()
+
+    /**
+     * Font is stored as an Android font resource. Supports variation settings.
+     */
     data class Resource(@FontRes val resId: Int) : DivFontSource()
 
-    /** Font is stored as an app asset. Supports variation settings. */
+    /**
+     * Font is stored as an app asset. Supports variation settings.
+     */
     data class Asset(val path: String) : DivFontSource()
 
     /**
@@ -23,5 +33,6 @@ sealed class DivFontSource {
      * typeface — use [Resource] or [Asset] for variable fonts that need runtime
      * variation support.
      */
+    @Deprecated("Use FontFamily instead")
     data class Typeface(val typeface: android.graphics.Typeface) : DivFontSource()
 }
