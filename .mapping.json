@@ -3486,6 +3486,8 @@
   "client/android/div/src/main/java/com/yandex/div/core/view2/DivVisibilityActionDispatcher.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/DivVisibilityActionDispatcher.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/DivVisibilityActionTracker.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/DivVisibilityActionTracker.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/DivVisibilityTokenHolder.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/DivVisibilityTokenHolder.kt",
+  "client/android/div/src/main/java/com/yandex/div/core/view2/IndexedDivVisibilityTokenHolder.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/IndexedDivVisibilityTokenHolder.kt",
+  "client/android/div/src/main/java/com/yandex/div/core/view2/LinearDivVisibilityTokenHolder.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/LinearDivVisibilityTokenHolder.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/Releasable.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/Releasable.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/ReleaseManager.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/ReleaseManager.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/ShadowCache.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/ShadowCache.kt",

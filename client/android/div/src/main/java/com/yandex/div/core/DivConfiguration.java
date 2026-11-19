@@ -90,6 +90,7 @@ public class DivConfiguration {
 
     private final boolean mTapBeaconsEnabled;
     private final boolean mVisibilityBeaconsEnabled;
+    private final boolean mVisibilityTokenIndexEnabled;
     private final boolean mSwipeOutBeaconsEnabled;
     private final boolean mLongtapActionsPassToChild;
     private final boolean mShouldIgnoreMenuItemsInActions;
@@ -137,6 +138,7 @@ public class DivConfiguration {
             @NonNull DivVariableController divVariableController,
             boolean tapBeaconsEnabled,
             boolean visibilityBeaconsEnabled,
+            boolean visibilityTokenIndexEnabled,
             boolean swipeOutBeaconsEnabled,
             boolean longtapActionsPassToChild,
             boolean shouldIgnoreMenuItemsInActions,
@@ -182,6 +184,7 @@ public class DivConfiguration {
         mViewPoolReporter = reporter;
         mTapBeaconsEnabled = tapBeaconsEnabled;
         mVisibilityBeaconsEnabled = visibilityBeaconsEnabled;
+        mVisibilityTokenIndexEnabled = visibilityTokenIndexEnabled;
         mSwipeOutBeaconsEnabled = swipeOutBeaconsEnabled;
         mLongtapActionsPassToChild = longtapActionsPassToChild;
         mShouldIgnoreMenuItemsInActions = shouldIgnoreMenuItemsInActions;
@@ -311,6 +314,12 @@ public class DivConfiguration {
     @ExperimentFlag(experiment = Experiment.VISIBILITY_BEACONS_ENABLED)
     public boolean isVisibilityBeaconsEnabled() {
         return mVisibilityBeaconsEnabled;
+    }
+
+    @Provides
+    @ExperimentFlag(experiment = Experiment.VISIBILITY_TOKEN_INDEX_ENABLED)
+    public boolean isVisibilityTokenIndexEnabled() {
+        return mVisibilityTokenIndexEnabled;
     }
 
     @Provides
@@ -551,6 +560,7 @@ public class DivConfiguration {
         private DivVariableController mDivVariableController;
         private boolean mTapBeaconsEnabled = Experiment.TAP_BEACONS_ENABLED.getDefaultValue();
         private boolean mVisibilityBeaconsEnabled = Experiment.VISIBILITY_BEACONS_ENABLED.getDefaultValue();
+        private boolean mVisibilityTokenIndexEnabled = Experiment.VISIBILITY_TOKEN_INDEX_ENABLED.getDefaultValue();
         private boolean mSwipeOutBeaconsEnabled = Experiment.SWIPE_OUT_BEACONS_ENABLED.getDefaultValue();
         private boolean mLongtapActionsPassToChild = Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED.getDefaultValue();
         private boolean mShouldIgnoreMenuItemsInActions = Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED.getDefaultValue();
@@ -879,6 +889,16 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * Enables indexed lookup of tracked visibility actions. Disabled by default.
+         * Applies to both appearance and disappearance actions.
+         */
+        @NonNull
+        public Builder enableVisibilityTokenIndex(boolean enable) {
+            mVisibilityTokenIndexEnabled = enable;
+            return this;
+        }
+
         @NonNull
         public Builder animationsEnabledProvider(@NonNull DivAnimationsEnabledProvider provider) {
             mAnimationsEnabledProvider = provider;
@@ -927,6 +947,7 @@ public class DivConfiguration {
                     mDivVariableController == null ? new DivVariableController() : mDivVariableController,
                     mTapBeaconsEnabled,
                     mVisibilityBeaconsEnabled,
+                    mVisibilityTokenIndexEnabled,
                     mSwipeOutBeaconsEnabled,
                     mLongtapActionsPassToChild,
                     mShouldIgnoreMenuItemsInActions,

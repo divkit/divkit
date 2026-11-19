@@ -7,6 +7,10 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     VISIBILITY_BEACONS_ENABLED(
         "visibility_beacons_enabled"
     ),
+    VISIBILITY_TOKEN_INDEX_ENABLED(
+        "visibility_token_index_enabled",
+        defaultValue = false
+    ),
     SWIPE_OUT_BEACONS_ENABLED(
         "swipe_out_beacons_enabled",
         defaultValue = true

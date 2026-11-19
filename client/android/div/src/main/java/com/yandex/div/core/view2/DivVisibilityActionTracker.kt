@@ -9,6 +9,8 @@ import androidx.annotation.MainThread
 import androidx.core.os.postDelayed
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.experiments.Experiment.VISIBILITY_TOKEN_INDEX_ENABLED
 import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
@@ -30,11 +32,13 @@ import javax.inject.Inject
 @DivScope
 internal class DivVisibilityActionTracker @Inject constructor(
     private val viewVisibilityCalculator: ViewVisibilityCalculator,
+    @ExperimentFlag(VISIBILITY_TOKEN_INDEX_ENABLED)
+    visibilityTokenIndexEnabled: Boolean = VISIBILITY_TOKEN_INDEX_ENABLED.defaultValue,
 ) {
 
     private val handler = Handler(Looper.getMainLooper())
-    private val appearTrackedTokens = DivVisibilityTokenHolder()
-    private val disappearTrackedTokens = DivVisibilityTokenHolder()
+    private val appearTrackedTokens = DivVisibilityTokenHolder.create(visibilityTokenIndexEnabled)
+    private val disappearTrackedTokens = DivVisibilityTokenHolder.create(visibilityTokenIndexEnabled)
 
     private val isEnabledObserver = SightActionIsEnabledObserver(
         onEnable = { scope, resolver, view, div, action ->

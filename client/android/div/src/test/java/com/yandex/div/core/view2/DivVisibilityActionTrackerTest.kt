@@ -30,14 +30,14 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.LooperMode
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
-class DivVisibilityActionTrackerTest {
+@RunWith(ParameterizedRobolectricTestRunner::class)
+class DivVisibilityActionTrackerTest(private val indexEnabled: Boolean) {
     private val visibleDivsChangedCaptor = argumentCaptor<Map<View, Div>>()
     private val viewVisibilityCalculator = mock<ViewVisibilityCalculator>()
     private val resolver = mock<ExpressionResolver>()
@@ -87,7 +87,7 @@ class DivVisibilityActionTrackerTest {
     private val div5 = text(text = "test5", visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
     private val div6 = text(text = "test6", disappearActions = listOf(disappearAction50))
 
-    private val visibilityActionTracker = DivVisibilityActionTracker(viewVisibilityCalculator)
+    private val visibilityActionTracker = DivVisibilityActionTracker(viewVisibilityCalculator, indexEnabled)
 
     @Test
     fun `visibility action is not dispatched for invisible view`() {
@@ -331,6 +331,39 @@ class DivVisibilityActionTrackerTest {
             eq(resolver),
             eq(view4),
             argThat { this.size == 2 }
+        )
+    }
+
+    @Test
+    fun `cancelling one action preserves other actions in the same delayed group`() {
+        val visibleAction = DivVisibilityAction(
+            logId = "visible_50".asExpression(),
+            visibilityPercentage = 50L.asExpression(),
+            visibilityDuration = 1000L.asExpression()
+        )
+        val cancelledAction = DivVisibilityAction(
+            logId = "visible_90".asExpression(),
+            visibilityPercentage = 90L.asExpression(),
+            visibilityDuration = 1000L.asExpression()
+        )
+        val div = text(text = "test", visibilityActions = listOf(visibleAction, cancelledAction))
+        trackVisibilityAction(view1, div, 100)
+        Robolectric.getForegroundThreadScheduler().advanceBy(100L, TimeUnit.MILLISECONDS)
+
+        trackVisibilityAction(view1, div, 75)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.size == 1 && this[0] == visibleAction }
+        )
+        verify(visibilityActionDispatcher, never()).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contains(cancelledAction) }
         )
     }
 
@@ -634,6 +667,10 @@ class DivVisibilityActionTrackerTest {
     }
 
     companion object {
+        @JvmStatic
+        @ParameterizedRobolectricTestRunner.Parameters(name = "indexEnabled={0}")
+        fun parameters() = listOf(false, true)
+
         private fun mockView() = mock<View> {
             on { width } doReturn 300
             on { height } doReturn 100
