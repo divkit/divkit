@@ -1,0 +1,262 @@
+{
+  "description": "Pager keeps the position of the current page when item_builder data changes before it",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "page": {
+        "type": "text",
+        "height": {
+          "type": "fixed",
+          "value": 120
+        },
+        "font_size": 18,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "border": {
+          "corner_radius": 12,
+          "stroke": {
+            "color": "#aaaaaa",
+            "width": 1
+          }
+        },
+        "margins": {
+          "left": 4,
+          "right": 4
+        },
+        "selected_actions": [
+          {
+            "log_id": "select_page",
+            "url": "div-action://set_variable?name=selected&value=@{index}"
+          }
+        ],
+        "text": "@{getStringFromDict(it, 'title')} #@{index}"
+      },
+      "button": {
+        "type": "text",
+        "$text": "label",
+        "$actions": "on_tap",
+        "font_size": 14,
+        "text_color": "#ffffff",
+        "paddings": {
+          "top": 8,
+          "bottom": 8,
+          "left": 12,
+          "right": 12
+        },
+        "margins": {
+          "right": 8
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#3f51b5"
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "pager_item_builder_data_change_position",
+      "variables": [
+        {
+          "name": "data",
+          "type": "array",
+          "value": [
+            {
+              "kind": "keyed",
+              "id": "a",
+              "title": "A"
+            },
+            {
+              "kind": "keyed",
+              "id": "b",
+              "title": "B"
+            },
+            {
+              "kind": "anon",
+              "title": "C"
+            },
+            {
+              "kind": "keyed",
+              "id": "d",
+              "title": "D"
+            }
+          ]
+        },
+        {
+          "name": "selected",
+          "type": "string",
+          "value": "-"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "paddings": {
+              "top": 12,
+              "bottom": 12,
+              "left": 12,
+              "right": 12
+            },
+            "items": [
+              {
+                "type": "text",
+                "id": "selected_text",
+                "text": "selected index: @{selected}"
+              },
+              {
+                "type": "pager",
+                "id": "pager",
+                "margins": {
+                  "top": 12
+                },
+                "layout_mode": {
+                  "type": "percentage",
+                  "page_width": {
+                    "type": "percentage",
+                    "value": 60
+                  }
+                },
+                "item_builder": {
+                  "data": "@{data}",
+                  "prototypes": [
+                    {
+                      "selector": "@{getStringFromDict(it, 'kind') == 'keyed'}",
+                      "id": "@{getStringFromDict(it, 'id')}",
+                      "div": {
+                        "type": "page"
+                      }
+                    },
+                    {
+                      "div": {
+                        "type": "page"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "margins": {
+                  "top": 12
+                },
+                "items": [
+                  {
+                    "type": "button",
+                    "id": "insert",
+                    "label": "Insert first",
+                    "on_tap": [
+                      {
+                        "log_id": "insert",
+                        "typed": {
+                          "type": "array_insert_value",
+                          "variable_name": "data",
+                          "index": 0,
+                          "value": {
+                            "type": "dict",
+                            "value": {
+                              "kind": "anon",
+                              "title": "New"
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "id": "remove",
+                    "label": "Remove first",
+                    "on_tap": [
+                      {
+                        "log_id": "remove",
+                        "typed": {
+                          "type": "array_remove_value",
+                          "variable_name": "data",
+                          "index": 0
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "pager"
+      },
+      "direction": "left"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "selected_text"
+      },
+      "text": "selected index: 1"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "insert"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "selected_text"
+      },
+      "text": "selected index: 1"
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "pager"
+      },
+      "direction": "right"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "selected_text"
+      },
+      "text": "selected index: 0"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "remove"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "selected_text"
+      },
+      "text": "selected index: 0"
+    }
+  ]
+}

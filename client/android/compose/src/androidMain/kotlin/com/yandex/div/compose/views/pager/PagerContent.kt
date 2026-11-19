@@ -62,6 +62,7 @@ import kotlin.math.abs
 internal fun PagerContent(
     pager: DivPager,
     items: List<Div>,
+    allItems: List<Div>,
     components: Map<Div, DivLocalComponent>?,
     isHorizontal: Boolean,
     itemSpacing: Dp,
@@ -80,6 +81,9 @@ internal fun PagerContent(
     val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
     val itemKeys = remember(items) {
         items.map { compositionKeyStorage.get(it.value()) }
+    }
+    val allItemKeys = remember(allItems) {
+        allItems.map { compositionKeyStorage.get(it.value()) }
     }
     val initialDefaultItem = remember { defaultItem }
     val density = LocalDensity.current
@@ -107,6 +111,7 @@ internal fun PagerContent(
         viewportSize,
         itemWindow.itemCount,
     )
+    KeepPositionWhenPagesChange(listState, allItemKeys)
     // Raw index of the page the pager settled on last: pages that cannot reach their snap positions at a list edge
     // share one, and the layout alone does not tell which of them is the current page.
     val settledPage = rememberSaveable(listState) { mutableIntStateOf(rawDefaultItem) }
@@ -134,6 +139,7 @@ internal fun PagerContent(
         listState = listState,
         itemWindow = itemWindow,
         itemKeys = itemKeys,
+        allItemKeys = allItemKeys,
         defaultItem = initialDefaultItem,
         alignment = PagerAlignment(snapPosition, startPadding, endPadding, itemSpacing, pageSize, viewportSize),
         settledPage = settledPage,
@@ -152,7 +158,6 @@ internal fun PagerContent(
     val selectedActionsHandler = rememberPagerSelectedActionsHandler(
         items = items,
         components = components,
-        itemKeys = itemKeys,
         listState = listState,
         snapPosition = snapPosition,
         itemWindow = itemWindow,
@@ -249,6 +254,7 @@ private fun rememberCurrentPageAlignment(
     listState: LazyListState,
     itemWindow: PagerItemWindow,
     itemKeys: List<Long>,
+    allItemKeys: List<Long>,
     defaultItem: Int,
     alignment: PagerAlignment,
     settledPage: MutableIntState,
@@ -262,6 +268,7 @@ private fun rememberCurrentPageAlignment(
             initialItemWindow = itemWindow,
             initialRealPage = defaultItem,
             initialItemKeys = itemKeys,
+            initialAllItemKeys = allItemKeys,
             initialAlignment = alignment,
         )
     }
@@ -269,7 +276,9 @@ private fun rememberCurrentPageAlignment(
     val viewportSizePx = with(density) { alignment.viewportSize.roundToPx() }
     var ready by remember(listState, itemWindow, itemKeys, alignment, density) { mutableStateOf(false) }
 
-    LaunchedEffect(listState, itemWindow, itemKeys, alignment, density, isPositionAvailable, neighbourSizes) {
+    LaunchedEffect(
+        listState, itemWindow, itemKeys, allItemKeys, alignment, density, isPositionAvailable, neighbourSizes
+    ) {
         if (!isPositionAvailable) return@LaunchedEffect
 
         val snapPosition = alignment.snapPosition
@@ -284,7 +293,7 @@ private fun rememberCurrentPageAlignment(
 
         snapshotFlow { listState.layoutInfo }.first { alignment.matchesLayout(it, density) }
         val rawPage = listState.pagerPosition(snapPosition, settledPage.intValue).first
-        state.update(itemWindow, rawPage, isPositionAvailable, itemKeys, alignment)?.let { snapPage(it) }
+        state.update(itemWindow, rawPage, isPositionAvailable, itemKeys, alignment, allItemKeys)?.let { snapPage(it) }
         ready = true
 
         // The latest layout in which the list stood still.
@@ -308,6 +317,7 @@ private fun rememberCurrentPageAlignment(
                         isPositionAvailable = listState.layoutInfo.visibleItemsInfo.isNotEmpty(),
                         itemKeys = itemKeys,
                         alignment = alignment,
+                        allItemKeys = allItemKeys,
                     )
                 }
                 standing = layout.takeIf { it.resizeCount != null }

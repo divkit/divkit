@@ -34,7 +34,6 @@ internal fun interface PagerSelectedActionsHandler {
 internal fun rememberPagerSelectedActionsHandler(
     items: List<Div>,
     components: Map<Div, DivLocalComponent>?,
-    itemKeys: List<Long>,
     listState: LazyListState,
     snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
@@ -49,7 +48,7 @@ internal fun rememberPagerSelectedActionsHandler(
     val viewportSizePx = with(LocalDensity.current) { viewportSize.roundToPx() }
 
     LaunchedEffect(
-        items, components, itemKeys, listState, snapPosition, itemWindow, parentComponent, enabled,
+        items, components, listState, snapPosition, itemWindow, parentComponent, enabled,
         viewportSizePx, settledPage, neighbourSizes
     ) {
         if (!enabled) return@LaunchedEffect
@@ -74,7 +73,7 @@ internal fun rememberPagerSelectedActionsHandler(
             previous = layout
             val page = layout.page
             if (page == null || isResize) return@collect
-            selection.select(itemKeys[page], items[page])
+            selection.select(page, items[page])
             while (selection.pendingItems.isNotEmpty()) {
                 val item = selection.pendingItems.removeFirst()
                 val actions = item.value().selectedActions
@@ -89,7 +88,7 @@ internal fun rememberPagerSelectedActionsHandler(
     val onTargetPageCalculated = rememberUpdatedState<(Int) -> Unit> { rawIndex ->
         if (enabled) {
             listState.realPage(itemWindow, rawIndex)?.let { page ->
-                selection.select(itemKeys[page], items[page])
+                selection.select(page, items[page])
             }
         }
     }
@@ -98,14 +97,15 @@ internal fun rememberPagerSelectedActionsHandler(
     }
 }
 
+/** Selects a page by its position: a page that takes the current position after a change of pages is not selected. */
 private class PageSelection {
-    private var currentItemKey: Long? = null
+    private var currentPage: Int? = null
     val pendingItems = ArrayDeque<Div>()
 
-    fun select(itemKey: Long, item: Div) {
-        if (itemKey == currentItemKey) return
+    fun select(page: Int, item: Div) {
+        if (page == currentPage) return
         pendingItems.addLast(item)
-        currentItemKey = itemKey
+        currentPage = page
     }
 }
 

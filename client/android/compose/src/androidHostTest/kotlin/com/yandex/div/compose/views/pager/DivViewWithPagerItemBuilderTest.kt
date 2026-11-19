@@ -9,6 +9,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeLeft
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
@@ -24,6 +26,7 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.arrayExpression
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -123,7 +126,7 @@ class DivViewWithPagerItemBuilderTest {
     }
 
     @Test
-    fun `data change reruns selected_actions of the current page only without an id`() {
+    fun `data change does not rerun selected_actions of the current page`() {
         val elements = Variable.ArrayVariable("elements", jsonArray(jsonObject("v" to 1)))
         variableController.declare(elements)
         setContent(container(items = listOf(
@@ -134,18 +137,85 @@ class DivViewWithPagerItemBuilderTest {
         elements.set(jsonArray(jsonObject("v" to 2)))
 
         rule.runOnIdle {
-            assertEquals(listOf("anonymous_1", "identified_1", "anonymous_2"), selections())
+            assertEquals(listOf("anonymous_1", "identified_1"), selections())
         }
     }
 
     @Test
-    fun `page with an id keeps its state and stays current when a page is inserted before it`() {
+    fun `pager keeps its position without selected_actions when a page is inserted before the current one`() {
+        val elements = Variable.ArrayVariable("elements", elements(2))
+        variableController.declare(elements)
+        setContent(indexedPager())
+
+        elements.set(jsonArray(jsonObject("id" to "new"), jsonObject("id" to "page0"), jsonObject("id" to "page1")))
+
+        rule.onNodeWithTag("page0").assertIsDisplayed()
+        rule.runOnIdle { assertEquals(listOf("page1_1"), selections()) }
+    }
+
+    @Test
+    fun `pager keeps its position without selected_actions when a page before the current one is removed`() {
+        val elements = Variable.ArrayVariable("elements", elements(3))
+        variableController.declare(elements)
+        setContent(indexedPager())
+
+        elements.set(jsonArray(jsonObject("id" to "page1"), jsonObject("id" to "page2")))
+
+        rule.onNodeWithTag("page2").assertIsDisplayed()
+        rule.runOnIdle { assertEquals(listOf("page1_1"), selections()) }
+    }
+
+    @Test
+    fun `selected_actions of a page moved to a clamped position run when the current position is removed`() {
+        val elements = Variable.ArrayVariable("elements", elements(3))
+        variableController.declare(elements)
+        setContent(indexedPager(defaultItem = 2))
+
+        elements.set(jsonArray(jsonObject("id" to "page1"), jsonObject("id" to "page2")))
+
+        rule.onNodeWithTag("page2").assertIsDisplayed()
+        rule.runOnIdle { assertEquals(listOf("page2_2", "page2_1"), selections()) }
+    }
+
+    @Test
+    fun `selected_actions of the current page with an id do not rerun when a page is added after it`() {
+        val elements = Variable.ArrayVariable("elements", elements(2))
+        variableController.declare(elements)
+        setContent(indexedPager())
+
+        elements.set(jsonArray(jsonObject("id" to "page0"), jsonObject("id" to "page1"), jsonObject("id" to "new")))
+
+        rule.runOnIdle { assertEquals(listOf("page1_1"), selections()) }
+    }
+
+    @Test
+    fun `selected_actions of a swipe target run once when its index changes before the swipe settles`() {
+        val elements = Variable.ArrayVariable("elements", elements(2))
+        variableController.declare(elements)
+        setContent(indexedPager(defaultItem = 0, selector = booleanExpression("@{it.getString('id') != 'skipped'}")))
+        rule.waitForIdle()
+        rule.mainClock.autoAdvance = false
+
+        rule.onNodeWithTag("pager").performTouchInput {
+            swipeLeft(startX = right - 1f, endX = left + 1f, durationMillis = 50)
+        }
+        rule.mainClock.advanceTimeByFrame()
+        elements.set(jsonArray(jsonObject("id" to "skipped"), jsonObject("id" to "page0"), jsonObject("id" to "page1")))
+        rule.mainClock.autoAdvance = true
+
+        rule.runOnIdle { assertEquals(listOf("page0_0", "page1_2"), selections()) }
+    }
+
+    @Test
+    fun `page with an id keeps its state when a page inserted before it takes the current position`() {
         val elements = Variable.ArrayVariable("elements", jsonArray(jsonObject("id" to "kept")))
         variableController.declare(elements)
         setContent(editablePager())
         rule.onNodeWithTag("kept").performClick()
 
         elements.set(jsonArray(jsonObject("id" to "new"), jsonObject("id" to "kept")))
+        rule.onNodeWithTag("new").assertIsDisplayed()
+        rule.onNode(hasScrollToIndexAction()).performScrollToIndex(1)
 
         rule.onNodeWithTag("kept").assertIsDisplayed().assertTextEquals("changed kept 1")
     }
@@ -262,6 +332,19 @@ private fun editablePager(
             variables = listOf(variable("local", "initial"))
         ),
         id = id
+    ))
+)
+
+private fun indexedPager(defaultItem: Long = 1, selector: Expression<Boolean>? = null): Div = builtPager(
+    data = arrayExpression("@{elements}"),
+    defaultItem = defaultItem,
+    id = "pager",
+    prototypes = listOf(prototype(
+        div = page(selectedActions = listOf(
+            action(url = uriExpression("divkit-test://select?page=@{it.getString('id')}_@{index}"))
+        )),
+        id = expression("@{it.getString('id')}"),
+        selector = selector
     ))
 )
 

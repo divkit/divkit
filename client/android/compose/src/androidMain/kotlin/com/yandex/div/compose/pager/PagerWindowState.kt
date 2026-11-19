@@ -28,16 +28,20 @@ internal class PagerWindowState(
     initialRealPage: Int,
     initialItemKeys: List<Long>,
     initialAlignment: PagerAlignment,
+    initialAllItemKeys: List<Long> = initialItemKeys,
 ) {
 
     private var itemWindow = initialItemWindow
     private var realPage = initialRealPage
     private var cycle = 0
     private var itemKeys = initialItemKeys
+    private var allItemKeys = initialAllItemKeys
     private var alignment = initialAlignment
 
     /**
-     * Returns a raw page to restore when the finite/cyclic window or the [alignment] changes.
+     * Returns a raw page to restore when the finite/cyclic window, the visible [itemKeys] or the [alignment] changes.
+     * When the pages themselves change ([allItemKeys] with `gone` pages included), the pager keeps its position, as
+     * the View renderer does after `setItems`; when only their visibility changes, it keeps its page.
      * [rawPage] is measured with the new [alignment], so after its change the page tracked before is restored.
      */
     fun update(
@@ -46,16 +50,18 @@ internal class PagerWindowState(
         isPositionAvailable: Boolean,
         itemKeys: List<Long>,
         alignment: PagerAlignment,
+        allItemKeys: List<Long> = itemKeys,
     ): Int? {
         if (!isPositionAvailable || itemWindow.realItemCount == 0) return null
         val alignmentChanged = this.alignment != alignment
         this.alignment = alignment
         if (this.itemWindow != itemWindow || this.itemKeys != itemKeys) {
-            val previousKey = this.itemKeys.getOrNull(realPage)
-            realPage = itemKeys.indexOf(previousKey).takeIf { it >= 0 }
-                ?: realPage.coerceIn(0, itemWindow.realItemCount - 1)
+            val onlyVisibilityChanged = this.allItemKeys == allItemKeys
+            val keptPage = if (onlyVisibilityChanged) itemKeys.indexOf(this.itemKeys.getOrNull(realPage)) else -1
+            realPage = keptPage.takeIf { it >= 0 } ?: realPage.coerceIn(0, itemWindow.realItemCount - 1)
             this.itemWindow = itemWindow
             this.itemKeys = itemKeys
+            this.allItemKeys = allItemKeys
             val baseRawPage = itemWindow.rawIndex(realPage)
             val minCycle = -baseRawPage / itemWindow.realItemCount
             val maxCycle = (itemWindow.itemCount - 1 - baseRawPage) / itemWindow.realItemCount

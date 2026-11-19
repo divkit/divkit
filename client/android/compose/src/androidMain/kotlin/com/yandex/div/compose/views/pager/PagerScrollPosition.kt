@@ -1,6 +1,10 @@
 package com.yandex.div.compose.views.pager
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import kotlin.math.max
@@ -83,3 +87,20 @@ private fun edgeClamp(excess: Long, contentOutside: Long): Long {
     if (excess <= 0) return 0
     return max(0, excess - contentOutside)
 }
+
+/**
+ * The list keeps its first visible item by key. When the pages themselves change, rather than their visibility,
+ * the pager keeps its position, so the first layout with the new pages already shows it.
+ */
+@Composable
+internal fun KeepPositionWhenPagesChange(listState: LazyListState, allItemKeys: List<Long>) {
+    val applied = remember(listState) { AppliedItemKeys(allItemKeys) }
+    SideEffect {
+        if (applied.keys != allItemKeys) {
+            applied.keys = allItemKeys
+            listState.requestScrollToItem(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset)
+        }
+    }
+}
+
+private class AppliedItemKeys(var keys: List<Long>)

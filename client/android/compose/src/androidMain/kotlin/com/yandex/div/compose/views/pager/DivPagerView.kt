@@ -61,6 +61,7 @@ internal fun DivPagerView(
     PagerView(
         modifier = modifier,
         items = items,
+        allItems = collectionItems.items,
         components = collectionItems.components,
         data = data
     )
@@ -70,6 +71,7 @@ internal fun DivPagerView(
 private fun PagerView(
     modifier: Modifier,
     items: List<Div>,
+    allItems: List<Div>,
     components: Map<Div, DivLocalComponent>?,
     data: DivPager,
 ) {
@@ -115,6 +117,7 @@ private fun PagerView(
         PagerContent(
             pager = data,
             items = items,
+            allItems = allItems,
             components = components,
             isHorizontal = isHorizontal,
             itemSpacing = data.itemSpacing.observedValue(),

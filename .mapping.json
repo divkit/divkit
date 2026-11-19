@@ -16154,6 +16154,7 @@
   "test_data/interactive_snapshot_test_data/div-pager/gone_items_with_infinite_scroll.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/gone_items_with_infinite_scroll.json",
   "test_data/interactive_snapshot_test_data/div-pager/horizontal-content-alignment.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/horizontal-content-alignment.json",
   "test_data/interactive_snapshot_test_data/div-pager/infinite-scroll.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/infinite-scroll.json",
+  "test_data/interactive_snapshot_test_data/div-pager/item-builder-data-change-position.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/item-builder-data-change-position.json",
   "test_data/interactive_snapshot_test_data/div-pager/item-builder.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/item-builder.json",
   "test_data/interactive_snapshot_test_data/div-pager/item_count.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/item_count.json",
   "test_data/interactive_snapshot_test_data/div-pager/item_count_builder.json":"divkit/public/test_data/interactive_snapshot_test_data/div-pager/item_count_builder.json",

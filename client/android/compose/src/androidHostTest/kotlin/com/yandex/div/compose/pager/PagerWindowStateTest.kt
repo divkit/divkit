@@ -49,7 +49,7 @@ class PagerWindowStateTest {
     }
 
     @Test
-    fun `removing a preceding page preserves the visible key and positive cycle`() {
+    fun `removing a preceding page keeps the position and positive cycle`() {
         val rawPage = infiniteWindow.rawIndex(2) + 10
         infiniteState.update(infiniteWindow, rawPage, isPositionAvailable = true, itemKeys, alignment)
         val smallerWindow = PagerItemWindow.virtuallyUnbounded(realItemCount = 4)
@@ -59,11 +59,11 @@ class PagerWindowStateTest {
             alignment = alignment,
         )
 
-        assertEquals(smallerWindow.rawIndex(1) + 8, restoredPage)
+        assertEquals(smallerWindow.rawIndex(2) + 8, restoredPage)
     }
 
     @Test
-    fun `inserting a preceding page preserves the visible key and negative cycle`() {
+    fun `inserting a preceding page keeps the position and negative cycle`() {
         val rawPage = infiniteWindow.rawIndex(2) - 10
         infiniteState.update(infiniteWindow, rawPage, isPositionAvailable = true, itemKeys, alignment)
         val largerWindow = PagerItemWindow.virtuallyUnbounded(realItemCount = 6)
@@ -73,7 +73,33 @@ class PagerWindowStateTest {
             alignment = alignment,
         )
 
-        assertEquals(largerWindow.rawIndex(3) - 12, restoredPage)
+        assertEquals(largerWindow.rawIndex(2) - 12, restoredPage)
+    }
+
+    @Test
+    fun `hiding a preceding page keeps the current page`() {
+        val state = PagerWindowState(finiteWindow, initialRealPage = 0, itemKeys, alignment)
+        state.update(finiteWindow, rawPage = 2, isPositionAvailable = true, itemKeys, alignment)
+
+        val restoredPage = state.update(
+            PagerItemWindow(realItemCount = 4), rawPage = 2, isPositionAvailable = true,
+            itemKeys = listOf(1L, 2L, 3L, 4L), alignment = alignment, allItemKeys = itemKeys,
+        )
+
+        assertEquals(1, restoredPage)
+    }
+
+    @Test
+    fun `hiding the current page keeps its position`() {
+        val state = PagerWindowState(finiteWindow, initialRealPage = 0, itemKeys, alignment)
+        state.update(finiteWindow, rawPage = 2, isPositionAvailable = true, itemKeys, alignment)
+
+        val restoredPage = state.update(
+            PagerItemWindow(realItemCount = 4), rawPage = 2, isPositionAvailable = true,
+            itemKeys = listOf(0L, 1L, 3L, 4L), alignment = alignment, allItemKeys = itemKeys,
+        )
+
+        assertEquals(2, restoredPage)
     }
 
     @Test

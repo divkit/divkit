@@ -477,7 +477,7 @@ class DivViewWithPatchTest {
     }
 
     @Test
-    fun `pager keeps its visible page when a preceding page is removed`() {
+    fun `pager keeps its position when a preceding page is removed`() {
         val data = data(Div.Pager(DivPager(
             id = "pager",
             width = fixed(200),
@@ -491,7 +491,7 @@ class DivViewWithPatchTest {
 
         applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("page0"))))
 
-        rule.onNodeWithTag("page5").assertIsDisplayed()
+        rule.onNodeWithTag("page6").assertIsDisplayed()
     }
 
     @Test
@@ -514,7 +514,7 @@ class DivViewWithPatchTest {
     }
 
     @Test
-    fun `infinite pager keeps its visible page when a preceding page is removed`() {
+    fun `infinite pager keeps its position when a preceding page is removed`() {
         val data = data(Div.Pager(DivPager(
             id = "pager",
             width = fixed(200),
@@ -529,7 +529,7 @@ class DivViewWithPatchTest {
 
         applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("page0"))))
 
-        rule.onNodeWithTag("page5").assertIsDisplayed()
+        rule.onNodeWithTag("page6").assertIsDisplayed()
     }
 
     @Test
@@ -796,7 +796,7 @@ class DivViewWithPatchTest {
     }
 
     @Test
-    fun `pager runs selected actions when the selected page is replaced`() {
+    fun `pager does not run selected actions when the selected page is replaced`() {
         val data = pagerWithSelectedActions()
         setContent(data)
         rule.onNodeWithTag("page5").assertIsDisplayed()
@@ -806,10 +806,8 @@ class DivViewWithPatchTest {
         ))))))
         rule.waitForIdle()
 
-        assertEquals(listOf(
-            actionData(id = "page5", source = DivActionSource.SELECTION),
-            actionData(id = "replacement", source = DivActionSource.SELECTION)
-        ), actionHandler.handledActions)
+        rule.onNodeWithText("Replacement").assertIsDisplayed()
+        assertEquals(listOf(actionData(id = "page5", source = DivActionSource.SELECTION)), actionHandler.handledActions)
     }
 
     private fun pagerWithSelectedActions(infiniteScroll: Boolean = false): DivData {
