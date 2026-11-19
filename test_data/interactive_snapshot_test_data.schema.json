@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DivKit interactive snapshot test scenario",
+  "type": "object",
+  "required": ["description", "platforms", "div_data", "steps"],
+  "additionalProperties": false,
+  "properties": {
+    "description": { "type": "string" },
+    "platforms": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/definitions/platform" }
+    },
+    "unsupported_platforms": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/definitions/platform" },
+      "additionalProperties": { "type": "string" }
+    },
+    "case_id": { "type": "integer", "minimum": 1 },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "layout_direction": { "enum": ["ltr", "rtl"] },
+        "fail_on_parsing_error": { "type": "boolean" },
+        "runtime_error_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "div_data": {
+      "description": "DivKit document envelope. Card contents and templates are parsed by the platform runners, including expressions, template parameters and intentional parsing errors.",
+      "type": "object",
+      "required": ["card"],
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string" },
+        "card": { "type": "object" },
+        "templates": {
+          "type": "object",
+          "additionalProperties": { "type": "object" }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/step" }
+    }
+  },
+  "definitions": {
+    "platform": { "enum": ["android", "ios", "web"] },
+    "direction": { "enum": ["up", "down", "left", "right"] },
+    "target": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "id"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "div_id" },
+            "id": { "type": "string", "pattern": "\\S" },
+            "description": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "text"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "text" },
+            "text": { "type": "string", "pattern": "\\S" },
+            "description": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "point": {
+      "type": "object",
+      "required": ["x", "y"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 },
+        "description": { "type": "string" }
+      }
+    },
+    "step": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "target"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "enum": ["tap", "long_tap", "double_tap"] },
+            "description": { "type": "string" },
+            "target": { "$ref": "#/definitions/target" },
+            "point": { "$ref": "#/definitions/point" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "target"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "swipe" },
+            "description": { "type": "string" },
+            "target": { "$ref": "#/definitions/target" },
+            "direction": { "$ref": "#/definitions/direction" },
+            "from": { "$ref": "#/definitions/point" },
+            "to": { "$ref": "#/definitions/point" },
+            "hold_duration_ms": { "type": "integer", "minimum": 0 }
+          },
+          "oneOf": [
+            {
+              "required": ["direction"],
+              "not": { "anyOf": [{ "required": ["from"] }, { "required": ["to"] }] }
+            },
+            {
+              "required": ["from", "to"],
+              "not": { "required": ["direction"] }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "required": ["type", "container", "destination", "scroll_direction"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "scroll_to" },
+            "description": { "type": "string" },
+            "container": { "$ref": "#/definitions/target" },
+            "destination": { "$ref": "#/definitions/target" },
+            "scroll_direction": { "$ref": "#/definitions/direction" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "mode", "text"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "edit_text" },
+            "description": { "type": "string" },
+            "target": { "$ref": "#/definitions/target" },
+            "mode": { "enum": ["replace", "append"] },
+            "text": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "action"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "div_action" },
+            "description": { "type": "string" },
+            "action": {
+              "description": "DivKit action payload, parsed by the platform runners using the DivKit action contract.",
+              "type": "object",
+              "properties": {
+                "description": { "type": "string" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "text"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "verify_text" },
+            "description": { "type": "string" },
+            "target": { "$ref": "#/definitions/target" },
+            "text": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "target", "focused"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "verify_focus" },
+            "description": { "type": "string" },
+            "target": { "$ref": "#/definitions/target" },
+            "focused": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "source", "id"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "verify_log" },
+            "description": { "type": "string" },
+            "source": { "enum": ["visibility", "disappear"] },
+            "id": { "type": "string", "minLength": 1 },
+            "count": { "type": "integer", "minimum": 0 }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "name"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "verify_snapshot" },
+            "description": { "type": "string" },
+            "name": { "type": "string", "minLength": 1, "pattern": "^[^/\\\\]+$" },
+            "target": { "$ref": "#/definitions/target" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "duration_ms"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "wait" },
+            "description": { "type": "string" },
+            "duration_ms": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ]
+    }
+  }
+}
