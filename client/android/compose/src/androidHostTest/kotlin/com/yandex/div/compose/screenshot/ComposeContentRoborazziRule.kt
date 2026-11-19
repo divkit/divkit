@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalCursorBlinkEnabled
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
@@ -102,7 +103,8 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
         composeRule.setContent {
             CompositionLocalProvider(
                 LocalContext provides divContext,
-                LocalLayoutDirection provides configuration.layoutDirection
+                LocalLayoutDirection provides configuration.layoutDirection,
+                LocalCursorBlinkEnabled provides false
             ) {
                 viewConfiguration = LocalViewConfiguration.current
                 Box(

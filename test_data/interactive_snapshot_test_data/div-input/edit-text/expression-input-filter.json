@@ -1,6 +1,7 @@
 {
   "description": "Expression input filter: accept or reject edits according to the filter condition",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

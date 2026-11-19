@@ -5,19 +5,27 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.toAndroidRectF
 import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.TouchInjectionScope
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextInputSelection
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextRange
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziTaskType
 import com.github.takahirom.roborazzi.provideRoborazziContext
@@ -86,6 +94,7 @@ class RoborazziInteractiveScreenshotTest(
                 is Step.DoubleTap -> performGesture(step.target, step.point) { doubleClick(it) }
                 is Step.LongTap -> performGesture(step.target, step.point) { longClick(it) }
                 is Step.Swipe -> performSwipe(step)
+                is Step.EditText -> performEditText(step)
                 is Step.VerifyText -> verifyText(step)
                 is Step.VerifyFocus -> verifyFocus(step)
                 is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
@@ -106,6 +115,15 @@ class RoborazziInteractiveScreenshotTest(
     private fun onTarget(target: Target, unmerged: Boolean = false) = when (target) {
         is Target.DivId -> composeRule.onNode(hasTestTag(target.id) and isPlaced(), unmerged)
         is Target.Text -> composeRule.onNode(hasText(target.text) and isPlaced(), useUnmergedTree = true)
+    }
+
+    // The id of an input is on its wrapper, the text and the editing actions are on its child.
+    private fun onInput(target: Target): SemanticsNodeInteraction {
+        val matcher = target.matcher()
+        return composeRule.onNode(
+            hasSetTextAction() and (matcher or hasWrapper(matcher)) and isPlaced(),
+            useUnmergedTree = true,
+        )
     }
 
     private fun performTap(target: Target, point: PointF?) {
@@ -135,6 +153,31 @@ class RoborazziInteractiveScreenshotTest(
         return node.positionInRoot - node.boundsInRoot.topLeft + Offset(position.x, position.y)
     }
 
+    private fun performEditText(step: Step.EditText) {
+        // Typing may change the text of the target and recreate the field, but not its wrapper.
+        val wrapperId = onInput(step.target).fetchSemanticsNode().layoutInfo.parentInfo?.semanticsId
+        val input = composeRule.onNode(
+            hasSetTextAction() and SemanticsMatcher("input found by ${step.target}") {
+                it.layoutInfo.parentInfo?.semanticsId == wrapperId
+            },
+            useUnmergedTree = true,
+        )
+        input.performClick()
+        composeRule.mainClock.advanceTimeBy(contentRule.viewConfiguration.doubleTapTimeoutMillis)
+        input.assert(isFocused()) { "Failed to focus ${step.target} by a tap" }
+        val length = input.fetchSemanticsNode().config[SemanticsProperties.InputText].length
+        val start = if (step.mode == Step.EditText.Mode.REPLACE) 0 else length
+        input.performTextInputSelection(TextRange(start, length), relativeToOriginalText = true)
+        step.inputs.forEachIndexed { index, text ->
+            input.assert(isFocused()) {
+                "Failed to keep focus in ${step.target} " +
+                    "before character ${index + 1} of '${step.text}'"
+            }
+            input.performTextInput(text)
+            contentRule.waitForIdle()
+        }
+    }
+
     private fun performSwipe(step: Step.Swipe) {
         val target = onTarget(step.target, unmerged = true)
         val node = target.fetchSemanticsNode()
@@ -156,7 +199,20 @@ class RoborazziInteractiveScreenshotTest(
     }
 
     private fun verifyText(step: Step.VerifyText) {
-        onTarget(step.target).assertTextEquals(step.text)
+        val target = onTarget(step.target)
+        val input = onInput(step.target)
+        // A missing or ambiguous target fails in assertTextEquals below with its usual message.
+        if (runCatching { target.fetchSemanticsNode(); input.fetchSemanticsNode() }.isSuccess) {
+            // The field also merges the hint its decorator shows while the text is empty.
+            input.assert(
+                SemanticsMatcher.expectValue(
+                    SemanticsProperties.EditableText,
+                    AnnotatedString(step.text),
+                )
+            )
+        } else {
+            target.assertTextEquals(step.text)
+        }
     }
 
     private fun verifyFocus(step: Step.VerifyFocus) {
@@ -242,5 +298,17 @@ private fun TouchInjectionScope.swipeAndHold(start: Offset, end: Offset, holdDur
 
 private const val SWIPE_DURATION_MS = 200L
 
+private fun Target.matcher() = when (this) {
+    is Target.DivId -> hasTestTag(id)
+    is Target.Text -> hasText(text)
+}
+
 // Div-tabs measures pages in compositions that are never placed, so their nodes duplicate visible ones.
 private fun isPlaced() = SemanticsMatcher("is placed") { it.layoutInfo.isPlaced }
+
+// The wrapper is the layout parent: without an id it may lack semantics and not be the parent.
+private fun hasWrapper(matcher: SemanticsMatcher) =
+    SemanticsMatcher("hasWrapperThat(${matcher.description})") { node ->
+        node.parent?.takeIf { it.id == node.layoutInfo.parentInfo?.semanticsId }
+            ?.let(matcher::matches) == true
+    }

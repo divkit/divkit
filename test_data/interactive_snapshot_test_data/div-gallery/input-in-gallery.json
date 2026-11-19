@@ -1,6 +1,7 @@
 {
   "description": "Input field in gallery that triggers action",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

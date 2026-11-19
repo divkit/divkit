@@ -27,6 +27,19 @@ class InteractiveScreenshotTestData(
             val holdDurationMs: Long,
         ) : Step()
 
+        class EditText(val target: Target, val mode: Mode, val text: String) : Step() {
+            /**
+             * Texts entered one by one: graphemes of [text], or an empty text that deletes the
+             * selection.
+             */
+            val inputs: List<String> = when {
+                mode == Mode.REPLACE && text.isEmpty() -> listOf("")
+                else -> Regex("\\X").findAll(text).map { it.value }.toList()
+            }
+
+            enum class Mode { REPLACE, APPEND }
+        }
+
         class Wait(val delay: Long) : Step()
 
         class VerifySnapshot(val name: String, val target: Target? = null) : Step()
@@ -75,6 +88,12 @@ class InteractiveScreenshotTestData(
 
                 "swipe" -> parseSwipe(step)
 
+                "edit_text" -> Step.EditText(
+                    parseTarget(step),
+                    parseEditMode(step),
+                    step.getString("text"),
+                )
+
                 "wait" -> {
                     val delay = step.getLong("duration_ms")
                     if (delay <= 0) {
@@ -117,6 +136,14 @@ class InteractiveScreenshotTestData(
         }
 
         private const val TAP_POINT = "point"
+
+        private fun parseEditMode(step: JSONObject): Step.EditText.Mode {
+            return when (val mode = step.getString("mode")) {
+                "replace" -> Step.EditText.Mode.REPLACE
+                "append" -> Step.EditText.Mode.APPEND
+                else -> throw JSONException("Unsupported edit_text mode: $mode")
+            }
+        }
 
         private const val SWIPE_DIRECTION = "direction"
         private const val SWIPE_FROM = "from"

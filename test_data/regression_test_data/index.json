@@ -2744,6 +2744,7 @@
       "title": "Text input max_length",
       "case_id": 163,
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -3317,6 +3318,7 @@
         "ios"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -3359,6 +3361,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -3422,6 +3425,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -3441,6 +3445,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -5253,6 +5258,7 @@
       "file": "input_in_gallery.json",
       "case_id": 477,
       "automated": [
+        "android",
         "ios"
       ]
     },

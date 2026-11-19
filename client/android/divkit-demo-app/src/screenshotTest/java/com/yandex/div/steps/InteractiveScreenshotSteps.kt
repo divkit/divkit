@@ -16,6 +16,7 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Target
 import com.yandex.div.view.ViewActions.doubleTapWithRetries
 import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
+import com.yandex.div.view.actions.EditTextThroughInputConnection
 import com.yandex.div.view.actions.SwipeWithinVisibleBounds
 import com.yandex.div.view.waitUntilVisible
 import com.yandex.div2.DivAction
@@ -55,6 +56,8 @@ internal class InteractiveScreenshotSteps {
                     is Step.LongTap -> performLongTap(step.target, step.point)
 
                     is Step.Swipe -> performSwipe(step)
+
+                    is Step.EditText -> performEditText(step)
 
                     is Step.Wait -> waitForStep(step)
 
@@ -105,6 +108,13 @@ internal class InteractiveScreenshotSteps {
 
     private fun performSwipe(swipe: Step.Swipe) = step("Swipe ${swipe.target}") {
         onView(swipe.target).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to, swipe.holdDurationMs))
+    }
+
+    private fun performEditText(
+        edit: Step.EditText
+    ) = step("Edit text ${edit.mode} '${edit.text}' in ${edit.target}") {
+        val replace = edit.mode == Step.EditText.Mode.REPLACE
+        onView(edit.target).perform(EditTextThroughInputConnection(replace, edit.inputs))
     }
 
     private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {

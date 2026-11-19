@@ -1,6 +1,7 @@
 {
   "description": "Text input max_length: enforce the character limit and update bound text",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
