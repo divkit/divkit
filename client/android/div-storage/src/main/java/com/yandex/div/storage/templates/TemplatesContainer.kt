@@ -42,8 +42,7 @@ internal class TemplatesContainer(
             histogramComponentName,
             histogramRecorder,
             parsingHistogramProxy,)
-    private val groupTemplateReferences =
-            mutableMapOf<GroupId, TemplateReferenceResolver>()
+    private val groupTemplateReferences = TemplateReferenceIndex(errorLogger::logError)
     private val templateEnvironments = ConcurrentHashMap<GroupId, DivParsingEnvironment>()
     private val messageDigest: MessageDigest? by lazy {
         try {
@@ -70,7 +69,7 @@ internal class TemplatesContainer(
         synchronized(this) {
             templateHash = groupTemplateReferences[groupId]?.resolveTemplateHash(templateId)
             templateProvider = templateEnvironments[groupId]?.templates
-            supportedGroups = groupTemplateReferences.keys.toSet()
+            supportedGroups = groupTemplateReferences.groupIds()
         }
         val shortReason: String
         val details = StringBuilder()
@@ -184,7 +183,7 @@ internal class TemplatesContainer(
         }
         synchronized(this) {
             templateEnvironments[groupId] = env
-            groupTemplateReferences[groupId] = TemplateReferenceResolver(errorLogger)
+            groupTemplateReferences.resetGroup(groupId)
         }
         return results
     }
@@ -213,10 +212,7 @@ internal class TemplatesContainer(
         }
 
         loadResult.restoredData.forEach {
-            val references = groupTemplateReferences.getOrPut(it.groupId) {
-                TemplateReferenceResolver(errorLogger)
-            }
-            references.add(it)
+            groupTemplateReferences.add(it.groupId, it.templateId, it.templateHash)
         }
         templateReferencesLoaded = loadResult.errors.isEmpty()
         return templateReferencesLoaded
@@ -330,56 +326,6 @@ private class CommonTemplatesPool(
     fun put(templateHash: TemplateHash, template: DivTemplate) {
         commonTemplates[templateHash] = template
     }
-}
-
-private class TemplateReferenceResolver(
-        private val logger: ParsingErrorLogger,
-) {
-    private val templateHashRefs = mutableMapOf<TemplateId, TemplateHash>()
-    private val _templateHashes = mutableSetOf<TemplateHash>()
-    val templateHashes: Set<TemplateHash> = _templateHashes
-
-    private val templateIdRefs: Map<TemplateHash, TemplateHashIds> by lazy {
-        val refs = HashMap<TemplateHash, TemplateHashIds>(templateHashRefs.size)
-        templateHashRefs.forEach { (id, hash) ->
-            val existent = refs[hash]
-            refs[hash] = when (existent) {
-                null -> TemplateHashIds.Single(id)
-                is TemplateHashIds.Single -> {
-                    TemplateHashIds.Collection(mutableListOf(existent.id, id))
-                }
-                is TemplateHashIds.Collection -> {
-                    existent.ids.add(id)
-                    existent
-                }
-            }
-        }
-        refs
-    }
-
-    fun add(templateReference: DivStorage.TemplateReference) {
-        templateHashRefs[templateReference.templateId] = templateReference.templateHash
-        _templateHashes.add(templateReference.templateHash)
-    }
-
-    inline fun doOnEachResolvedId(hash: String, block: (templateId: String) -> Unit) {
-        when (val ids = templateIdRefs[hash]) {
-            is TemplateHashIds.Collection -> ids.ids.forEach { block(it) }
-            is TemplateHashIds.Single -> block(ids.id)
-            null -> logger.logError(IllegalStateException("No template id was found for hash!"))
-        }
-    }
-
-    fun resolveTemplateHash(id: String): String? {
-        return templateHashRefs[id]
-    }
-}
-
-private sealed interface TemplateHashIds {
-    @JvmInline
-    value class Single(val id: String) : TemplateHashIds
-    @JvmInline
-    value class Collection(val ids: MutableList<String>) : TemplateHashIds
 }
 
 private fun createEmptyEnv(logger: ParsingErrorLogger) = DivParsingEnvironment(

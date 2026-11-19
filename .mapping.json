@@ -6932,6 +6932,7 @@
   "client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/internal/rawjson/RawJson.kt":"divkit/public/client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/internal/rawjson/RawJson.kt",
   "client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/templates/RawTemplateData.kt":"divkit/public/client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/templates/RawTemplateData.kt",
   "client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/templates/Template.kt":"divkit/public/client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/templates/Template.kt",
+  "client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/templates/TemplateReferenceIndex.kt":"divkit/public/client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/templates/TemplateReferenceIndex.kt",
   "client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/util/ConcurrentMap.kt":"divkit/public/client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/util/ConcurrentMap.kt",
   "client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/util/SqlExtensions.kt":"divkit/public/client/android/storage/src/commonMain/kotlin/com/yandex/div/storage/util/SqlExtensions.kt",
   "client/android/storage/src/commonTest/kotlin/com/yandex/div/storage/BaseDivDatabaseStorageLifecycleTest.kt":"divkit/public/client/android/storage/src/commonTest/kotlin/com/yandex/div/storage/BaseDivDatabaseStorageLifecycleTest.kt",
