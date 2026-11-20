@@ -36,6 +36,7 @@ import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
+import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.compose.views.modifiers.verticalPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -110,7 +111,8 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val spacingAsItems = !useMatchParentRow && foundWeightedChildMargins && horizontalArrangement.spacing > 0.dp
 
     val containerModifier = modifier
-        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
+        .padding(data.paddings)
+        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
         // Measure unbounded children as one row so the overflowing group keeps its alignment.
         .applyIf(canAlignMainAxisOverflow) {
             wrapContentWidth(

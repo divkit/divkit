@@ -34,6 +34,7 @@ import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.MatchParentSize
+import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.compose.visibility.observeRenderedVisibility
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
@@ -51,11 +52,9 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val items = data.observeItems()
-    val containerModifier = modifier.adaptiveContainerPadding(
-        data.paddings,
-        horizontalAlignment,
-        verticalAlignment,
-    )
+    val containerModifier = modifier
+        .padding(data.paddings)
+        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
 
     val isWidthWrapContent = data.width is DivSize.WrapContent
     // A positive aspect ratio makes the height follow the width: the children never wrap it.

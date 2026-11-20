@@ -31,6 +31,7 @@ import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
+import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -62,7 +63,8 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     )
 
     val containerModifier = modifier
-        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
+        .padding(data.paddings)
+        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
         // Measure unbounded children as one column so the overflowing group keeps its alignment.
         .applyIf(canAlignMainAxisOverflow) {
             wrapContentHeight(

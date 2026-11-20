@@ -30,7 +30,7 @@ import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.container.SeparatorVisibility
-import com.yandex.div.compose.views.container.adaptiveContainerPadding
+import com.yandex.div.compose.views.container.alignContainerOverflow
 import com.yandex.div.compose.views.container.observeHorizontalChildAlignment
 import com.yandex.div.compose.views.container.observeVerticalChildModifier
 import com.yandex.div.compose.views.container.resolveSeparatorVisibility
@@ -38,6 +38,7 @@ import com.yandex.div.compose.views.container.toCrossAxisHorizontalAlignment
 import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
 import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
+import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
@@ -57,7 +58,8 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
     )
 
     val containerModifier = modifier
-        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
+        .padding(data.paddings)
+        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
         .applyIf(wrapLayoutState.hasEdgePadding) {
             padding(
                 start = wrapLayoutState.mainAxisStartPadding,
@@ -121,7 +123,8 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
     )
 
     val containerModifier = modifier
-        .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
+        .padding(data.paddings)
+        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
         .applyIf(wrapLayoutState.hasEdgePadding) {
             padding(
                 top = wrapLayoutState.mainAxisStartPadding,
