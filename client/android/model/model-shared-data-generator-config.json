@@ -1,0 +1,23 @@
+{
+  "lang": "kotlin",
+  "header": [
+    "// Generated code. Do not modify.",
+    "",
+    "package com.yandex.div.model",
+    "",
+    "import com.yandex.div.core.annotations.InternalApi",
+    "import com.yandex.div.core.json.JsonArray",
+    "import com.yandex.div.core.json.JsonObject",
+    "import com.yandex.div.core.type.Color",
+    "import com.yandex.div.core.type.Url",
+    "import com.yandex.div.model.entity.*",
+    "import com.yandex.div.model.expression.*",
+    ""
+  ],
+  "kotlinAnnotations": {
+    "internalApiMarker": "@InternalApi"
+  },
+  "multiplatform": true,
+  "generateSerialization": false,
+  "generateTemplates": false
+}

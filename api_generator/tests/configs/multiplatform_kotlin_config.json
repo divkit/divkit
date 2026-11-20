@@ -1,0 +1,9 @@
+{
+  "lang": "kotlin",
+  "header": "// Generated code. Do not modify.\n\npackage com.yandex.div.reference\n\nimport com.yandex.div.core.annotations.InternalApi\nimport com.yandex.div.core.json.JsonArray\nimport com.yandex.div.core.json.JsonObject\nimport com.yandex.div.core.type.Color\nimport com.yandex.div.core.type.Url\nimport com.yandex.div.model.entity.*\nimport com.yandex.div.model.expression.*\nimport com.yandex.div.model.entity.EntityTemplate as Template\n",
+  "kotlinAnnotations": {
+    "internalApiMarker": "@InternalApi"
+  },
+  "multiplatform": true,
+  "generateSerialization": false
+}

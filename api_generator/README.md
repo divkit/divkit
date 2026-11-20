@@ -40,10 +40,8 @@ The Kotlin generator supports opt-in standalone parsers for existing models:
 
 - `generateModels` defaults to `true`. When disabled, only `*JsonParser` files
   and `JsonParserComponent` are emitted; models, templates, and enums are reused.
-- `multiplatform` defaults to `false`. It generates parsers using
-  `com.yandex.div.core.json.JsonObject` instead of `org.json.JSONObject` and
-  serializes through `JsonObject.builder()`. It requires Kotlin serializers and
-  `generateModels: false`.
+- `multiplatform` defaults to `false`. In parser-only mode it generates parsers using
+  `com.yandex.div.core.json.JsonObject` instead of `org.json.JSONObject`.
 - Existing model fields keep their original JSON types. Parser helpers supply
   `JSON_TO_ORG_OBJECT` and `JSON_TO_ORG_ARRAY` conversions at those boundaries.
 - The configuration's `header` must select a separate parser package and import
@@ -51,6 +49,28 @@ The Kotlin generator supports opt-in standalone parsers for existing models:
 
 See `client/android/parser-json/parser-generator-config.json` for the complete
 Android configuration. Other generator configurations retain their existing behavior.
+
+### Kotlin Multiplatform models
+
+With `generateModels` enabled, `multiplatform` generates models and templates for
+Kotlin Multiplatform code:
+
+```json
+{
+  "lang": "kotlin",
+  "multiplatform": true,
+  "generateSerialization": false
+}
+```
+
+- It requires `generateSerialization: false`; models and templates have no JSON entry points.
+- Models don't implement `Hashable` and have no resolver-based `equals`, so `generateEquality` isn't supported.
+- Colors, URLs, dictionaries and raw arrays use `Color`, `Url`, `JsonObject` and `JsonArray` from `:core`.
+- Templates implement `Template<Model>` and are generated without serialization. The `header` must
+  import the template interface under that name: `import com.yandex.div.model.entity.EntityTemplate as Template`.
+- Declarations have explicit visibility and types, as required by the explicit API mode.
+
+See `client/android/model/model-generator-config.json` for the complete configuration.
 
 ### Documentation table of contents
 

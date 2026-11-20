@@ -7,6 +7,7 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.domainObjectContainer
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByName
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -24,36 +25,34 @@ class ApiGeneratorPlugin : Plugin<Project> {
                 schemasDirectory.set(schemas)
                 outputDirectory.convention(project.layout.buildDirectory.dir("generated/kotlin/scheme_${name}"))
             }
-            addGeneratedSources(project, schemaTask)
+            if (project.extensions.findByType<KotlinMultiplatformExtension>() == null) {
+                addGeneratedSourcesToAndroidProject(project, schemaTask)
+            }
             umbrellaTask.configure {
                 dependsOn(schemaTask)
             }
         }
+
+        // Schema source sets are known only after the build script configures the schemas.
+        project.afterEvaluate {
+            addGeneratedSourcesToKmpProject(project, schemasContainer)
+        }
     }
 
-    private fun addGeneratedSources(project: Project, schemaTask: TaskProvider<ApiGeneratorTask>) {
-        if (addGeneratedSourcesToKmpProject(project, schemaTask)) {
-            return
+    private fun addGeneratedSourcesToKmpProject(project: Project, schemas: Iterable<ApiGeneratorSchema>) {
+        val kotlin = project.extensions.findByType<KotlinMultiplatformExtension>() ?: return
+        schemas.forEach { schema ->
+            val schemaTask = project.tasks.named<ApiGeneratorTask>("scheme_${schema.name}")
+            kotlin.sourceSets.named(schema.sourceSet.get()) {
+                this.kotlin.srcDir(schemaTask.flatMap { it.outputDirectory })
+            }
         }
-
-        addGeneratedSourcesToAndroidProject(project, schemaTask)
-    }
-
-    private fun addGeneratedSourcesToKmpProject(
-        project: Project,
-        schemaTask: TaskProvider<ApiGeneratorTask>
-    ): Boolean {
-        val kotlin = project.extensions.findByType<KotlinMultiplatformExtension>() ?: return false
-        kotlin.sourceSets.named("androidMain") {
-            this.kotlin.srcDir(schemaTask.flatMap { it.outputDirectory })
-        }
-        return true
     }
 
     private fun addGeneratedSourcesToAndroidProject(
         project: Project,
         schemaTask: TaskProvider<ApiGeneratorTask>
-    ): Boolean {
+    ) {
         val androidComponents = project.extensions.getByName<AndroidComponentsExtension<*, *, *>>("androidComponents")
         androidComponents.onVariants { variant ->
             val javaSources = checkNotNull(variant.sources.java) {
@@ -64,6 +63,5 @@ class ApiGeneratorPlugin : Plugin<Project> {
                 ApiGeneratorTask::outputDirectory,
             )
         }
-        return true
     }
 }

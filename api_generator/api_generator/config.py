@@ -50,9 +50,13 @@ class GenerationMode(Enum):
         elif self is GenerationMode.TEMPLATE:
             return TEMPLATE_SUFFIX
 
-    def protocol_name(self, lang: GeneratedLanguage, name: str) -> Optional[str]:
+    def protocol_name(self, lang: GeneratedLanguage, name: str, multiplatform: bool = False) -> Optional[str]:
         if self.is_template:
-            return 'TemplateValue' if lang is GeneratedLanguage.SWIFT else f'JsonTemplate<{name}>'
+            if lang is GeneratedLanguage.SWIFT:
+                return 'TemplateValue'
+            if multiplatform:
+                return f'Template<{name}>'
+            return f'JsonTemplate<{name}>'
         return None
 
 
@@ -87,25 +91,33 @@ class Config:
                 raise NotImplementedError('generateTemplates & generateSerialization flags are supported only for '
                                           'Kotlin and Swift languages')
 
-            if self.generate_templates and not self.generate_serialization:
+            self.generate_serializers: bool = dictionary.get('generateSerializers', False)
+            self.generate_models: bool = dictionary.get('generateModels', True)
+            self.multiplatform: bool = dictionary.get('multiplatform', False)
+
+            if self.generate_templates and not self.generate_serialization and not self.multiplatform_models:
                 if 'generateTemplates' in dictionary:
                     print_warning('Templates can not be generated without Serialization. '
                                   'Templates will not be generated.')
                 self.generate_templates = False
 
-            self.generate_serializers: bool = dictionary.get('generateSerializers', False)
-            self.generate_models: bool = dictionary.get('generateModels', True)
-            self.multiplatform: bool = dictionary.get('multiplatform', False)
-
-            if not self.generate_models or self.multiplatform:
+            if self.multiplatform and self.lang != GeneratedLanguage.KOTLIN:
+                raise ValueError('Multiplatform mode requires Kotlin')
+            if not self.generate_models:
                 if self.lang != GeneratedLanguage.KOTLIN or not self.generate_serializers:
-                    raise ValueError('Parser-only and multiplatform modes require Kotlin serializers')
-            if self.multiplatform and self.generate_models:
-                raise ValueError('Multiplatform parsers must reuse existing models')
+                    raise ValueError('Parser-only mode requires Kotlin serializers')
+            if self.multiplatform_models and (self.generate_serialization or self.generate_serializers):
+                raise ValueError('Multiplatform models require disabled serialization')
+            if self.multiplatform_models and self.generate_equality:
+                raise ValueError('Multiplatform models do not support equality')
 
             if ('generateSerializers' in dictionary) and \
                     self.lang != GeneratedLanguage.KOTLIN:
                 raise NotImplementedError('generateSerializers flag is supported only for Kotlin language')
+
+        @property
+        def multiplatform_models(self) -> bool:
+            return self.multiplatform and self.generate_models
 
     def __init__(self, generator_path: Optional[str], config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path

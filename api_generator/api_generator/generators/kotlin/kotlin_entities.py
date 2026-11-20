@@ -59,6 +59,22 @@ def internal_api_annotations(annotations: Config.KotlinAnnotations) -> InternalA
     return InternalApiAnnotations(annotations.internal_api_marker)
 
 
+class MultiplatformModels:
+    """
+    Model mode of the `multiplatform` flag: models use :core types and explicit API visibility.
+    Property types can't reach their entity, so KotlinGenerator sets this switch on every run.
+    """
+    enabled: bool = False
+
+
+def visibility() -> str:
+    return 'public ' if MultiplatformModels.enabled else ''
+
+
+def _is_value_class(property_type: PropertyType) -> bool:
+    return MultiplatformModels.enabled and isinstance(property_type, (Color, Url))
+
+
 def _number_validator_decl(type: str, constraint: Optional[str]) -> Optional[str]:
     if constraint is None:
         return None
@@ -226,12 +242,12 @@ class KotlinEntity(Entity):
         result = Text()
         for annotation in kotlin_annotations.classes:
             result += annotation
-        prefix = f'class {utils.capitalize_camel_case(self.name)}'
+        prefix = f'{visibility()}class {utils.capitalize_camel_case(self.name)}'
 
         interfaces = ['JSONSerializable'] if generate_serialization else []
-        if not self.generation_mode.is_template:
+        if not self.generation_mode.is_template and not MultiplatformModels.enabled:
             interfaces.append('Hashable')
-        protocol_plus_super_entities = self.protocol_plus_super_entities()
+        protocol_plus_super_entities = self.protocol_plus_super_entities(multiplatform=MultiplatformModels.enabled)
         if protocol_plus_super_entities is not None:
             interfaces.append(protocol_plus_super_entities)
         interfaces = ', '.join(interfaces)
@@ -585,9 +601,10 @@ class KotlinEntity(Entity):
         is_private = True
         if isinstance(self.generator_properties, KotlinGeneratorProperties):
             is_private = not self.generator_properties.public_default_values
-        default_values = self.default_values_static_declaration(is_private)
-        if default_values:
-            groups.append(Text(default_values))
+        if not is_template or generate_serialization:
+            default_values = self.default_values_static_declaration(is_private)
+            if default_values:
+                groups.append(Text(default_values))
 
         if generate_serialization and not generate_serializers:
             type_helpers = self.type_helpers_static_declaration(is_private=True)
@@ -707,7 +724,7 @@ class KotlinEntity(Entity):
         result = EMPTY
         if self.internal_api.marker:
             result += f'    {self.internal_api.marker}'
-        decl = '    fun copy('
+        decl = f'    {visibility()}fun copy('
 
         method_params: List[str] = []
         constructor_params: List[str] = []
@@ -722,7 +739,9 @@ class KotlinEntity(Entity):
         decl += ''.join(method_params)
         if len(method_params) > 0:
             decl += '\n    '
-        decl += f') = {utils.capitalize_camel_case(self.name)}('
+        name = utils.capitalize_camel_case(self.name)
+        return_type = f': {name}' if MultiplatformModels.enabled else ''
+        decl += f'){return_type} = {name}('
         decl += ''.join(constructor_params)
         if len(constructor_params) > 0:
             decl += '\n    '
@@ -928,8 +947,12 @@ class KotlinProperty(Property):
     def default_value_declaration(self, is_private: bool = True) -> Optional[str]:
         default_value_definition = self.default_value_definition
         if default_value_definition is not None:
-            prefix = 'private ' if is_private else '@JvmField '
-            return f'{prefix}val {self.default_value_var_name} = {default_value_definition}'
+            if is_private:
+                prefix = 'private '
+            else:
+                prefix = f'{self.jvm_field_annotation}{visibility()}'
+            type_decl = f': {self.type_declaration}' if MultiplatformModels.enabled else ''
+            return f'{prefix}val {self.default_value_var_name}{type_decl} = {default_value_definition}'
         return None
 
     @property
@@ -1029,17 +1052,25 @@ class KotlinProperty(Property):
     def use_custom_hash(self) -> bool:
         return self.property_type.use_custom_hash
 
+    @property
+    def jvm_field_annotation(self) -> str:
+        """@JvmField can't be applied to a property of a value class type."""
+        if _is_value_class(self.property_type) and not self.mode.is_template and not self.use_expression_type:
+            return ''
+        return '@JvmField '
+
     def declaration(self, overridden: bool, in_interface: bool, with_comma: bool, with_default: bool) -> Text:
         if isinstance(self.property_type, StaticString):
             assert not overridden and not with_comma
-            return Text(f'const val {self.declaration_name} = "{self.property_type.value}"')
+            type_decl = ': String' if MultiplatformModels.enabled else ''
+            return Text(f'{visibility()}const val {self.declaration_name}{type_decl} = "{self.property_type.value}"')
         if overridden:
             prefix = 'override '
             assert not in_interface
         elif not in_interface:
-            prefix = '@JvmField '
+            prefix = f'{self.jvm_field_annotation}{visibility()}'
         else:
-            prefix = ''
+            prefix = visibility()
         comma = ',' if with_comma else ''
         default_assignment = ''
         if with_default:
@@ -1271,11 +1302,15 @@ class KotlinPropertyType(PropertyType):
                 color_argb_hex = color_value
             else:
                 raise ValueError(f'Invalid color default value: {default_value}')
+            if MultiplatformModels.enabled:
+                return wrap(f'Color.create(0x{color_argb_hex}.toInt())')
             return wrap(f'0x{color_argb_hex}.toInt()')
         elif isinstance(self, String):
             escaping = default_value.replace("\"", "\\\"")
             return wrap(f'"{escaping}"')
         elif isinstance(self, Url):
+            if MultiplatformModels.enabled:
+                return wrap(f'Url.create("{default_value}")')
             return wrap(f'Uri.parse("{default_value}")')
         elif isinstance(self, Array):
             without_whitespaces = default_value.replace(' ', '').replace('\n', '')
@@ -1343,7 +1378,8 @@ class KotlinPropertyType(PropertyType):
             args = ', '.join(args)
             return wrap(f'{entity.resolved_prefixed_declaration}({args})')
         elif isinstance(self, (Dictionary, RawObject)):
-            return wrap(f'JSONObject("""\n{default_value}\n""")')
+            json_object_type = 'JsonObject' if MultiplatformModels.enabled else 'JSONObject'
+            return wrap(f'{json_object_type}("""\n{default_value}\n""")')
         else:
             return None
 
@@ -1387,8 +1423,9 @@ class KotlinPropertyType(PropertyType):
                                 prefixed: bool,
                                 mode: GenerationMode,
                                 supports_expressions: bool) -> str:
+        multiplatform = MultiplatformModels.enabled
         if isinstance(self, Color):
-            return 'Int'
+            return 'Color' if multiplatform else 'Int'
         if isinstance(self, Int):
             return 'Long'
         elif isinstance(self, Double):
@@ -1398,13 +1435,13 @@ class KotlinPropertyType(PropertyType):
         elif isinstance(self, String):
             return 'CharSequence' if self.formatted else 'String'
         elif isinstance(self, (Dictionary, RawObject)):
-            return 'JSONObject'
+            return 'JsonObject' if multiplatform else 'JSONObject'
         elif isinstance(self, RawArray):
-            return 'JSONArray'
+            return 'JsonArray' if multiplatform else 'JSONArray'
         elif isinstance(self, StaticString):
             return 'String'
         elif isinstance(self, Url):
-            return 'Uri'
+            return 'Url' if multiplatform else 'Uri'
         elif isinstance(self, Array):
             item_type = cast(KotlinPropertyType, self.property_type)
             item_decl = item_type.declaration_by_prefixed(prefixed, mode, supports_expressions)

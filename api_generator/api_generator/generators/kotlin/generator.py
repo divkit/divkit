@@ -5,7 +5,9 @@ from .kotlin_entities import (
     KotlinEntity,
     KotlinEntityEnumeration,
     InternalApiAnnotations,
+    MultiplatformModels,
     internal_api_annotations,
+    visibility,
     ENTITY_STATIC_CREATOR,
     ENTITY_PARSER_NAME,
     TEMPLATE_PARSER_NAME,
@@ -34,6 +36,7 @@ class KotlinGenerator(Generator):
         self.generate_models = config.generation.generate_models
         self.multiplatform = config.generation.multiplatform
         self.json_object_type = 'JsonObject' if self.multiplatform else 'JSONObject'
+        MultiplatformModels.enabled = config.generation.multiplatform_models
         self._entity_generator = KotlinEntityGenerator(self)
         self._entity_template_generator = KotlinEntityTemplateGenerator(self)
         self._string_enumeration_generator = KotlinStringEnumerationGenerator(self)
@@ -129,8 +132,9 @@ class KotlinEntityGenerator:
         if entity.generate_as_protocol:
             return self.__declaration_as_interface(entity)
         result: Text = entity.header_declaration(self._kotlin_annotations, self._generate_serialization)
-        result += entity.hash_declaration(self._generate_equality)
-        result += entity.equals_resolved_declaration()
+        if not MultiplatformModels.enabled:
+            result += entity.hash_declaration(self._generate_equality)
+            result += entity.equals_resolved_declaration()
         if self._generate_equality:
             result += entity.equality_declaration
         result += entity.copy_declaration
@@ -142,7 +146,7 @@ class KotlinEntityGenerator:
         static_declarations = entity.static_declarations(self._generate_serialization, self._generate_serializers)
         if static_declarations.lines:
             result += EMPTY
-            result += '    companion object {'
+            result += f'    {visibility()}companion object {{'
             result += static_declarations.indented(indent_width=8)
             result += '    }'
 
@@ -156,7 +160,7 @@ class KotlinEntityGenerator:
 
     @staticmethod
     def __declaration_as_interface(entity: KotlinEntity) -> Text:
-        result = Text(f'interface {utils.capitalize_camel_case(entity.name)} {{')
+        result = Text(f'{visibility()}interface {utils.capitalize_camel_case(entity.name)} {{')
         for prop in entity.instance_properties_kotlin:
             result += prop.declaration(overridden=False,
                                        in_interface=True,
@@ -175,28 +179,30 @@ class KotlinEntityGenerator:
         for annotation in self._kotlin_annotations.classes:
             result += annotation
         interfaces = ['JSONSerializable'] if self._generate_serialization else []
-        interfaces.append('Hashable')
+        if not MultiplatformModels.enabled:
+            interfaces.append('Hashable')
         interfaces.append(entity_enumeration.mode.protocol_name(
             lang=GeneratedLanguage.KOTLIN,
             name=entity_enumeration.resolved_prefixed_declaration))
         interfaces = ', '.join(filter(None, interfaces))
 
         suffix = f' : {interfaces}' if interfaces else ''
-        result += f'sealed class {declaration_name}{suffix} {{'
+        result += f'{visibility()}sealed class {declaration_name}{suffix} {{'
         for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)
-            decl = f'class {naming}(val value: {decl}) : {declaration_name}()'
+            decl = f'{visibility()}class {naming}({visibility()}val value: {decl}) : {declaration_name}()'
             result += Text(indent_width=4, init_lines=decl)
 
-        hash_types = ['propertiesHash', 'hash']
-        result += EMPTY
-        for hash_type in hash_types:
-            result += f'    private var _{hash_type}: Int? = null '
-        for hash_type in hash_types:
+        if not MultiplatformModels.enabled:
+            hash_types = ['propertiesHash', 'hash']
             result += EMPTY
-            result += self._hash_enumeration_declaration(entity_enumeration, entity_declarations, hash_type, internal_api)
-        result += EMPTY
-        result += self._equals_resolved_enumeration_declaration(entity_enumeration, entity_declarations, internal_api)
+            for hash_type in hash_types:
+                result += f'    private var _{hash_type}: Int? = null '
+            for hash_type in hash_types:
+                result += EMPTY
+                result += self._hash_enumeration_declaration(entity_enumeration, entity_declarations, hash_type, internal_api)
+            result += EMPTY
+            result += self._equals_resolved_enumeration_declaration(entity_enumeration, entity_declarations, internal_api)
         if self._generate_equality:
             result += EMPTY
             if internal_api.marker:
@@ -204,7 +210,7 @@ class KotlinEntityGenerator:
             result += '    fun isHashCalculated() = _hash != null'
 
         result += EMPTY
-        result += f'    fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
+        result += f'    {visibility()}fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
         result += '        return when (this) {'
         for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)
@@ -377,8 +383,9 @@ class KotlinEntityTemplateGenerator:
                 else:
                     result += '    ) : this()'
 
-        result += EMPTY
-        result += entity.value_resolving_declaration(self._generate_serializers).indented(indent_width=4)
+        if self._generate_serialization:
+            result += EMPTY
+            result += entity.value_resolving_declaration(self._generate_serializers).indented(indent_width=4)
 
         if self._generate_serialization:
             result += EMPTY
@@ -387,7 +394,7 @@ class KotlinEntityTemplateGenerator:
         static_declarations = entity.static_declarations(self._generate_serialization, self._generate_serializers)
         if static_declarations.lines:
             result += EMPTY
-            result += '    companion object {'
+            result += f'    {visibility()}companion object {{'
             result += static_declarations.indented(indent_width=8)
             result += '    }'
 
@@ -411,18 +418,19 @@ class KotlinEntityTemplateGenerator:
         interfaces = ['JSONSerializable'] if self._generate_serialization else []
         interfaces.append(entity_enumeration.mode.protocol_name(
             lang=GeneratedLanguage.KOTLIN,
-            name=entity_enumeration.resolved_prefixed_declaration))
+            name=entity_enumeration.resolved_prefixed_declaration,
+            multiplatform=MultiplatformModels.enabled))
         interfaces = ', '.join(filter(None, interfaces))
 
         suffix = f' : {interfaces}' if interfaces else ''
-        result += f'sealed class {declaration_name}{suffix} {{'
+        result += f'{visibility()}sealed class {declaration_name}{suffix} {{'
         for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)
-            decl = f'class {naming}(val value: {decl}) : {declaration_name}()'
+            decl = f'{visibility()}class {naming}({visibility()}val value: {decl}) : {declaration_name}()'
             result += Text(indent_width=4, init_lines=decl)
 
         result += EMPTY
-        result += f'    fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
+        result += f'    {visibility()}fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
         result += '        return when (this) {'
         for decl in entity_declarations:
             naming = entity_enumeration.format_case_naming(decl)
@@ -448,26 +456,27 @@ class KotlinEntityTemplateGenerator:
                 result += '        }'
             result += '    }'
 
-        self_name = entity_enumeration.resolved_prefixed_declaration
+        if self._generate_serialization:
+            self_name = entity_enumeration.resolved_prefixed_declaration
+            result += EMPTY
+            if internal_api.marker:
+                result += f'    {internal_api.marker}'
+            result += f'    override fun resolve(env: ParsingEnvironment, data: JSONObject): {self_name} {{'
+            if self._generate_serializers:
+                resolver_name = entity_enumeration.template_resolver_name_declaration
+                result += f'        return builtInParserComponent.{resolver_name}'
+                result += '            .value'
+                result += '            .resolve(context = env, template = this, data = data)'
+            else:
+                result += '        return when (this) {'
+                for decl in entity_declarations:
+                    case_name = entity_enumeration.format_case_naming(decl)
+                    line = f'is {case_name} -> {self_name}.{case_name}(value.resolve(env, data))'
+                    result += Text(indent_width=12, init_lines=line)
+                result += '        }'
+            result += '    }'
         result += EMPTY
-        if internal_api.marker:
-            result += f'    {internal_api.marker}'
-        result += f'    override fun resolve(env: ParsingEnvironment, data: JSONObject): {self_name} {{'
-        if self._generate_serializers:
-            resolver_name = entity_enumeration.template_resolver_name_declaration
-            result += f'        return builtInParserComponent.{resolver_name}'
-            result += '            .value'
-            result += '            .resolve(context = env, template = this, data = data)'
-        else:
-            result += '        return when (this) {'
-            for decl in entity_declarations:
-                case_name = entity_enumeration.format_case_naming(decl)
-                line = f'is {case_name} -> {self_name}.{case_name}(value.resolve(env, data))'
-                result += Text(indent_width=12, init_lines=line)
-            result += '        }'
-        result += '    }'
-        result += EMPTY
-        result += '    val type: String'
+        result += f'    {visibility()}val type: String'
         result += '        get() {'
         result += '            return when (this) {'
         for decl in entity_declarations:
@@ -537,7 +546,7 @@ class KotlinStringEnumerationGenerator:
         internal_api = internal_api_annotations(self._kotlin_annotations)
 
         result = Text()
-        result += f'enum class {declaration_name}(private val value: String) {{'
+        result += f'{visibility()}enum class {declaration_name}(private val value: String) {{'
         for ind, case in enumerate(string_enumeration.cases):
             terminal = ',' if ind != (len(cases_declarations) - 1) else ';'
             name = utils.fixing_first_digit(utils.constant_upper_case(case[0]))
@@ -546,24 +555,26 @@ class KotlinStringEnumerationGenerator:
         result += EMPTY
         if internal_api.marker:
             result += f'    {internal_api.marker}'
-        result += '    companion object Converter {'
+        result += f'    {visibility()}companion object Converter {{'
         result += EMPTY
-        result += f'        fun toString(obj: {declaration_name}): String {{'
+        result += f'        {visibility()}fun toString(obj: {declaration_name}): String {{'
         result += '            return obj.value'
         result += '        }'
         result += EMPTY
-        result += f'        fun fromString(value: String): {declaration_name}? {{'
+        result += f'        {visibility()}fun fromString(value: String): {declaration_name}? {{'
         result += '            return when (value) {'
         result += cases_declarations
         result += '                else -> null'
         result += '            }'
         result += '        }'
         result += EMPTY
+        to_string_type = f': ({declaration_name}) -> String' if MultiplatformModels.enabled else ''
+        from_string_type = f': (String) -> {declaration_name}?' if MultiplatformModels.enabled else ''
         result += '        @JvmField'
-        result += f'        val TO_STRING = {{ value: {declaration_name} -> toString(value) }}'
+        result += f'        {visibility()}val TO_STRING{to_string_type} = {{ value: {declaration_name} -> toString(value) }}'
         result += EMPTY
         result += '        @JvmField'
-        result += '        val FROM_STRING = { value: String -> fromString(value) }'
+        result += f'        {visibility()}val FROM_STRING{from_string_type} = {{ value: String -> fromString(value) }}'
         result += '    }'
         result += '}'
 

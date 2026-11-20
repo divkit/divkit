@@ -382,11 +382,11 @@ class Entity(Declarable):
     def is_deprecated(self) -> bool:
         return self._is_deprecated
 
-    def protocol_plus_super_entities(self, with_impl_protocol=True) -> Optional[str]:
+    def protocol_plus_super_entities(self, with_impl_protocol=True, multiplatform=False) -> Optional[str]:
         protocols = []
         if with_impl_protocol and self._implemented_protocol is not None:
             protocols.append(capitalize_camel_case(self._implemented_protocol.name))
-        protocol_name = self.generation_mode.protocol_name(self._lang, self.resolved_prefixed_declaration)
+        protocol_name = self.generation_mode.protocol_name(self._lang, self.resolved_prefixed_declaration, multiplatform)
         if protocol_name is not None:
             protocols.append(protocol_name)
         if self.super_entities is not None:

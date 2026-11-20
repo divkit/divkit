@@ -13,14 +13,18 @@ TEST_SCHEMA_PATH = utils.path_divkit_test_data('test_schema')
 
 
 def generate(tmp_path, **options):
-    config_path = tmp_path / 'config.json'
-    config_path.write_text(json.dumps(dict(
+    return generate_with_config(tmp_path, dict(
         lang='kotlin',
         header='package generated',
         generateSerializers=True,
         errorsCollectors=['entity_with_required_property'],
         **options,
-    )))
+    ))
+
+
+def generate_with_config(tmp_path, dictionary):
+    config_path = tmp_path / 'config.json'
+    config_path.write_text(json.dumps(dictionary))
     output = tmp_path / 'generated'
     config = Config(
         generator_path=None,
@@ -35,6 +39,17 @@ def generate(tmp_path, **options):
 @pytest.fixture(scope='module')
 def multiplatform_files(tmp_path_factory):
     return generate(tmp_path_factory.mktemp('multiplatform'), generateModels=False, multiplatform=True)
+
+
+@pytest.fixture(scope='module')
+def multiplatform_model_files(tmp_path_factory):
+    return generate_with_config(tmp_path_factory.mktemp('multiplatform_models'), dict(
+        lang='kotlin',
+        header='package generated',
+        kotlinAnnotations={'internalApiMarker': '@InternalApi'},
+        multiplatform=True,
+        generateSerialization=False,
+    ))
 
 
 def assert_contains(files, name, *snippets):
@@ -142,5 +157,29 @@ def test_parser_only_org_json_mode(tmp_path):
     {'lang': 'kotlin', 'generateSerializers': True, 'multiplatform': True},
 ])
 def test_invalid_parser_modes_are_rejected(options):
+    with pytest.raises(ValueError):
+        Config.GenerationConfig(options)
+
+
+def test_multiplatform_generates_models_and_templates(multiplatform_model_files):
+    assert 'EntityWithSimpleProperties.kt' in multiplatform_model_files
+    assert 'EntityWithSimplePropertiesTemplate.kt' in multiplatform_model_files
+    parsers = [name for name in multiplatform_model_files
+               if name.endswith('JsonParser.kt') or name == 'JsonParserComponent.kt']
+    assert parsers == []
+
+
+def test_multiplatform_models_keep_templates():
+    config = Config.GenerationConfig({'lang': 'kotlin', 'multiplatform': True, 'generateSerialization': False})
+    assert config.generate_templates
+
+
+@pytest.mark.parametrize('options', [
+    {'lang': 'kotlin', 'multiplatform': True},
+    {'lang': 'kotlin', 'multiplatform': True, 'generateSerialization': False, 'generateSerializers': True},
+    {'lang': 'kotlin', 'multiplatform': True, 'generateSerialization': False, 'generateEquality': True},
+    {'lang': 'swift', 'multiplatform': True, 'generateSerialization': False},
+])
+def test_invalid_multiplatform_model_modes_are_rejected(options):
     with pytest.raises(ValueError):
         Config.GenerationConfig(options)
