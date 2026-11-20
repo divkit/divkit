@@ -1,6 +1,6 @@
 package com.yandex.div.compose.images
 
-import android.net.Uri
+import coil3.toUri
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
@@ -14,7 +14,7 @@ internal class ImagePreviewDecoder(
     private val base64 = Base64.Mime.withPadding(Base64.PaddingOption.PRESENT_OPTIONAL)
 
     fun decodePreview(data: String): ImagePreview? {
-        val uri = Uri.parse(data)
+        val uri = data.toUri()
         if (uri.scheme != null && !uri.scheme.equals("data", ignoreCase = true)) {
             return ImagePreview.Url(uri)
         }

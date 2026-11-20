@@ -1,6 +1,6 @@
 package com.yandex.div.compose.images
 
-import android.net.Uri
+import coil3.Uri
 
 internal sealed interface ImagePreview {
     data class Url(val uri: Uri) : ImagePreview

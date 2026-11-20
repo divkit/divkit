@@ -1,16 +1,13 @@
 package com.yandex.div.compose.images
 
-import androidx.core.net.toUri
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import coil3.toUri
 import com.yandex.div.compose.TestReporter
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 
-@RunWith(AndroidJUnit4::class)
 class ImagePreviewDecoderTest {
 
     private val reporter = TestReporter()
