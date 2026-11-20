@@ -7,6 +7,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertAll
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -54,8 +55,8 @@ class SliderSemanticsTest {
     }
 
     private val thumb = SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo)
-    private val rangeStart = thumb and hasContentDescription("Range start")
-    private val rangeEnd = thumb and hasContentDescription("Range end")
+    private val rangeStart = thumb and hasContentDescription("Minimum price")
+    private val rangeEnd = thumb and hasContentDescription("Maximum price")
 
     @Test
     fun `thumb is described by the slider accessibility description`() {
@@ -73,17 +74,18 @@ class SliderSemanticsTest {
     }
 
     @Test
-    fun `range slider thumbs name the range start and end`() {
+    fun `range slider thumbs use the slider accessibility description`() {
         setContent(accessibility = accessibility(description = "Price"), hasSecondaryThumb = true)
 
-        assertEquals(listOf("Price,Range start", "Price,Range end"), thumbDescriptions())
+        assertEquals(listOf("Price", "Price"), thumbDescriptions())
     }
 
     @Test
-    fun `range slider thumbs without description are named by the range ends`() {
+    fun `range slider thumbs have no description when none is provided`() {
         setContent(hasSecondaryThumb = true)
 
-        assertEquals(listOf("Range start", "Range end"), thumbDescriptions())
+        rule.onAllNodes(thumb).assertCountEquals(2)
+            .assertAll(SemanticsMatcher.keyNotDefined(SemanticsProperties.ContentDescription))
     }
 
     @Test
@@ -94,17 +96,18 @@ class SliderSemanticsTest {
             secondaryValueAccessibility = accessibility(description = "Maximum price"),
         )
 
-        assertEquals(listOf("Price,Range start", "Maximum price"), thumbDescriptions())
+        assertEquals(listOf("Price", "Maximum price"), thumbDescriptions())
     }
 
     @Test
     fun `excluded secondary value accessibility hides the secondary thumb`() {
         setContent(
+            accessibility = accessibility(description = "Price"),
             hasSecondaryThumb = true,
             secondaryValueAccessibility = accessibility(mode = DivAccessibility.Mode.EXCLUDE),
         )
 
-        assertEquals(listOf("Range start"), thumbDescriptions())
+        assertEquals(listOf("Price"), thumbDescriptions())
     }
 
     @Test
@@ -127,7 +130,7 @@ class SliderSemanticsTest {
             hasSecondaryThumb = true,
         )
 
-        assertEquals(listOf("Price,Range start", "Price,Range end"), thumbDescriptions())
+        assertEquals(listOf("Price", "Price"), thumbDescriptions())
     }
 
     @Test
@@ -141,7 +144,7 @@ class SliderSemanticsTest {
 
     @Test
     fun `secondary thumb reports the secondary value`() {
-        setContent(hasSecondaryThumb = true)
+        setRangeContent()
 
         assertEquals(70f, rule.onNode(rangeEnd).rangeInfo().current)
     }
@@ -171,7 +174,7 @@ class SliderSemanticsTest {
 
     @Test
     fun `range thumb nodes cover the whole thumbs when apart`() {
-        setContent(hasSecondaryThumb = true)
+        setRangeContent()
 
         rule.onNode(rangeStart)
             .assertLeftPositionInRootIsEqualTo(54.dp)
@@ -182,7 +185,7 @@ class SliderSemanticsTest {
     fun `overlapping thumbs split their nodes at the middle between them`() {
         value.set(50L)
         secondaryValue.set(50L)
-        setContent(hasSecondaryThumb = true)
+        setRangeContent()
 
         rule.onNode(rangeStart)
             .assertLeftPositionInRootIsEqualTo(90.dp)
@@ -196,7 +199,7 @@ class SliderSemanticsTest {
     fun `overlapping thumbs in rtl give the start half to the range start`() {
         value.set(50L)
         secondaryValue.set(50L)
-        setContent(hasSecondaryThumb = true, layoutDirection = LayoutDirection.Rtl)
+        setRangeContent(layoutDirection = LayoutDirection.Rtl)
 
         rule.onNode(rangeStart)
             .assertLeftPositionInRootIsEqualTo(100.dp)
@@ -235,7 +238,7 @@ class SliderSemanticsTest {
 
     @Test
     fun `set progress on the secondary thumb writes the secondary variable`() {
-        setContent(hasSecondaryThumb = true)
+        setRangeContent()
 
         rule.onNode(rangeEnd).performSemanticsAction(SemanticsActions.SetProgress) { it(55f) }
 
@@ -330,6 +333,15 @@ class SliderSemanticsTest {
         return rule.onAllNodes(thumb).fetchSemanticsNodes().map {
             it.config[SemanticsProperties.ContentDescription].single()
         }
+    }
+
+    private fun setRangeContent(layoutDirection: LayoutDirection = LayoutDirection.Ltr) {
+        setContent(
+            accessibility = accessibility(description = "Minimum price"),
+            secondaryValueAccessibility = accessibility(description = "Maximum price"),
+            hasSecondaryThumb = true,
+            layoutDirection = layoutDirection,
+        )
     }
 
     private fun setContent(

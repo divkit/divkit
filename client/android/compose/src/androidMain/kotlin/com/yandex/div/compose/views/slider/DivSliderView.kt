@@ -11,7 +11,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.MeasurePolicy
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -23,7 +22,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.Constraints
-import com.yandex.div.compose.R
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -160,20 +158,11 @@ private fun SliderThumbNodes(
 ) {
     val description = data.accessibility?.observeContentDescription()
     val menu = data.accessibility?.observeMenu(data).orEmpty()
-    val secondary = state.secondary
-    if (secondary == null) {
-        SliderThumbNode(state.main, state.range, description, isEnabled, scope, menu)
-        return
-    }
-    val start = joinDescription(
-        description,
-        stringResource(R.string.div_slider_range_start),
-    )
-    SliderThumbNode(state.main, state.range, start, isEnabled, scope, menu)
+    SliderThumbNode(state.main, state.range, description, isEnabled, scope, menu)
+    val secondary = state.secondary ?: return
     val secondaryAccessibility = data.secondaryValueAccessibility
     if (secondaryAccessibility?.mode?.observedValue() == DivAccessibility.Mode.EXCLUDE) return
-    val end = secondaryAccessibility?.observeContentDescription()
-        ?: joinDescription(description, stringResource(R.string.div_slider_range_end))
+    val end = secondaryAccessibility?.observeContentDescription() ?: description
     SliderThumbNode(
         secondary, state.range, end, isEnabled, scope,
         secondaryAccessibility?.observeMenu(data).orEmpty(),
@@ -221,6 +210,3 @@ private fun SliderThumb.setAccessibilityValue(
     setValue((current + sign(delta).toLong() * step).toFloat(), animated = false, scope = scope)
     return true
 }
-
-private fun joinDescription(description: String?, suffix: String): String =
-    if (description == null) suffix else "$description,$suffix"

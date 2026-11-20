@@ -270,7 +270,7 @@ class DivAccessibilityMenuTest {
             accessibility = accessibility(description = "Price", menu = listOf(accessibilityMenuItem("Start", listOf(action())))),
             secondaryValueAccessibility = accessibility(description = "Maximum", menu = listOf(accessibilityMenuItem("End", listOf(action())))),
         ))
-        val main = rule.onNode(hasContentDescription("Price,Range start"))
+        val main = rule.onNode(hasContentDescription("Price"))
         val secondary = rule.onNode(hasContentDescription("Maximum"))
 
         main.performSemanticsAction(SemanticsActions.SetProgress) { assertTrue(it(35f)) }
@@ -289,10 +289,11 @@ class DivAccessibilityMenuTest {
             thumbValueVariable = "start", thumbSecondaryValueVariable = "end",
             accessibility = accessibility(description = "Price", menu = listOf(accessibilityMenuItem("Run", listOf(action())))),
             secondaryValueAccessibility = DivAccessibility(
+                description = constant("Maximum"),
                 mode = accessibilityMode("@{secondary_mode}"),
             ),
         ))
-        val command = rule.onNode(hasContentDescription("Price,Range start"))
+        val command = rule.onNode(hasContentDescription("Price"))
             .fetchSemanticsNode().config[SemanticsActions.CustomActions].single()
 
         rule.runOnIdle { mode.setValueDirectly("exclude") }
@@ -434,10 +435,17 @@ class DivAccessibilityMenuTest {
     private fun setContent(content: Div) {
         this.content.value = content
         rule.setContentWithDivContext(configuration) {
-            DivView(data = data(
-                container(items = listOf(this.content.value, text(id = "result", text = expression("@{last_action}")))),
-                variables = listOf(variable("last_action", "none")),
-            ))
+            DivView(
+                data = data(
+                    container(
+                        items = listOf(
+                            this.content.value,
+                            text(id = "result", text = expression("@{last_action}"))
+                        )
+                    ),
+                    variables = listOf(variable("last_action", "none")),
+                )
+            )
         }
     }
 }

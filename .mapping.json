@@ -1285,8 +1285,6 @@
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/visibility/VisibilityActionModifiers.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/visibility/VisibilityActionModifiers.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/visibility/VisibilityActionTracker.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/visibility/VisibilityActionTracker.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/visibility/VisibilityTransitionStorage.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/visibility/VisibilityTransitionStorage.kt",
-  "client/android/compose/src/androidMain/res/values-ru/strings.xml":"divkit/public/client/android/compose/src/androidMain/res/values-ru/strings.xml",
-  "client/android/compose/src/androidMain/res/values/strings.xml":"divkit/public/client/android/compose/src/androidMain/res/values/strings.xml",
   "client/android/compose/src/commonMain/kotlin/com/yandex/div/compose/DivException.kt":"divkit/public/client/android/compose/src/commonMain/kotlin/com/yandex/div/compose/DivException.kt",
   "client/android/compose/src/commonMain/kotlin/com/yandex/div/compose/DivReporter.kt":"divkit/public/client/android/compose/src/commonMain/kotlin/com/yandex/div/compose/DivReporter.kt",
   "client/android/compose/src/commonMain/kotlin/com/yandex/div/compose/PreloadMode.kt":"divkit/public/client/android/compose/src/commonMain/kotlin/com/yandex/div/compose/PreloadMode.kt",
