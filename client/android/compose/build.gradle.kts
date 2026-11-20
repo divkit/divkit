@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
     id("divkit.convention.library-kmp")
+    id("divkit.convention.jvm-api-check")
     id("divkit.convention.publishing-module-kmp")
     id("divkit.convention.stub-aar")
     alias(libs.plugins.compose.multiplatform)
@@ -17,6 +18,10 @@ kotlin {
     // Preserve the existing Android API while moving its source set.
     // TODO(https://st.yandex-team.ru/DIVKIT-11051): Restore strict explicit API mode.
     explicitApi = ExplicitApiMode.Disabled
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 
     android {
         namespace = "com.yandex.div.compose"
@@ -31,6 +36,11 @@ kotlin {
     }
 
     sourceSets {
+        commonMain.dependencies {
+            implementation(project.dependencies.platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.compose.ui.text)
+        }
+
         androidMain.dependencies {
             api(project(":core"))
             api(project(":div-data"))
@@ -41,7 +51,6 @@ kotlin {
             implementation(project(":div-storage"))
             implementation(project(":render-common"))
 
-            implementation(project.dependencies.platform(libs.androidx.compose.bom))
             implementation(libs.androidx.compose.foundation.layout)
             implementation(libs.androidx.compose.material3)
             implementation(libs.androidx.core)

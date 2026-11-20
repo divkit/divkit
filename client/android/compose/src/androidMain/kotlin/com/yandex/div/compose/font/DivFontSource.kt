@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
  * constructs the [androidx.compose.ui.text.font.Font] and applies weight / variation
  * settings.
  */
-sealed class DivFontSource {
+actual sealed class DivFontSource {
 
     /**
      * Font is provided as a [androidx.compose.ui.text.font.FontFamily] instance.
