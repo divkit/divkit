@@ -4,7 +4,6 @@
   <CurrentIssues>
     <ID>CognitiveComplexMethod:AdjustScrollToItem.kt:private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible: Boolean</ID>
     <ID>CognitiveComplexMethod:CoilImagePreloader.kt:CoilImagePreloader$override suspend fun preloadImages: PreloadResult</ID>
-    <ID>CognitiveComplexMethod:ContainerAlignment.kt:internal fun DivContentAlignmentHorizontal.toHorizontalArrangement: Arrangement.Horizontal</ID>
     <ID>CognitiveComplexMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
     <ID>CognitiveComplexMethod:GalleryFlingBehavior.kt:GallerySnapLayoutInfoProvider$override fun calculateSnapOffset: Float</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.observeItemBaseSizes: FloatArray</ID>

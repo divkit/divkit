@@ -4,6 +4,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertTopPositionInRootIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasScrollToIndexAction
@@ -67,6 +68,23 @@ class DivContainerMatchParentTest {
             declare(size)
             declare(visibility)
         }
+    }
+
+    @Test
+    fun `spaced children that overflow the container keep their places instead of piling up at its end`() {
+        setContent(
+            container(
+                height = fixed(100),
+                itemSpacing = 10,
+                items = listOf(
+                    verticalChild("first", matchParent(minSize = 80)),
+                    verticalChild("second", matchParent(minSize = 80)),
+                ),
+            )
+        )
+
+        rule.onNodeWithTag("first").assertTopPositionInRootIsEqualTo(0.dp)
+        rule.onNodeWithTag("second").assertTopPositionInRootIsEqualTo(90.dp)
     }
 
     @Test
