@@ -1,5 +1,8 @@
 package com.yandex.div.compose.collection
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewScope
@@ -21,6 +24,14 @@ import dev.zacsweers.metro.Inject
 internal class CollectionItemScopeStorage {
     private val builders = HashMap<DivBase, MutableMap<DivLocalComponent, BuilderScopes>>()
     private val staticItems = HashMap<DivLocalComponent, MutableMap<DivBase, CollectionItems>>()
+
+    fun getItems(owner: DivBase, parent: DivLocalComponent): List<CollectionItem> =
+        builders[owner]?.get(parent)?.selectedItems.orEmpty()
+
+    fun setSelectedItems(owner: DivBase, parent: DivLocalComponent, items: List<CollectionItem>) {
+        val scopes = builders[owner]?.get(parent) ?: return
+        scopes.selectedItems = items
+    }
 
     fun getOrCreateStaticItems(
         owner: DivBase,
@@ -188,6 +199,7 @@ internal class CollectionItemScopeStorage {
     private class BuilderScopes {
         val items = HashMap<ItemKey, CollectionItem>()
         val nestedTriggers = HashMap<DivCollectionItemBuilder.Prototype, Boolean>()
+        var selectedItems by mutableStateOf(emptyList<CollectionItem>())
     }
 }
 

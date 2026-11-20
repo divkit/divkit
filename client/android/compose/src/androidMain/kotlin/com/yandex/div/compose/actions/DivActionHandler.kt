@@ -57,10 +57,6 @@ internal class DivActionHandler(
         action: DivAction,
         source: DivActionSource,
     ) {
-        if (action.scopeId != null && !action.typed.supportsScopeId) {
-            reporter.reportError("div-action.scope_id not supported")
-        }
-
         handle(
             context = context,
             action = DivActionBase(
@@ -80,10 +76,6 @@ internal class DivActionHandler(
     }
 
     fun handle(context: DivActionHandlingContext, action: DivSightAction) {
-        if (action.scopeId != null && !action.typed.supportsScopeId) {
-            reporter.reportError("div-action.scope_id not supported")
-        }
-
         handle(
             context = context,
             action = DivActionBase(
@@ -114,6 +106,7 @@ internal class DivActionHandler(
         if (!action.isEnabled.evaluate(expressionResolver)) {
             return
         }
+        val scopeId = action.scopeId?.evaluate(expressionResolver)
 
         val actionData = DivActionData(
             id = action.logId?.evaluate(expressionResolver),
@@ -129,22 +122,48 @@ internal class DivActionHandler(
 
         val typedAction = action.typed ?: actionData.url?.let(::parseActionUrl)
         typedAction?.let {
+            if (scopeId != null && !it.supportsScopeId) {
+                reporter.reportError("div-action.scope_id not supported")
+            }
             handle(
                 context = context,
                 action = it,
                 actionData = actionData,
-                scopeId = action.scopeId?.evaluate(expressionResolver),
+                scopeId = scopeId,
             )
             return
         }
 
+        handleUrl(
+            context = context,
+            actionData = actionData,
+            downloadCallbacks = action.downloadCallbacks,
+            scopeId = scopeId,
+        )
+    }
+
+    private fun handleUrl(
+        context: DivActionHandlingContext,
+        actionData: DivActionData,
+        downloadCallbacks: DivDownloadCallbacks?,
+        scopeId: String?,
+    ) {
         val url = actionData.url
+        val untypedAction = if (url?.isDivAction == true) {
+            DivUntypedAction.parse(url)
+        } else {
+            null
+        }
+        if (scopeId != null && untypedAction !is DivUntypedAction.SetVariable) {
+            reporter.reportError("div-action.scope_id not supported")
+        }
         if (url?.isDivAction == true) {
-            DivUntypedAction.parse(url)?.let {
+            untypedAction?.let {
                 handle(
                     context = context,
                     action = it,
-                    downloadCallbacks = action.downloadCallbacks
+                    downloadCallbacks = downloadCallbacks,
+                    scopeId = scopeId,
                 )
             }
         } else {
@@ -179,13 +198,13 @@ internal class DivActionHandler(
             is DivActionTyped.AnimatorStop -> animatorActionHandler.handle(scopeId, action.value)
 
             is DivActionTyped.ArrayInsertValue ->
-                arrayActionsHandler.handle(context, action.value)
+                arrayActionsHandler.handle(context, action.value, scopeId)
 
             is DivActionTyped.ArrayRemoveValue ->
-                arrayActionsHandler.handle(context, action.value)
+                arrayActionsHandler.handle(context, action.value, scopeId)
 
             is DivActionTyped.ArraySetValue ->
-                arrayActionsHandler.handle(context, action.value)
+                arrayActionsHandler.handle(context, action.value, scopeId)
 
             is DivActionTyped.Haptic ->
                 hapticActionHandler.handle(context, action.value)
@@ -206,7 +225,7 @@ internal class DivActionHandler(
                 )
 
             is DivActionTyped.DictSetValue ->
-                dictSetValueActionHandler.handle(context, action.value)
+                dictSetValueActionHandler.handle(context, action.value, scopeId)
 
             is DivActionTyped.Download ->
                 downloadActionHandler.handle(context, action.value)
@@ -230,7 +249,7 @@ internal class DivActionHandler(
                 setStoredValueActionHandler.handle(context, action.value)
 
             is DivActionTyped.SetVariable ->
-                setVariableActionHandler.handle(context, action.value)
+                setVariableActionHandler.handle(context, action.value, scopeId)
 
             is DivActionTyped.ShowTooltip ->
                 tooltipActionHandler.handle(context, action.value)
@@ -242,7 +261,7 @@ internal class DivActionHandler(
                 timerActionHandler.handle(context, action.value)
 
             is DivActionTyped.UpdateStructure ->
-                updateStructureActionHandler.handle(context, action.value)
+                updateStructureActionHandler.handle(context, action.value, scopeId)
 
             is DivActionTyped.Video ->
                 videoActionHandler.handle(context, action.value)
@@ -252,7 +271,8 @@ internal class DivActionHandler(
     private fun handle(
         context: DivActionHandlingContext,
         action: DivUntypedAction,
-        downloadCallbacks: DivDownloadCallbacks?
+        downloadCallbacks: DivDownloadCallbacks?,
+        scopeId: String?,
     ) {
         when (action) {
             is DivUntypedAction.Download ->
@@ -268,7 +288,7 @@ internal class DivActionHandler(
                 setStoredValueActionHandler.handle(action)
 
             is DivUntypedAction.SetVariable ->
-                setVariableActionHandler.handle(context, action)
+                setVariableActionHandler.handle(context, action, scopeId)
 
             is DivUntypedAction.ShowTooltip ->
                 tooltipActionHandler.handle(action)
@@ -299,8 +319,15 @@ private class DivActionBase(
     val url: Expression<Uri>?,
 )
 
-private val DivActionTyped?.supportsScopeId: Boolean
+private val DivActionTyped.supportsScopeId: Boolean
     get() = when (this) {
-        is DivActionTyped.AnimatorStart, is DivActionTyped.AnimatorStop -> true
+        is DivActionTyped.AnimatorStart,
+        is DivActionTyped.AnimatorStop,
+        is DivActionTyped.SetVariable,
+        is DivActionTyped.DictSetValue,
+        is DivActionTyped.ArrayInsertValue,
+        is DivActionTyped.ArrayRemoveValue,
+        is DivActionTyped.ArraySetValue,
+        is DivActionTyped.UpdateStructure -> true
         else -> false
     }

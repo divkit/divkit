@@ -46,9 +46,7 @@ internal fun mutableStateFromStringVariable(variableName: String): MutableState<
         variableName = variableName,
         readValue = { it.getValue().toString() },
         validate = { variable ->
-            if (variable is Variable.StringVariable ||
-                variable.isProperty(DivEvaluableType.STRING)
-            ) {
+            if (variable.isStringVariable) {
                 null
             } else {
                 "variable [$variableName] is not a string variable"
@@ -168,6 +166,9 @@ private class DivVariableMutableState<T : Any>(
         _value = readValue(variable)
     }
 }
+
+internal val Variable.isStringVariable: Boolean
+    get() = this is Variable.StringVariable || isProperty(DivEvaluableType.STRING)
 
 private fun Variable.isProperty(type: DivEvaluableType): Boolean {
     return this is Variable.PropertyVariable && valueType == type

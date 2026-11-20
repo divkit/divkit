@@ -32,9 +32,8 @@ internal class DivPropertyVariableExecutor(
         newValue: Any,
     ) {
         actionHandler.value.handle(
-            context = DivActionHandlingContext(
-                cardId = actionHandlingContext.cardId,
-                expressionResolver = expressionResolver.withPropertyNewValueVariable(
+            context = actionHandlingContext.wrap(
+                expressionResolver.withPropertyNewValueVariable(
                     variableName = newValueVarName,
                     value = newValue,
                 ),

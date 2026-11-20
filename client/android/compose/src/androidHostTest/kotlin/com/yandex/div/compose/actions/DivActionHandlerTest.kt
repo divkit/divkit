@@ -68,6 +68,42 @@ class DivActionHandlerTest {
     }
 
     @Test
+    fun `unsupported typed action reports scope_id`() {
+        actionHandlerEnvironment.reporter.failOnError = false
+
+        handle(action(scopeId = "target", typed = customAction()))
+
+        assertEquals(
+            listOf("div-action.scope_id not supported"),
+            actionHandlerEnvironment.reporter.errors,
+        )
+    }
+
+    @Test
+    fun `URL converted to typed action reports unsupported scope_id`() {
+        actionHandlerEnvironment.reporter.failOnError = false
+
+        handle(action(scopeId = "target", url = "div-action://scroll_to_end?id=gallery"))
+
+        assertEquals(
+            listOf("div-action.scope_id not supported"),
+            actionHandlerEnvironment.reporter.errors,
+        )
+    }
+
+    @Test
+    fun `untyped URL action reports unsupported scope_id`() {
+        actionHandlerEnvironment.reporter.failOnError = false
+
+        handle(action(scopeId = "target", url = "div-action://set_state?state_id=state1"))
+
+        assertEquals(
+            listOf("div-action.scope_id not supported"),
+            actionHandlerEnvironment.reporter.errors,
+        )
+    }
+
+    @Test
     fun `not enabled action is not handled`() {
         handle(
             action(

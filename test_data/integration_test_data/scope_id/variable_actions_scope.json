@@ -1,5 +1,5 @@
 {
-  "description": "set_variable, dict_set_value, array_insert_value, array_remove_value, array_set_value and update_structure with scope_id change the variable declared on the scope element. Action parameters are evaluated in the context of the element that performs the action. If the scope ID repeats in several states of div-state, the element in the active state is used. On Android and iOS, the scope element can be the root element. If the scope element is not found, an error is reported and the variable is looked up from the element that performs the action. When snapshot becomes true, triggers on the scope elements copy their variables to card variables.",
+  "description": "set_variable, dict_set_value, array_insert_value, array_remove_value, array_set_value and update_structure with scope_id change the variable declared on the scope element. Action parameters are evaluated in the context of the element that performs the action. If the scope ID repeats in several states of div-state, the element in the active state is used. On Android and iOS, the scope element can be the root element. When snapshot becomes true, triggers on the scope elements copy their variables to card variables.",
   "div_data": {
     "card": {
       "log_id": "variable_actions_scope",
@@ -512,43 +512,6 @@
             "type": "string",
             "value": "sender"
           }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios"
-      ]
-    },
-    {
-      "steps": [
-        {
-          "type": "div_action",
-          "action": {
-            "log_id": "set_variable_with_missing_scope",
-            "scope_id": "missing_scope",
-            "typed": {
-              "type": "set_variable",
-              "variable_name": "text_result",
-              "value": {
-                "type": "string",
-                "value": "@{source}"
-              }
-            }
-          }
-        },
-        {
-          "type": "verify_variable",
-          "variable_name": "text_result",
-          "value": {
-            "type": "string",
-            "value": "sender"
-          }
-        },
-        {
-          "type": "verify_errors",
-          "errors": [
-            "Scope with id 'missing_scope' not found"
-          ]
         }
       ],
       "platforms": [

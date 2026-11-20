@@ -4,21 +4,28 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.setVariableAction
+import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.typedValue
+import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
+import com.yandex.div2.DivTrigger
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
@@ -95,6 +102,38 @@ class DivViewWithTriggersTest {
         rule.runOnIdle { condition.set(true) }
 
         assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `card trigger changes the scope in the state chosen during composition`() {
+        variableController.declare(Variable.StringVariable("default_id", "first"))
+        val first = text(
+            id = "target",
+            text = expression("@{label}"),
+            variables = listOf(variable("label", "Before")),
+        )
+        val content = state(
+            id = "menu",
+            defaultStateId = expression("@{default_id}"),
+            states = listOf(
+                state(stateId = "first", div = first),
+                state(stateId = "second", div = text(text = "Other state")),
+            ),
+        )
+        val initialTrigger = DivTrigger(
+            condition = booleanExpression("@{true}"),
+            actions = listOf(
+                action(typed = setVariableAction("default_id", typedValue("second"))),
+                action(scopeId = "target", typed = setVariableAction("label", typedValue("After"))),
+            ),
+        )
+
+        rule.setContent(
+            configuration = configuration,
+            data = data(content, triggers = listOf(initialTrigger)),
+        )
+
+        rule.onNodeWithTag("target").assertTextEquals("After")
     }
 
     private fun setContent(content: Div) {

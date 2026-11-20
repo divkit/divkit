@@ -1,0 +1,175 @@
+{
+  "description": "Typed and URL actions evaluate values in the source context and update variables in the selected scope without changing root variables; a child without local variables inherits its parent scope.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "action_variable_scope",
+      "variables": [
+        {
+          "name": "counter",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "id": "root_status",
+                "text": "Root: @{counter}"
+              },
+              {
+                "type": "container",
+                "id": "target",
+                "variables": [
+                  {
+                    "name": "counter",
+                    "type": "integer",
+                    "value": 100
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "text",
+                    "id": "target_status",
+                    "text": "Target: @{counter}"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "id": "typed_update_button",
+                "text": "Update target with typed action",
+                "actions": [
+                  {
+                    "log_id": "typed_update_target",
+                    "scope_id": "target",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "counter",
+                      "value": {
+                        "type": "integer",
+                        "value": "@{counter + 1}"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "id": "url_update_button",
+                "text": "Update target with URL action",
+                "actions": [
+                  {
+                    "log_id": "url_update_target",
+                    "scope_id": "target",
+                    "url": "div-action://set_variable?name=counter&value=@{counter + 10}"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "id": "inherited_scope_button",
+                "text": "Update inherited target scope",
+                "actions": [
+                  {
+                    "log_id": "typed_update_inherited_scope",
+                    "scope_id": "target_status",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "counter",
+                      "value": {
+                        "type": "integer",
+                        "value": "@{counter + 100}"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "typed_update_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "target_status"
+      },
+      "text": "Target: 1"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_status"
+      },
+      "text": "Root: 0"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "url_update_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "target_status"
+      },
+      "text": "Target: 10"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_status"
+      },
+      "text": "Root: 0"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "inherited_scope_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "target_status"
+      },
+      "text": "Target: 100"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_status"
+      },
+      "text": "Root: 0"
+    }
+  ]
+}

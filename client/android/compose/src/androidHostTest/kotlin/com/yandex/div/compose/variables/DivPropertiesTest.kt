@@ -9,12 +9,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
@@ -25,7 +27,11 @@ import com.yandex.div.test.data.action
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.property
+import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.stringProperty
 import com.yandex.div.test.data.text
@@ -34,12 +40,14 @@ import com.yandex.div.test.data.uriExpression
 import com.yandex.div.test.data.variable
 import com.yandex.div2.DivData
 import com.yandex.div2.DivEvaluableType
+import com.yandex.div2.DivTypedValue
+import com.yandex.div2.StrValue
+import org.junit.Rule
+import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import org.junit.Rule
-import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivPropertiesTest {
@@ -58,6 +66,67 @@ class DivPropertiesTest {
 
     @get:Rule
     val rule = createComposeRule()
+
+    @Test
+    fun `scoped setter keeps new value above target variables`() {
+        val target = text(
+            id = "target", text = "Target",
+            variables = listOf(variable("counter", "before"), variable("new_value", "shadow")),
+        )
+        val viewContext = context.getViewContext(data(
+            container(items = listOf(target)),
+            variables = listOf(stringProperty(
+                name = "title", get = "initial",
+                set = listOf(action(
+                    scopeId = "target",
+                    typed = setVariableAction("counter", DivTypedValue.Str(StrValue(expression("@{new_value}")))),
+                )),
+            )),
+        ))
+        val root = viewContext.rootLocalComponent
+        val resolver = viewContext.getOwnComponent(target.value(), root).expressionResolver
+
+        root.actionHandler.handle(
+            root.actionHandlingContext,
+            action = action(typed = setVariableAction("title", typedValue("assigned"))),
+            source = DivActionSource.EXTERNAL,
+        )
+
+        assertEquals("assigned", resolver.getVariable("counter")?.getValue())
+        assertEquals("shadow", resolver.getVariable("new_value")?.getValue())
+    }
+
+    @Test
+    fun `scoped property setter updates only its own repeated item`() {
+        val item = container(
+            variables = listOf(stringProperty(
+                name = "title", get = "initial",
+                set = listOf(action(
+                    scopeId = "target",
+                    typed = setVariableAction("counter", DivTypedValue.Str(StrValue(expression("@{new_value}")))),
+                )),
+            )),
+            items = listOf(
+                text(
+                    id = "target", text = expression("@{it.getString('label')}:@{counter}"),
+                    variables = listOf(variable("counter", "before")),
+                ),
+                text(
+                    text = expression("Set @{it.getString('label')}"),
+                    action = action(typed = setVariableAction("title", typedValue("after"))),
+                ),
+            ),
+        )
+        setContent(data(container(itemBuilder = itemBuilder(
+            data = jsonArray(jsonObject("label" to "first"), jsonObject("label" to "second")),
+            prototypes = listOf(prototype(item)),
+        ))))
+
+        rule.onNodeWithText("Set first").performClick()
+
+        rule.onNodeWithText("first:after").assertExists()
+        rule.onNodeWithText("second:before").assertExists()
+    }
 
     @Test
     fun `property value changes after backing variable changes`() {

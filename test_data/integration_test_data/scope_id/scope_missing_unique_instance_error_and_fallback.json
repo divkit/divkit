@@ -13,6 +13,16 @@
           "name": "input_value",
           "type": "string",
           "value": "test"
+        },
+        {
+          "type": "string",
+          "name": "source",
+          "value": "sender"
+        },
+        {
+          "type": "string",
+          "name": "text_result",
+          "value": ""
         }
       ],
       "states": [
@@ -175,6 +185,43 @@
       "platforms": [
         "ios",
         "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "set_variable_with_missing_scope",
+            "scope_id": "missing_scope",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "text_result",
+              "value": {
+                "type": "string",
+                "value": "@{source}"
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "text_result",
+          "value": {
+            "type": "string",
+            "value": "sender"
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'missing_scope' not found"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
       ]
     }
   ]

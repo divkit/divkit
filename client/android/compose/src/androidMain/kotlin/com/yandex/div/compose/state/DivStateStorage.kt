@@ -10,12 +10,12 @@ import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.utils.children
+import com.yandex.div.compose.variables.isStringVariable
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
-import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivState
 import dev.zacsweers.metro.Inject
 
@@ -29,6 +29,7 @@ internal class DivStateStorage(
     private val activeStates = mutableStateMapOf<String, String>()
     private val swipeOutStates = mutableMapOf<Long, SwipeOutState>()
     private val variableSetters = mutableMapOf<String, (String) -> Unit>()
+    val renderedStates = RenderedStates()
 
     fun getActiveRootState(states: List<DivData.State>): DivData.State? {
         return states.find { it.stateId == activeRootStateId } ?: states.firstOrNull()
@@ -84,9 +85,7 @@ internal class DivStateStorage(
             component.reporter.reportError("Unknown variable: $name")
             return
         }
-        val isString = variable is Variable.StringVariable ||
-            variable is Variable.PropertyVariable && variable.valueType == DivEvaluableType.STRING
-        if (!isString) {
+        if (!variable.isStringVariable) {
             component.reporter.reportError("variable [$name] is not a string variable")
             return
         }
@@ -154,6 +153,7 @@ internal class DivStateStorage(
         activeStates.clear()
         swipeOutStates.clear()
         variableSetters.clear()
+        renderedStates.clear()
     }
 
     private fun storageKey(parentPath: DivStatePath, divId: String): String =
@@ -165,4 +165,27 @@ internal class DivStateStorage(
     )
 
     private class StateTarget(val state: DivState, val component: DivLocalComponent)
+
+    internal class RenderedStates {
+        private val states = mutableStateMapOf<Key, Registration>()
+
+        operator fun get(div: DivState, resolver: ExpressionResolver): String? =
+            states[Key(div, resolver)]?.state?.stateId
+
+        fun bind(div: DivState, resolver: ExpressionResolver, state: DivState.State): () -> Unit {
+            val key = Key(div, resolver)
+            val registration = Registration(state)
+            states[key] = registration
+            return {
+                if (states[key] === registration) {
+                    states.remove(key)
+                }
+            }
+        }
+
+        fun clear() = states.clear()
+
+        private class Registration(val state: DivState.State)
+        private data class Key(val div: DivState, val resolver: ExpressionResolver)
+    }
 }

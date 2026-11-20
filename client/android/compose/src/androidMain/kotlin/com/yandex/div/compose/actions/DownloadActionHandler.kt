@@ -21,7 +21,7 @@ internal class DownloadActionHandler(
     ) {
         download(
             context = context,
-            url = action.url.evaluate(context.expressionResolver),
+            url = action.url.evaluate(context.originExpressionResolver),
             onSuccessActions = action.onSuccessActions,
             onFailActions = action.onFailActions,
         )

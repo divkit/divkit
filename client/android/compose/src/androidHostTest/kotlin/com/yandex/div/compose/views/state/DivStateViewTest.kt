@@ -6,8 +6,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
@@ -23,12 +26,22 @@ import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.alignmentHorizontalExpression
 import com.yandex.div.test.data.alignmentVerticalExpression
+import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.prototype
+import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.typedValue
+import com.yandex.div.test.data.variable
+import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivFadeTransition
 import com.yandex.div2.DivState
@@ -341,6 +354,37 @@ class DivStateViewTest {
 
         assertEquals("second", stateVar.getValue())
     }
+
+    @Test
+    fun `scoped action updates the visible state of its own repeated item`() {
+        val item = state(
+            id = "switch",
+            defaultStateId = expression("@{it.getString('state')}"),
+            states = listOf(
+                state(stateId = "a", div = scopedCounter("a")),
+                state(stateId = "b", div = scopedCounter("b")),
+            ),
+        )
+        composeRule.setContent(
+            configuration = divConfiguration { reporter = this@DivStateViewTest.reporter },
+            data = data(container(itemBuilder = itemBuilder(
+                data = jsonArray(jsonObject("state" to "a"), jsonObject("state" to "b")),
+                prototypes = listOf(prototype(item)),
+            ))),
+        )
+
+        composeRule.onNodeWithText("a:a").performClick()
+
+        composeRule.onNodeWithText("a:after").assertExists()
+        composeRule.onNodeWithText("b:b").assertTextEquals("b:b")
+    }
+
+    private fun scopedCounter(initial: String): Div = text(
+        id = "target",
+        text = expression("@{it.getString('state')}:@{counter}"),
+        variables = listOf(variable("counter", initial)),
+        action = action(scopeId = "target", typed = setVariableAction("counter", typedValue("after"))),
+    )
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {

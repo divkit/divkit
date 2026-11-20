@@ -27,6 +27,7 @@ import com.yandex.div.test.data.jsonArray
 import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.matchParent
 import com.yandex.div.test.data.prototype
+import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.showTooltipAction
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
@@ -40,6 +41,8 @@ import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
 import com.yandex.div2.DivTooltipModeModal
 import com.yandex.div2.DivTooltipModeNonModal
+import com.yandex.div2.DivTypedValue
+import com.yandex.div2.StrValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
@@ -140,6 +143,49 @@ class DivViewWithTooltipsTest {
         rule.onNodeWithTag("bubble").assertTextEquals("Anchor / After")
         rule.onNodeWithTag("anchor").assertTextEquals("After")
         rule.onNodeWithTag("open").assertTextEquals("Card")
+    }
+
+    @Test
+    fun `scoped action in a tooltip prefers its own target over the same card id`() {
+        val cardTarget = text(
+            id = "target",
+            text = expression("@{label}"),
+            variables = listOf(variable("label", "Card target")),
+        )
+        val tooltipTarget = text(
+            id = "target",
+            text = expression("@{label}"),
+            variables = listOf(variable("label", "Tooltip target")),
+        )
+        val updateButton = text(
+            text = "Update tooltip target",
+            variables = listOf(variable("value", "Updated tooltip")),
+            action = action(
+                scopeId = "target",
+                typed = setVariableAction(
+                    name = "label",
+                    value = DivTypedValue.Str(StrValue(value = expression("@{value}"))),
+                ),
+            ),
+        )
+        val tooltip = DivTooltip(
+            id = "tooltip",
+            position = constant(DivTooltip.Position.BOTTOM),
+            duration = constant(0L),
+            div = container(items = listOf(updateButton, tooltipTarget)),
+        )
+        val anchor = text(
+            text = "Show tooltip",
+            action = action(typed = showTooltipAction("tooltip")),
+            tooltips = listOf(tooltip),
+        )
+        setContent(container(items = listOf(cardTarget, anchor)))
+        rule.onNodeWithText("Show tooltip").performClick()
+
+        rule.onNodeWithText("Update tooltip target").performClick()
+
+        rule.onNodeWithText("Updated tooltip").assertIsDisplayed()
+        rule.onNodeWithText("Card target").assertIsDisplayed()
     }
 
     @Test

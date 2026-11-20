@@ -2,6 +2,7 @@ package com.yandex.div.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.actions.DivActionHandlingContext
@@ -19,6 +20,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -54,10 +56,7 @@ internal fun mockLocalComponent(
         reporter = reporter,
         variableProvider = variableProvider
     )
-    val actionHandlingContext = DivActionHandlingContext(
-        cardId = "test",
-        expressionResolver = expressionResolver
-    )
+    val actionHandlingContext = createActionHandlingContext(expressionResolver)
     val expressionCache = ExpressionCache(expressionResolver)
     return mock<DivLocalComponent> {
         on { this.actionHandlingContext } doReturn actionHandlingContext
@@ -103,3 +102,17 @@ fun ComposeContentTestRule.setContent(
         DivView(data = data)
     }
 }
+
+internal fun createActionHandlingContext(
+    expressionResolver: ExpressionResolver,
+): DivActionHandlingContext = DivActionHandlingContext(
+    cardId = "test",
+    expressionResolver = expressionResolver,
+    reporter = mock(),
+    stateStorage = mock(),
+    tooltipStateStorage = mock(),
+    localComponentStorage = mock(),
+    collectionItemScopeStorage = mock(),
+    states = mutableStateOf(emptyList()),
+    rootLocalComponent = lazy { error("No root component in an empty card") },
+)

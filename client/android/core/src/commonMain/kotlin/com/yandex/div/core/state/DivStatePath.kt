@@ -159,6 +159,11 @@ public data class DivStatePath @InternalApi constructor(
             path.size <= other.path.size && path.indices.all { path[it] == other.path[it] }
     }
 
+    @InternalApi
+    public fun containsStateOf(other: DivStatePath): Boolean =
+        (containsOnlyStates || isSubsetOf(other)) &&
+            (statesString == other.statesString || isAncestorOf(other))
+
     public fun isAncestorOf(other: DivStatePath): Boolean {
         if (topLevelStateId != other.topLevelStateId || namespace != other.namespace) {
             return false

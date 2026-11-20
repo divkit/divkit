@@ -21,6 +21,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.arrayExpression
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -28,9 +29,11 @@ import com.yandex.div.test.data.itemBuilder
 import com.yandex.div.test.data.jsonArray
 import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.prototype
+import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.trigger
+import com.yandex.div.test.data.typedValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTrigger.Mode
@@ -122,6 +125,43 @@ class DivViewWithItemBuilderTriggerTest {
         rule.waitForIdle()
 
         assertEquals(listOf(1), actionVersions)
+    }
+
+    @Test
+    fun `new item trigger cannot change a variable through a removed scope`() {
+        val elements = Variable.ArrayVariable("elements", jsonArray(jsonObject("old" to true)))
+        val label = Variable.StringVariable("label", "before")
+        val controller = DivVariableController().apply { declare(elements, label) }
+        val testReporter = TestReporter().apply { failOnError = false }
+        val configuration = divConfiguration {
+            reporter = testReporter
+            variableController = controller
+        }
+        val oldItem = prototype(
+            div = text(id = "old_target", text = "Old item"),
+            selector = booleanExpression("@{it.getBoolean('old')}"),
+        )
+        val newItem = prototype(div = text(
+            text = "New item",
+            triggers = listOf(trigger(
+                condition = "@{true}",
+                action = action(
+                    scopeId = "old_target",
+                    typed = setVariableAction("label", typedValue("changed")),
+                ),
+            )),
+        ))
+        val content = container(itemBuilder = itemBuilder(
+            data = arrayExpression("@{elements}"),
+            prototypes = listOf(oldItem, newItem),
+        ))
+        rule.setContent(configuration = configuration, data = data(content))
+
+        rule.runOnIdle { elements.set(jsonArray(jsonObject("old" to false))) }
+        rule.waitForIdle()
+
+        assertEquals("before", label.getValue())
+        assertEquals(listOf("Failed to resolve action scope 'old_target'"), testReporter.errors)
     }
 }
 

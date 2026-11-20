@@ -206,6 +206,18 @@ private fun ResolveDivState(
     }
 
     val activeState = divState.rememberActiveState(parentPath) ?: return
+    val component = LocalComponent.current
+    val stateStorage = component.stateStorage
+    val resolver = component.expressionResolver
+    if (divId != null) {
+        // Parent triggers can look up the selected state before this node's effects run.
+        val unbind = remember(stateStorage, divState, resolver, activeState) {
+            stateStorage.renderedStates.bind(divState, resolver, activeState)
+        }
+        DisposableEffect(unbind) {
+            onDispose(unbind)
+        }
+    }
     content(parentPath, divId.orEmpty(), activeState)
 }
 

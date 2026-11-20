@@ -14,11 +14,13 @@ internal class SetVariableActionHandler(
 
     fun handle(
         context: DivActionHandlingContext,
-        action: DivActionSetVariable
+        action: DivActionSetVariable,
+        scopeId: String?,
     ) {
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = context.originExpressionResolver
         val variableName = action.variableName.evaluate(expressionResolver)
-        val variable = expressionResolver.getVariable(variableName)
+        val scopeResolver = context.findScopeResolver(scopeId) ?: return
+        val variable = scopeResolver.getVariable(variableName)
         if (variable == null) {
             reporter.reportError("Unknown variable: $variableName")
             return
@@ -33,10 +35,12 @@ internal class SetVariableActionHandler(
 
     fun handle(
         context: DivActionHandlingContext,
-        action: DivUntypedAction.SetVariable
+        action: DivUntypedAction.SetVariable,
+        scopeId: String?,
     ) {
         val variableName = action.name
-        val variable = context.expressionResolver.getVariable(variableName)
+        val scopeResolver = context.findScopeResolver(scopeId) ?: return
+        val variable = scopeResolver.getVariable(variableName)
         if (variable == null) {
             reporter.reportError("Unknown variable: $variableName")
             return

@@ -1,6 +1,7 @@
 package com.yandex.div.core.util
 
 import com.yandex.div.core.expression.asImpl
+import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
@@ -54,9 +55,9 @@ internal class ViewDivBlockSearchEnvironment(
                 val stateId = divView.dataComponent.stateManager.getState(
                     block.divValue, block.expressionResolver, statePath,
                 )
-                val selectedStateId = block.divValue.states.find { it.stateId == stateId }?.stateId
-                    ?: block.divValue.getDefaultState(block.expressionResolver)?.stateId
-                selectedStateId?.let { DivStatePath.parse("$statePath/$it") }
+                val selectedState = block.divValue.states.find { it.stateId == stateId }
+                    ?: block.divValue.getDefaultState(block.expressionResolver)
+                selectedState?.let { block.path.append(block.divValue.getId(), it, it.stateId) }
             }
     }
 

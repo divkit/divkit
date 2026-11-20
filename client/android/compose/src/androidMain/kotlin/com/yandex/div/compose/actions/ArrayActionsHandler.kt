@@ -4,7 +4,6 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.util.map
 import com.yandex.div.internal.variables.evaluateAsPrimitive
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
@@ -19,10 +18,15 @@ internal class ArrayActionsHandler(
 
     fun handle(
         context: DivActionHandlingContext,
-        action: DivActionArrayInsertValue
+        action: DivActionArrayInsertValue,
+        scopeId: String?,
     ) {
-        val expressionResolver = context.expressionResolver
-        val variableWithValue = getArrayVariable(action.variableName, expressionResolver) ?: return
+        val expressionResolver = context.originExpressionResolver
+        val scopeResolver = context.findScopeResolver(scopeId) ?: return
+        val variableWithValue = getArrayVariable(
+            action.variableName.evaluate(expressionResolver),
+            scopeResolver,
+        ) ?: return
         val variable = variableWithValue.variable
         val array = variableWithValue.value
         val valueToInsert = action.value.evaluateAsPrimitive(expressionResolver)
@@ -42,10 +46,15 @@ internal class ArrayActionsHandler(
 
     fun handle(
         context: DivActionHandlingContext,
-        action: DivActionArrayRemoveValue
+        action: DivActionArrayRemoveValue,
+        scopeId: String?,
     ) {
-        val expressionResolver = context.expressionResolver
-        val variableWithValue = getArrayVariable(action.variableName, expressionResolver) ?: return
+        val expressionResolver = context.originExpressionResolver
+        val scopeResolver = context.findScopeResolver(scopeId) ?: return
+        val variableWithValue = getArrayVariable(
+            action.variableName.evaluate(expressionResolver),
+            scopeResolver,
+        ) ?: return
         val variable = variableWithValue.variable
         val array = variableWithValue.value
         when (val index = action.index.evaluate(expressionResolver).toInt()) {
@@ -58,10 +67,15 @@ internal class ArrayActionsHandler(
 
     fun handle(
         context: DivActionHandlingContext,
-        action: DivActionArraySetValue
+        action: DivActionArraySetValue,
+        scopeId: String?,
     ) {
-        val expressionResolver = context.expressionResolver
-        val variableWithValue = getArrayVariable(action.variableName, expressionResolver) ?: return
+        val expressionResolver = context.originExpressionResolver
+        val scopeResolver = context.findScopeResolver(scopeId) ?: return
+        val variableWithValue = getArrayVariable(
+            action.variableName.evaluate(expressionResolver),
+            scopeResolver,
+        ) ?: return
         val variable = variableWithValue.variable
         val array = variableWithValue.value
         when (val index = action.index.evaluate(expressionResolver).toInt()) {
@@ -77,10 +91,9 @@ internal class ArrayActionsHandler(
     }
 
     private fun getArrayVariable(
-        variableName: Expression<String>,
+        variableName: String,
         expressionResolver: ExpressionResolver
     ): VariableWithValue? {
-        val variableName = variableName.evaluate(expressionResolver)
         val variable = expressionResolver.getVariable(variableName)
         if (variable == null) {
             reporter.reportError("Unknown variable: $variableName")

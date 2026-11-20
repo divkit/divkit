@@ -55,6 +55,8 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         testCase.parseActions().forEach {
             divContext.debugFeatures.performAction(data = divData, action = it)
         }
+        // State changes trigger local actions during recomposition; wait for them before checking results.
+        rule.waitForIdle()
 
         testCase.checkResult(
             expressionResolver = divContext.debugFeatures.getExpressionResolver(divData)!!,
@@ -111,7 +113,6 @@ private class Reporter(private val logger: IntegrationTestLogger) : DivReporter(
 private val ignoredFiles = listOf(
     "action_before_bind.json",
     "action_same_id_in_states.json",
-    "local-triggers-states.json",
     "local-triggers-tabs.json",
     "no_scope_duplicate_instance_errors.json",
     "no_scope_missing_instance_errors.json",
@@ -122,6 +123,5 @@ private val ignoredFiles = listOf(
     "set_stored_value_scope.json",
     "submit_scope.json",
     "tooltip_scope.json",
-    "variable_actions_scope.json",
     "wrap_content_constraints_warning.json",
 )

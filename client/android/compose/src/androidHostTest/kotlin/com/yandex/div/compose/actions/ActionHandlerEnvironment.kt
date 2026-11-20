@@ -1,6 +1,7 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.createActionHandlingContext
 import com.yandex.div.compose.createExpressionResolver
 import com.yandex.div.compose.variables.DivPropertyVariableExecutor
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -17,10 +18,7 @@ internal class ActionHandlerEnvironment {
         variableController = variableController
     )
 
-    val context = DivActionHandlingContext(
-        cardId = "test",
-        expressionResolver = expressionResolver
-    )
+    val context = createActionHandlingContext(expressionResolver)
 
     lateinit var actionHandler: DivActionHandler
     lateinit var propertyVariableExecutor: DivPropertyVariableExecutor

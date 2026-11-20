@@ -60,7 +60,8 @@ class DivActionLoggingTest {
             )
             verify(setVariableHandler).handle(
                 eq(context),
-                any<DivUntypedAction.SetVariable>()
+                any<DivUntypedAction.SetVariable>(),
+                eq(null),
             )
         }
     }

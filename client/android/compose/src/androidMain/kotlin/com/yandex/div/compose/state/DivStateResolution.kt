@@ -1,5 +1,6 @@
 package com.yandex.div.compose.state
 
+import com.yandex.div.compose.variables.isStringVariable
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivState
@@ -8,8 +9,9 @@ import com.yandex.div2.DivState
  * Resolves the active [DivState.State] using the same priority as [com.yandex.div.compose.views.state.DivStateView]:
  * 1. selection stored in [DivStateStorage] before variable binding
  * 2. [DivState.stateIdVariable]
- * 3. [DivState.defaultStateId]
- * 4. first item in [DivState.states]
+ * 3. state currently rendered by the composition
+ * 4. [DivState.defaultStateId]
+ * 5. first item in [DivState.states]
  */
 internal fun DivState.resolveActiveState(
     resolver: ExpressionResolver,
@@ -23,7 +25,8 @@ internal fun DivState.resolveActiveStateId(
     parentPath: DivStatePath,
 ): String? {
     return id?.let { stateStorage.getActiveState(parentPath, it) }
-        ?: stateIdVariable?.let { resolver.getVariable(it)?.getValue()?.toString() }
+        ?: stateIdVariable?.let(resolver::getVariable)?.takeIf { it.isStringVariable }?.getValue()?.toString()
+        ?: stateStorage.renderedStates[this, resolver]
         ?: defaultStateId?.evaluate(resolver)
 }
 

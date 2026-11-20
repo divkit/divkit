@@ -32,7 +32,7 @@ internal class SubmitActionHandler(
         context: DivActionHandlingContext,
         action: DivActionSubmit,
     ) {
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = context.originExpressionResolver
         val id = action.containerId.evaluate(expressionResolver)
         val targets = mutableListOf<DivBase>()
         states.value.forEach { find(it.div, id, targets) }

@@ -173,7 +173,9 @@ class DivBlockLocator(
 
         private fun DivStatePath.isInActiveState(): Boolean {
             val stateAncestors = activeStatesPaths.count { activePath ->
-                statesString == activePath.statesString || activePath.isAncestorOf(this)
+                // An action may target an element in a repeated item whose state ID matches other items.
+                // A state active in one item must not count as active in another item.
+                activePath.containsStateOf(this)
             }
             return stateAncestors == getStates().size
         }

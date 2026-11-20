@@ -17,6 +17,10 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
@@ -59,6 +63,36 @@ class ViewDivBlockSearchEnvironmentTest {
         val result = locator.findTarget("target", null, resolver, matches = { true })
 
         assertSame(selectedTarget, result.getOrThrow().div)
+    }
+
+    @Test
+    fun `active state paths distinguish repeated collection items by their tree position`() {
+        // Arrange
+        val resolvers = createRepeatedResolvers()
+        val item = container(items = listOf(state(
+            id = "switch",
+            states = listOf(state(stateId = "active", div = text(text = "Target"))),
+        )))
+        val card = data(container(id = "root", itemBuilder = itemBuilder(
+            data = jsonArray(jsonObject(), jsonObject()),
+            prototypes = listOf(prototype(item, id = constant("item"))),
+        )))
+        val stateManager = DivStateManager("card", mock())
+        val component = mock<DivDataComponent> { on { this.stateManager } doReturn stateManager }
+        val divView = mock<Div2View> {
+            on { divData } doReturn card
+            on { stateId } doReturn 0L
+            on { expressionResolver } doReturn resolvers.root
+            on { currentRootPath } doReturn DivStatePath.fromState(card.states.single())
+            on { dataComponent } doReturn component
+        }
+        val environment = ViewDivBlockSearchEnvironment(divView)
+
+        // Act
+        val paths = environment.activeStatesPaths().map { it.fullPath }.toSet()
+
+        // Assert
+        assertEquals(setOf("0:root/item#0/switch/active", "0:root/item#1/switch/active"), paths)
     }
 
     @Test

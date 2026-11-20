@@ -321,6 +321,53 @@ class DivBlockLocatorTest {
     }
 
     @Test
+    fun `active states with the same id in repeated items select the source item target`() {
+        // Arrange
+        val actionResolver = mock<ExpressionResolver>()
+        val target = text(id = "target", text = "Target")
+        val firstStatePath = DivStatePath.fromState(0)
+            .appendDiv("item#0")
+            .appendDiv("switch")
+            .append("switch", "active", "active")
+        val secondStatePath = DivStatePath.fromState(0)
+            .appendDiv("item#1")
+            .appendDiv("switch")
+            .append("switch", "active", "active")
+        val environment = TestSearchEnvironment(
+            blocks = listOf(
+                DivBlock.create(target, mock(), firstStatePath.appendDiv("target")),
+                DivBlock.create(target, mock(), secondStatePath.appendDiv("target")),
+            ),
+            itemSegment = "item#1",
+            activeStates = setOf(firstStatePath, secondStatePath),
+        )
+
+        // Act
+        val result = findTarget(environment, actionResolver)
+
+        // Assert
+        assertEquals("0/item#1/switch/active/target", result.getOrThrow().path.fullPath)
+    }
+
+    @Test
+    fun `active state directly under root does not match a nested sibling state`() {
+        val root = DivStatePath.fromState(0)
+        val directPath = root.appendDiv("switch").append("switch", "active", "active")
+        val nestedPath = root.appendDiv("nested").appendDiv("switch").append("switch", "active", "active")
+        val direct = DivBlock.create(text(id = "target", text = "Direct"), resolver, directPath.appendDiv("target"))
+        val source = mock<ExpressionResolver>()
+        val nested = DivBlock.create(text(id = "target", text = "Nested"), source, nestedPath.appendDiv("target"))
+        val environment = TestSearchEnvironment(
+            blocks = listOf(direct, nested),
+            activeStates = setOf(directPath, nestedPath),
+        )
+
+        val result = findTarget(environment, source)
+
+        assertSame(nested, result.getOrThrow())
+    }
+
+    @Test
     fun `unknown generated item ownership falls back to resolver identity`() {
         val actionResolver = mock<ExpressionResolver>()
         val sameResolverTarget = text(id = "target", text = "Same resolver")

@@ -130,6 +130,8 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
             viewContext = viewContext,
         )
     }
+    // Initial item triggers run before SideEffect releases the previously selected scopes.
+    collectionItemScopeStorage.setSelectedItems(owner, parent, items)
     SideEffect {
         val removedDivs = collectionItemScopeStorage.retainItems(owner, parent, items)
         if (removedDivs.isNotEmpty()) {

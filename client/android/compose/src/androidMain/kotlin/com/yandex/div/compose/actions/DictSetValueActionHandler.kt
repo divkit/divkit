@@ -15,11 +15,13 @@ internal class DictSetValueActionHandler(
 
     fun handle(
         context: DivActionHandlingContext,
-        action: DivActionDictSetValue
+        action: DivActionDictSetValue,
+        scopeId: String?,
     ) {
-        val expressionResolver = context.expressionResolver
+        val expressionResolver = context.originExpressionResolver
         val variableName = action.variableName.evaluate(expressionResolver)
-        val variable = expressionResolver.getVariable(variableName)
+        val scopeResolver = context.findScopeResolver(scopeId) ?: return
+        val variable = scopeResolver.getVariable(variableName)
         if (variable == null) {
             reporter.reportError("Unknown variable: $variableName")
             return
