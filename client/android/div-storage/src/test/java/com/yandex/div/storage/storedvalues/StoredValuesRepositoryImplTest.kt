@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.json.JsonObject
+import com.yandex.div.core.json.asJsonObject
 import com.yandex.div.internal.storedvalues.StoredValueScope
 import com.yandex.div.internal.storedvalues.StoredValuesStorage
 import com.yandex.div.storage.DivStorageComponent
@@ -11,6 +12,9 @@ import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.rawjson.RawJson
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertSame
 import org.json.JSONObject
 import org.junit.runner.RunWith
@@ -78,6 +82,33 @@ class StoredValuesRepositoryImplTest {
             9007199254740993L,
             restored.getObject("value").getArray("items").getObject(0).getLong("number")
         )
+    }
+
+    @Test
+    fun `raw repository reuses the Android record written by stored values`() {
+        val ids = listOf("stored_value_name")
+        val envelope = JSONObject("""{"type":"string","value":"saved"}""")
+
+        repository.put(ids.single(), envelope.asJsonObject())
+
+        val firstRead = assertIs<RawJson.Ready>(rawRepository.get(ids).resultData.single())
+        assertSame(envelope, firstRead.data)
+        assertSame(firstRead, rawRepository.get(ids).resultData.single())
+    }
+
+    @Test
+    fun `reading an expired value removes it from the Android cache and database`() {
+        val id = "stored_value_name"
+        val envelope = JsonObject("""{"type":"string","value":"old","expiration_time":1000}""")
+        val expiringStorage = StoredValuesStorage(repository, currentTimeMillis = { 1000L })
+        repository.put(id, envelope)
+        assertNotNull(createRepository().get(id))
+
+        val expired = expiringStorage.getValue("name", StoredValueScope.Global, "card")
+
+        assertNull(expired)
+        assertNull(repository.get(id))
+        assertNull(createRepository().get(id))
     }
 
     private fun createRepository(): StoredValuesRepositoryImpl =

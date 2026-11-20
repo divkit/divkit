@@ -1,5 +1,7 @@
 package com.yandex.div.storage
 
+import com.yandex.div.core.json.asJsonObject
+import com.yandex.div.core.json.asOrgJsonObject
 import com.yandex.div.storage.ActionOnError as CommonActionOnError
 import com.yandex.div.storage.internal.DivStorage as CommonDivStorage
 import com.yandex.div.storage.internal.RawJsonRepository as CommonRawJsonRepository
@@ -19,6 +21,13 @@ internal class RawJsonRepositoryImpl(divStorage: CommonDivStorage<JSONObject>) :
             )
         }
     })
+
+    internal fun createStoredValuesRepository(): StoredValuesRepository =
+        PersistentStoredValuesRepository(
+            delegate,
+            toJsonObject = JSONObject::asJsonObject,
+            createRecord = { id, value -> AndroidRawJson(RawJson(id, value.asOrgJsonObject())) },
+        )
 
     override fun put(payload: RawJsonRepository.Payload): RawJsonRepositoryResult {
         val result = delegate.put(
