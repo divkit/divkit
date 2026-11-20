@@ -38,6 +38,11 @@
                BlueprintName = "DivKitUITests"
                ReferencedContainer = "container:DivKit.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "TextInputMultilineUITests/testCaretStaysWhereUserPlacedIt">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

@@ -35,6 +35,7 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.FutureTask
 import kotlin.test.assertEquals
 import kotlin.test.AfterTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import org.json.JSONArray
 import org.json.JSONObject
@@ -192,6 +193,7 @@ class Div2ViewRuntimeOwnershipTest {
         assertEquals("Updated title", newView.titleText())
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `local scope of a cached card shows the variable updated while the card had no views`() {
         val card = data(

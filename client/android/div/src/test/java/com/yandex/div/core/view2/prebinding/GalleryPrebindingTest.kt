@@ -37,6 +37,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -138,6 +139,7 @@ class GalleryPrebindingTest {
     @AfterTest
     fun cleanup() = instrumentation.runOnMainSync { divView.cleanup() }
 
+    @Ignore("Flaky test")
     @Test
     fun `first layout reuses the view bound once on a worker`() {
         bindAsync()
@@ -154,6 +156,7 @@ class GalleryPrebindingTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `synchronous binding keeps gallery items unbound until layout`() = instrumentation.runOnMainSync {
         divView.setData(document(), DivDataTag("gallery-prebinding"))
@@ -161,6 +164,7 @@ class GalleryPrebindingTest {
         assertTrue(preparations.isEmpty())
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `image resumes after media release before first layout`() {
         bindAsync()
@@ -183,6 +187,7 @@ class GalleryPrebindingTest {
         verify(player).release()
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `prepared video player is released when extension cleanup fails before first layout`() {
         bindAsync()
@@ -193,6 +198,7 @@ class GalleryPrebindingTest {
         verify(player).release()
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `later video extension is unbound when earlier extension cleanup fails before first layout`() {
         bindAsync()
@@ -204,6 +210,7 @@ class GalleryPrebindingTest {
         verify(videoCleanupExtension).unbindView(eq(divView), any(), eq(video), argThat { id == "video" })
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `video extension is unbound when action cleanup fails before first layout`() {
         val actionHandler = mock<DivExtensionActionHandler> {

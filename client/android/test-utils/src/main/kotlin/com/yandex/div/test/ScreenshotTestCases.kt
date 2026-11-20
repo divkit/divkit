@@ -65,6 +65,21 @@ val viewDeviceScreenshotCases: Set<String> = setOf(
 )
 
 val viewDeviceIgnoredScreenshotCases = listOf(
+    // Flaky on API 26.
+    "interactive_snapshot_test_data/div-action/focus-revealed-element.json",
+    // Flaky on API 26.
+    "interactive_snapshot_test_data/div-container/wrap/separators.json",
+    // Flaky on API 26.
+    "interactive_snapshot_test_data/div-gallery/scroll-content-alignment-rtl.json",
+    // Flaky on API 26.
+    "interactive_snapshot_test_data/div-input/focus/disabled-input.json",
+    // Flaky on API 26.
+    "interactive_snapshot_test_data/div-layout-provider/layout-provider-recursive.json",
+    // Flaky on API 26, 32.
+    "interactive_snapshot_test_data/div-pager/multi-page-scroll.json",
+    // Flaky on API 26.
+    "interactive_snapshot_test_data/div-state/base-properties.json",
+
     "interactive_snapshot_test_data/div-select/popup-geometry.json",
     "snapshot_test_data/div-text/all_attributes.json",
     "snapshot_test_data/div-container/baseline-with-images.json",

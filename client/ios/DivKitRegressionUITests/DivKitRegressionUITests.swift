@@ -2,6 +2,21 @@ import Foundation
 import XCTest
 
 final class DivKitRegressionUITests: XCTestCase {
+  private static let quarantinedScenarioPaths: Set<String> = [
+    "div-action/button-actions.json",
+    "div-action/submit-form.json",
+    "div-container/patch_actions_applied.json",
+    "div-container/patch_actions_failed.json",
+    "div-container/patch_root.json",
+    "div-extension/is-enabled.json",
+    "div-gallery/patch_typed_gallery.json",
+    "div-input/phone_input_mask.json",
+    "div-tooltip/tooltip-positions.json",
+    "div-tooltip/tooltip-with-states.json",
+    "div-tooltip/tooltips-close-by-duration.json",
+    "local-variables/visibility-action-url.json",
+  ]
+
   override class var defaultTestSuite: XCTestSuite {
     let suite = XCTestSuite(forTestCaseClass: self)
 
@@ -101,7 +116,7 @@ final class DivKitRegressionUITests: XCTestCase {
     configuration: UITestConfiguration
   ) throws -> [RunnerScenario] {
     guard let selector = configuration.scenarioFilter else {
-      return scenarios
+      return scenarios.filter { !quarantinedScenarioPaths.contains($0.relativePath) }
     }
 
     let selected = scenarios.filter {

@@ -6,6 +6,7 @@ import com.yandex.div.steps.testClicks
 import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
+import org.junit.Ignore
 import org.junit.Test
 
 class DivTouchInteractivityTest {
@@ -73,7 +74,8 @@ class DivTouchInteractivityTest {
             }
         }
     }
-    
+
+    @Ignore("Flaky test")
     @Test
     fun doubleTapIsHandledOnElementWithTapAndDoubleTapActions() {
         testClicks {

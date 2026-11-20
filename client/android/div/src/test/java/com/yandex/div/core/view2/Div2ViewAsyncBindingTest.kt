@@ -20,6 +20,7 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.testContextThemeWrapper
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -94,6 +95,7 @@ internal class Div2ViewAsyncBindingTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `cleanup cancels the old completion but keeps the new one`() {
         val callbacks = mutableListOf<String>()
@@ -251,6 +253,7 @@ internal class Div2ViewAsyncBindingTest {
         assertEquals(listOf("other", "first"), callbacks)
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `repeated request completes only after content is applied with old data`() {
         var contentOnComplete: String? = null

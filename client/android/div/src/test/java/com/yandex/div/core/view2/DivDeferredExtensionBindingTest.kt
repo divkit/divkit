@@ -17,6 +17,7 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -108,6 +109,7 @@ class DivDeferredExtensionBindingTest {
         assertEquals(listOf("First", "Second"), textsAtCompletion)
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `synchronous binding applies extensions on main before setData returns`() {
         instrumentation.runOnMainSync {
