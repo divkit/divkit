@@ -14,11 +14,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.di.LocalComponent
@@ -26,6 +24,7 @@ import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.DivPopup
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
@@ -39,7 +38,7 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Renders a single tooltip as a [Popup] positioned relative to its registered anchor.
+ * Renders a single tooltip as a [DivPopup] positioned relative to its registered anchor.
  *
  * The popup observes anchor bounds via [TooltipAnchorEntry.bounds] and is dismissed:
  * - automatically after [DivTooltip.duration] (unless `duration == 0`),
@@ -76,7 +75,6 @@ internal fun TooltipPopup(
     }
     TooltipExitEffect(tooltip, isVisible, exitTransition, onHidden)
 
-    val context = LocalContext.current
     val underlyingView = LocalView.current.rootView
     val isModal = tooltip.mode is DivTooltipMode.Modal
     val touchDispatcher = remember(underlyingView, isModal) {
@@ -91,13 +89,12 @@ internal fun TooltipPopup(
         closeByTapOutside = closeByTapOutside,
         onDismiss = onDismissRequested
     )
-    Popup(
+    DivPopup(
         properties = popupProperties(isModal, closeByTapOutside),
         popupPositionProvider = positionProvider,
         onDismissRequest = onTapOutside,
     ) {
         CompositionLocalProvider(
-            LocalContext provides context,
             LocalTooltipContent provides true,
             LocalTooltipTouchDispatcher provides touchDispatcher,
         ) {

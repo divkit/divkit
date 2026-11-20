@@ -1133,6 +1133,7 @@
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivChildren.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivChildren.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivDimension.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivDimension.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivEdgeInsets.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivEdgeInsets.kt",
+  "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivPopup.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivPopup.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivReporterUtils.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivReporterUtils.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivShadow.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivShadow.kt",
   "client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivSize.kt":"divkit/public/client/android/compose/src/androidMain/kotlin/com/yandex/div/compose/utils/DivSize.kt",

@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
+import com.yandex.div.compose.utils.DivPopup
 
 @Composable
 internal fun ZoomHost(
@@ -52,7 +52,7 @@ internal fun ZoomHost(
         state.value = null
     }
 
-    Popup(
+    DivPopup(
         popupPositionProvider = WindowPositionProvider,
         properties = PopupProperties(
             focusable = false,
