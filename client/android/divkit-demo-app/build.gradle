@@ -83,7 +83,6 @@ dependencies {
     implementation project(path: ':div-lottie')
     implementation project(path: ':div-markdown')
     implementation project(path: ':div-network')
-    implementation project(path: ':div-network-okhttp')
     implementation project(path: ':div-pinch-to-zoom')
     implementation project(path: ':div-rive')
     implementation project(path: ':div-shimmer')
@@ -94,6 +93,7 @@ dependencies {
     implementation project(path: ':fonts')
     implementation project(path: ':glide')
     implementation project(path: ':logging')
+    implementation project(path: ':network-ktor')
     implementation project(path: ':test-utils')
     implementation project(path: ':utils')
 
@@ -111,6 +111,7 @@ dependencies {
     }
 
     implementation libs.javax
+    implementation libs.ktor.client.okhttp
     implementation libs.markwon
     implementation libs.nvWebsocket
     implementation libs.okhttp
@@ -133,6 +134,7 @@ dependencies {
     testImplementation libs.androidx.espresso.core
     testImplementation libs.androidx.viewpager2
     testImplementation libs.json
+    testImplementation libs.okhttp.mockwebserver
     testImplementation libs.roborazzi
     testImplementation libs.roborazzi.junit.rule
     testImplementation libs.webp.imageio

@@ -12,7 +12,8 @@ interface ImageLoaderConfiguration {
 
     /**
      * Registers additional Coil components on [builder].
-     * Built-in DivKit components are already added.
+     * Built-in DivKit components are already added, except the network fetcher: it is added
+     * afterwards, so a fetcher registered here takes precedence over it.
      */
     fun applyComponents(builder: ComponentRegistry.Builder) = Unit
 

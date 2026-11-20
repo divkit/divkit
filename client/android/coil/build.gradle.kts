@@ -17,7 +17,7 @@ dependencies {
 
     api(libs.coil)
 
-    implementation(libs.coil.network)
     implementation(libs.coil.network.cachecontrol)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.coil.svg)
 }

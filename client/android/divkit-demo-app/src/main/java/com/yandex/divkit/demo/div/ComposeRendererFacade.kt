@@ -22,7 +22,6 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.network.OkHttpDivNetworkClient
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
@@ -54,7 +53,7 @@ class ComposeRendererFacade(
                 "pinch-to-zoom" to PinchToZoomExtensionHandler(),
             )
             fontSourceProvider = ComposeFontSourceProvider()
-            networkClient = OkHttpDivNetworkClient(Container.httpClient)
+            networkClient = Container.ktorNetworkClient
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context))
             this.variableController = hostVariableController
         }

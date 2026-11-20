@@ -24,6 +24,7 @@ import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
+import com.yandex.divkit.demo.utils.createKtorNetworkClient
 import com.yandex.divkit.regression.di.YataganRegressionComponent
 import okhttp3.OkHttpClient
 import okhttp3.internal.http2.Header
@@ -67,6 +68,8 @@ internal object Container {
         .addNetworkInterceptor(StethoInterceptor())
 
     val httpClient = httpClientBuilder.build()
+
+    val ktorNetworkClient by lazy { createKtorNetworkClient(httpClient) }
 
     val webSocketFactory: WebSocketFactory by lazy {
         WebSocketFactory()
