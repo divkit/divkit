@@ -272,20 +272,26 @@ private class CommonTemplatesPool(
 
     fun load(templateReferences: TemplateReferenceResolver): Map<TemplateHash, DivTemplate>? {
         val templateHashes = templateReferences.templateHashes
-        val nonLoaded = templateHashes.toMutableSet()
-                .apply { removeAll(commonTemplates.keys) }
-        if (nonLoaded.isNotEmpty() && !loadFromStorage(env, templateReferences, nonLoaded)) {
+        val loadResult = loadMissingTemplates(templateHashes, commonTemplates.keys, ::readTemplates)
+        if (loadResult != null && !restoreTemplates(templateReferences, loadResult)) {
             return null
         }
         return commonTemplates.filter { templateHashes.contains(it.key) }
     }
 
-    private fun loadFromStorage(env: DivParsingEnvironment,
-                                templateReferences: TemplateReferenceResolver,
-                                templateHashes: Set<String>): Boolean {
+    private fun readTemplates(
+        templateHashes: Set<String>,
+    ): DivStorage.LoadDataResult<RawTemplateData> {
         val loadingStarted = HistogramClock.uptime()
         val loadResult = divStorage.readTemplates(templateHashes)
         histogramRecorder.reportTemplateLoadedTime(HistogramClock.uptime() - loadingStarted)
+        return loadResult
+    }
+
+    private fun restoreTemplates(
+        templateReferences: TemplateReferenceResolver,
+        loadResult: DivStorage.LoadDataResult<RawTemplateData>,
+    ): Boolean {
         val templatesJson = JSONObject()
         loadResult.restoredData.forEach {
             val hash = it.hash
