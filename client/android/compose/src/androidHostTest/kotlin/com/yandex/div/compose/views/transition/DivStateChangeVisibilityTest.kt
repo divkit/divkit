@@ -313,6 +313,41 @@ class DivStateChangeVisibilityTest : StateChangeTransitionTestBase() {
     }
 
     @Test
+    fun `visibility fade inside a state draws the transition alpha in the state snapshot`() {
+        val handler = TrackingExtensionHandler(mutableSetOf())
+        val visibility = Variable.StringVariable(VISIBILITY_VARIABLE, "gone")
+        renderStates(
+            states = listOf(state(
+                stateId = OUTGOING,
+                div = text(
+                    text = MIDDLE,
+                    id = MIDDLE_ID,
+                    alpha = constant(BASE_ALPHA.toDouble()),
+                    extensions = listOf(DivExtension(id = TRACKING_EXTENSION_ID)),
+                    visibility = visibilityExpression("@{$VISIBILITY_VARIABLE}"),
+                    transitionIn = linearFade(TRANSITION_DURATION_MS, TRANSITION_ALPHA.toDouble()),
+                ),
+            )),
+            extraVariables = listOf(visibility),
+            extensionHandlers = mapOf(TRACKING_EXTENSION_ID to handler),
+        )
+
+        composeRule.runOnIdle { visibility.set("visible") }
+        composeRule.waitForIdle()
+        composeRule.mainClock.advanceTimeByFrame()
+        composeRule.mainClock.advanceTimeByFrame()
+        val enterAlpha = composeRule.runOnIdle { handler.snapshotAlphaOf(MIDDLE_ID) }
+        composeRule.mainClock.advanceTimeBy(TRANSITION_DURATION_MS + 100)
+        val finalAlpha = composeRule.runOnIdle { handler.snapshotAlphaOf(MIDDLE_ID) }
+
+        assertEquals(TRANSITION_ALPHA, enterAlpha, 0.03f)
+        assertEquals(BASE_ALPHA, finalAlpha, 0.01f)
+    }
+
+    private fun TrackingExtensionHandler.snapshotAlphaOf(id: String): Float =
+        requireNotNull(transitionStateOf(id).snapshots.snapshot(id)).baseAlpha
+
+    @Test
     fun `rapid retarget continues fade from current alpha`() {
         val data = text(
             text = MIDDLE,

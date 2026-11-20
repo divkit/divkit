@@ -13,6 +13,7 @@ import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.compose.visibility.VisibilityActionTracker
+import com.yandex.div.compose.visibility.VisibilityTransitionStorage
 
 internal interface DivViewDependencies : DivContextDependencies {
 
@@ -29,4 +30,5 @@ internal interface DivViewDependencies : DivContextDependencies {
     val storedValuesStorage: DivStoredValuesStorage
     val videoPlayerStorage: VideoPlayerStorage
     val visibilityActionTracker: VisibilityActionTracker
+    val visibilityTransitionStorage: VisibilityTransitionStorage
 }

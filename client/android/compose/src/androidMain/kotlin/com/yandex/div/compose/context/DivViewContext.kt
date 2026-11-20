@@ -121,6 +121,7 @@ internal class DivViewContext(
         component.localComponentStorage.remove(divs)
         component.compositionKeyStorage.remove(divs)
         component.pagerStateStorage.remove(divs)
+        component.visibilityTransitionStorage.remove(divs)
     }
 
     private fun buildLocalComponent(

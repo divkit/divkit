@@ -13,6 +13,7 @@ private val neutralStateChangeTransition = StateChangeTransitionModifier()
 internal fun WithStateChangeTransition(
     data: Div,
     visibility: DivVisibility,
+    alphaOverride: Float? = null,
     content: @Composable (StateChangeTransitionModifier) -> Unit,
 ) {
     val transitionContext = LocalStateChangeTransitionContext.current
@@ -28,6 +29,7 @@ internal fun WithStateChangeTransition(
         data = data.value(),
         visibility = visibility,
         capturesScene = data.hasStateChangeTransitionChildren(),
+        alphaOverride = alphaOverride,
     )
     CompositionLocalProvider(
         LocalStateChangeTransitionContext provides transitionContext.copy(

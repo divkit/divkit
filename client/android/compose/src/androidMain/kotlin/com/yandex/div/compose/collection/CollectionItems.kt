@@ -10,6 +10,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.declaresLocalScope
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.triggers.onComposition
+import com.yandex.div.compose.visibility.observeRenderedVisibility
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
@@ -88,12 +89,12 @@ private fun observeCollectionItems(
 @Composable
 internal inline fun CollectionItems.observeVisible(): List<Div> {
     return if (components == null) {
-        items.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
+        items.filter { it.value().observeRenderedVisibility() != DivVisibility.GONE }
     } else {
         val component = LocalComponent.current
         items.filter {
             val itemComponent = components[it] ?: component
-            it.value().visibility.observedValue(component = itemComponent) != DivVisibility.GONE
+            it.value().observeRenderedVisibility(component = itemComponent) != DivVisibility.GONE
         }
     }
 }

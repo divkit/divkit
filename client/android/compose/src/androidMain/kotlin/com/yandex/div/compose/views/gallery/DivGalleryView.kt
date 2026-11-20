@@ -8,6 +8,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.scroll.restrictParentScroll
+import com.yandex.div.compose.views.transition.slideTransitionParent
 import com.yandex.div2.DivGallery
 
 @Composable
@@ -16,7 +17,7 @@ internal fun DivGalleryView(
     data: DivGallery
 ) {
     val properties = data.observeProperties()
-    val modifier = modifier.applyIf(data.restrictParentScroll.observedValue()) {
+    val modifier = modifier.slideTransitionParent().applyIf(data.restrictParentScroll.observedValue()) {
         restrictParentScroll(isHorizontal = properties.isHorizontal)
     }
     val collectionItems = data.observeItems()

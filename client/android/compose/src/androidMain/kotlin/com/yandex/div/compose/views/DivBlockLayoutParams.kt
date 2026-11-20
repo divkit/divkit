@@ -12,6 +12,8 @@ internal data class DivBlockLayoutParams(
     val defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     val defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
     val blockTapPropagation: Boolean = false,
+    /** Whether service layouts separate the element from the layout of its parent element. */
+    val hasLayoutWrapper: Boolean = false,
 ) {
     companion object {
         val Default = DivBlockLayoutParams()

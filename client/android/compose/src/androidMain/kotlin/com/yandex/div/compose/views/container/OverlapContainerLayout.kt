@@ -34,6 +34,7 @@ import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.MatchParentSize
+import com.yandex.div.compose.visibility.observeRenderedVisibility
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -173,7 +174,7 @@ private fun MatchParentOverlapChild(
         // The metadata is resolved in the child's own local-variable scope, the one DivBlockView
         // renders it in, and travels to the measure policy as the child's parent data.
         WithLocalComponent(divBase) {
-            if (divBase.visibility.observedValue() == DivVisibility.GONE) return@WithLocalComponent
+            if (divBase.observeRenderedVisibility() == DivVisibility.GONE) return@WithLocalComponent
 
             val child = div.observeOverlapChild(
                 isWidthWrapContent = isWidthWrapContent,

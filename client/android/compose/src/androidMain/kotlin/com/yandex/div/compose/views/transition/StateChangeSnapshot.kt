@@ -177,6 +177,8 @@ internal class StateChangeSnapshotCache {
     }
 
     fun layout(id: String): StateChangeLayoutState? = layouts[id]
+
+    fun snapshot(id: String): StateChangeSnapshot? = snapshots[id]
 }
 
 @Composable

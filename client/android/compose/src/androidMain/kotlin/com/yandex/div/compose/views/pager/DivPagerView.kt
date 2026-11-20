@@ -24,6 +24,7 @@ import com.yandex.div.compose.variables.mutableStateFromIntegerVariable
 import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div2.Div
+import com.yandex.div.compose.views.transition.slideTransitionParent
 import com.yandex.div2.DivPager
 
 @Composable
@@ -59,7 +60,7 @@ internal fun DivPagerView(
     }
 
     PagerView(
-        modifier = modifier,
+        modifier = modifier.slideTransitionParent(),
         items = items,
         allItems = collectionItems.items,
         components = collectionItems.components,

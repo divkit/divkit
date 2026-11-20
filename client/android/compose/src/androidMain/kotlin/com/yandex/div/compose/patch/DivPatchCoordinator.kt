@@ -17,6 +17,7 @@ import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.di.Names
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.pager.DivPagerStateStorage
+import com.yandex.div.compose.visibility.VisibilityTransitionStorage
 import com.yandex.div.internal.patch.DivPatchApply
 import com.yandex.div.internal.patch.DivPatchMap
 import com.yandex.div2.DivBase
@@ -39,6 +40,7 @@ internal class DivPatchCoordinator(
     @Named(Names.ROOT_LOCAL_COMPONENT)
     private val rootLocalComponent: Lazy<DivLocalComponent>,
     private val states: MutableState<List<DivData.State>>,
+    private val visibilityTransitionStorage: VisibilityTransitionStorage,
 ) {
     var revision: Long by mutableLongStateOf(0L)
         private set
@@ -74,6 +76,7 @@ internal class DivPatchCoordinator(
             collectionItemScopeStorage.alias(original, updated)
             localComponentStorage.alias(original, updated)
             compositionKeyStorage.alias(original, updated)
+            visibilityTransitionStorage.alias(original, updated)
         }
         val retainedDivs = mutableSetOf<DivBase>()
         updatedStates.forEach { it.div.collectDivs(retainedDivs) }
@@ -103,6 +106,7 @@ internal class DivPatchCoordinator(
         localComponentStorage.retain(retainedDivs)
         compositionKeyStorage.retain(retainedDivs)
         pagerStateStorage.retain(retainedDivs)
+        visibilityTransitionStorage.retain(retainedDivs)
         appliedActions.forEach { it.run() }
     }
 }

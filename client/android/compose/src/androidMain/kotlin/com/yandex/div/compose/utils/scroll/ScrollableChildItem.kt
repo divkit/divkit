@@ -60,6 +60,7 @@ internal inline fun ScrollableChildItem(
                         },
                         matchParentWidth = matchParentWidth,
                         matchParentHeight = matchParentHeight,
+                        hasLayoutWrapper = true,
                     ),
                 )
             }

@@ -50,6 +50,7 @@ internal fun Modifier.applyStateChangeTransition(
     data: DivBase,
     visibility: DivVisibility,
     capturesScene: Boolean = false,
+    alphaOverride: Float? = null,
 ): StateChangeTransitionModifier {
     val transitionContext = LocalStateChangeTransitionContext.current
     val scope = transitionContext.scope ?: return StateChangeTransitionModifier(this)
@@ -64,6 +65,7 @@ internal fun Modifier.applyStateChangeTransition(
         id,
         capturesScene,
         transitionContext.snapshotParentId,
+        alphaOverride,
     )
     if (data.transitionTriggers?.contains(DivTransitionTrigger.STATE_CHANGE) == false) {
         return StateChangeTransitionModifier(
@@ -76,7 +78,8 @@ internal fun Modifier.applyStateChangeTransition(
     val geometry = withStateChangeGeometry(scope, id)
     val isEntering = id in scope.enteringIds
     val isExiting = id in scope.exitingIds
-    val baseAlpha = if (visibility == DivVisibility.VISIBLE) data.alpha.observedFloatValue() else 0f
+    val baseAlpha = alphaOverride
+        ?: if (visibility == DivVisibility.VISIBLE) data.alpha.observedFloatValue() else 0f
     val cachedLayer = rememberCachedTransitionLayer(snapshot, ancestorOverlayCaptured, data.transitionOut)
     val transition = data.selectStateChangeTransition(isEntering, isExiting)
     if (transition == null) {
@@ -148,6 +151,7 @@ private fun rememberStateChangeSnapshot(
     id: String,
     capturesScene: Boolean,
     snapshotParentId: String?,
+    alphaOverride: Float?,
 ): StateChangeSnapshot? {
     val store = scope.transitionState.snapshots.layerStore ?: return null
     val transition = if (data.transitionTriggers?.contains(DivTransitionTrigger.STATE_CHANGE) != false) {
@@ -160,7 +164,8 @@ private fun rememberStateChangeSnapshot(
         parentId = snapshotParentId,
         layer = store.layer(id),
         transition = transition,
-        baseAlpha = if (visibility == DivVisibility.VISIBLE) data.alpha.observedFloatValue() else 0f,
+        baseAlpha = alphaOverride
+            ?: if (visibility == DivVisibility.VISIBLE) data.alpha.observedFloatValue() else 0f,
         capturesScene = capturesScene,
     )
     SideEffect { scope.transitionState.snapshots.update(snapshot) }
@@ -298,8 +303,9 @@ internal fun AnimatedAppearance.resolveTranslation(
     visualState: StateChangeVisualState,
     slideGeometry: SlideGeometry?,
     isExiting: Boolean,
+    retainFinishedValues: Boolean = false,
 ): Offset {
-    val slide = dominantSlide()
+    val slide = dominantSlide(retainFinishedValues)
     return if (slide == null) {
         Offset(visualState.translationX, visualState.translationY)
     } else {
@@ -314,6 +320,6 @@ internal fun AnimatedAppearance.resolveTranslation(
 private val AnimatedAppearance.hasTransform: Boolean
     get() = scales.isNotEmpty() || slides.isNotEmpty()
 
-private val StateChangeVisualState.hasTransform: Boolean
+internal val StateChangeVisualState.hasTransform: Boolean
     get() = scale != 1f || translationX != 0f || translationY != 0f
 

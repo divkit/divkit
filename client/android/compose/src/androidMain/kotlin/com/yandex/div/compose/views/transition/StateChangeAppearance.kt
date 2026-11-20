@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.transition
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
@@ -60,12 +61,29 @@ internal fun DivAppearanceTransition.animatedAppearance(
     exitValues: StateChangeVisualState?,
     slideGeometry: SlideGeometry?,
     label: String,
+): AnimatedAppearance = animatedAppearance(
+    transition = scope.transition,
+    transitionState = transitionState,
+    baseAlpha = baseAlpha,
+    exitValues = exitValues,
+    slideGeometry = slideGeometry,
+    label = label,
+)
+
+@Composable
+internal fun DivAppearanceTransition.animatedAppearance(
+    transition: Transition<EnterExitState>,
+    transitionState: EnterExitState,
+    baseAlpha: Float,
+    exitValues: StateChangeVisualState?,
+    slideGeometry: SlideGeometry?,
+    label: String,
 ): AnimatedAppearance {
     return when (this) {
         is DivAppearanceTransition.Fade -> AnimatedAppearance(
             alphas = listOf(
                 value.animatedAlpha(
-                    scope = scope,
+                    transition = transition,
                     transitionState = transitionState,
                     baseAlpha = exitValues?.alpha ?: baseAlpha,
                     label = label,
@@ -75,7 +93,7 @@ internal fun DivAppearanceTransition.animatedAppearance(
         is DivAppearanceTransition.Scale -> AnimatedAppearance(
             scales = listOf(
                 value.animatedScale(
-                    scope = scope,
+                    transition = transition,
                     transitionState = transitionState,
                     exitValues = exitValues,
                     label = label,
@@ -85,7 +103,7 @@ internal fun DivAppearanceTransition.animatedAppearance(
         is DivAppearanceTransition.Slide -> AnimatedAppearance(
             slides = listOf(
                 value.animatedSlide(
-                    scope = scope,
+                    transition = transition,
                     transitionState = transitionState,
                     exitValues = exitValues,
                     slideGeometry = slideGeometry,
@@ -96,7 +114,7 @@ internal fun DivAppearanceTransition.animatedAppearance(
         is DivAppearanceTransition.Set -> {
             value.items.mapIndexed { index, item ->
                 item.animatedAppearance(
-                    scope = scope,
+                    transition = transition,
                     transitionState = transitionState,
                     baseAlpha = baseAlpha,
                     exitValues = exitValues,
@@ -114,7 +132,7 @@ internal fun DivAppearanceTransition.animatedAppearance(
 
 @Composable
 private fun DivFadeTransition.animatedAlpha(
-    scope: AnimatedVisibilityScope,
+    transition: Transition<EnterExitState>,
     transitionState: EnterExitState,
     baseAlpha: Float,
     label: String,
@@ -122,7 +140,7 @@ private fun DivFadeTransition.animatedAlpha(
     val animation = observedAnimation(duration, startDelay, interpolator)
     val transitionAlpha = alpha.observedFloatValue()
     val isAnimated = transitionAlpha != baseAlpha
-    val value = scope.transition.animateFloat(
+    val value = transition.animateFloat(
         transitionSpec = { animation.valueSpec(isAnimated) },
         label = "Div state fade $label",
     ) { state ->
@@ -130,14 +148,14 @@ private fun DivFadeTransition.animatedAlpha(
     }.value
     return AnimatedFloat(
         value = value,
-        timing = scope.animatedTiming(transitionState, animation, isAnimated, label),
+        timing = transition.animatedTiming(transitionState, animation, isAnimated, label),
         orderingDurationMillis = animation.endTimeMillis,
     )
 }
 
 @Composable
 private fun DivScaleTransition.animatedScale(
-    scope: AnimatedVisibilityScope,
+    transition: Transition<EnterExitState>,
     transitionState: EnterExitState,
     exitValues: StateChangeVisualState?,
     label: String,
@@ -148,7 +166,7 @@ private fun DivScaleTransition.animatedScale(
     val transitionPivotY = pivotY.observedFloatValue()
     val baseScale = exitValues?.scale ?: 1f
     val isAnimated = transitionScale != baseScale
-    val animatedScale = scope.transition.animateFloat(
+    val animatedScale = transition.animateFloat(
         transitionSpec = { animation.valueSpec(isAnimated) },
         label = "Div state scale $label",
     ) { state ->
@@ -158,14 +176,14 @@ private fun DivScaleTransition.animatedScale(
         value = animatedScale,
         pivotX = transitionPivotX,
         pivotY = transitionPivotY,
-        timing = scope.animatedTiming(transitionState, animation, isAnimated, label),
+        timing = transition.animatedTiming(transitionState, animation, isAnimated, label),
         orderingDurationMillis = animation.endTimeMillis,
     )
 }
 
 @Composable
 private fun DivSlideTransition.animatedSlide(
-    scope: AnimatedVisibilityScope,
+    transition: Transition<EnterExitState>,
     transitionState: EnterExitState,
     exitValues: StateChangeVisualState?,
     slideGeometry: SlideGeometry?,
@@ -184,7 +202,7 @@ private fun DivSlideTransition.animatedSlide(
     )
     val isExiting = transitionState == EnterExitState.PostExit
     val isAnimated = slide.hasMovement(slideGeometry, isExiting)
-    val progress = scope.transition.animateFloat(
+    val progress = transition.animateFloat(
         transitionSpec = { animation.valueSpec(isAnimated) },
         label = "Div state slide $label",
     ) { state ->
@@ -192,7 +210,7 @@ private fun DivSlideTransition.animatedSlide(
     }.value
     return slide.copy(
         progress = progress,
-        timing = scope.animatedTiming(transitionState, animation, isAnimated, label),
+        timing = transition.animatedTiming(transitionState, animation, isAnimated, label),
     )
 }
 
@@ -222,14 +240,14 @@ private fun observedAnimation(
 }
 
 @Composable
-private fun AnimatedVisibilityScope.animatedTiming(
+private fun Transition<EnterExitState>.animatedTiming(
     transitionState: EnterExitState,
     animation: ObservedAnimation,
     isAnimated: Boolean,
     label: String,
 ): AnimatedTiming {
     val transitionPhase = if (transitionState == EnterExitState.PreEnter) 0f else 1f
-    val phase = transition.animateFloat(
+    val phase = animateFloat(
         transitionSpec = { if (isAnimated) animation.timingSpec else animation.immediateSpec },
         label = "Div state timing $label",
     ) { state ->

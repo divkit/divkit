@@ -30,10 +30,13 @@ internal data class AnimatedAppearance(
         bounds: ElementBounds,
         baseState: StateChangeVisualState,
         isExiting: Boolean,
+        retainFinishedValues: Boolean = false,
     ): StateChangeVisualState {
-        val scale = scales.dominantAnimation { it.timing }
-        val slide = slides.dominantAnimation { it.timing }
-        val pivot = scales.resolvePivot(baseState)
+        val scale = scales.dominantAnimation(retainFinishedValues) { it.timing }
+        val slide = slides.dominantAnimation(retainFinishedValues) { it.timing }
+        val retainedScaleEndTime = scale?.timing
+            ?.takeIf { retainFinishedValues && it.isFinished }?.endTimeMillis
+        val pivot = scales.resolvePivot(baseState, retainedScaleEndTime)
         val translation = slide?.resolveTranslation(sceneSize, bounds, isExiting) ?: Offset(
             baseState.translationX,
             baseState.translationY,
@@ -43,7 +46,7 @@ internal data class AnimatedAppearance(
             alpha = if (isExiting && isFinished) {
                 0f
             } else {
-                alphas.dominantAnimation { it.timing }?.value ?: baseState.alpha
+                alphas.dominantAnimation(retainFinishedValues) { it.timing }?.value ?: baseState.alpha
             },
             scale = scale?.value ?: baseState.scale,
             pivotX = pivot.x,
@@ -53,7 +56,8 @@ internal data class AnimatedAppearance(
         )
     }
 
-    fun dominantSlide(): AnimatedSlide? = slides.dominantAnimation { it.timing }
+    fun dominantSlide(retainFinishedValues: Boolean = false): AnimatedSlide? =
+        slides.dominantAnimation(retainFinishedValues) { it.timing }
 }
 
 internal data class AnimatedFloat(
@@ -157,12 +161,30 @@ private fun appearanceOrderingDuration(
         ?: SET_ORDERING_DURATION_MILLIS
 }
 
-private fun <T> List<T>.dominantAnimation(timing: (T) -> AnimatedTiming): T? {
+private fun <T> List<T>.dominantAnimation(
+    retainFinishedValues: Boolean = false,
+    timing: (T) -> AnimatedTiming,
+): T? {
     lastOrNull { timing(it).hasAnimator && timing(it).isRunning }?.let { return it }
-    return lastOrNull { timing(it).hasAnimator && !timing(it).isFinished }
+    lastOrNull { timing(it).hasAnimator && !timing(it).isFinished }?.let { return it }
+    if (!retainFinishedValues) return null
+
+    var result: T? = null
+    var lastEndTime = Long.MIN_VALUE
+    for (item in this) {
+        val itemTiming = timing(item)
+        if (itemTiming.hasAnimator && itemTiming.isFinished && itemTiming.endTimeMillis >= lastEndTime) {
+            result = item
+            lastEndTime = itemTiming.endTimeMillis
+        }
+    }
+    return result
 }
 
-private fun List<AnimatedScale>.resolvePivot(baseState: StateChangeVisualState): Offset {
+private fun List<AnimatedScale>.resolvePivot(
+    baseState: StateChangeVisualState,
+    retainedEndTimeMillis: Long?,
+): Offset {
     var pivot = Offset(baseState.pivotX, baseState.pivotY)
     var lastEventTime = Long.MIN_VALUE
     var lastEventOrder = -1
@@ -181,7 +203,7 @@ private fun List<AnimatedScale>.resolvePivot(baseState: StateChangeVisualState):
             lastEventOrder = startOrder
         }
         val endOrder = startOrder + 1
-        if (scale.timing.isFinished && isLaterEvent(
+        if (scale.timing.isFinished && scale.timing.endTimeMillis != retainedEndTimeMillis && isLaterEvent(
                 scale.timing.endTimeMillis,
                 endOrder,
                 lastEventTime,

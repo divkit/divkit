@@ -29,8 +29,12 @@ import com.yandex.div.compose.views.slider.DivSliderView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.tabs.DivTabsView
 import com.yandex.div.compose.views.text.DivTextView
+import com.yandex.div.compose.views.transition.VisibilityChangeTransition
 import com.yandex.div.compose.views.transition.WithStateChangeTransition
+import com.yandex.div.compose.views.transition.rememberVisibilityChangeTransition
+import com.yandex.div.compose.views.transition.withVisibilityTransition
 import com.yandex.div.compose.views.video.DivVideoView
+import com.yandex.div.compose.visibility.hasVisibilityTransition
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
@@ -44,7 +48,17 @@ internal inline fun DivBlockView(
         val divBase = data.value()
         WithLocalComponent(divBase) {
             WithAnimatorTarget(divBase) {
-                val visibility = divBase.visibility.observedValue()
+                val requestedVisibility = divBase.visibility.observedValue()
+                val transition = if (divBase.hasVisibilityTransition()) {
+                    rememberVisibilityChangeTransition(
+                        divBase,
+                        requestedVisibility,
+                        layoutParams.hasLayoutWrapper,
+                    )
+                } else {
+                    null
+                }
+                val visibility = transition?.visibility ?: requestedVisibility
                 if (visibility == DivVisibility.GONE) return@WithAnimatorTarget
                 WithAccessibilityMenuScope(divBase, visibility) {
                     VisibleDivBlockView(
@@ -52,6 +66,7 @@ internal inline fun DivBlockView(
                         modifier = modifier,
                         layoutParams = layoutParams,
                         visibility = visibility,
+                        visibilityTransition = transition,
                     )
                 }
             }
@@ -65,17 +80,24 @@ internal fun VisibleDivBlockView(
     modifier: Modifier,
     layoutParams: DivBlockLayoutParams,
     visibility: DivVisibility,
+    visibilityTransition: VisibilityChangeTransition? = null,
 ) {
     val divBase = data.value()
     val focusState = rememberFocusState(divBase)
-    val actions = data.observedActions()
+    // Content that is animating out is drawn, but the user can no longer interact with it.
+    val isExiting = visibilityTransition?.isExiting == true
+    val actions = if (isExiting) null else data.observedActions()
     val margins = if (layoutParams.applyMargins) divBase.margins?.observeInsets() else null
     val menuOffset = DpOffset(
         x = 0.dp,
         y = -(margins?.calculateBottomPadding() ?: 0.dp),
     )
     WithActionMenu(actions, modifier, menuOffset) { contentModifier ->
-        WithStateChangeTransition(data, visibility) { stateChangeTransition ->
+        WithStateChangeTransition(
+            data = data,
+            visibility = visibility,
+            alphaOverride = visibilityTransition?.appearance?.appearanceAlpha,
+        ) { stateChangeTransition ->
             val decoration = Modifier.apply(
                 data,
                 layoutParams = layoutParams,
@@ -83,7 +105,10 @@ internal fun VisibleDivBlockView(
                 margins = margins,
                 visibility = visibility,
                 focusState = focusState,
-                stateChangeTransition = stateChangeTransition,
+                stateChangeTransition = stateChangeTransition.withVisibilityTransition(
+                    transition = visibilityTransition,
+                    blocksPointerInput = isExiting && data.hasInteractiveContent(),
+                ),
             )
             val decorator = DivContentDecorator(data, decoration)
             if (data is Div.State) {
@@ -95,6 +120,27 @@ internal fun VisibleDivBlockView(
             }
         }
     }
+}
+
+/** Whether the element reacts to input by itself or through its children, apart from its actions. */
+private fun Div.hasInteractiveContent(): Boolean = when (this) {
+    is Div.Container,
+    is Div.Custom,
+    is Div.Gallery,
+    is Div.Grid,
+    is Div.Input,
+    is Div.Pager,
+    is Div.Select,
+    is Div.Slider,
+    is Div.State,
+    is Div.Switch,
+    is Div.Tabs,
+    is Div.Text,
+    is Div.Video -> true
+    is Div.GifImage,
+    is Div.Image,
+    is Div.Indicator,
+    is Div.Separator -> false
 }
 
 @Composable
