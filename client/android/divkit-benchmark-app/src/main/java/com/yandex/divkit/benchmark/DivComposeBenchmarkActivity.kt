@@ -13,10 +13,10 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
@@ -26,9 +26,6 @@ import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.benchmark.perf.PerfMetricReporter
 import com.yandex.divkit.regression.utils.AssetReader
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -36,6 +33,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Start activity with default data:
@@ -85,7 +85,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         measureRender("Cold") { setContent(data) }
 
         val modeString = intent.getStringExtra("warm_render_mode")
-            ?: throw RuntimeException("Extra is required: warm_render_mode")
+            ?: error("Extra is required: warm_render_mode")
         when (WarmRenderMode.valueOf(modeString)) {
             WarmRenderMode.RECOMPOSITION -> {
                 measureRender("Warm") { divContext.debugFeatures.forceRecomposition(data) }
@@ -119,7 +119,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
 
     private fun parseDivData(): DivData {
         val assetName = intent.getStringExtra(EXTRA_ASSET_NAME)
-            ?: throw RuntimeException("Extra is required: $EXTRA_ASSET_NAME")
+            ?: error("Extra is required: $EXTRA_ASSET_NAME")
 
         val json = AssetReader(this).readJson(assetName)
         val templatesJson = json.optJSONObject("templates")
@@ -132,18 +132,18 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
     private fun createDivContext(): DivContext {
         return DivContext(
             baseContext = this,
-            configuration = DivConfiguration(
+            configuration = divConfiguration {
                 histogramConfiguration = object : DivHistogramConfiguration {
                     override val isEnabled = true
                     override val componentName = ""
                     override val histogramBridge = this@DivComposeBenchmarkActivity.histogramBridge
                     override val prepareFilter = HistogramFilter.ON
-                },
+                }
                 imageLoaderConfiguration = object : ImageLoaderConfiguration {
                     override val reportErrors = false
-                },
+                }
                 reporter = FailingReporter
-            )
+            }
         )
     }
 
@@ -181,11 +181,11 @@ private enum class WarmRenderMode {
 
 private object FailingReporter : DivReporter(), ParsingErrorLogger {
     override fun reportError(message: String) {
-        throw RuntimeException(message)
+        error(message)
     }
 
     override fun reportError(e: Exception) {
-        throw RuntimeException(e.message)
+        error(e.message ?: "")
     }
 
     override fun logError(e: Exception) {

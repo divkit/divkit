@@ -1,14 +1,14 @@
 package com.yandex.div.compose.histogram
 
 import android.annotation.SuppressLint
-import android.view.ViewTreeObserver
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.histogram.HistogramFilter
 import dev.zacsweers.metro.Inject
@@ -41,37 +41,30 @@ internal class DivViewHistogramReporter(
 
     @Composable
     @SuppressLint("ComposableNaming")
-    inline fun measure(prepareDuration: Duration, content: @Composable () -> Unit) {
+    inline fun measure(prepareDuration: Duration, content: @Composable (Modifier) -> Unit) {
         if (!configuration.isEnabled) {
-            content()
+            content(Modifier)
             return
         }
 
+        // Restart phase markers on every measured composition, including ordinary recompositions.
+        val measurement = Any()
         key(counter) {
             onCompositionStarted(prepareDuration)
-            DisposableEffect(Unit) {
+            DisposableEffect(measurement) {
                 onChangesApplied()
                 onDispose {}
             }
-            content()
-            onCompositionFinished()
-        }
-
-        val view = LocalView.current
-        DisposableEffect(counter) {
-            onEffectsApplied()
-
-            var listener: ViewTreeObserver.OnDrawListener? = null
-            listener = ViewTreeObserver.OnDrawListener {
-                onDrawFinished()
-                view.post {
-                    view.viewTreeObserver.removeOnDrawListener(listener)
+            content(
+                Modifier.drawWithContent {
+                    drawContent()
+                    onDrawFinished()
                 }
-            }
-            view.viewTreeObserver.addOnDrawListener(listener)
-
-            onDispose {
-                view.viewTreeObserver.removeOnDrawListener(listener)
+            )
+            onCompositionFinished()
+            DisposableEffect(measurement) {
+                onEffectsApplied()
+                onDispose {}
             }
         }
     }
