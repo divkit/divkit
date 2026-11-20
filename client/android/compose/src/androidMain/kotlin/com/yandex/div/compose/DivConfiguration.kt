@@ -132,7 +132,7 @@ fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfigurati
 private val defaultActionHandler = object : DivExternalActionHandler {}
 
 private val disabledNetworkClient = DivNetworkClient {
-    throw UnsupportedOperationException("DivNetworkClient is not configured")
+    error("DivNetworkClient is not configured")
 }
 
 private val disabledVideoPreloader = object : DivVideoPreloader {

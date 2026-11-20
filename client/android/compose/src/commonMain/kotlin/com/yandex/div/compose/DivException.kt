@@ -1,6 +1,4 @@
 package com.yandex.div.compose
 
-/**
- * Exception thrown when an unrecoverable error occurs in DivKit pipeline.
- */
+@Deprecated("Not used inside DivKit. Will be removed.")
 class DivException internal constructor(message: String) : Exception(message)

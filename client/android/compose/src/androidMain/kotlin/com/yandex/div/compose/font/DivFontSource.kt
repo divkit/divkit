@@ -14,7 +14,9 @@ actual sealed class DivFontSource {
     /**
      * Font is provided as a [androidx.compose.ui.text.font.FontFamily] instance.
      */
-    data class FontFamily(val fontFamily: ComposeFontFamily): DivFontSource()
+    actual data class FontFamily actual constructor(
+        actual val fontFamily: ComposeFontFamily,
+    ) : DivFontSource()
 
     /**
      * Font is stored as an Android font resource. Supports variation settings.

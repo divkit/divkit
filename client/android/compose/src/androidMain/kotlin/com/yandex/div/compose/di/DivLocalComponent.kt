@@ -3,7 +3,6 @@ package com.yandex.div.compose.di
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.yandex.div.compose.DivException
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
@@ -63,7 +62,7 @@ internal val DivBase.declaresLocalScope: Boolean
         !variableTriggers.isNullOrEmpty()
 
 internal val LocalComponent = staticCompositionLocalOf<DivLocalComponent> {
-    throw DivException("DivLocalComponent not provided")
+    error("DivLocalComponent not provided")
 }
 
 @Composable

@@ -37,12 +37,16 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            api(project(":core"))
+
             implementation(project.dependencies.platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.compose.ui)
             implementation(libs.androidx.compose.ui.text)
+            implementation(libs.coil.core)
+            implementation(libs.kotlinx.coroutines.core)
         }
 
         androidMain.dependencies {
-            api(project(":core"))
             api(project(":div-data"))
 
             implementation(project(":coil-core"))
@@ -58,19 +62,22 @@ kotlin {
             implementation(libs.coil.network)
         }
 
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+
         getByName("androidHostTest").dependencies {
             implementation(project(":div-histogram"))
             implementation(project(":fonts"))
             implementation(project(":test-utils"))
 
+            implementation(libs.androidx.compose.ui.test.junit4)
+            implementation(libs.androidx.compose.ui.test.manifest)
             implementation(libs.androidx.test.ext.junit)
+            implementation(libs.json)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.mockito.kotlin)
             implementation(libs.robolectric)
-            implementation(libs.androidx.compose.ui.test.junit4)
-            implementation(libs.androidx.compose.ui.test.manifest)
-            implementation(libs.json)
-            implementation(libs.kotlin.test)
             implementation(libs.roborazzi)
             implementation(libs.roborazzi.compose)
             implementation(libs.roborazzi.junit.rule)

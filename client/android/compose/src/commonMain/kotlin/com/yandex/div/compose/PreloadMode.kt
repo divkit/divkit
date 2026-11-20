@@ -1,7 +1,7 @@
 package com.yandex.div.compose
 
 /**
- * Controls how [DivViewHost.setContent] and [DivContext.preload] load resources.
+ * Enumerates the resources preloading modes.
  *
  * - [DISABLED] — do not preload.
  * - [REQUIRED_ONLY] — walk all state variants; load only resources with `preloadRequired = true`.

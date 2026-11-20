@@ -425,8 +425,7 @@ private class CompositionCounterExtensionHandler : DivExtensionHandler {
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     ) {
-        val name = environment.extension.params?.getString("name")
-            ?: throw DivException("Extension parameter expected: name")
+        val name = requireNotNull(environment.extension.params?.getString("name"))
         SideEffect {
             _compositions[name] = (_compositions[name] ?: 0) + 1
         }

@@ -3,7 +3,6 @@ package com.yandex.div.compose.context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.yandex.div.compose.DivException
 import com.yandex.div.compose.animation.onComposition
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewComponent
@@ -134,5 +133,5 @@ internal class DivViewContext(
 }
 
 internal val LocalDivViewContext = staticCompositionLocalOf<DivViewContext> {
-    throw DivException("DivViewContext not provided")
+    error("DivViewContext not provided")
 }
