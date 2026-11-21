@@ -37,12 +37,9 @@ import com.yandex.div2.DivGrid
 @OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun DivGridView(modifier: Modifier, data: DivGrid) {
-    val collectionItems = data.observeStaticItems(data.items)
-    val items = collectionItems.observeVisible()
-    val components = collectionItems.components
+    val collection = data.observeStaticItems(data.items).observeVisible()
     val columnCount = data.columnCount.observedIntValue().coerceAtLeast(DEFAULT_COLUMN_COUNT)
-    val (columnTracks, rowTracks) = items.computeTracks(
-        components = components,
+    val (columnTracks, rowTracks) = collection.computeTracks(
         columnCount = columnCount,
         widthWrapContent = data.width.isWrapContent,
         heightWrapContent = data.height.isWrapContent,
@@ -60,9 +57,9 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
             rowTracks.resolve(constraints.maxHeight, this).forEach { row(it) }
         }
     ) {
-        items.forEach { item ->
+        collection.items.forEach { item ->
             WithDivKey(item) {
-                WithLocalComponent(components?.get(item)) {
+                WithLocalComponent(collection.components?.get(item)) {
                     val divBase = item.value()
                     val columnSpan = divBase.columnSpan.observedIntValue(DEFAULT_SPAN)
                     val rowSpan = divBase.rowSpan.observedIntValue(DEFAULT_SPAN)

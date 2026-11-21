@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.pager.PagerAlignment
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,12 +15,14 @@ class PagerScrollPositionTest {
     fun `centered initial page uses a nearby first visible index`() {
         val position = calculateInitialScroll(
             defaultItem = 3,
-            snapPosition = SnapPosition.Center,
-            pageSize = 100.dp,
-            itemSpacing = 0.dp,
-            startPadding = 0.dp,
-            endPadding = 0.dp,
-            viewportSize = 300.dp,
+            alignment = PagerAlignment(
+                snapPosition = SnapPosition.Center,
+                pageSize = 100.dp,
+                itemSpacing = 0.dp,
+                startPadding = 0.dp,
+                endPadding = 0.dp,
+                viewportSize = 300.dp,
+            ),
             itemCount = 5,
             density = density,
         )
@@ -33,12 +36,14 @@ class PagerScrollPositionTest {
 
         val position = calculateInitialScroll(
             defaultItem = virtualPage,
-            snapPosition = SnapPosition.Center,
-            pageSize = 100.dp,
-            itemSpacing = 20.dp,
-            startPadding = 0.dp,
-            endPadding = 0.dp,
-            viewportSize = 300.dp,
+            alignment = PagerAlignment(
+                snapPosition = SnapPosition.Center,
+                pageSize = 100.dp,
+                itemSpacing = 20.dp,
+                startPadding = 0.dp,
+                endPadding = 0.dp,
+                viewportSize = 300.dp,
+            ),
             itemCount = Int.MAX_VALUE,
             density = density,
         )
@@ -52,12 +57,14 @@ class PagerScrollPositionTest {
 
         val position = calculateInitialScroll(
             defaultItem = virtualPage,
-            snapPosition = SnapPosition.End,
-            pageSize = 100.dp,
-            itemSpacing = 0.dp,
-            startPadding = 0.dp,
-            endPadding = 0.dp,
-            viewportSize = 300.dp,
+            alignment = PagerAlignment(
+                snapPosition = SnapPosition.End,
+                pageSize = 100.dp,
+                itemSpacing = 0.dp,
+                startPadding = 0.dp,
+                endPadding = 0.dp,
+                viewportSize = 300.dp,
+            ),
             itemCount = Int.MAX_VALUE,
             density = density,
         )

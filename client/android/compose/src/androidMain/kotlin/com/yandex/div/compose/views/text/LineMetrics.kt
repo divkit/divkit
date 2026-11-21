@@ -49,13 +49,12 @@ private fun SpanStyle.changesFontMetrics(): Boolean {
 
 @Composable
 internal fun rememberLineMetricsText(
-    text: AnnotatedText,
-    style: TextStyle,
-    inlineContent: Map<String, InlineTextContent>,
+    input: TextMeasureInput,
     measurer: TextMeasurer,
     availableWidth: IntState,
     maxLines: Int,
 ): TextLines {
+    val (text, style, inlineContent) = input
     val density = LocalDensity.current
     val fontSizePx = with(density) { style.fontSize.toPx() }
     val lineHeightPx = when {
@@ -66,7 +65,7 @@ internal fun rememberLineMetricsText(
     val needsLayout = lineHeightPx != null || text.metrics.any { it.needsLayout } ||
         text.needsLineFrames
     val width = if (needsLayout) availableWidth.intValue else Constraints.Infinity
-    return remember(text, style, inlineContent, measurer, width, fontSizePx, lineHeightPx, maxLines) {
+    return remember(input, measurer, width, fontSizePx, lineHeightPx, maxLines) {
         val naturalStyle = style.copy(lineHeight = TextUnit.Unspecified, lineHeightStyle = null)
         val measure = { value: AnnotatedString ->
             measurer.measure(

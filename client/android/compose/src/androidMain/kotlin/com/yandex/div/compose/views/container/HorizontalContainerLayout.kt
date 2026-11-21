@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.di.DivLocalComponent
@@ -55,7 +56,8 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val separator = data.separator
     val separatorVisibility = separator.resolveSeparatorVisibility()
     val items = data.observeItems()
-    val visibleItems = items.observeVisible()
+    val visibleCollection = items.observeVisible()
+    val (visibleItems, components) = visibleCollection
 
     val supportsMainAxisWeight = !data.width.isWrapContent
     // A positive aspect ratio makes the height definite: the cross axis does not wrap the children.
@@ -72,8 +74,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val canAlignMainAxisOverflow = canAlignMainAxisOverflow(
         data.width,
         horizontalAlignment,
-        visibleItems,
-        items.components,
+        visibleCollection,
     )
     for (item in visibleItems) {
         val child = item.value()
@@ -84,7 +85,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
             hasMatchParentMinimum = hasMatchParentMinimum || childWidth.value.minSize != null
             totalWeightedChildrenReservedWidth += child.observeReservedWidth(
                 spacing = horizontalArrangement.spacing,
-                component = items.components?.get(item) ?: LocalComponent.current,
+                component = components?.get(item) ?: LocalComponent.current,
             )
         }
         if (isCrossAxisWrapContent) {
@@ -100,7 +101,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val hasConstrainedChildren = hasWeightedChildren && visibleItems.any { item ->
         val size = item.value().width as? DivSize.WrapContent
         size?.value?.constrained?.observedValue(
-            component = items.components?.get(item) ?: LocalComponent.current,
+            component = components?.get(item) ?: LocalComponent.current,
         ) == true
     }
     val useMatchParentRow = hasConstrainedChildren && hasMatchParentMinimum
@@ -139,8 +140,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
         verticalAlignment = defaultVerticalAlignment,
     ) { rowScope ->
         LinearContainer(
-            items = visibleItems,
-            components = items.components,
+            collection = visibleCollection,
             separator = separator,
             separatorVisibility = separatorVisibility,
             spacingAsItems = spacingAsItems,
@@ -201,19 +201,18 @@ private fun DivBase.observeReservedWidth(spacing: Dp, component: DivLocalCompone
 private fun canAlignMainAxisOverflow(
     containerSize: DivSize,
     alignment: DivContentAlignmentHorizontal,
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
 ): Boolean {
     if (containerSize is DivSize.WrapContent) return false
-    if (items.isEmpty()) return false
+    if (collection.items.isEmpty()) return false
     when (alignment) {
         DivContentAlignmentHorizontal.CENTER,
         DivContentAlignmentHorizontal.RIGHT,
         DivContentAlignmentHorizontal.END -> Unit
         else -> return false
     }
-    return items.all { item ->
-        item.value().width.canMeasureMainAxisUnbounded(components?.get(item))
+    return collection.items.all { item ->
+        item.value().width.canMeasureMainAxisUnbounded(collection.components?.get(item))
     }
 }
 

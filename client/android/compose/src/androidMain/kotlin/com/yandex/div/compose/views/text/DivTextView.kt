@@ -169,18 +169,17 @@ private fun RenderTextContent(
     val needsMeasuredText = customEllipsis != null || needsMeasuredEndEllipsis
     val inlineContent = rememberInlineContent(inlineImages + ellipsis?.images.orEmpty())
     val sourceText = annotatedText ?: AnnotatedText(AnnotatedString(text), emptyList())
+    val input = TextMeasureInput(sourceText, textStyle, inlineContent)
     val truncation = TextTruncation(truncate, truncatePolicy, customEllipsis, needsMeasuredText)
-    val tightWidth = data.observeTightTextWidth(sourceText, textStyle, inlineContent, lineLimits, truncation)
+    val tightWidth = data.observeTightTextWidth(input, lineLimits, truncation)
     val textModifier = Modifier.applyIfNotNull(tightWidth) { then(it.modifier) }.textHeightLimit(
         limits = if (needsMeasuredText) lineLimits.copy(minHiddenLines = 0) else lineLimits,
-        text = sourceText.text,
-        style = textStyle,
-        inlineContent = inlineContent,
+        input = input,
     )
     if (!selectable && !needsMeasuredText && annotatedText == null) {
         RenderNativeText(
             modifier.plainTextLayout(alignment).then(textModifier),
-            sourceText.text, annotatedText, inlineContent, textStyle, truncate, lineLimits,
+            input, isPlainText = true, truncate, lineLimits,
             tightWidth?.onTextLayout,
         )
     } else {
@@ -191,15 +190,15 @@ private fun RenderTextContent(
             if (selectable) {
                 SelectionContainer {
                     RenderComplexTextContent(
-                        textModifier, sourceText, annotatedText, customEllipsis, textStyle,
-                        lineLimits, truncatePolicy, inlineContent, truncate, needsMeasuredText,
+                        textModifier, input, isPlainText = annotatedText == null, customEllipsis,
+                        lineLimits, truncatePolicy, truncate, needsMeasuredText,
                         tightWidth?.onTextLayout,
                     )
                 }
             } else {
                 RenderComplexTextContent(
-                    textModifier, sourceText, annotatedText, customEllipsis, textStyle,
-                    lineLimits, truncatePolicy, inlineContent, truncate, needsMeasuredText,
+                    textModifier, input, isPlainText = annotatedText == null, customEllipsis,
+                    lineLimits, truncatePolicy, truncate, needsMeasuredText,
                     tightWidth?.onTextLayout,
                 )
             }
@@ -215,25 +214,22 @@ internal fun Modifier.plainTextLayout(alignment: Alignment): Modifier =
 @Composable
 private fun RenderComplexTextContent(
     modifier: Modifier,
-    sourceText: AnnotatedText,
-    annotatedText: AnnotatedText?,
+    input: TextMeasureInput,
+    isPlainText: Boolean,
     customEllipsis: AnnotatedText?,
-    textStyle: TextStyle,
     lineLimits: TextLineLimits,
     truncatePolicy: DivText.TruncatePolicy,
-    inlineContent: Map<String, InlineTextContent>,
     truncate: DivText.Truncate,
     needsMeasuredText: Boolean,
     onTextLayout: ((TextLayoutResult) -> Unit)?,
 ) {
     if (needsMeasuredText) {
         RenderMeasuredText(
-            modifier, sourceText, customEllipsis, textStyle, lineLimits,
-            truncatePolicy, inlineContent, onTextLayout,
+            modifier, input, customEllipsis, lineLimits, truncatePolicy, onTextLayout,
         )
     } else {
         RenderNativeText(
-            modifier, sourceText.text, annotatedText, inlineContent, textStyle, truncate, lineLimits,
+            modifier, input, isPlainText, truncate, lineLimits,
             onTextLayout,
         )
     }
@@ -245,27 +241,25 @@ private fun RenderComplexTextContent(
 @Composable
 private fun RenderNativeText(
     modifier: Modifier,
-    sourceText: AnnotatedString,
-    annotatedText: AnnotatedText?,
-    inlineContent: Map<String, InlineTextContent>,
-    textStyle: TextStyle,
+    input: TextMeasureInput,
+    isPlainText: Boolean,
     truncate: DivText.Truncate,
     lineLimits: TextLineLimits,
     onTextLayout: ((TextLayoutResult) -> Unit)?,
 ) {
     val singleLineTruncation = if (truncate.isSingleLineOnly() && lineLimits.limitsLinesByLayout) {
-        rememberSingleLineTruncation(sourceText, textStyle, inlineContent)
+        rememberSingleLineTruncation(input)
     } else {
         null
     }
     val onNativeTextLayout = rememberTextLayoutCallback(singleLineTruncation?.onTextLayout, onTextLayout)
     val maxLines = if (singleLineTruncation?.isSingleLine == true) 1 else lineLimits.layoutMaxLines
     val overflow = if (lineLimits.truncates) truncate.toTextOverflow() else TextOverflow.Clip
-    if (annotatedText == null) {
+    if (isPlainText) {
         BasicText(
             modifier = modifier,
-            text = sourceText.text,
-            style = textStyle,
+            text = input.text.text.text,
+            style = input.style,
             overflow = overflow,
             maxLines = maxLines,
             onTextLayout = onNativeTextLayout,
@@ -273,9 +267,7 @@ private fun RenderNativeText(
     } else {
         RenderAnnotatedText(
             modifier = modifier,
-            annotatedText = remember(annotatedText) { annotatedText.withFontBoxes() },
-            inlineContent = inlineContent,
-            textStyle = textStyle,
+            input = input.copy(text = remember(input.text) { input.text.withFontBoxes() }),
             overflow = overflow,
             maxLines = maxLines,
             onTextLayout = onNativeTextLayout,
@@ -312,40 +304,35 @@ private fun DivText.observeTruncatePolicy(
 @Composable
 private fun RenderMeasuredText(
     modifier: Modifier,
-    sourceText: AnnotatedText,
+    input: TextMeasureInput,
     customEllipsis: AnnotatedText?,
-    textStyle: TextStyle,
     lineLimits: TextLineLimits,
     truncatePolicy: DivText.TruncatePolicy,
-    inlineContent: Map<String, InlineTextContent>,
     onTextLayout: ((TextLayoutResult) -> Unit)?,
 ) {
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val rendering = rememberEllipsizedTextRendering(
-        sourceText = sourceText,
+        input = input,
         ellipsis = customEllipsis ?: defaultEllipsis,
-        textStyle = textStyle,
         lineLimits = lineLimits,
         truncatePolicy = truncatePolicy,
-        inlineContent = inlineContent,
         layoutResult = layoutResult,
         onLayout = onTextLayout,
     )
-    RenderBasicText(modifier, rendering, textStyle, layoutResult)
+    RenderBasicText(modifier, rendering, input.style, layoutResult)
 }
 
 @Composable
 private fun RenderAnnotatedText(
     modifier: Modifier,
-    annotatedText: AnnotatedText,
-    inlineContent: Map<String, InlineTextContent>,
-    textStyle: TextStyle,
+    input: TextMeasureInput,
     overflow: TextOverflow,
     maxLines: Int,
     onTextLayout: ((TextLayoutResult) -> Unit)?,
 ) {
+    val (annotatedText, textStyle, inlineContent) = input
     if (annotatedText.hasLineMetrics(textStyle, inlineContent)) {
-        RenderTextLines(modifier, annotatedText, inlineContent, textStyle, overflow, maxLines, onTextLayout)
+        RenderTextLines(modifier, input, overflow, maxLines, onTextLayout)
     } else if (annotatedText.decorations.isEmpty()) {
         BasicText(
             modifier = modifier,
@@ -379,13 +366,12 @@ private fun RenderAnnotatedText(
 @Composable
 private fun RenderTextLines(
     modifier: Modifier,
-    annotatedText: AnnotatedText,
-    inlineContent: Map<String, InlineTextContent>,
-    textStyle: TextStyle,
+    input: TextMeasureInput,
     overflow: TextOverflow,
     maxLines: Int,
     onTextLayout: ((TextLayoutResult) -> Unit)?,
 ) {
+    val annotatedText = input.text
     val measurer = rememberTextMeasurer()
     val availableWidth = remember { mutableIntStateOf(Constraints.Infinity) }
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -398,10 +384,10 @@ private fun RenderTextLines(
             onTextLayout?.invoke(layout)
         }
     }
-    val intrinsics = remember(measurer, annotatedText, textStyle, inlineContent) {
-        SourceTextIntrinsics(measurer, annotatedText.text, textStyle, annotatedText.text.placeholders(inlineContent))
+    val intrinsics = remember(measurer, input) {
+        SourceTextIntrinsics(measurer, input)
     }
-    val lines = rememberLineMetricsText(annotatedText, textStyle, inlineContent, measurer, availableWidth, maxLines)
+    val lines = rememberLineMetricsText(input, measurer, availableWidth, maxLines)
     val textModifier = if (lines.text.text.text == annotatedText.text.text) {
         intrinsics
     } else {
@@ -411,7 +397,7 @@ private fun RenderTextLines(
         modifier = modifier.then(textModifier).drawTextRangeDecorations(layoutResult, lines.text.decorations),
         text = lines.text.text,
         inlineContent = lines.inlineContent,
-        style = textStyle,
+        style = input.style,
         overflow = overflow,
         maxLines = maxLines,
         onTextLayout = onLineTextLayout,
@@ -446,18 +432,18 @@ private fun shouldMeasureEndEllipsis(
 
 @Composable
 private fun rememberEllipsizedTextRendering(
-    sourceText: AnnotatedText,
+    input: TextMeasureInput,
     ellipsis: AnnotatedText,
-    textStyle: TextStyle,
     lineLimits: TextLineLimits,
     truncatePolicy: DivText.TruncatePolicy,
-    inlineContent: Map<String, InlineTextContent>,
     layoutResult: MutableState<TextLayoutResult?>,
     onLayout: ((TextLayoutResult) -> Unit)?,
 ): TextRendering {
+    val (sourceText, textStyle, inlineContent) = input
     val measurer = rememberTextMeasurer()
     // The View renderer measures with ALIGN_NORMAL, so offsets are relative to the start edge.
     val measuredStyle = remember(textStyle) { textStyle.copy(textAlign = TextAlign.Start) }
+    val measuredInput = input.copy(style = measuredStyle)
     val availableWidth = remember { mutableIntStateOf(Constraints.Infinity) }
     val availableHeight = remember { mutableIntStateOf(Constraints.Infinity) }
     val onTextLayout = remember(onLayout) {
@@ -469,31 +455,27 @@ private fun rememberEllipsizedTextRendering(
         }
     }
     val maxLines = remember(
-        measurer, sourceText, measuredStyle, lineLimits, availableWidth.intValue, inlineContent,
+        measurer, measuredInput, lineLimits, availableWidth.intValue,
     ) {
         measurer.measureMaxLines(
             limits = lineLimits,
-            text = sourceText.text,
-            style = measuredStyle,
+            input = measuredInput,
             width = availableWidth.intValue,
-            inlineContent = inlineContent,
         )
     }
     val ellipsisResult = remember(
-        measurer, sourceText, ellipsis, measuredStyle, maxLines,
-        availableWidth.intValue, availableHeight.intValue, truncatePolicy, inlineContent,
+        measurer, measuredInput, ellipsis, maxLines,
+        availableWidth.intValue, availableHeight.intValue, truncatePolicy,
     ) {
         ellipsizeTextEnd(
-            measurer, sourceText, ellipsis, measuredStyle, maxLines,
-            availableWidth.intValue, truncatePolicy, inlineContent,
+            measurer, measuredInput, ellipsis, maxLines,
+            availableWidth.intValue, truncatePolicy,
             maxHeight = availableHeight.intValue,
         )
     }
     // Intrinsic-size containers must keep measuring the full text to avoid repeated truncation.
-    val intrinsics = remember(measurer, sourceText, measuredStyle, inlineContent) {
-        SourceTextIntrinsics(
-            measurer, sourceText.text, measuredStyle, sourceText.text.placeholders(inlineContent),
-        )
+    val intrinsics = remember(measurer, measuredInput) {
+        SourceTextIntrinsics(measurer, measuredInput)
     }
     val rendering = ellipsisResult.toTextRendering(
         sourceText = sourceText,
@@ -505,7 +487,9 @@ private fun rememberEllipsizedTextRendering(
     if (!rendering.text.hasLineMetrics(textStyle, inlineContent)) {
         return rendering.copy(text = remember(rendering.text) { rendering.text.withFontBoxes() })
     }
-    val lines = rememberLineMetricsText(rendering.text, textStyle, inlineContent, measurer, availableWidth, maxLines)
+    val lines = rememberLineMetricsText(
+        input.copy(text = rendering.text), measurer, availableWidth, maxLines
+    )
     return rendering.copy(text = lines.text, inlineContent = lines.inlineContent)
 }
 

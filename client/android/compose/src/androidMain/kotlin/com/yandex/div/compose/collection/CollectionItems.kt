@@ -25,6 +25,11 @@ internal class CollectionItems(
     val triggerComponents: List<DivLocalComponent>,
 )
 
+internal data class VisibleCollectionItems(
+    val items: List<Div>,
+    val components: Map<Div, DivLocalComponent>?,
+)
+
 @Composable
 internal fun DivContainer.observeItems(): CollectionItems =
     observeCollectionItems(this, items, itemBuilder)
@@ -87,8 +92,8 @@ private fun observeCollectionItems(
  * element, is read here exactly as it is read on render.
  */
 @Composable
-internal inline fun CollectionItems.observeVisible(): List<Div> {
-    return if (components == null) {
+internal fun CollectionItems.observeVisible(): VisibleCollectionItems {
+    val visibleItems = if (components == null) {
         items.filter { it.value().observeRenderedVisibility() != DivVisibility.GONE }
     } else {
         val component = LocalComponent.current
@@ -97,6 +102,7 @@ internal inline fun CollectionItems.observeVisible(): List<Div> {
             it.value().observeRenderedVisibility(component = itemComponent) != DivVisibility.GONE
         }
     }
+    return VisibleCollectionItems(visibleItems, components)
 }
 
 /**

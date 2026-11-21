@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
-import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
@@ -39,7 +39,6 @@ import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutInfo
 import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutItem
 import com.yandex.div.compose.views.gallery.scroll.GalleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
-import com.yandex.div2.Div
 import kotlinx.coroutines.flow.first
 
 /**
@@ -49,11 +48,11 @@ import kotlinx.coroutines.flow.first
  */
 @Composable
 internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     properties: GalleryProperties,
     defaultItem: Int,
 ) {
+    val items = collection.items
     if (isScrollAxisBounded(properties.isHorizontal)) {
         val scrollState = rememberScrollState()
         val itemPositions = remember { MeasuredItemPositions() }
@@ -74,8 +73,7 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
         }
         val flingBehavior = rememberGalleryLanesFlingBehavior(scrollState, itemPositions, properties)
         MeasuredLanesLayout(
-            items = items,
-            components = components,
+            collection = collection,
             properties = properties,
             modifier = Modifier
                 .galleryScrollbar(properties.scrollbar, scrollState, properties.isHorizontal, properties.contentPadding)
@@ -91,8 +89,7 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
     } else {
         BindGalleryScrollActions(properties.id, items)
         MeasuredLanesLayout(
-            items,
-            components,
+            collection,
             properties,
             Modifier,
             matchParentMaxSize = Dp.Unspecified,
@@ -201,13 +198,13 @@ private fun AdjustDefaultItemAlignment(
 @Suppress("DEPRECATION")
 @Composable
 private fun MeasuredLanesLayout(
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     properties: GalleryProperties,
     modifier: Modifier,
     matchParentMaxSize: Dp,
     itemPositions: MeasuredItemPositions?,
 ) {
+    val items = collection.items
     val isHorizontal = properties.isHorizontal
     val density = LocalDensity.current
     val itemSpacingPx = with(density) { properties.itemSpacing.roundToPx() }
@@ -220,7 +217,7 @@ private fun MeasuredLanesLayout(
             items.forEach { item ->
                 ScrollableChildItem(
                     data = item,
-                    component = components?.get(item),
+                    component = collection.components?.get(item),
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal),
                     isHorizontal = isHorizontal,
                     crossAxisAlignment = crossAlignment,

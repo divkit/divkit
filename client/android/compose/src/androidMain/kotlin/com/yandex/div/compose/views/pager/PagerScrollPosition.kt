@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.pager.PagerAlignment
 import kotlin.math.max
 
 internal data class InitialScroll(
@@ -16,28 +16,24 @@ internal data class InitialScroll(
 
 internal fun calculateInitialScroll(
     defaultItem: Int,
-    snapPosition: SnapPosition,
-    pageSize: Dp?,
-    itemSpacing: Dp,
-    startPadding: Dp,
-    endPadding: Dp,
-    viewportSize: Dp,
+    alignment: PagerAlignment,
     itemCount: Int,
     density: Density,
 ): InitialScroll {
-    if (pageSize == null || snapPosition == SnapPosition.Start) {
+    val pageSize = alignment.pageSize
+    if (pageSize == null || alignment.snapPosition == SnapPosition.Start) {
         return InitialScroll(itemIndex = defaultItem, scrollOffset = 0)
     }
 
     val (itemIndex, scrollOffset) = with(density) {
         calculateScrollPosition(
             defaultItem = defaultItem,
-            snapPosition = snapPosition,
+            snapPosition = alignment.snapPosition,
             pageSizePx = pageSize.roundToPx(),
-            spacingPx = itemSpacing.roundToPx(),
-            startPx = startPadding.roundToPx(),
-            endPx = endPadding.roundToPx(),
-            viewportPx = viewportSize.roundToPx(),
+            spacingPx = alignment.itemSpacing.roundToPx(),
+            startPx = alignment.startPadding.roundToPx(),
+            endPx = alignment.endPadding.roundToPx(),
+            viewportPx = alignment.viewportSize.roundToPx(),
             itemCount = itemCount,
         )
     }

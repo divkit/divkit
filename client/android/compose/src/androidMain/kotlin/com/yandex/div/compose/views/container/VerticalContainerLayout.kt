@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.di.DivLocalComponent
@@ -23,10 +24,10 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.isWrapContent
-import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
 import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observeVerticalInsets
+import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
@@ -49,17 +50,16 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val itemSpacing = data.itemSpacing.observedValue()
     val separatorVisibility = data.separator.resolveSeparatorVisibility()
     val items = data.observeItems()
-    val visibleItems = items.observeVisible()
+    val visibleCollection = items.observeVisible()
     // An aspect height is definite like a fixed one: match-parent children share it and
     // constrained children shrink to it. Only a positive ratio applies, as in DivContainerView.
     val hasAspect = data.observedAspectRatio() != null
 
-    val sizing = observeVerticalChildrenSizing(data, visibleItems, hasAspect)
+    val sizing = observeVerticalChildrenSizing(data, visibleCollection.items, hasAspect)
     val canAlignMainAxisOverflow = canAlignMainAxisOverflow(
         data.height,
         verticalAlignment,
-        visibleItems,
-        items.components,
+        visibleCollection,
     )
 
     val containerModifier = modifier
@@ -86,8 +86,7 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
         ) {
             VerticalContainerItems(
                 data = data,
-                visibleItems = visibleItems,
-                components = items.components,
+                collection = visibleCollection,
                 separatorVisibility = separatorVisibility,
                 itemSpacing = itemSpacing,
                 hasAspect = hasAspect,
@@ -102,8 +101,7 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val content: @Composable VerticalScope.() -> Unit = {
         VerticalContainerItems(
             data = data,
-            visibleItems = visibleItems,
-            components = items.components,
+            collection = visibleCollection,
             separatorVisibility = separatorVisibility,
             itemSpacing = itemSpacing,
             hasAspect = hasAspect,
@@ -176,8 +174,7 @@ private inline fun VerticalLayout(
 @NonRestartableComposable
 private fun VerticalScope.VerticalContainerItems(
     data: DivContainer,
-    visibleItems: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     separatorVisibility: SeparatorVisibility,
     itemSpacing: Long,
     hasAspect: Boolean,
@@ -186,8 +183,7 @@ private fun VerticalScope.VerticalContainerItems(
     defaultVerticalAlignment: Alignment.Vertical,
 ) {
     LinearContainer(
-        items = visibleItems,
-        components = components,
+        collection = collection,
         separator = data.separator,
         separatorVisibility = separatorVisibility,
         renderSeparator = { separatorData ->
@@ -272,18 +268,17 @@ private fun observeVerticalChildrenSizing(
 private fun canAlignMainAxisOverflow(
     containerSize: DivSize,
     alignment: DivContentAlignmentVertical,
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
 ): Boolean {
     if (containerSize is DivSize.WrapContent) return false
-    if (items.isEmpty()) return false
+    if (collection.items.isEmpty()) return false
     when (alignment) {
         DivContentAlignmentVertical.CENTER,
         DivContentAlignmentVertical.BOTTOM -> Unit
         else -> return false
     }
-    return items.all { item ->
-        item.value().height.canMeasureMainAxisUnbounded(components?.get(item))
+    return collection.items.all { item ->
+        item.value().height.canMeasureMainAxisUnbounded(collection.components?.get(item))
     }
 }
 

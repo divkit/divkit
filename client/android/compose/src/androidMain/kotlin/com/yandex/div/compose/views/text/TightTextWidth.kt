@@ -1,6 +1,5 @@
 package com.yandex.div.compose.views.text
 
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -12,10 +11,8 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.InspectorInfo
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -33,21 +30,18 @@ import kotlin.math.floor
 
 /**
  * Narrowing of the text to its widest line by `tighten_width`, or `null` when the property does
- * not apply. [text], [style], [inlineContent], [limits] and [truncation] describe how the text is
- * rendered.
+ * not apply. [input], [limits] and [truncation] describe how the text is rendered.
  */
 @Composable
 internal fun DivText.observeTightTextWidth(
-    text: AnnotatedText,
-    style: TextStyle,
-    inlineContent: Map<String, InlineTextContent>,
+    input: TextMeasureInput,
     limits: TextLineLimits,
     truncation: TextTruncation,
 ): TightTextWidth? {
     val maxWidth = observeTightTextMaxWidth() ?: return null
     val latestLayout = remember { LatestTextLayout() }
     val measurer = rememberTextMeasurer()
-    val intrinsics = TightTextIntrinsics(measurer, text, style, inlineContent, limits, truncation, maxWidth)
+    val intrinsics = TightTextIntrinsics(measurer, input, limits, truncation, maxWidth)
     return TightTextWidth(latestLayout, intrinsics)
 }
 
@@ -150,9 +144,7 @@ internal class LatestTextLayout {
  */
 internal data class TightTextIntrinsics(
     private val measurer: TextMeasurer,
-    private val text: AnnotatedText,
-    private val style: TextStyle,
-    private val inlineContent: Map<String, InlineTextContent>,
+    private val input: TextMeasureInput,
     private val limits: TextLineLimits,
     private val truncation: TextTruncation,
     private val maxWidth: TextMaxWidth,
@@ -168,13 +160,14 @@ internal data class TightTextIntrinsics(
     }
 
     private fun layout(width: Int): TextLayoutResult {
-        val maxLines = measurer.measureMaxLines(limits, text.text, style, width, inlineContent)
+        val (text, style, inlineContent) = input
+        val maxLines = measurer.measureMaxLines(limits, input, width)
         val ellipsis = truncation.ellipsis
         val rendered = if (ellipsis == null) {
             null
         } else {
             ellipsizeTextEnd(
-                measurer, text, ellipsis, style, maxLines, width, truncation.policy, inlineContent,
+                measurer, input, ellipsis, maxLines, width, truncation.policy,
                 maxHeight = Constraints.Infinity,
             )
         }

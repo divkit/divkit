@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
@@ -24,16 +24,15 @@ import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
 import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
-import com.yandex.div2.Div
 
 @Composable
 internal fun GalleryListView(
     modifier: Modifier,
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     properties: GalleryProperties,
     isScrollable: Boolean,
 ) {
+    val items = collection.items
     if (isScrollable) {
         // The scroll state and the default item alignment live outside BoxWithConstraints: a parent that
         // measures the gallery once more with an unbounded scroll axis switches the branch below.
@@ -45,23 +44,23 @@ internal fun GalleryListView(
         }
         BoxWithConstraints(modifier = modifier.then(IntrinsicSizeBarrier)) {
             if (isScrollAxisBounded(properties.isHorizontal)) {
-                ScrollableGalleryView(items, components, properties, listState)
+                ScrollableGalleryView(collection, properties, listState)
             } else {
-                NonScrollableGalleryView(Modifier, items, components, properties)
+                NonScrollableGalleryView(Modifier, collection, properties)
             }
         }
     } else {
-        NonScrollableGalleryView(modifier, items, components, properties)
+        NonScrollableGalleryView(modifier, collection, properties)
     }
 }
 
 @Composable
 private fun BoxWithConstraintsScope.ScrollableGalleryView(
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     properties: GalleryProperties,
     listState: LazyListState,
 ) {
+    val items = collection.items
     val isHorizontal = properties.isHorizontal
     val density = LocalDensity.current
     val scrollLayout = remember(listState, density) { listState.galleryScrollLayout(density) }
@@ -105,7 +104,7 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
         ) { index ->
             ScrollableChildItem(
                 data = items[index],
-                component = components?.get(items[index]),
+                component = collection.components?.get(items[index]),
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal),
                 isHorizontal = isHorizontal,
                 crossAxisAlignment = crossAlignment,
@@ -133,10 +132,10 @@ private fun AdjustDefaultItemAlignment(
 @Composable
 private fun NonScrollableGalleryView(
     modifier: Modifier,
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     properties: GalleryProperties,
 ) {
+    val items = collection.items
     BindGalleryScrollActions(properties.id, items)
     val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
     if (properties.isHorizontal) {
@@ -148,7 +147,7 @@ private fun NonScrollableGalleryView(
             items.forEach {
                 ScrollableChildItem(
                     data = it,
-                    component = components?.get(it),
+                    component = collection.components?.get(it),
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
                     isHorizontal = true,
                     crossAxisAlignment = crossAlignment,
@@ -164,7 +163,7 @@ private fun NonScrollableGalleryView(
             items.forEach {
                 ScrollableChildItem(
                     data = it,
-                    component = components?.get(it),
+                    component = collection.components?.get(it),
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),
                     isHorizontal = false,
                     crossAxisAlignment = crossAlignment,

@@ -12,7 +12,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
@@ -32,8 +32,7 @@ internal fun interface PagerSelectedActionsHandler {
  */
 @Composable
 internal fun rememberPagerSelectedActionsHandler(
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     listState: LazyListState,
     snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
@@ -42,13 +41,14 @@ internal fun rememberPagerSelectedActionsHandler(
     neighbourSizes: PagerNeighbourSizes?,
     enabled: Boolean,
 ): PagerSelectedActionsHandler {
+    val items = collection.items
     val parentComponent = LocalComponent.current
     val isDragged = listState.interactionSource.collectIsDraggedAsState()
     val selection = remember(listState) { PageSelection() }
     val viewportSizePx = with(LocalDensity.current) { viewportSize.roundToPx() }
 
     LaunchedEffect(
-        items, components, listState, snapPosition, itemWindow, parentComponent, enabled,
+        collection, listState, snapPosition, itemWindow, parentComponent, enabled,
         viewportSizePx, settledPage, neighbourSizes
     ) {
         if (!enabled) return@LaunchedEffect
@@ -79,7 +79,7 @@ internal fun rememberPagerSelectedActionsHandler(
                 val actions = item.value().selectedActions
                 if (actions.isNullOrEmpty()) continue
 
-                val component = components?.get(item) ?: parentComponent
+                val component = collection.components?.get(item) ?: parentComponent
                 component.handleActions(actions, DivActionSource.SELECTION)
             }
         }

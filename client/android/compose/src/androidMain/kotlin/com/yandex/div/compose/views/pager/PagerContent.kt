@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
@@ -61,9 +61,8 @@ import kotlin.math.abs
 @Composable
 internal fun PagerContent(
     pager: DivPager,
-    items: List<Div>,
+    collection: VisibleCollectionItems,
     allItems: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
     isHorizontal: Boolean,
     itemSpacing: Dp,
     paddings: PaddingValues,
@@ -78,6 +77,7 @@ internal fun PagerContent(
     crossAxisBounded: Boolean,
     stateStorage: DivPagerStateStorage
 ) {
+    val items = collection.items
     val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
     val itemKeys = remember(items) {
         items.map { compositionKeyStorage.get(it.value()) }
@@ -101,16 +101,10 @@ internal fun PagerContent(
     val rawDefaultItem = if (items.isEmpty()) 0 else itemWindow.rawIndex(initialDefaultItem)
 
     val pageSize = layoutMode.observePageSize(scrollAxisAlignment, viewportSize, itemSpacing, startPadding, endPadding)
-    val listState = rememberListState(
-        rawDefaultItem,
-        snapPosition,
-        pageSize,
-        itemSpacing,
-        startPadding,
-        endPadding,
-        viewportSize,
-        itemWindow.itemCount,
+    val alignment = PagerAlignment(
+        snapPosition, startPadding, endPadding, itemSpacing, pageSize, viewportSize
     )
+    val listState = rememberListState(rawDefaultItem, alignment, itemWindow.itemCount)
     KeepPositionWhenPagesChange(listState, allItemKeys)
     // Raw index of the page the pager settled on last: pages that cannot reach their snap positions at a list edge
     // share one, and the layout alone does not tell which of them is the current page.
@@ -141,7 +135,7 @@ internal fun PagerContent(
         itemKeys = itemKeys,
         allItemKeys = allItemKeys,
         defaultItem = initialDefaultItem,
-        alignment = PagerAlignment(snapPosition, startPadding, endPadding, itemSpacing, pageSize, viewportSize),
+        alignment = alignment,
         settledPage = settledPage,
         neighbourSizes = neighbourSizes,
     )
@@ -156,8 +150,7 @@ internal fun PagerContent(
         }
     }
     val selectedActionsHandler = rememberPagerSelectedActionsHandler(
-        items = items,
-        components = components,
+        collection = collection,
         listState = listState,
         snapPosition = snapPosition,
         itemWindow = itemWindow,
@@ -167,7 +160,7 @@ internal fun PagerContent(
         enabled = initialPositionAdjusted && alignmentReady,
     )
 
-    val childModifier = childModifier(isHorizontal, viewportSize, crossAxisSizes, pageSize, startPadding, endPadding)
+    val childModifier = childModifier(isHorizontal, crossAxisSizes, alignment)
     val pageSizePx = pageSize?.let { with(density) { it.roundToPx() } }
     val neighbourSize: (Int) -> Int? = remember(neighbourSizes, pageSizePx) {
         { index -> neighbourSizes?.get(index) ?: pageSizePx }
@@ -222,7 +215,7 @@ internal fun PagerContent(
             val item = items[itemWindow.realIndex(index)]
             ScrollableChildItem(
                 item,
-                components?.get(item),
+                collection.components?.get(item),
                 childModifier
                     .trackPagerPageSize(neighbourSizes, index, isHorizontal)
                     .pageTransformation(
@@ -415,20 +408,12 @@ private fun DivPagerLayoutMode.observePageSize(
 @Composable
 private fun rememberListState(
     defaultItem: Int,
-    snapPosition: SnapPosition,
-    pageSize: Dp?,
-    itemSpacing: Dp,
-    startPadding: Dp,
-    endPadding: Dp,
-    viewportSize: Dp,
+    alignment: PagerAlignment,
     itemsCount: Int
 ): LazyListState {
     val density = LocalDensity.current
-    val initialScroll = remember(defaultItem, snapPosition, pageSize) {
-        calculateInitialScroll(
-            defaultItem, snapPosition, pageSize, itemSpacing,
-            startPadding, endPadding, viewportSize, itemsCount, density
-        )
+    val initialScroll = remember(defaultItem, alignment.snapPosition, alignment.pageSize) {
+        calculateInitialScroll(defaultItem, alignment, itemsCount, density)
     }
 
     return rememberLazyListState(

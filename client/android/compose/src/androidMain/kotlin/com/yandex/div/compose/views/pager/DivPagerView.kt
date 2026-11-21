@@ -10,10 +10,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
@@ -23,8 +23,8 @@ import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.variables.mutableStateFromIntegerVariable
 import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
-import com.yandex.div2.Div
 import com.yandex.div.compose.views.transition.slideTransitionParent
+import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 
 @Composable
@@ -33,7 +33,8 @@ internal fun DivPagerView(
     data: DivPager,
 ) {
     val collectionItems = data.observeItems()
-    val items = collectionItems.observeVisible()
+    val collection = collectionItems.observeVisible()
+    val items = collection.items
 
     data.itemCountVariable?.let { variableName ->
         val countState = mutableStateFromIntegerVariable(variableName)
@@ -61,21 +62,21 @@ internal fun DivPagerView(
 
     PagerView(
         modifier = modifier.slideTransitionParent(),
-        items = items,
+        data = data,
+        collection = collection,
         allItems = collectionItems.items,
-        components = collectionItems.components,
-        data = data
     )
 }
 
 @Composable
 private fun PagerView(
     modifier: Modifier,
-    items: List<Div>,
-    allItems: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
     data: DivPager,
+    collection: VisibleCollectionItems,
+    allItems: List<Div>,
 ) {
+    val items = collection.items
+
     val viewportSizePx = remember { mutableIntStateOf(0) }
     val crossAxisBounded = remember { mutableStateOf(true) }
 
@@ -117,9 +118,8 @@ private fun PagerView(
 
         PagerContent(
             pager = data,
-            items = items,
+            collection = collection,
             allItems = allItems,
-            components = components,
             isHorizontal = isHorizontal,
             itemSpacing = data.itemSpacing.observedValue(),
             paddings = data.paddings.observeInsets(),

@@ -23,24 +23,22 @@ import com.yandex.div2.DivText
  */
 internal fun ellipsizeTextEnd(
     measurer: TextMeasurer,
-    text: AnnotatedText,
+    input: TextMeasureInput,
     ellipsis: AnnotatedText,
-    style: TextStyle,
     maxLines: Int,
     availableWidth: Int,
     policy: DivText.TruncatePolicy,
-    inlineContent: Map<String, InlineTextContent>,
     maxHeight: Int,
 ): TextEllipsisResult {
     return EndTextEllipsizer(
         measurer = measurer,
-        style = style,
+        style = input.style,
         maxLines = maxLines,
         availableWidth = availableWidth,
         maxHeight = maxHeight,
-        inlineContent = inlineContent,
+        inlineContent = input.inlineContent,
     ).ellipsize(
-        text = text,
+        text = input.text,
         ellipsis = ellipsis,
         policy = policy,
     )

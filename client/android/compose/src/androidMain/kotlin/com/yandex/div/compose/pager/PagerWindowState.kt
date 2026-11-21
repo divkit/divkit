@@ -2,11 +2,15 @@ package com.yandex.div.compose.pager
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import com.yandex.div.render.common.pager.PagerItemWindow
 
-/** Inputs that define where pages are aligned in the viewport. */
+/**
+ * Inputs that define where pages are aligned in the viewport.
+ */
+@Stable
 internal data class PagerAlignment(
     val snapPosition: SnapPosition,
     val startPadding: Dp,

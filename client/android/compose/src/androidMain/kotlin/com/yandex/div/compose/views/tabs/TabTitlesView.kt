@@ -62,8 +62,9 @@ internal fun TabTitlesView(
     onTabSelected: (Int) -> Unit,
 ) {
     val itemSpacing = style.itemSpacing.observedIntValue().dp
+    val appearance = TabTitleAppearance(style, titleDelimiter, itemSpacing)
     val rowHeight = style.observeRowHeight()
-    val intrinsicWidth = observeIntrinsicWidth(items, style, titleDelimiter, itemSpacing)
+    val intrinsicWidth = observeIntrinsicWidth(items, appearance)
 
     val modifier = Modifier
         .padding(titlePaddings)
@@ -74,10 +75,8 @@ internal fun TabTitlesView(
             ScrollableTitleRow(
                 items = items,
                 state = state,
-                style = style,
+                appearance = appearance,
                 animationType = animationType,
-                titleDelimiter = titleDelimiter,
-                itemSpacing = itemSpacing,
                 modifier = Modifier,
                 onTabSelected = onTabSelected,
             )
@@ -85,10 +84,8 @@ internal fun TabTitlesView(
             FixedTitleRow(
                 items = items,
                 state = state,
-                style = style,
+                appearance = appearance,
                 animationType = animationType,
-                titleDelimiter = titleDelimiter,
-                itemSpacing = itemSpacing,
                 modifier = Modifier,
                 onTabSelected = onTabSelected,
             )
@@ -99,10 +96,9 @@ internal fun TabTitlesView(
 @Composable
 private fun observeIntrinsicWidth(
     items: List<DivTabs.Item>,
-    style: DivTabs.TabTitleStyle,
-    titleDelimiter: DivTabs.TabTitleDelimiter?,
-    itemSpacing: Dp,
+    appearance: TabTitleAppearance,
 ): Dp {
+    val (style, titleDelimiter, itemSpacing) = appearance
     val density = LocalDensity.current
     val textMeasurer = rememberTextMeasurer()
     val textStyle = style.observeTextStyle(isSelected = false)
@@ -126,13 +122,12 @@ private fun observeIntrinsicWidth(
 private fun FixedTitleRow(
     items: List<DivTabs.Item>,
     state: DivTabsState,
-    style: DivTabs.TabTitleStyle,
+    appearance: TabTitleAppearance,
     animationType: DivTabs.TabTitleStyle.AnimationType,
-    titleDelimiter: DivTabs.TabTitleDelimiter?,
-    itemSpacing: Dp,
     modifier: Modifier,
     onTabSelected: (Int) -> Unit,
 ) {
+    val (style, titleDelimiter, itemSpacing) = appearance
     val selectedIndex = state.selectedIndex
     val titleStartOffsetPx = titleDelimiter?.observeTitleStartOffsetPx(itemSpacing) ?: 0
     val isRtlLayout = isRtlLayout
@@ -152,9 +147,7 @@ private fun FixedTitleRow(
                 index = index,
                 item = item,
                 isSelected = index == selectedIndex,
-                style = style,
-                titleDelimiter = titleDelimiter,
-                itemSpacing = itemSpacing,
+                appearance = appearance,
                 onClick = { onTabSelected(index) },
             )
         }
@@ -165,13 +158,12 @@ private fun FixedTitleRow(
 private fun ScrollableTitleRow(
     items: List<DivTabs.Item>,
     state: DivTabsState,
-    style: DivTabs.TabTitleStyle,
+    appearance: TabTitleAppearance,
     animationType: DivTabs.TabTitleStyle.AnimationType,
-    titleDelimiter: DivTabs.TabTitleDelimiter?,
-    itemSpacing: Dp,
     modifier: Modifier,
     onTabSelected: (Int) -> Unit,
 ) {
+    val (style, titleDelimiter, itemSpacing) = appearance
     val selectedIndex = state.selectedIndex
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
     var activeTitleTaps by remember { mutableIntStateOf(0) }
@@ -192,9 +184,7 @@ private fun ScrollableTitleRow(
                 index = index,
                 item = items[index],
                 isSelected = index == selectedIndex,
-                style = style,
-                titleDelimiter = titleDelimiter,
-                itemSpacing = itemSpacing,
+                appearance = appearance,
                 onClick = {
                     if (index == selectedIndex) {
                         activeTitleTaps++

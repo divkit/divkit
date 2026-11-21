@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.actions.DivActionSource
@@ -30,11 +29,10 @@ internal fun TabTitleItem(
     index: Int,
     item: DivTabs.Item,
     isSelected: Boolean,
-    style: DivTabs.TabTitleStyle,
-    titleDelimiter: DivTabs.TabTitleDelimiter?,
-    itemSpacing: Dp,
+    appearance: TabTitleAppearance,
     onClick: () -> Unit,
 ) {
+    val (style, titleDelimiter, itemSpacing) = appearance
     val titleClickAction = item.titleClickAction
     val localComponent = LocalComponent.current
     val onTitleClick: () -> Unit = {

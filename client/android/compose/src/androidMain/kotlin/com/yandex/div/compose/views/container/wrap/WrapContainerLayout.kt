@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.observeItems
@@ -50,7 +51,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = true)
     val items = data.observeItems()
-    val visibleItems = items.observeVisible()
+    val (visibleItems, components) = items.observeVisible()
     val separatorGeometry = rememberSeparatorGeometry(
         enabled = wrapLayoutState.hasSeparatorsToDraw && visibleItems.isNotEmpty(),
         childCount = visibleItems.size,
@@ -88,7 +89,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
         val alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE
         visibleItems.forEachIndexed { index, item ->
             WithDivKey(item) {
-                WithLocalComponent(items.components?.get(item)) {
+                WithLocalComponent(components?.get(item)) {
                     DivBlockView(
                         data = item,
                         modifier = observeVerticalChildModifier(
@@ -115,7 +116,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = false)
     val items = data.observeItems()
-    val visibleItems = items.observeVisible()
+    val (visibleItems, components) = items.observeVisible()
     val separatorGeometry = rememberSeparatorGeometry(
         enabled = wrapLayoutState.hasSeparatorsToDraw && visibleItems.isNotEmpty(),
         childCount = visibleItems.size,
@@ -151,7 +152,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
         }
         visibleItems.forEachIndexed { index, item ->
             WithDivKey(item) {
-                WithLocalComponent(items.components?.get(item)) {
+                WithLocalComponent(components?.get(item)) {
                     val childAlignment = item.observeHorizontalChildAlignment()
                     DivBlockView(
                         data = item,
@@ -288,27 +289,11 @@ private fun Modifier.drawHorizontalWrapSeparators(
 ): Modifier {
     geometry ?: return this
     return drawWithCache {
-        val itemSeparatorDrawInfo = state.itemSeparatorDrawInfo?.toPx(this)
-        val lineSeparatorDrawInfo = state.lineSeparatorDrawInfo?.toPx(this)
-        val mainAxisStartPadding = state.mainAxisStartPadding.toPx()
-        val mainAxisEndPadding = state.mainAxisEndPadding.toPx()
-        val crossAxisStartPadding = state.crossAxisStartPadding.toPx()
-        val crossAxisEndPadding = state.crossAxisEndPadding.toPx()
+        val params = state.toDrawParams(this)
 
         onDrawWithContent {
             drawContent()
-            drawHorizontalWrapSeparators(
-                geometry,
-                itemSeparatorDrawInfo,
-                state.itemSeparatorVisibility,
-                lineSeparatorDrawInfo,
-                state.lineSeparatorVisibility,
-                mainAxisStartPadding,
-                mainAxisEndPadding,
-                crossAxisStartPadding,
-                crossAxisEndPadding,
-                isRtl = isRtl,
-            )
+            drawHorizontalWrapSeparators(geometry, params, isRtl)
         }
     }
 }
@@ -320,27 +305,26 @@ private fun Modifier.drawVerticalWrapSeparators(
 ): Modifier {
     geometry ?: return this
     return drawWithCache {
-        val itemSeparatorDrawInfo = state.itemSeparatorDrawInfo?.toPx(this)
-        val lineSeparatorDrawInfo = state.lineSeparatorDrawInfo?.toPx(this)
-        val mainAxisStartPadding = state.mainAxisStartPadding.toPx()
-        val mainAxisEndPadding = state.mainAxisEndPadding.toPx()
-        val crossAxisStartPadding = state.crossAxisStartPadding.toPx()
-        val crossAxisEndPadding = state.crossAxisEndPadding.toPx()
+        val params = state.toDrawParams(this)
 
         onDrawWithContent {
             drawContent()
-            drawVerticalWrapSeparators(
-                geometry,
-                itemSeparatorDrawInfo,
-                state.itemSeparatorVisibility,
-                lineSeparatorDrawInfo,
-                state.lineSeparatorVisibility,
-                mainAxisStartPadding,
-                mainAxisEndPadding,
-                crossAxisStartPadding,
-                crossAxisEndPadding,
-                isRtl = isRtl,
-            )
+            drawVerticalWrapSeparators(geometry, params, isRtl)
         }
+    }
+}
+
+private fun WrapLayoutState.toDrawParams(density: Density): WrapSeparatorDrawParams {
+    return with(density) {
+        WrapSeparatorDrawParams(
+            itemSeparatorInfo = itemSeparatorDrawInfo?.toPx(this),
+            itemSeparatorVisibility = itemSeparatorVisibility,
+            lineSeparatorInfo = lineSeparatorDrawInfo?.toPx(this),
+            lineSeparatorVisibility = lineSeparatorVisibility,
+            mainAxisStartPadding = mainAxisStartPadding.toPx(),
+            mainAxisEndPadding = mainAxisEndPadding.toPx(),
+            crossAxisStartPadding = crossAxisStartPadding.toPx(),
+            crossAxisEndPadding = crossAxisEndPadding.toPx(),
+        )
     }
 }

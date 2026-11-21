@@ -1,100 +1,25 @@
 package com.yandex.div.compose.views.container.wrap
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ClipOp
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div.compose.views.container.observeSeparatorStroke
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivShape
-import kotlin.math.ceil
 import kotlin.math.min
-
-@Immutable
-internal data class SeparatorDrawInfo(
-    val color: Color,
-    val shapeWidthDp: Dp,
-    val shapeHeightDp: Dp,
-    val cornerRadiusDp: Dp,
-    val marginStartDp: Dp,
-    val marginEndDp: Dp,
-    val marginTopDp: Dp,
-    val marginBottomDp: Dp,
-    val isCircle: Boolean,
-    val stroke: BorderStroke?,
-) {
-    val totalWidthDp: Dp get() = shapeWidthDp + marginStartDp + marginEndDp
-    val totalHeightDp: Dp get() = shapeHeightDp + marginTopDp + marginBottomDp
-}
-
-internal fun SeparatorDrawInfo.mainAxisTotalDp(isHorizontal: Boolean): Dp =
-    if (isHorizontal) totalWidthDp else totalHeightDp
-
-internal fun SeparatorDrawInfo.crossAxisTotalDp(isHorizontal: Boolean): Dp =
-    if (isHorizontal) totalHeightDp else totalWidthDp
-
-internal data class SeparatorDrawInfoPx(
-    val color: Color,
-    val shapeWidth: Float,
-    val shapeHeight: Float,
-    val cornerRadius: Float,
-    val marginStart: Float,
-    val marginEnd: Float,
-    val marginTop: Float,
-    val marginBottom: Float,
-    val isCircle: Boolean,
-    val strokeBrush: Brush?,
-    val strokeStyle: Stroke?,
-) {
-    val totalWidth: Float
-        get() = shapeWidth + marginStart + marginEnd
-    val totalHeight: Float
-        get() = shapeHeight + marginTop + marginBottom
-}
-
-internal fun SeparatorDrawInfo.toPx(density: Density): SeparatorDrawInfoPx = with(density) {
-    SeparatorDrawInfoPx(
-        color = color,
-        shapeWidth = shapeWidthDp.toPx(),
-        shapeHeight = shapeHeightDp.toPx(),
-        cornerRadius = cornerRadiusDp.toPx(),
-        marginStart = marginStartDp.toPx(),
-        marginEnd = marginEndDp.toPx(),
-        marginTop = marginTopDp.toPx(),
-        marginBottom = marginBottomDp.toPx(),
-        isCircle = isCircle,
-        strokeBrush = stroke?.brush,
-        strokeStyle = stroke?.let {
-            val width = if (isCircle) {
-                it.width.toPx()
-            } else {
-                ceil(it.width.toPx()).coerceAtLeast(1f)
-                    .coerceAtMost(ceil(min(shapeWidthDp.toPx(), shapeHeightDp.toPx()) / 2))
-            }
-            Stroke(width)
-        },
-    )
-}
 
 @Composable
 internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
@@ -157,16 +82,13 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
 
 internal fun DrawScope.drawHorizontalWrapSeparators(
     geometry: WrapSeparatorGeometry,
-    sepInfo: SeparatorDrawInfoPx?,
-    sepVisibility: SeparatorVisibility,
-    lineSepInfo: SeparatorDrawInfoPx?,
-    lineSepVisibility: SeparatorVisibility,
-    edgeSepPadStartPx: Float,
-    edgeSepPadEndPx: Float,
-    edgeLineSepPadTopPx: Float,
-    edgeLineSepPadBottomPx: Float,
+    params: WrapSeparatorDrawParams,
     isRtl: Boolean,
 ) {
+    val sepInfo = params.itemSeparatorInfo
+    val sepVisibility = params.itemSeparatorVisibility
+    val lineSepInfo = params.lineSeparatorInfo
+    val lineSepVisibility = params.lineSeparatorVisibility
     geometry.prepare(size.width, isRtl)
     if (geometry.lineCount == 0) return
 
@@ -175,9 +97,9 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
             val lineTop = geometry.lineAt(0).crossAxisMin
             drawLineSeparatorH(
                 lineSepInfo,
-                separatorBottom = lineTop - edgeLineSepPadTopPx + lineSepInfo.totalHeight,
-                contentLeft = -edgeSepPadStartPx,
-                contentRight = size.width + edgeSepPadEndPx,
+                separatorBottom = lineTop - params.crossAxisStartPadding + lineSepInfo.totalHeight,
+                contentLeft = -params.mainAxisStartPadding,
+                contentRight = size.width + params.mainAxisEndPadding,
             )
         }
 
@@ -192,8 +114,8 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
                 drawLineSeparatorH(
                     lineSepInfo,
                     separatorBottom = gapCenter + lineSepInfo.totalHeight / 2,
-                    contentLeft = -edgeSepPadStartPx,
-                    contentRight = size.width + edgeSepPadEndPx,
+                    contentLeft = -params.mainAxisStartPadding,
+                    contentRight = size.width + params.mainAxisEndPadding,
                 )
             }
 
@@ -212,7 +134,7 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
                             drawItemSeparatorH(
                                 sepInfo,
                                 separatorRight = rectLeft -
-                                    (edgeSepPadStartPx - sepInfo.totalWidth) / 2,
+                                    (params.mainAxisStartPadding - sepInfo.totalWidth) / 2,
                                 lineTop = lineTop,
                                 lineBottom = lineBottom,
                             )
@@ -239,7 +161,7 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
                 drawItemSeparatorH(
                     sepInfo,
                     separatorRight = lastRight + sepInfo.totalWidth +
-                        (edgeSepPadEndPx - sepInfo.totalWidth) / 2,
+                        (params.mainAxisEndPadding - sepInfo.totalWidth) / 2,
                     lineTop = lineTop,
                     lineBottom = lineBottom,
                 )
@@ -251,10 +173,10 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
             val lineBottom = geometry.lineAt(geometry.lineCount - 1).crossAxisMax
             drawLineSeparatorH(
                 lineSepInfo,
-                separatorBottom = lineBottom + edgeLineSepPadBottomPx -
-                    (edgeLineSepPadBottomPx - lineSepInfo.totalHeight) / 2,
-                contentLeft = -edgeSepPadStartPx,
-                contentRight = size.width + edgeSepPadEndPx,
+                separatorBottom = lineBottom + params.crossAxisEndPadding -
+                    (params.crossAxisEndPadding - lineSepInfo.totalHeight) / 2,
+                contentLeft = -params.mainAxisStartPadding,
+                contentRight = size.width + params.mainAxisEndPadding,
             )
         }
     }
@@ -262,16 +184,13 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
 
 internal fun DrawScope.drawVerticalWrapSeparators(
     geometry: WrapSeparatorGeometry,
-    sepInfo: SeparatorDrawInfoPx?,
-    sepVisibility: SeparatorVisibility,
-    lineSepInfo: SeparatorDrawInfoPx?,
-    lineSepVisibility: SeparatorVisibility,
-    edgeSepPadStartPx: Float,
-    edgeSepPadEndPx: Float,
-    edgeLineSepPadStartPx: Float,
-    edgeLineSepPadEndPx: Float,
+    params: WrapSeparatorDrawParams,
     isRtl: Boolean,
 ) {
+    val sepInfo = params.itemSeparatorInfo
+    val sepVisibility = params.itemSeparatorVisibility
+    val lineSepInfo = params.lineSeparatorInfo
+    val lineSepVisibility = params.lineSeparatorVisibility
     geometry.prepare(size.width, isRtl)
     if (geometry.lineCount == 0) return
 
@@ -280,9 +199,9 @@ internal fun DrawScope.drawVerticalWrapSeparators(
             val lineLeft = geometry.lineAt(0).crossAxisMin
             drawLineSeparatorV(
                 lineSepInfo,
-                separatorRight = lineLeft - edgeLineSepPadStartPx + lineSepInfo.totalWidth,
-                contentTop = -edgeSepPadStartPx,
-                contentBottom = size.height + edgeSepPadEndPx,
+                separatorRight = lineLeft - params.crossAxisStartPadding + lineSepInfo.totalWidth,
+                contentTop = -params.mainAxisStartPadding,
+                contentBottom = size.height + params.mainAxisEndPadding,
             )
         }
 
@@ -297,8 +216,8 @@ internal fun DrawScope.drawVerticalWrapSeparators(
                 drawLineSeparatorV(
                     lineSepInfo,
                     separatorRight = gapCenter + lineSepInfo.totalWidth / 2,
-                    contentTop = -edgeSepPadStartPx,
-                    contentBottom = size.height + edgeSepPadEndPx,
+                    contentTop = -params.mainAxisStartPadding,
+                    contentBottom = size.height + params.mainAxisEndPadding,
                 )
             }
 
@@ -315,7 +234,7 @@ internal fun DrawScope.drawVerticalWrapSeparators(
                             drawItemSeparatorV(
                                 sepInfo,
                                 separatorBottom = rect.top -
-                                    (edgeSepPadStartPx - sepInfo.totalHeight) / 2,
+                                    (params.mainAxisStartPadding - sepInfo.totalHeight) / 2,
                                 lineLeft = lineLeft,
                                 lineRight = lineRight,
                             )
@@ -340,7 +259,7 @@ internal fun DrawScope.drawVerticalWrapSeparators(
                 drawItemSeparatorV(
                     sepInfo,
                     separatorBottom = lastRect.bottom + sepInfo.totalHeight +
-                        (edgeSepPadEndPx - sepInfo.totalHeight) / 2,
+                        (params.mainAxisEndPadding - sepInfo.totalHeight) / 2,
                     lineLeft = lineLeft,
                     lineRight = lineRight,
                 )
@@ -352,10 +271,10 @@ internal fun DrawScope.drawVerticalWrapSeparators(
             val lineRight = geometry.lineAt(geometry.lineCount - 1).crossAxisMax
             drawLineSeparatorV(
                 lineSepInfo,
-                separatorRight = lineRight + edgeLineSepPadEndPx -
-                    (edgeLineSepPadEndPx - lineSepInfo.totalWidth) / 2,
-                contentTop = -edgeSepPadStartPx,
-                contentBottom = size.height + edgeSepPadEndPx,
+                separatorRight = lineRight + params.crossAxisEndPadding -
+                    (params.crossAxisEndPadding - lineSepInfo.totalWidth) / 2,
+                contentTop = -params.mainAxisStartPadding,
+                contentBottom = size.height + params.mainAxisEndPadding,
             )
         }
     }

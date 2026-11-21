@@ -1,6 +1,5 @@
 package com.yandex.div.compose.views.text
 
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -94,17 +93,16 @@ private fun Expression<Long>?.observedSaturatedIntValue(): Int {
 
 internal fun TextMeasurer.measureMaxLines(
     limits: TextLineLimits,
-    text: AnnotatedString,
-    style: TextStyle,
+    input: TextMeasureInput,
     width: Int,
-    inlineContent: Map<String, InlineTextContent>,
 ): Int {
+    val (text, style, inlineContent) = input
     if (limits.minHiddenLines == 0) return limits.layoutMaxLines
     val layout = measure(
-        text = text,
+        text = text.text,
         style = style,
         maxLines = limits.layoutMaxLines,
-        placeholders = text.placeholders(inlineContent),
+        placeholders = text.text.placeholders(inlineContent),
         constraints = Constraints(maxWidth = width),
     )
     return if (layout.didOverflowHeight) requireNotNull(limits.maxLines) else limits.layoutMaxLines
@@ -116,15 +114,16 @@ internal fun TextMeasurer.measureMaxLines(
  * last line that fits the container, and is clipped instead. With `min_hidden_lines` the text
  * longer than `max_lines + min_hidden_lines` lines is limited to the height of `max_lines` lines.
  *
- * [text] and [inlineContent] are the source text and its inline content laid out with [style].
+ * [input] describes the source text, its style and inline content.
  */
 @Composable
 internal fun Modifier.textHeightLimit(
     limits: TextLineLimits,
-    text: AnnotatedString,
-    style: TextStyle,
-    inlineContent: Map<String, InlineTextContent>,
+    input: TextMeasureInput,
 ): Modifier {
+    val text = input.text.text
+    val style = input.style
+    val inlineContent = input.inlineContent
     val maxLines = limits.maxLines
     if (maxLines == null || limits.autoEllipsize && limits.minHiddenLines == 0) {
         return this
@@ -160,10 +159,11 @@ internal fun Modifier.textHeightLimit(
  */
 @Composable
 internal fun rememberSingleLineTruncation(
-    text: AnnotatedString,
-    style: TextStyle,
-    inlineContent: Map<String, InlineTextContent>,
+    input: TextMeasureInput,
 ): SingleLineTruncation {
+    val text = input.text.text
+    val style = input.style
+    val inlineContent = input.inlineContent
     val measurer = rememberTextMeasurer()
     val placeholders = remember(text, inlineContent) { text.placeholders(inlineContent) }
     val currentText = rememberUpdatedState(text)

@@ -8,18 +8,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.pager.PagerAlignment
 
 internal fun childModifier(
     isHorizontal: Boolean,
-    viewportSize: Dp,
     crossAxisSizes: PagerCrossAxisSizes?,
-    pageSize: Dp?,
-    startPadding: Dp,
-    endPadding: Dp,
+    alignment: PagerAlignment,
 ): Modifier {
-    val scrollAxisModifier = scrollAxisSizeModifier(pageSize, isHorizontal, viewportSize, startPadding, endPadding)
+    val scrollAxisModifier = scrollAxisSizeModifier(isHorizontal, alignment)
     return crossAxisSizeModifier(isHorizontal, crossAxisSizes).then(scrollAxisModifier)
 }
 
@@ -39,10 +36,12 @@ private fun crossAxisSizeModifier(isHorizontal: Boolean, crossAxisSizes: PagerCr
     }
 }
 
-private fun scrollAxisSizeModifier(pageSize: Dp?, isHorizontal: Boolean, viewportSize: Dp, startPadding: Dp, endPadding: Dp): Modifier {
+private fun scrollAxisSizeModifier(isHorizontal: Boolean, alignment: PagerAlignment): Modifier {
+    val pageSize = alignment.pageSize
     if (pageSize != null) {
         return if (isHorizontal) Modifier.width(pageSize) else Modifier.height(pageSize)
     }
-    val maxSize = (viewportSize - startPadding - endPadding).coerceAtLeast(0.dp)
+    val maxSize = (alignment.viewportSize - alignment.startPadding - alignment.endPadding)
+        .coerceAtLeast(0.dp)
     return if (isHorizontal) Modifier.widthIn(max = maxSize) else Modifier.heightIn(max = maxSize)
 }

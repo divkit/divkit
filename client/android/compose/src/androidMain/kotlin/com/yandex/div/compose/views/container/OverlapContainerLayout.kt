@@ -65,7 +65,7 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
             .padding(data.paddings)
             .alignContainerOverflow(horizontalAlignment, verticalAlignment),
         content = {
-            items.observeVisible().forEach { item ->
+            items.observeVisible().items.forEach { item ->
                 WithDivKey(item) {
                     // The scope of the item, so its layout data is read where DivBlockView renders it.
                     WithLocalComponent(items.components?.get(item)) {

@@ -20,16 +20,14 @@ internal fun DivGalleryView(
     val modifier = modifier.slideTransitionParent().applyIf(data.restrictParentScroll.observedValue()) {
         restrictParentScroll(isHorizontal = properties.isHorizontal)
     }
-    val collectionItems = data.observeItems()
-    val items = collectionItems.observeVisible()
+    val items = data.observeItems().observeVisible()
 
     if (properties.columnCount > 1) {
-        GalleryGridView(modifier, items, collectionItems.components, properties)
+        GalleryGridView(modifier, items, properties)
     } else {
         GalleryListView(
             modifier,
             items,
-            collectionItems.components,
             properties,
             isScrollable = data.observeIsScrollable(properties.isHorizontal),
         )

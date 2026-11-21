@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.aspect
@@ -22,21 +22,18 @@ import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.render.common.layout.GridItemMeasurement
 import com.yandex.div.render.common.layout.resolveGridTrackSizes
 import com.yandex.div.render.common.layout.resolveWeightedSizes
-import com.yandex.div2.Div
 import com.yandex.div2.DivSize
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalGridApi::class)
 @Composable
-internal fun List<Div>.computeTracks(
-    components: Map<Div, DivLocalComponent>?,
+internal fun VisibleCollectionItems.computeTracks(
     columnCount: Int,
     widthWrapContent: Boolean,
     heightWrapContent: Boolean,
 ): Pair<AxisTracks, AxisTracks> {
     val freeAtRow = IntArray(columnCount)
     val parentComponent = LocalComponent.current
-    val cells = map { item ->
+    val cells = items.map { item ->
         item.value().toCell(components?.get(item) ?: parentComponent, freeAtRow, columnCount)
     }
     val rowCount = freeAtRow.maxOrNull() ?: 0
@@ -68,22 +65,17 @@ private fun List<Cell>.axisTracks(
         isColumn = isColumn,
         includeMatchParentMargins = supportsConstrainedResolution,
     )
+    val measurement = GridAxisMeasurement(this, isColumn, weights, itemBaseSizes)
     val fallbackBaseSizes = FloatArray(lineCount) { line ->
-        lineBaseSize(
+        measurement.lineBaseSize(
             line = line,
-            isColumn = isColumn,
-            weights = weights,
-            itemBaseSizes = itemBaseSizes,
             includeMatchParentMargins = false,
         )
     }
     val resolvedBaseSizes = if (supportsConstrainedResolution) {
         FloatArray(lineCount) { line ->
-            lineBaseSize(
+            measurement.lineBaseSize(
                 line = line,
-                isColumn = isColumn,
-                weights = weights,
-                itemBaseSizes = itemBaseSizes,
                 includeMatchParentMargins = true,
             )
         }
@@ -248,81 +240,78 @@ private fun List<Cell>.observeItemBaseSizes(
 private fun Cell.observedWeight(size: DivSize.MatchParent): Float =
     size.value.weight?.observedValue(component = component)?.toFloat() ?: 0f
 
-private fun List<Cell>.lineBaseSize(
-    line: Int,
-    isColumn: Boolean,
-    weights: FloatArray,
-    itemBaseSizes: FloatArray,
-    includeMatchParentMargins: Boolean,
-    includeMultiSpan: Boolean = true,
-): Float {
-    var max = 0f
-    forEachIndexed { index, cell ->
-        val span = if (isColumn) cell.columnSpan else cell.rowSpan
-        if (!includeMultiSpan && span > 1) return@forEachIndexed
-        val start = if (isColumn) cell.columnIndex else cell.rowIndex
-        if (line !in start until start + span) return@forEachIndexed
-        val size = if (isColumn) cell.base.width else cell.base.height
-        val itemSize = when (size) {
-            is DivSize.Fixed -> itemBaseSizes[index]
-            is DivSize.MatchParent -> {
-                if (!includeMatchParentMargins) return@forEachIndexed
-                itemBaseSizes[index]
+private class GridAxisMeasurement(
+    private val cells: List<Cell>,
+    private val isColumn: Boolean,
+    private val weights: FloatArray,
+    private val itemBaseSizes: FloatArray,
+) {
+    fun lineBaseSize(
+        line: Int,
+        includeMatchParentMargins: Boolean,
+        includeMultiSpan: Boolean = true,
+    ): Float {
+        var max = 0f
+        cells.forEachIndexed { index, cell ->
+            val span = if (isColumn) cell.columnSpan else cell.rowSpan
+            val start = if (isColumn) cell.columnIndex else cell.rowIndex
+            if (line !in start until start + span || !includeMultiSpan && span > 1) {
+                return@forEachIndexed
             }
-            is DivSize.WrapContent -> return@forEachIndexed
-        }
-        max = maxOf(
-            max,
-            lineShareOfBase(
-                line = line,
-                start = start,
-                span = span,
-                isColumn = isColumn,
-                itemSize = itemSize,
-                weights = weights,
-                itemBaseSizes = itemBaseSizes,
-                includeMatchParentMargins = includeMatchParentMargins,
+            if (!cell.contributesBaseSize(includeMatchParentMargins)) return@forEachIndexed
+            max = maxOf(
+                max,
+                lineShareOfBase(
+                    line = line,
+                    start = start,
+                    span = span,
+                    itemSize = itemBaseSizes[index],
+                    includeMatchParentMargins = includeMatchParentMargins,
+                )
             )
-        )
+        }
+        return max
     }
-    return max
-}
 
-private fun List<Cell>.lineShareOfBase(
-    line: Int,
-    start: Int,
-    span: Int,
-    isColumn: Boolean,
-    itemSize: Float,
-    weights: FloatArray,
-    itemBaseSizes: FloatArray,
-    includeMatchParentMargins: Boolean,
-): Float {
-    if (span == 1) return itemSize
-    val range = start until start + span
-    val totalFlexWeight = range.sumOf { weights[it].toDouble() }.toFloat()
-    if (totalFlexWeight > 0f) {
-        val weight = weights[line]
-        if (weight <= 0f) return 0f
-        val nonFlexBaseSize = range.sumOf {
-            if (weights[it] > 0f) 0.0
-            else lineBaseSize(
-                line = it,
-                isColumn = isColumn,
-                weights = weights,
-                itemBaseSizes = itemBaseSizes,
-                includeMatchParentMargins = includeMatchParentMargins,
-                includeMultiSpan = false,
-            ).toDouble()
-        }.toFloat()
-        val flexibleSize = (itemSize - nonFlexBaseSize).coerceAtLeast(0f)
-        return weight / totalFlexWeight * flexibleSize
+    private fun Cell.contributesBaseSize(includeMatchParentMargins: Boolean): Boolean {
+        val size = if (isColumn) base.width else base.height
+        return when (size) {
+            is DivSize.Fixed -> true
+            is DivSize.MatchParent -> includeMatchParentMargins
+            is DivSize.WrapContent -> false
+        }
     }
-    val unusedCount = range.count { !isLineUsed(it, isColumn) }
-    return if (unusedCount > 0) {
-        if (!isLineUsed(line, isColumn)) itemSize / unusedCount else 0f
-    } else {
-        itemSize / span
+
+    private fun lineShareOfBase(
+        line: Int,
+        start: Int,
+        span: Int,
+        itemSize: Float,
+        includeMatchParentMargins: Boolean,
+    ): Float {
+        if (span == 1) return itemSize
+        val range = start until start + span
+        val totalFlexWeight = range.sumOf { weights[it].toDouble() }.toFloat()
+        if (totalFlexWeight > 0f) {
+            val weight = weights[line]
+            if (weight <= 0f) return 0f
+            val nonFlexBaseSize = range.sumOf {
+                if (weights[it] > 0f) 0.0
+                else lineBaseSize(
+                    line = it,
+                    includeMatchParentMargins = includeMatchParentMargins,
+                    includeMultiSpan = false,
+                ).toDouble()
+            }.toFloat()
+            val flexibleSize = (itemSize - nonFlexBaseSize).coerceAtLeast(0f)
+            return weight / totalFlexWeight * flexibleSize
+        }
+        val unusedCount = range.count { !cells.isLineUsed(it, isColumn) }
+        return if (unusedCount > 0) {
+            if (!cells.isLineUsed(line, isColumn)) itemSize / unusedCount else 0f
+        } else {
+            itemSize / span
+        }
     }
 }
 

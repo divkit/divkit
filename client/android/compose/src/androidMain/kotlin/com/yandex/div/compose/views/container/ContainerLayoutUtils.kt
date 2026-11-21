@@ -2,11 +2,12 @@ package com.yandex.div.compose.views.container
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
+import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.context.WithDivKey
-import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
@@ -31,6 +32,7 @@ internal fun DivContainer.Separator?.resolveSeparatorVisibility(): SeparatorVisi
     )
 }
 
+@Immutable
 internal data class SeparatorVisibility(
     val showAtStart: Boolean,
     val showBetween: Boolean,
@@ -92,8 +94,7 @@ internal fun Modifier.reduceMaxConstraint(
 
 @Composable
 internal inline fun LinearContainer(
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
+    collection: VisibleCollectionItems,
     separator: DivContainer.Separator?,
     separatorVisibility: SeparatorVisibility,
     spacingAsItems: Boolean = false,
@@ -101,28 +102,7 @@ internal inline fun LinearContainer(
     renderSpacing: @Composable () -> Unit,
     crossinline renderItem: @Composable (Div) -> Unit,
 ) {
-    LinearContainerContent(
-        items = items,
-        separator = separator,
-        separatorVisibility = separatorVisibility,
-        spacingAsItems = spacingAsItems || separatorVisibility.hasAnySeparator,
-        renderSeparator = renderSeparator,
-        renderSpacing = renderSpacing,
-    ) { item ->
-        WithLocalComponent(components?.get(item)) { renderItem(item) }
-    }
-}
-
-@Composable
-private inline fun LinearContainerContent(
-    items: List<Div>,
-    separator: DivContainer.Separator?,
-    separatorVisibility: SeparatorVisibility,
-    spacingAsItems: Boolean,
-    renderSeparator: @Composable (DivContainer.Separator) -> Unit,
-    renderSpacing: @Composable () -> Unit,
-    renderItem: @Composable (Div) -> Unit,
-) {
+    val items = collection.items
     val hasItems = items.isNotEmpty()
 
     if (hasItems && separatorVisibility.showAtStart && separator != null) {
@@ -132,14 +112,14 @@ private inline fun LinearContainerContent(
     items.forEachIndexed { index, childDiv ->
         // The child slot includes layout wrappers and spacers outside DivBlockView.
         WithDivKey(childDiv) {
-            renderItem(childDiv)
+            WithLocalComponent(collection.components?.get(childDiv)) { renderItem(childDiv) }
         }
 
         val isNotLastItem = index < items.lastIndex
         if (isNotLastItem) {
             when {
                 separatorVisibility.showBetween && separator != null -> renderSeparator(separator)
-                spacingAsItems -> renderSpacing()
+                spacingAsItems || separatorVisibility.hasAnySeparator -> renderSpacing()
             }
         }
     }
