@@ -1,481 +1,228 @@
 package com.yandex.div.compose.views.container
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
+import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.MultiMeasureLayout
+import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.collection.CollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
-import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.isMatchParent
+import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observeHorizontalMarginsSum
+import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.observedAspectRatio
-import com.yandex.div.compose.utils.observeHorizontalInsets
-import com.yandex.div.compose.utils.observeVerticalInsets
-import com.yandex.div.compose.utils.observedDpValue
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.compose.views.modifiers.MatchParentSize
 import com.yandex.div.compose.views.modifiers.padding
-import com.yandex.div.compose.visibility.observeRenderedVisibility
-import com.yandex.div2.Div
-import com.yandex.div2.DivAlignmentHorizontal
-import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivContentAlignmentHorizontal
-import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivVisibility
 import kotlin.math.max
-import kotlin.math.min
 
+/**
+ * A container that lays its children out over each other. A wrap_content size next to match_parent
+ * children is the size the other children define; when they define none, the largest content of
+ * the match_parent children does. The match_parent children then fill that size.
+ */
+@Suppress("DEPRECATION")
 @Composable
 internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
-    val items = data.observeItems()
-    val containerModifier = modifier
-        .padding(data.paddings)
-        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
-
-    val isWidthWrapContent = data.width is DivSize.WrapContent
-    // A positive aspect ratio makes the height follow the width: the children never wrap it.
-    val hasAspect = data.observedAspectRatio() != null
-    val isHeightWrapContent = data.height is DivSize.WrapContent && !hasAspect
-    // Children with their own aspect keep the Box route, unless the container's aspect height is
-    // derived from a wrap-content width that a match-parent child must not define.
-    val needsMatchParentMeasurement = (hasAspect || items.items.none { it.value().aspect != null }) &&
-        items.items.any {
-            val child = it.value()
-            (isWidthWrapContent && child.width.isMatchParent) ||
-                (isHeightWrapContent && child.height.isMatchParent)
-        }
-    if (!needsMatchParentMeasurement) {
-        OverlapLayout(
-            modifier = containerModifier,
-            items = items,
-            defaultHorizontal = horizontalAlignment,
-            defaultVertical = verticalAlignment,
-        )
-        return
-    }
-
-    MatchParentOverlapLayout(
-        modifier = containerModifier,
-        items = items.items,
-        components = items.components,
-        isWidthWrapContent = isWidthWrapContent,
-        isHeightWrapContent = isHeightWrapContent,
-        defaultHorizontal = horizontalAlignment,
-        defaultVertical = verticalAlignment,
-    )
-}
-
-@Composable
-@NonRestartableComposable
-private fun OverlapLayout(
-    modifier: Modifier,
-    items: CollectionItems,
-    defaultHorizontal: DivContentAlignmentHorizontal,
-    defaultVertical: DivContentAlignmentVertical,
-) {
-    val defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment()
-    val defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment()
     val layoutParams = DivBlockLayoutParams(
-        defaultHorizontalAlignment = defaultHorizontalAlignment,
-        defaultVerticalAlignment = defaultVerticalAlignment,
+        defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment(),
+        defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment(),
     )
-    Box(
-        modifier,
-        contentAlignment = combineAlignment(defaultHorizontalAlignment, defaultVerticalAlignment),
-    ) {
-        items.observeVisible().forEach { item ->
-            WithDivKey(item) {
-                WithLocalComponent(items.components?.get(item)) {
-                    DivBlockView(
-                        data = item,
-                        modifier = Modifier.align(
-                            item.resolveOverlapChildAlignment(defaultHorizontal, defaultVertical),
-                        ),
-                        layoutParams = layoutParams,
-                    )
-                }
-            }
-        }
-    }
-}
+    val items = data.observeItems()
+    val wrapsWidth = data.width.isWrapContent
+    // A positive aspect ratio makes the height follow the width: the children never wrap it.
+    val wrapsHeight = data.height.isWrapContent && data.observedAspectRatio() == null
 
-@Suppress("DEPRECATION")
-@Composable
-private fun MatchParentOverlapLayout(
-    modifier: Modifier,
-    items: List<Div>,
-    components: Map<Div, DivLocalComponent>?,
-    isWidthWrapContent: Boolean,
-    isHeightWrapContent: Boolean,
-    defaultHorizontal: DivContentAlignmentHorizontal,
-    defaultVertical: DivContentAlignmentVertical,
-) {
-    // View's FrameContainerLayout resolves wrap-content size before remeasuring match-parent
-    // children. MultiMeasureLayout is intentionally limited to this compatibility path.
+    // A match_parent child may be measured twice: as content, when nothing else defines the size
+    // it fills, and at that size.
     MultiMeasureLayout(
-        modifier = modifier,
+        modifier = modifier
+            .padding(data.paddings)
+            .alignContainerOverflow(horizontalAlignment, verticalAlignment),
         content = {
-            items.forEach { item ->
+            items.observeVisible().forEach { item ->
                 WithDivKey(item) {
-                    MatchParentOverlapChild(
-                        div = item,
-                        component = components?.get(item),
-                        isWidthWrapContent = isWidthWrapContent,
-                        isHeightWrapContent = isHeightWrapContent,
-                        defaultHorizontal = defaultHorizontal,
-                        defaultVertical = defaultVertical,
-                    )
+                    // The scope of the item, so its layout data is read where DivBlockView renders it.
+                    WithLocalComponent(items.components?.get(item)) {
+                        DivBlockView(
+                            data = item,
+                            modifier = item.value().observeOverlapChild(layoutParams, wrapsWidth, wrapsHeight),
+                            layoutParams = layoutParams,
+                        )
+                    }
                 }
             }
         },
-        measurePolicy = overlapMeasurePolicy(
-            isWidthWrapContent = isWidthWrapContent,
-            isHeightWrapContent = isHeightWrapContent,
-        ),
+        measurePolicy = OverlapMeasurePolicy,
     )
 }
 
-@Composable
-private fun MatchParentOverlapChild(
-    div: Div,
-    component: DivLocalComponent?,
-    isWidthWrapContent: Boolean,
-    isHeightWrapContent: Boolean,
-    defaultHorizontal: DivContentAlignmentHorizontal,
-    defaultVertical: DivContentAlignmentVertical,
-) {
-    WithLocalComponent(component) {
-        val divBase = div.value()
-        // The metadata is resolved in the child's own local-variable scope, the one DivBlockView
-        // renders it in, and travels to the measure policy as the child's parent data.
-        WithLocalComponent(divBase) {
-            if (divBase.observeRenderedVisibility() == DivVisibility.GONE) return@WithLocalComponent
-
-            val child = div.observeOverlapChild(
-                isWidthWrapContent = isWidthWrapContent,
-                isHeightWrapContent = isHeightWrapContent,
-                defaultHorizontal = defaultHorizontal,
-                defaultVertical = defaultVertical,
-            )
-            DivBlockView(
-                data = div,
-                modifier = Modifier.layoutId(child),
-                layoutParams = DivBlockLayoutParams(
-                    matchParentWidth = MatchParentSize.contentIf(isWidthWrapContent && child.matchParentWidth),
-                    matchParentHeight = MatchParentSize.contentIf(isHeightWrapContent && child.matchParentHeight),
-                    defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment(),
-                    defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
-                ),
-            )
-        }
-    }
-}
-
-@Composable
-private fun Div.observeOverlapChild(
-    isWidthWrapContent: Boolean,
-    isHeightWrapContent: Boolean,
-    defaultHorizontal: DivContentAlignmentHorizontal,
-    defaultVertical: DivContentAlignmentVertical,
-): OverlapChild {
-    val divBase = value()
-    val matchParentWidth = divBase.width.isMatchParent
-    val matchParentHeight = divBase.height.isMatchParent
-    val widthBounds = if (isWidthWrapContent && matchParentWidth) {
-        divBase.width.observeMatchParentBounds()
-    } else {
-        UnboundedMatchParentBounds
-    }
-    val heightBounds = if (isHeightWrapContent && matchParentHeight) {
-        divBase.height.observeMatchParentBounds()
-    } else {
-        UnboundedMatchParentBounds
-    }
-    val horizontalMargins = if (isWidthWrapContent && matchParentWidth) {
-        divBase.margins.observeHorizontalInsets()
-    } else {
-        ZeroMargins
-    }
-    val verticalMargins = if (isHeightWrapContent && matchParentHeight) {
-        divBase.margins.observeVerticalInsets()
-    } else {
-        ZeroMargins
-    }
-    return OverlapChild(
-        alignment = resolveOverlapChildAlignment(
-            defaultHorizontal = defaultHorizontal,
-            defaultVertical = defaultVertical,
-        ),
-        matchParentWidth = matchParentWidth,
-        matchParentHeight = matchParentHeight,
-        hasPositiveFixedHeight = isWidthWrapContent && matchParentWidth &&
-            divBase.height.observeIsPositiveFixedSize(),
-        minWidth = widthBounds.minSize,
-        maxWidth = widthBounds.maxSize,
-        minHeight = heightBounds.minSize,
-        maxHeight = heightBounds.maxSize,
-        horizontalMarginStart = horizontalMargins.first,
-        horizontalMarginEnd = horizontalMargins.second,
-        verticalMarginTop = verticalMargins.first,
-        verticalMarginBottom = verticalMargins.second,
-    )
-}
-
-private fun overlapMeasurePolicy(
-    isWidthWrapContent: Boolean,
-    isHeightWrapContent: Boolean,
-) = MeasurePolicy { measurables, constraints ->
-    val children = measurables.map { measurable ->
-        checkNotNull(measurable.layoutId as? OverlapChild)
-    }
-
-    val exactWidth = constraints.hasFixedWidth && !isWidthWrapContent
-    val exactHeight = constraints.hasFixedHeight && !isHeightWrapContent
-    val looseConstraints = constraints.copy(minWidth = 0, minHeight = 0)
-    val placeables = arrayOfNulls<Placeable>(children.size)
-    val matchParentChildren = mutableListOf<Int>()
-    var maxWidth = 0
-    var maxHeight = 0
-
-    fun resolveMatchParentChildSize(
-        parentSize: Int,
-        minSize: Dp,
-        maxSize: Dp?,
-        marginStart: Dp,
-        marginEnd: Dp,
-    ): Int {
-        val marginsPx = marginStart.roundToPx() + marginEnd.roundToPx()
-        val availableSize = max(0, parentSize - marginsPx)
-        val maxSizePx = maxSize?.roundToPx() ?: Constraints.Infinity
-        return min(max(availableSize, minSize.roundToPx()), maxSizePx) + marginsPx
-    }
-
-    children.forEachIndexed { index, child ->
-        val matchDynamicWidth = isWidthWrapContent && !exactWidth && child.matchParentWidth
-        val matchDynamicHeight = isHeightWrapContent && !exactHeight && child.matchParentHeight
-        val matchDynamicSize = matchDynamicWidth || matchDynamicHeight
-        val hasDefinedSize = when {
-            exactWidth && exactHeight -> true
-            exactHeight -> !matchDynamicWidth
-            exactWidth -> !matchDynamicHeight
-            !matchDynamicWidth -> true
-            child.hasPositiveFixedHeight -> true
-            else -> false
-        }
-        if (!hasDefinedSize) {
-            if (matchDynamicSize) {
-                matchParentChildren += index
-            }
-            return@forEachIndexed
-        }
-
-        val placeable = measurables[index].measure(looseConstraints)
-        placeables[index] = placeable
-        if (matchDynamicSize) {
-            matchParentChildren += index
-        }
-        if (!exactWidth && !child.matchParentWidth) {
-            maxWidth = max(maxWidth, placeable.width)
-        }
-        if (!exactHeight && !child.matchParentHeight) {
-            maxHeight = max(maxHeight, placeable.height)
-        }
-    }
-
-    if (matchParentChildren.isNotEmpty() && !(exactWidth && exactHeight)) {
-        val needMeasureWidth = !exactWidth && maxWidth == 0
-        val needMeasureHeight = !exactHeight && maxHeight == 0
-        if (needMeasureWidth || needMeasureHeight) {
-            matchParentChildren.forEach { index ->
-                val child = children[index]
-                var placeable = placeables[index]
-                val measureContentWidth = isWidthWrapContent && !exactWidth &&
-                    child.matchParentWidth && needMeasureWidth
-                val measureContentHeight = isHeightWrapContent && !exactHeight &&
-                    child.matchParentHeight && needMeasureHeight
-                if (measureContentWidth || measureContentHeight) {
-                    placeable = measurables[index].measure(looseConstraints)
-                    placeables[index] = placeable
-                }
-                if (needMeasureWidth && placeable != null) {
-                    maxWidth = max(maxWidth, placeable.width)
-                }
-                if (needMeasureHeight && placeable != null) {
-                    maxHeight = max(maxHeight, placeable.height)
-                }
-            }
-        } else {
-            matchParentChildren.forEach { index ->
-                val child = children[index]
-                if (isWidthWrapContent && !exactWidth && child.matchParentWidth) {
-                    maxWidth = max(
-                        maxWidth,
-                        child.minWidth.roundToPx() +
-                            child.horizontalMarginStart.roundToPx() +
-                            child.horizontalMarginEnd.roundToPx(),
-                    )
-                }
-                if (isHeightWrapContent && !exactHeight && child.matchParentHeight) {
-                    maxHeight = max(
-                        maxHeight,
-                        child.minHeight.roundToPx() +
-                            child.verticalMarginTop.roundToPx() +
-                            child.verticalMarginBottom.roundToPx(),
-                    )
-                }
-            }
-        }
-    }
-
-    val width = constraints.constrainWidth(maxWidth)
-    val height = constraints.constrainHeight(maxHeight)
-    matchParentChildren.forEach { index ->
-        val child = children[index]
-        val matchParentWidth = isWidthWrapContent && !exactWidth && child.matchParentWidth
-        val matchParentHeight = isHeightWrapContent && !exactHeight && child.matchParentHeight
-        placeables[index] = measurables[index].measure(
-            looseConstraints.withResolvedMatchParentSize(
-                width = if (matchParentWidth) {
-                    resolveMatchParentChildSize(
-                        parentSize = width,
-                        minSize = child.minWidth,
-                        maxSize = child.maxWidth,
-                        marginStart = child.horizontalMarginStart,
-                        marginEnd = child.horizontalMarginEnd,
-                    )
-                } else {
-                    width
-                },
-                height = if (matchParentHeight) {
-                    resolveMatchParentChildSize(
-                        parentSize = height,
-                        minSize = child.minHeight,
-                        maxSize = child.maxHeight,
-                        marginStart = child.verticalMarginTop,
-                        marginEnd = child.verticalMarginBottom,
-                    )
-                } else {
-                    height
-                },
-                matchParentWidth = matchParentWidth,
-                matchParentHeight = matchParentHeight,
-            )
-        )
-    }
-
-    layout(width, height) {
-        placeables.forEachIndexed { index, placeable ->
-            placeable ?: return@forEachIndexed
-            val position = children[index].alignment.align(
-                size = IntSize(placeable.width, placeable.height),
-                space = IntSize(width, height),
-                layoutDirection = layoutDirection,
-            )
-            placeable.place(position.x, position.y)
-        }
-    }
-}
-
-private fun Constraints.withResolvedMatchParentSize(
-    width: Int,
-    height: Int,
-    matchParentWidth: Boolean,
-    matchParentHeight: Boolean,
-): Constraints = copy(
-    minWidth = if (matchParentWidth) width else minWidth,
-    maxWidth = if (matchParentWidth) width else maxWidth,
-    minHeight = if (matchParentHeight) height else minHeight,
-    maxHeight = if (matchParentHeight) height else maxHeight,
-)
-
-@Composable
-private fun DivSize.observeMatchParentBounds(): MatchParentBounds {
-    if (this !is DivSize.MatchParent) return UnboundedMatchParentBounds
-    val minSize = value.minSize?.let { it.value.observedDpValue(it.unit) } ?: 0.dp
-    val maxSize = value.maxSize?.let { it.value.observedDpValue(it.unit) }
-    return if (maxSize != null && minSize > maxSize) {
-        UnboundedMatchParentBounds
-    } else {
-        MatchParentBounds(minSize = minSize, maxSize = maxSize)
-    }
-}
-
-@Composable
-private fun DivSize.observeIsPositiveFixedSize(): Boolean {
-    if (this !is DivSize.Fixed) return false
-    return value.value.observedDpValue(value.unit) > 0.dp
-}
-
+/**
+ * How the overlap container lays a child out. A child fills an axis when it is match_parent along
+ * a size the container wraps; [minWidth] and [minHeight] are the room such a child needs anyway,
+ * its margins and min_size.
+ */
 private data class OverlapChild(
     val alignment: Alignment,
-    val matchParentWidth: Boolean,
-    val matchParentHeight: Boolean,
-    val hasPositiveFixedHeight: Boolean,
+    val fillsWidth: Boolean,
+    val fillsHeight: Boolean,
     val minWidth: Dp,
-    val maxWidth: Dp?,
     val minHeight: Dp,
-    val maxHeight: Dp?,
-    val horizontalMarginStart: Dp,
-    val horizontalMarginEnd: Dp,
-    val verticalMarginTop: Dp,
-    val verticalMarginBottom: Dp,
-)
-
-private data class MatchParentBounds(
-    val minSize: Dp,
-    val maxSize: Dp?,
-)
-
-private val UnboundedMatchParentBounds = MatchParentBounds(minSize = 0.dp, maxSize = null)
-private val ZeroMargins = Pair(0.dp, 0.dp)
+) : ParentDataModifier {
+    override fun Density.modifyParentData(parentData: Any?): Any = this@OverlapChild
+}
 
 @Composable
-private fun Div.resolveOverlapChildAlignment(
-    defaultHorizontal: DivContentAlignmentHorizontal,
-    defaultVertical: DivContentAlignmentVertical,
-): Alignment {
-    val divBase = value()
-    return resolveOverlapChildAlignment(
-        childHorizontal = divBase.alignmentHorizontal?.observedValue(),
-        childVertical = divBase.alignmentVertical?.observedValue(),
-        defaultHorizontal = defaultHorizontal,
-        defaultVertical = defaultVertical,
+private fun DivBase.observeOverlapChild(
+    layoutParams: DivBlockLayoutParams,
+    wrapsWidth: Boolean,
+    wrapsHeight: Boolean,
+): OverlapChild {
+    val fillsWidth = wrapsWidth && width.isMatchParent
+    val fillsHeight = wrapsHeight && height.isMatchParent
+    return OverlapChild(
+        alignment = combineAlignment(
+            alignmentHorizontal?.observedValue()?.toHorizontalAlignment() ?: layoutParams.defaultHorizontalAlignment,
+            alignmentVertical?.observedValue()?.toVerticalAlignment() ?: layoutParams.defaultVerticalAlignment,
+        ),
+        fillsWidth = fillsWidth,
+        fillsHeight = fillsHeight,
+        minWidth = if (fillsWidth) observeHorizontalMarginsSum() + width.observeMatchParentMinSize() else 0.dp,
+        minHeight = if (fillsHeight) observeVerticalMarginsSum() + height.observeMatchParentMinSize() else 0.dp,
     )
 }
 
-private fun resolveOverlapChildAlignment(
-    childHorizontal: DivAlignmentHorizontal?,
-    childVertical: DivAlignmentVertical?,
-    defaultHorizontal: DivContentAlignmentHorizontal,
-    defaultVertical: DivContentAlignmentVertical,
-): Alignment {
-    val horizontal = childHorizontal?.toHorizontalAlignment()
-        ?: defaultHorizontal.toCrossAxisHorizontalAlignment()
-    val vertical = childVertical?.toVerticalAlignment()
-        ?: defaultVertical.toCrossAxisVerticalAlignment()
-    return combineAlignment(horizontal, vertical)
+/** The min_size of a match_parent size; bounds with min_size above max_size are ignored. */
+@Composable
+private fun DivSize.observeMatchParentMinSize(): Dp {
+    val size = (this as? DivSize.MatchParent)?.value ?: return 0.dp
+    val min = size.minSize?.observedValue() ?: return 0.dp
+    val max = size.maxSize?.observedValue()
+    return if (max != null && min > max) 0.dp else min
+}
+
+private val Measurable.overlapChild: OverlapChild?
+    get() = parentData as? OverlapChild
+
+private val Measurable.fillsWidth: Boolean
+    get() = overlapChild?.fillsWidth == true
+
+private val Measurable.fillsHeight: Boolean
+    get() = overlapChild?.fillsHeight == true
+
+private object OverlapMeasurePolicy : MeasurePolicy {
+
+    override fun MeasureScope.measure(measurables: List<Measurable>, constraints: Constraints): MeasureResult {
+        val loose = constraints.copy(minWidth = 0, minHeight = 0)
+        val placeables = arrayOfNulls<Placeable>(measurables.size)
+        // The children that fill nothing are measured once and define the sizes the others fill.
+        measurables.forEachIndexed { index, measurable ->
+            if (!measurable.fillsWidth && !measurable.fillsHeight) placeables[index] = measurable.measure(loose)
+        }
+
+        val filledWidth = filledWidth(measurables, placeables, constraints)
+        val widthBound = if (filledWidth == null) loose else loose.copy(maxWidth = filledWidth)
+        // A child that fills the width only has its height at that width.
+        measurables.forEachIndexed { index, measurable ->
+            if (measurable.fillsWidth && !measurable.fillsHeight) placeables[index] = measurable.measure(widthBound)
+        }
+
+        val filledHeight = filledHeight(measurables, placeables, constraints, filledWidth)
+        measurables.forEachIndexed { index, measurable ->
+            if (measurable.fillsHeight) {
+                val bound = if (measurable.fillsWidth) widthBound else loose
+                placeables[index] = measurable.measure(bound.copy(maxHeight = filledHeight ?: bound.maxHeight))
+            }
+        }
+
+        // The passes above measure every child.
+        val measured = placeables.requireNoNulls()
+        val width = filledWidth ?: constraints.constrainWidth(measured.maxOfOrNull { it.width } ?: 0)
+        val height = filledHeight ?: constraints.constrainHeight(measured.maxOfOrNull { it.height } ?: 0)
+        return layout(width, height) {
+            measured.forEach { placeable ->
+                val alignment = (placeable.parentData as? OverlapChild)?.alignment ?: Alignment.TopStart
+                val position = alignment.align(
+                    size = IntSize(placeable.width, placeable.height),
+                    space = IntSize(width, height),
+                    layoutDirection = layoutDirection,
+                )
+                placeable.place(position)
+            }
+        }
+    }
+
+    /** The width the match_parent children fill, or null when no child fills the width. */
+    private fun MeasureScope.filledWidth(
+        measurables: List<Measurable>,
+        placeables: Array<Placeable?>,
+        constraints: Constraints,
+    ): Int? {
+        if (measurables.none { it.fillsWidth }) return null
+        val loose = constraints.copy(minWidth = 0, minHeight = 0)
+        var width = 0
+        measurables.forEachIndexed { index, measurable ->
+            if (!measurable.fillsWidth) {
+                // A child that fills the height only is measured for its width without a height.
+                val placeable = placeables[index] ?: measurable.measure(loose.copy(maxHeight = Constraints.Infinity))
+                width = max(width, placeable.width)
+            }
+        }
+        if (width == 0) {
+            // Nothing else defines the width: the content of the match_parent children does. Without
+            // any bound they do not fill, and a child with an aspect ratio does not derive its width
+            // from the height.
+            width = measurables.maxOf { if (it.fillsWidth) it.measure(Constraints()).width else 0 }
+        }
+        val minWidth = measurables.maxOf { it.overlapChild?.minWidth?.roundToPx() ?: 0 }
+        // The size the container itself has to take, e.g. its own min_size, is filled as well.
+        return constraints.constrainWidth(max(width, minWidth))
+    }
+
+    /** The height the match_parent children fill, or null when no child fills the height. */
+    private fun MeasureScope.filledHeight(
+        measurables: List<Measurable>,
+        placeables: Array<Placeable?>,
+        constraints: Constraints,
+        filledWidth: Int?,
+    ): Int? {
+        if (measurables.none { it.fillsHeight }) return null
+        var height = 0
+        measurables.forEachIndexed { index, measurable ->
+            if (!measurable.fillsHeight) height = max(height, placeables[index]?.height ?: 0)
+        }
+        if (height == 0) {
+            height = measurables.maxOf { measurable ->
+                val maxWidth = if (measurable.fillsWidth && filledWidth != null) filledWidth else constraints.maxWidth
+                if (measurable.fillsHeight) measurable.measure(Constraints(maxWidth = maxWidth)).height else 0
+            }
+        }
+        val minHeight = measurables.maxOf { it.overlapChild?.minHeight?.roundToPx() ?: 0 }
+        return constraints.constrainHeight(max(height, minHeight))
+    }
 }

@@ -88,6 +88,24 @@ class DivContainerMatchParentTest {
     }
 
     @Test
+    fun `overlap match_parent child keeps its min_size in the wrap_content width its sibling defines`() {
+        setContent(
+            container(
+                id = "overlap",
+                width = wrapContent(),
+                orientation = DivContainer.Orientation.OVERLAP,
+                items = listOf(
+                    fixedBox(100, 40),
+                    container(id = "minimum", width = matchParent(minSize = 160), items = listOf(fixedBox(300, 10))),
+                ),
+            )
+        )
+
+        rule.onNodeWithTag("overlap").assertWidthIsEqualTo(160.dp)
+        rule.onNodeWithTag("minimum").assertWidthIsEqualTo(160.dp)
+    }
+
+    @Test
     fun `horizontal match_parent children keep distinct minima beside a constrained sibling`() {
         setContent(
             container(

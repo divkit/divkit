@@ -148,13 +148,11 @@ private fun Modifier.height(
 
 private fun Modifier.matchParentWidth(size: MatchParentSize): Modifier = when (size) {
     MatchParentSize.Fill -> fillMaxWidth()
-    MatchParentSize.Content -> this
     is MatchParentSize.Bounded -> widthIn(max = size.max).fillMaxWidth()
 }
 
 private fun Modifier.matchParentHeight(size: MatchParentSize): Modifier = when (size) {
     MatchParentSize.Fill -> fillMaxHeight()
-    MatchParentSize.Content -> this
     is MatchParentSize.Bounded -> heightIn(max = size.max).fillMaxHeight()
 }
 

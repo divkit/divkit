@@ -69,7 +69,7 @@ private fun DivSize.observedHeightBounds(matchParentHeight: MatchParentSize): He
         is DivSize.MatchParent -> HeightBounds(
             min = value.minSize?.observedValue(),
             max = value.maxSize?.observedValue(),
-            isConstrained = matchParentHeight != MatchParentSize.Content,
+            isConstrained = true,
             matchParentMax = (matchParentHeight as? MatchParentSize.Bounded)?.max,
         )
     }

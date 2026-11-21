@@ -17,8 +17,6 @@
     <ID>CognitiveComplexMethod:IndicatorDrawing.kt:private fun clipAndScaleEdges: List&lt;Int&gt;</ID>
     <ID>CognitiveComplexMethod:InlineImages.kt:@Composable internal fun DivText.observeInlineImages: List&lt;InlineImageData&gt;</ID>
     <ID>CognitiveComplexMethod:LengthLimitedInputView.kt:@Composable internal fun LengthLimitedInputView</ID>
-    <ID>CognitiveComplexMethod:OverlapContainerLayout.kt:@Composable private fun MatchParentOverlapChild</ID>
-    <ID>CognitiveComplexMethod:OverlapContainerLayout.kt:private fun overlapMeasurePolicy</ID>
     <ID>CognitiveComplexMethod:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$@Composable override fun Content</ID>
     <ID>CognitiveComplexMethod:RangeDecorations.kt:private fun List&lt;RangeLine&gt;.toCloudPath: Path</ID>
     <ID>CognitiveComplexMethod:RangeDecorations.kt:private fun TextLayoutResult.lineRects: List&lt;RangeLine&gt;</ID>
@@ -38,8 +36,6 @@
     <ID>LongMethod:HorizontalContainerLayout.kt:@Composable internal fun ContainerHorizontalView</ID>
     <ID>LongMethod:IndicatorDrawing.kt:internal fun DrawScope.drawIndicators</ID>
     <ID>LongMethod:InlineImages.kt:@Composable internal fun DivText.observeInlineImages: List&lt;InlineImageData&gt;</ID>
-    <ID>LongMethod:OverlapContainerLayout.kt:@Composable private fun MatchParentOverlapChild</ID>
-    <ID>LongMethod:OverlapContainerLayout.kt:private fun overlapMeasurePolicy</ID>
     <ID>LongMethod:PagerContent.kt:@Composable internal fun PagerContent</ID>
     <ID>LongMethod:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$@Composable override fun Content</ID>
     <ID>LongMethod:ShimmerExtensionHandler.kt:private fun ShimmerConfig.toDrawingConfig: ShimmerDrawingConfig?</ID>
