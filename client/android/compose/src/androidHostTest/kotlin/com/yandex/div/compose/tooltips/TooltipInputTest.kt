@@ -2,10 +2,10 @@ package com.yandex.div.compose.tooltips
 
 import android.view.MotionEvent
 import android.view.View
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +46,7 @@ class TooltipInputTest {
             return true
         }
     }
-    private val dispatcher = TouchEventDispatcher { target }::dispatch
+    private val touchInput = androidTooltipInput(TouchEventDispatcher { target }::dispatch)
 
     @Test
     fun `complete gesture reaches underlying window in its coordinates`() {
@@ -77,7 +77,7 @@ class TooltipInputTest {
     fun `scroll inside popup cancels forwarding to underlying window`() {
         val scroll = ScrollState(0)
         rule.setContent {
-            CompositionLocalProvider(LocalTooltipTouchDispatcher provides dispatcher) {
+            CompositionLocalProvider(LocalTooltipInput provides touchInput) {
                 Box(Modifier.fillMaxSize().tooltipInput().verticalScroll(scroll).testTag("popup")) {
                     Box(Modifier.height(2000.dp))
                 }
@@ -97,7 +97,7 @@ class TooltipInputTest {
 
     private fun setContent() {
         rule.setContent {
-            CompositionLocalProvider(LocalTooltipTouchDispatcher provides dispatcher) {
+            CompositionLocalProvider(LocalTooltipInput provides touchInput) {
                 if (visible.value) {
                     Box(Modifier.fillMaxSize().tooltipInput().testTag("popup"))
                 }

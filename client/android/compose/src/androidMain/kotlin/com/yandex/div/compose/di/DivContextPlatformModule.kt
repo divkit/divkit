@@ -9,6 +9,8 @@ import com.yandex.div.compose.font.LineMetricsMeasurer
 import com.yandex.div.compose.images.AndroidImageLoaderConfiguration
 import com.yandex.div.compose.images.ImageHttpClientFactory
 import com.yandex.div.compose.images.PlatformImageLoaderConfiguration
+import com.yandex.div.compose.tooltips.AndroidTooltipDrawObserverFactory
+import com.yandex.div.compose.tooltips.TooltipDrawObserverFactory
 import com.yandex.div.compose.views.slider.AndroidSliderTextPainterFactory
 import com.yandex.div.compose.views.slider.SliderTextPainterFactory
 import com.yandex.div.render.common.animation.SystemAnimationConfiguration
@@ -37,6 +39,11 @@ internal interface DivContextPlatformModule {
     fun bindImageLoaderConfiguration(
         impl: AndroidImageLoaderConfiguration
     ): PlatformImageLoaderConfiguration
+
+    @Binds
+    fun bindTooltipDrawObserverFactory(
+        impl: AndroidTooltipDrawObserverFactory
+    ): TooltipDrawObserverFactory
 
     companion object {
         @DivContextScope

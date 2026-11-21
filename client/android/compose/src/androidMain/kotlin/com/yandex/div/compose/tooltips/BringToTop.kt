@@ -1,7 +1,5 @@
 package com.yandex.div.compose.tooltips
 
-import android.view.View
-import android.view.ViewTreeObserver
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -23,7 +21,6 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionOnScreen
-import androidx.compose.ui.platform.LocalView
 import com.yandex.div.compose.context.LocalDivViewContext
 
 internal val LocalTooltipContent = staticCompositionLocalOf { false }
@@ -31,12 +28,13 @@ internal val LocalTooltipContent = staticCompositionLocalOf { false }
 @Composable
 internal fun Modifier.tooltipBringToTop(id: String?): Modifier {
     if (id == null || LocalTooltipContent.current) return this
-    val storage = LocalDivViewContext.current.component.tooltipStateStorage
+    val component = LocalDivViewContext.current.component
+    val storage = component.tooltipStateStorage
     if (!storage.isBringToTopTarget(id)) return this
 
     val layer = rememberGraphicsLayer()
-    val view = LocalView.current
-    val entry = remember(id, layer, view) { BringToTopEntry(id, layer, view) }
+    val drawObserver = component.tooltipDrawObserverFactory.rememberObserver()
+    val entry = remember(id, layer, drawObserver) { BringToTopEntry(id, layer, drawObserver) }
     DisposableEffect(entry) {
         storage.register(entry)
         onDispose { storage.unregister(entry) }
@@ -57,13 +55,11 @@ internal fun BringToTop(id: String?, modifier: Modifier) {
     var popupPosition by remember { mutableStateOf<Offset?>(null) }
     val sourceToScreen = remember { Matrix() }
     DisposableEffect(entry) {
-        val observer = entry.view.viewTreeObserver
-        val listener = ViewTreeObserver.OnDrawListener {
+        val unsubscribe = entry.drawObserver.observe {
             // A nested layer can change without recording the outer source layer again.
             if (entry.isDrawn) entry.isDrawn = true
         }
-        observer.addOnDrawListener(listener)
-        onDispose { if (observer.isAlive) observer.removeOnDrawListener(listener) }
+        onDispose(unsubscribe)
     }
     Spacer(
         modifier.onGloballyPositioned { popupPosition = it.positionOnScreen() }
@@ -84,7 +80,11 @@ internal fun BringToTop(id: String?, modifier: Modifier) {
     )
 }
 
-internal class BringToTopEntry(val id: String, val layer: GraphicsLayer, val view: View) {
+internal class BringToTopEntry(
+    val id: String,
+    val layer: GraphicsLayer,
+    val drawObserver: TooltipDrawObserver,
+) {
     var coordinates by mutableStateOf<LayoutCoordinates?>(null)
 
     // The replica is in another window, so recording also invalidates its drawing.

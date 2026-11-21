@@ -10,6 +10,7 @@ import com.yandex.div.compose.system.HapticFeedbackStorage
 import com.yandex.div.compose.text.LabelTextStorage
 import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.compose.tooltips.DivTooltipController
+import com.yandex.div.compose.tooltips.TooltipDrawObserverFactory
 import com.yandex.div.compose.tooltips.TooltipStateStorage
 import com.yandex.div2.DivData
 import dev.zacsweers.metro.GraphExtension
@@ -33,6 +34,7 @@ internal interface DivViewComponent : DivViewDependencies {
     val states: MutableState<List<DivData.State>>
     val timerStorage: TimerStorage
     val tooltipController: DivTooltipController
+    val tooltipDrawObserverFactory: TooltipDrawObserverFactory
     val tooltipStateStorage: TooltipStateStorage
 
     @get:Named(Names.ROOT_LOCAL_COMPONENT)

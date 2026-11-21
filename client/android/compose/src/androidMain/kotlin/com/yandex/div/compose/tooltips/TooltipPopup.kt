@@ -14,21 +14,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.window.PopupProperties
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.DivPopup
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.internal.tooltip.TouchEventDispatcher
 import com.yandex.div.internal.tooltip.hasTooltipActions
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
@@ -38,7 +34,7 @@ import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
- * Renders a single tooltip as a [DivPopup] positioned relative to its registered anchor.
+ * Renders a single tooltip as a popup positioned relative to its registered anchor.
  *
  * The popup observes anchor bounds via [TooltipAnchorEntry.bounds] and is dismissed:
  * - automatically after [DivTooltip.duration] (unless `duration == 0`),
@@ -75,11 +71,7 @@ internal fun TooltipPopup(
     }
     TooltipExitEffect(tooltip, isVisible, exitTransition, onHidden)
 
-    val underlyingView = LocalView.current.rootView
     val isModal = tooltip.mode is DivTooltipMode.Modal
-    val touchDispatcher = remember(underlyingView, isModal) {
-        if (isModal) null else TouchEventDispatcher { underlyingView }::dispatch
-    }
     val closeByTapOutside = tooltip.closeByTapOutside.observedValue()
     val positionProvider = anchorEntry.observedPositionProvider(
         fullScreen = tooltip.substrateDiv != null
@@ -89,15 +81,13 @@ internal fun TooltipPopup(
         closeByTapOutside = closeByTapOutside,
         onDismiss = onDismissRequested
     )
-    DivPopup(
-        properties = popupProperties(isModal, closeByTapOutside),
-        popupPositionProvider = positionProvider,
+    PlatformTooltipPopup(
+        positionProvider = positionProvider,
+        isModal = isModal,
+        closeByTapOutside = closeByTapOutside,
         onDismissRequest = onTapOutside,
     ) {
-        CompositionLocalProvider(
-            LocalTooltipContent provides true,
-            LocalTooltipTouchDispatcher provides touchDispatcher,
-        ) {
+        CompositionLocalProvider(LocalTooltipContent provides true) {
             TooltipPopupContent(
                 anchorEntry = anchorEntry,
                 positionProvider = positionProvider,
@@ -111,13 +101,6 @@ internal fun TooltipPopup(
         }
     }
 }
-
-private fun popupProperties(isModal: Boolean, closeByTapOutside: Boolean) = PopupProperties(
-    focusable = isModal,
-    dismissOnBackPress = true,
-    dismissOnClickOutside = closeByTapOutside || isModal,
-    clippingEnabled = false,
-)
 
 @Composable
 private fun TooltipLifecycleEffect(
