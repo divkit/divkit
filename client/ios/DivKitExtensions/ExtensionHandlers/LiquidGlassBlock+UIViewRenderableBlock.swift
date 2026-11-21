@@ -44,7 +44,16 @@ private final class LiquidGlassView: UIVisualEffectView, BlockViewProtocol,
   private var childView: BlockView?
   private var currentEffectParams: EffectParams?
   private var uiStyleUpdater: LiquidGlassBlock.UIStyleUpdater?
-  private var systemCornerConfiguration: UICornerConfiguration?
+  // Stored as `Any` so that the layout of this class does not depend on an iOS 26 value type.
+  // The class is visible to the Objective-C runtime, and below iOS 26 its metadata cannot be
+  // completed with a stored `UICornerConfiguration`: any `objc_copyClassList` caller (Realm does
+  // it on start-up) crashes the app, even though the view is never created there.
+  private var systemCornerConfigurationStorage: Any?
+
+  private var systemCornerConfiguration: UICornerConfiguration? {
+    get { systemCornerConfigurationStorage as? UICornerConfiguration }
+    set { systemCornerConfigurationStorage = newValue }
+  }
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
