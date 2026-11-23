@@ -53,25 +53,6 @@
               }
             }
           },
-          "tick_mark_active_style": {
-            "type": "shape_drawable",
-            "$color": "accent_color",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 8
-              },
-              "item_width": {
-                "type": "fixed",
-                "value": 8
-              },
-              "corner_radius": {
-                "type": "fixed",
-                "value": 5
-              }
-            }
-          },
           "track_active_style": {
             "type": "shape_drawable",
             "color": "#ff0000",

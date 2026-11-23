@@ -1,6 +1,8 @@
 package com.yandex.div
 
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.test.rule.ActivityTestRule
+import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.defaultSlider
 import com.yandex.div.steps.doubleDefaultSlider
@@ -8,7 +10,11 @@ import com.yandex.div.steps.doubleWithDivisionsSlider
 import com.yandex.div.steps.max10Slider
 import com.yandex.div.steps.max3Slider
 import com.yandex.div.steps.slider
+import com.yandex.div2.DivData
 import com.yandex.divkit.demo.DummyActivity
+import com.yandex.divkit.demo.div.divContext
+import com.yandex.test.util.performOnMain
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -18,6 +24,33 @@ class DivSliderTests {
 
     @get:Rule
     val rule = uiTestRule { activityTestRule }
+
+    @Test
+    fun variableTriggerClosuresHaveNoWarnings() {
+        slider {
+            testAsset = "regression_test_data/variables/div_variable_trigger_loops.json"
+            val warnings = mutableListOf<String?>()
+            val reporter = object : DivErrorsReporter by DivErrorsReporter.STUB {
+                override fun onWarning(
+                    divData: DivData?,
+                    divDataTag: DivDataTag,
+                    warning: Throwable,
+                ) {
+                    warnings.add(warning.message)
+                }
+            }
+            val context = performOnMain {
+                divContext(activityTestRule.activity) {
+                    visualErrorsEnabled(true).divErrorsReporter(reporter)
+                }
+            }
+            context.buildContainer(MATCH_PARENT, MATCH_PARENT)
+
+            runOnMainSync {
+                assertEquals(emptyList<String>(), warnings)
+            }
+        }
+    }
 
     @Test
     fun sliderThumbValue() {
