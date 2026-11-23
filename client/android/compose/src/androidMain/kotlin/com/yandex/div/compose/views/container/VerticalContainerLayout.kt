@@ -22,6 +22,8 @@ import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
+import com.yandex.div.compose.utils.applyIfNotNull
+import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
@@ -125,7 +127,7 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
 }
 
 /**
- * Whether the container can switch between a Column and a [MatchParentColumn]. The layout follows
+ * Whether the container can switch between a Column and a [WeightedLinearLayout]. The layout follows
  * the visible match_parent children of a definite height, so it stays the same when the container
  * has no such children or one of them is always visible.
  */
@@ -152,12 +154,8 @@ private inline fun VerticalLayout(
     crossinline content: @Composable VerticalScope.() -> Unit,
 ) {
     if (hasWeightedChildren) {
-        MatchParentColumn(
-            modifier = modifier,
-            verticalArrangement = verticalArrangement,
-            horizontalAlignment = horizontalAlignment,
-        ) {
-            MatchParentColumnScope.content()
+        WeightedLinearLayout(LinearAxis.Vertical(verticalArrangement), modifier) {
+            remember(horizontalAlignment) { WeightedVerticalScope(horizontalAlignment) }.content()
         }
     } else {
         Column(
@@ -187,7 +185,7 @@ private fun VerticalScope.VerticalContainerItems(
         separator = data.separator,
         separatorVisibility = separatorVisibility,
         renderSeparator = { separatorData ->
-            ContainerSeparator(separatorData, Modifier.alignInColumn(Alignment.CenterHorizontally))
+            ContainerSeparator(separatorData, Modifier.verticalChild(alignment = Alignment.CenterHorizontally))
         },
         renderSpacing = {
             if (itemSpacing > 0) Spacer(Modifier.height(itemSpacing.toDp()))
@@ -206,25 +204,43 @@ private fun VerticalScope.VerticalContainerItems(
     }
 }
 
-/** The child modifiers a Column and a [MatchParentColumn] provide. */
+/** The child modifier a Column and a [WeightedLinearLayout] provide. */
 private interface VerticalScope {
-    fun Modifier.alignInColumn(alignment: Alignment.Horizontal): Modifier
-
     /**
-     * Shrinks a constrained child of a definite height: without match_parent siblings it shares the
-     * height with the other children, with them it leaves them their min_size.
+     * Lays a child out: [alignment] replaces the alignment of the container and [spec] is the share
+     * of a match_parent child. A constrained child of a definite height shrinks: without match_parent
+     * siblings it shares the height with the other children, with them it leaves them their min_size.
      */
-    fun Modifier.constrainHeight(): Modifier
+    fun Modifier.verticalChild(
+        alignment: Alignment.Horizontal? = null,
+        spec: MatchParentSpec? = null,
+        isConstrained: Boolean = false,
+    ): Modifier
 }
 
 private class ColumnVerticalScope(private val scope: ColumnScope) : VerticalScope {
-    override fun Modifier.alignInColumn(alignment: Alignment.Horizontal): Modifier = with(scope) { align(alignment) }
-    override fun Modifier.constrainHeight(): Modifier = with(scope) { weight(1f, fill = false) }
+    // A Column lays out no match_parent children along a definite height.
+    override fun Modifier.verticalChild(
+        alignment: Alignment.Horizontal?,
+        spec: MatchParentSpec?,
+        isConstrained: Boolean,
+    ): Modifier = with(scope) {
+        applyIf(isConstrained) { weight(1f, fill = false) }.applyIfNotNull(alignment) { align(it) }
+    }
 }
 
-private object MatchParentColumnScope : VerticalScope {
-    override fun Modifier.alignInColumn(alignment: Alignment.Horizontal): Modifier = alignInMatchParentColumn(alignment)
-    override fun Modifier.constrainHeight(): Modifier = constrainedInMatchParentColumn()
+private class WeightedVerticalScope(private val defaultAlignment: Alignment.Horizontal) : VerticalScope {
+    override fun Modifier.verticalChild(
+        alignment: Alignment.Horizontal?,
+        spec: MatchParentSpec?,
+        isConstrained: Boolean,
+    ): Modifier = then(
+        WeightedLinearChild(
+            alignment = combineAlignment(alignment ?: defaultAlignment, Alignment.Top),
+            spec = spec,
+            isConstrained = isConstrained,
+        )
+    )
 }
 
 private class VerticalChildrenSizing(
@@ -301,12 +317,15 @@ private fun VerticalScope.VerticalChildItem(
     defaultVerticalAlignment: Alignment.Vertical,
 ) {
     val divBase = div.value()
-    var modifier = Modifier
+    val modifier = Modifier
         .applyIf(excludeCrossAxisFromIntrinsics) {
             fixedIntrinsics(width = divBase.observeHorizontalMarginsSum())
         }
-        .then(makeVerticalChildModifier(divBase, containerMainSize, hasAspect))
-    div.observeHorizontalChildAlignment()?.let { modifier = modifier.alignInColumn(it) }
+        .verticalChild(
+            alignment = div.observeHorizontalChildAlignment(),
+            spec = divBase.observeMatchParentHeightSpec(containerMainSize, hasAspect),
+            isConstrained = divBase.height.observeShrinks(containerMainSize, hasAspect),
+        )
 
     DivBlockView(
         data = div,
@@ -318,25 +337,17 @@ private fun VerticalScope.VerticalChildItem(
     )
 }
 
+/** The share of a match_parent child of a definite height. */
 @Composable
-private fun VerticalScope.makeVerticalChildModifier(
-    child: DivBase,
-    containerSize: DivSize,
-    hasAspect: Boolean,
-): Modifier {
-    val childSize = child.height
-    return when {
-        childSize.isMatchParent && containerSize.isWrapContent && !hasAspect ->
-            // TODO: Needs warning match_parent child and wrap_content container.
-            Modifier
-        childSize is DivSize.MatchParent -> {
-            val (topMargin, bottomMargin) = child.margins.observeVerticalInsets()
-            Modifier.matchParentHeight(childSize.value, topMargin, bottomMargin)
-        }
-        childSize is DivSize.WrapContent && childSize.value.constrained?.observedValue() == true -> when {
-            hasAspect || containerSize.observeIsConstrained() -> Modifier.constrainHeight()
-            else -> Modifier
-        }
-        else -> Modifier
-    }
+private fun DivBase.observeMatchParentHeightSpec(containerSize: DivSize, hasAspect: Boolean): MatchParentSpec? {
+    val size = height as? DivSize.MatchParent ?: return null
+    // TODO: Needs warning match_parent child and wrap_content container.
+    if (containerSize.isWrapContent && !hasAspect) return null
+    val (topMargin, bottomMargin) = margins.observeVerticalInsets()
+    return size.value.observeMatchParentSpec(topMargin, bottomMargin)
 }
+
+@Composable
+private fun DivSize.observeShrinks(containerSize: DivSize, hasAspect: Boolean): Boolean =
+    this is DivSize.WrapContent && value.constrained?.observedValue() == true &&
+        (hasAspect || containerSize.observeIsConstrained())

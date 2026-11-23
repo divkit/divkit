@@ -67,6 +67,26 @@ class DivContainerAspectTest {
     }
 
     @Test
+    fun `match_parent children define the wrap_content width and share the height it gives`() {
+        setContent(
+            container(
+                id = "aspect",
+                width = wrapContent(),
+                aspect = aspect(2.0),
+                items = listOf(
+                    filling("first", fixedBox(120, 10)),
+                    filling("second", fixedBox(80, 10)),
+                ),
+            )
+        )
+
+        rule.onNodeWithTag("aspect").assertWidthIsEqualTo(120.dp)
+        rule.onNodeWithTag("aspect").assertHeightIsEqualTo(60.dp)
+        rule.onNodeWithTag("first").assertHeightIsEqualTo(30.dp)
+        rule.onNodeWithTag("second").assertHeightIsEqualTo(30.dp)
+    }
+
+    @Test
     fun `match_parent child takes the height its siblings leave`() {
         setContent(
             container(
@@ -362,4 +382,7 @@ class DivContainerAspectTest {
 
     private fun fixedBox(width: Int, height: Int): Div =
         container(width = fixed(width), height = fixed(height))
+
+    private fun filling(id: String, content: Div): Div =
+        container(id = id, width = matchParent(), height = matchParent(), items = listOf(content))
 }

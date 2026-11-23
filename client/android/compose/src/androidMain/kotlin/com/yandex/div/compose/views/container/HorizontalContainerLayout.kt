@@ -27,6 +27,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
+import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.observeHorizontalInsets
@@ -34,12 +35,14 @@ import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.compose.views.modifiers.verticalPaddings
 import com.yandex.div2.Div
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
@@ -146,7 +149,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
             spacingAsItems = spacingAsItems,
             renderSeparator = { separatorData ->
                 val separatorModifier = rowScope?.run { Modifier.align(Alignment.CenterVertically) }
-                    ?: MatchParentRowChild(alignment = Alignment.CenterVertically)
+                    ?: WeightedLinearChild(alignment = Alignment.Center)
                 ContainerSeparator(separatorData, separatorModifier)
             },
             renderSpacing = { if (itemSpacing > 0) Spacer(Modifier.width(itemSpacing.toDp())) },
@@ -179,7 +182,7 @@ private fun HorizontalLayout(
     val currentContent by rememberUpdatedState(content)
     val movableContent = remember { movableContentOf<RowScope?> { currentContent(it) } }
     if (useMatchParentRow) {
-        MatchParentRow(modifier, horizontalArrangement, verticalAlignment) { movableContent(null) }
+        WeightedLinearLayout(LinearAxis.Horizontal(horizontalArrangement), modifier) { movableContent(null) }
     } else {
         Row(modifier, horizontalArrangement, verticalAlignment) { movableContent(this) }
     }
@@ -246,7 +249,7 @@ private fun RowScope?.HorizontalChildItem(
         }
         .then(
             if (this == null) {
-                observeMatchParentRowChild(div, alignByBaseline = useBaseline)
+                observeWeightedChild(div, alignByBaseline = useBaseline, defaultAlignment = defaultVerticalAlignment)
             } else {
                 makeHorizontalChildModifier(
                     divBase.width,
@@ -270,6 +273,30 @@ private fun RowScope?.HorizontalChildItem(
         ),
     )
     if (endMargin > 0.dp) Spacer(Modifier.width(endMargin))
+}
+
+/** The layout data of a child of [WeightedLinearLayout]: the container aligns a child that has no alignment. */
+@Composable
+private fun observeWeightedChild(
+    div: Div,
+    alignByBaseline: Boolean,
+    defaultAlignment: Alignment.Vertical,
+): WeightedLinearChild {
+    val child = div.value()
+    val alignment = child.alignmentVertical?.observedValue()
+    val spec = (child.width as? DivSize.MatchParent)?.value?.let { size ->
+        val (startMargin, endMargin) = child.margins.observeHorizontalInsets()
+        size.observeMatchParentSpec(startMargin, endMargin)
+    }
+    return WeightedLinearChild(
+        alignment = combineAlignment(
+            Alignment.Start,
+            alignment?.takeUnless { it == DivAlignmentVertical.BASELINE }?.toVerticalAlignment() ?: defaultAlignment,
+        ),
+        alignByBaseline = alignment == DivAlignmentVertical.BASELINE || alignment == null && alignByBaseline,
+        spec = spec,
+        isConstrained = (child.width as? DivSize.WrapContent)?.value?.constrained?.observedValue() == true,
+    )
 }
 
 @Composable
