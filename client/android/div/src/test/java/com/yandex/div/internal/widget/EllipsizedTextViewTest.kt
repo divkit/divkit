@@ -1,6 +1,7 @@
 package com.yandex.div.internal.widget
 
 import android.app.Activity
+import android.text.BoringLayout
 import android.text.TextUtils.TruncateAt
 import android.view.View.MeasureSpec
 import android.view.ViewGroup.LayoutParams
@@ -10,11 +11,14 @@ import com.yandex.div2.DivText
 import java.util.Locale
 import kotlin.math.ceil
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.GraphicsMode
 
 @RunWith(RobolectricTestRunner::class)
 class EllipsizedTextViewTest {
@@ -91,6 +95,36 @@ class EllipsizedTextViewTest {
 
         assertEquals(sourceText, view.text.toString())
         assertEquals(TruncateAt.END, view.ellipsize)
+    }
+
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    fun `measure preserves source text with an invalid native ellipsis offset`() {
+        val sourceText = "123456789012345"
+        for (offset in listOf(-1, sourceText.length + 1)) {
+            val view = EllipsizedTextView(RuntimeEnvironment.getApplication()).apply {
+                layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                setPadding(0, 0, 0, 0)
+                textSize = 20f
+                maxLines = 1
+                setHorizontallyScrolling(true)
+                truncatePolicy = DivText.TruncatePolicy.GRAPHEME
+                text = sourceText
+            }
+            val width = ceil(view.paint.measureText("123…")).toInt()
+            view.measureAtWidth(width)
+            val nativeLayout = view.layout as BoringLayout
+            val ellipsisCount = nativeLayout.getEllipsisCount(0)
+            assertTrue(ellipsisCount > 0)
+
+            nativeLayout.ellipsized(offset, offset + ellipsisCount)
+            view.forceLayout()
+            view.measureAtWidth(width)
+
+            assertSame(nativeLayout, view.layout)
+            assertEquals(offset, nativeLayout.getEllipsisStart(0))
+            assertEquals(sourceText, view.text.toString())
+        }
     }
 
     @Test

@@ -288,6 +288,9 @@ open class EllipsizedTextView @JvmOverloads constructor(
         }
         val lineStart = nativeLayout.getLineStart(lastLine)
         val nativeOffset = lineStart + nativeLayout.getEllipsisStart(lastLine)
+        if (lineStart < 0 || nativeOffset !in lineStart..text.length) {
+            return null
+        }
         val locale = textLocale
         val hasSafeGraphemeBoundary = text.hasAsciiGraphemeBoundary(nativeOffset) ||
             (lastSafeNativeOffset == nativeOffset &&
