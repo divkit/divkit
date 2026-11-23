@@ -10,7 +10,7 @@ import androidx.core.graphics.withSave
 import kotlin.math.roundToInt
 
 internal class ScaleDrawable(
-    private val child: Drawable,
+    val child: Drawable,
     private val scaleX: Float,
     private val scaleY: Float,
 ) : Drawable(), Drawable.Callback, Animatable {
@@ -38,7 +38,7 @@ internal class ScaleDrawable(
     override fun draw(canvas: Canvas) {
         canvas.withSave {
             scale(scaleX, scaleY)
-            if (child is PictureDrawable) {
+            if (child is PictureDrawable && child.colorFilter == null) {
                 canvas.drawPicture(child.picture)
             } else {
                 child.draw(canvas)
@@ -53,6 +53,8 @@ internal class ScaleDrawable(
     override fun setColorFilter(colorFilter: ColorFilter?) {
         child.colorFilter = colorFilter
     }
+
+    override fun getColorFilter(): ColorFilter? = child.colorFilter
 
     override fun getOpacity() = child.opacity
 

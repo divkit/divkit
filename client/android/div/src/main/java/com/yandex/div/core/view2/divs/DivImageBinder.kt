@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.net.Uri
+import android.os.Build
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
@@ -27,6 +28,8 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.ViewImagePreviewLoader
+import com.yandex.div.core.view2.drawable.ScaleDrawable
+import com.yandex.div.core.view2.drawable.TintablePictureDrawable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.core.widget.LoadableImageView
@@ -224,7 +227,8 @@ internal class DivImageBinder @Inject constructor(
         val bitmap = when (val drawable = drawable) {
             null -> return
             is BitmapDrawable -> drawable.bitmap
-            else -> drawable.run { toBitmap(intrinsicWidth, intrinsicHeight) }
+            is ScaleDrawable -> drawable.child.toBitmapWithoutTint()
+            else -> drawable.toBitmapWithoutTint()
         }
         applyScaleAndFiltersAndSetBitmap(bitmap, newDiv.scale, newDiv.filters, resolver, divView)
     }
@@ -308,7 +312,8 @@ internal class DivImageBinder @Inject constructor(
             is ImageRepresentation.PictureDrawable -> {
                 if (div.isVectorCompatible()) {
                     previewLoaded()
-                    setImageDrawable(divView, preview.value)
+                    setImageDrawable(divView, preview.value.toVectorDrawable())
+                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                 } else {
                     setPreview(preview.value.toBitmap(), div, resolver, divView)
                 }
@@ -359,7 +364,7 @@ internal class DivImageBinder @Inject constructor(
                 setPreview(drawable.toBitmap(), div, resolver, divView, previewRequest)
             else -> {
                 previewLoaded()
-                setImageDrawable(drawable)
+                setImageDrawable((drawable as? PictureDrawable)?.toVectorDrawable() ?: drawable)
                 applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
             }
         }
@@ -465,7 +470,7 @@ internal class DivImageBinder @Inject constructor(
                 override fun onSuccess(pictureDrawable: PictureDrawable, source: BitmapSource) {
                     val current = divBlock ?: block
                     if (current.divValue.isVectorCompatible()) {
-                        onDrawableLoaded(pictureDrawable, source, current, divView)
+                        onDrawableLoaded(pictureDrawable.toVectorDrawable(), source, current, divView)
                     } else {
                         onBitmapLoaded(pictureDrawable.toBitmap(), source, current, divView)
                     }
@@ -533,14 +538,6 @@ internal class DivImageBinder @Inject constructor(
         bitmap.applyScaleAndFilters(divView, this, scale, filters) {
             setImageBitmap(divView, it, previewRequest)
         }
-    }
-
-    /**
-     * Vector format Image doesn't support color and filters.
-     * If color or filters are specified for Image, it should be rasterized.
-     */
-    private fun DivImage.isVectorCompatible() : Boolean {
-        return tintColor == null && filters.isNullOrEmpty()
     }
 
     private fun DivImageView.applyLoadingFade(
@@ -646,3 +643,24 @@ internal class DivImageBinder @Inject constructor(
         }
     }
 }
+
+private fun Drawable.toBitmapWithoutTint(): Bitmap {
+    val tint = colorFilter
+    colorFilter = null
+    return toBitmap(intrinsicWidth, intrinsicHeight).also { colorFilter = tint }
+}
+
+/**
+ * Vector format Image doesn't support filters, and before Android P doesn't support tint.
+ * If they are specified for Image, it should be rasterized.
+ */
+private fun DivImage.isVectorCompatible() : Boolean {
+    return filters.isNullOrEmpty() && (tintColor == null || isVectorTintSupported)
+}
+
+private fun PictureDrawable.toVectorDrawable(): Drawable {
+    return if (isVectorTintSupported) TintablePictureDrawable(picture) else this
+}
+
+// Before Android P a scaled saveLayer is drawn pixelated, so tinted vectors are rasterized
+private val isVectorTintSupported get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P

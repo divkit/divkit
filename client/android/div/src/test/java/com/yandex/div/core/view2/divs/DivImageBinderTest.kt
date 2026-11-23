@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.net.Uri
+import android.os.Build
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
@@ -27,7 +28,9 @@ import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBlur
 import com.yandex.div2.DivFadeTransition
 import com.yandex.div2.DivFilter
+import com.yandex.div2.DivFilterRtlMirror
 import com.yandex.div2.DivImage
+import com.yandex.div2.DivImageScale
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -46,6 +49,8 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
 
 @RunWith(RobolectricTestRunner::class)
 class DivImageBinderTest : DivBinderTest() {
@@ -360,7 +365,7 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `svg rasterized for tint of current div after same url rebind`() {
+    fun `svg kept vector with tint of current div after same url rebind`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv()
         binder.bindView(view, divImage, divView)
@@ -376,9 +381,27 @@ class DivImageBinderTest : DivBinderTest() {
             PictureDrawable(picture),
         )
 
-        Assert.assertTrue(view.drawable is BitmapDrawable)
         val expected = PorterDuffColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY)
-        Assert.assertEquals(expected, view.colorFilter)
+        Assert.assertEquals(expected, view.drawable.colorFilter)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.O_MR1])
+    fun `tinted svg rasterized before android p`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ff0000")
+        binder.bindView(view, divImage, divView)
+        val picture = Picture().apply {
+            beginRecording(10, 10)
+            endRecording()
+        }
+
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            PictureDrawable(picture),
+        )
+
+        Assert.assertTrue(view.drawable is BitmapDrawable)
     }
 
     @Test
@@ -399,6 +422,52 @@ class DivImageBinderTest : DivBinderTest() {
 
         Assert.assertFalse(view.drawable is BitmapDrawable)
         Assert.assertNull(view.colorFilter)
+    }
+
+    @Test
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    fun `svg rasterized without tint when filters added on rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ff0000")
+        binder.bindView(view, divImage, divView)
+        val picture = Picture().apply {
+            beginRecording(10, 10).drawColor(Color.BLACK)
+            endRecording()
+        }
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            PictureDrawable(picture),
+        )
+
+        val filtered = createTestDiv(tintColor = "#ff0000", filters = listOf(DivFilter.RtlMirror(DivFilterRtlMirror())))
+        binder.bindView(view, filtered, divView)
+
+        Assert.assertEquals(Color.BLACK, view.currentBitmapWithoutFilters?.getPixel(5, 5))
+    }
+
+    @Test
+    @Config(qualifiers = "xxhdpi")
+    fun `svg rasterized at picture size when filters added on rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ff0000", scale = DivImageScale.NO_SCALE)
+        binder.bindView(view, divImage, divView)
+        val picture = Picture().apply {
+            beginRecording(10, 10)
+            endRecording()
+        }
+        whenImageLoaded(
+            divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString(),
+            PictureDrawable(picture),
+        )
+
+        val filtered = createTestDiv(
+            tintColor = "#ff0000",
+            scale = DivImageScale.NO_SCALE,
+            filters = listOf(DivFilter.RtlMirror(DivFilterRtlMirror())),
+        )
+        binder.bindView(view, filtered, divView)
+
+        Assert.assertEquals(10, view.currentBitmapWithoutFilters?.width)
     }
 
     @Test
@@ -522,6 +591,7 @@ class DivImageBinderTest : DivBinderTest() {
         alpha: Double = 1.0,
         filters: List<DivFilter>? = null,
         appearanceAnimation: DivFadeTransition? = null,
+        scale: DivImageScale = DivImageScale.FILL,
     ): DivBlock.Image {
         return Div.Image(DivImage(
             alpha = alpha.asExpression(),
@@ -529,6 +599,7 @@ class DivImageBinderTest : DivBinderTest() {
             filters = filters,
             imageUrl = Uri.parse(imageUrl).asExpression(),
             preview = preview?.asExpression(),
+            scale = scale.asExpression(),
             highPriorityPreviewShow = highPriorityPreviewShow.asExpression(),
             tintColor = tintColor?.let { Color.parseColor(it).asExpression() },
             tintMode = tintMode.asExpression(),
