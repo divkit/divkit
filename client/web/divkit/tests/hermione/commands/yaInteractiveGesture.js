@@ -64,29 +64,6 @@ module.exports = async function(step) {
     });
     const target = await queryTarget('get');
 
-    if (step.type === 'tap') {
-        const element = await this.$(target);
-        if (step.point === undefined) {
-            await element.click();
-        } else {
-            const offsets = await this.execute((element, point) => {
-                const rect = element.getBoundingClientRect();
-                const origin = element.getClientRects()[0];
-                const x = Math.round(rect.left + rect.width * point.x);
-                const y = Math.round(rect.top + rect.height * point.y);
-                if (!origin || x < 0 || x >= innerWidth || y < 0 || y >= innerHeight) {
-                    throw new Error(`Tap point outside viewport: ${x}, ${y}`);
-                }
-                return {
-                    x: x - Math.floor((Math.max(0, origin.left) + Math.min(innerWidth, origin.right)) / 2),
-                    y: y - Math.floor((Math.max(0, origin.top) + Math.min(innerHeight, origin.bottom)) / 2),
-                };
-            }, target, step.point);
-            await element.click(offsets);
-        }
-        return;
-    }
-
     const coordinates = await this.execute((element, points) => {
         const rect = element.getBoundingClientRect();
         return points.map(point => {
@@ -102,8 +79,10 @@ module.exports = async function(step) {
     const actions = [
         { type: 'pointerMove', duration: 0, origin: 'viewport', ...coordinates[0] },
         { type: 'pointerDown', button: 0 },
-        { type: 'pause', duration: 200 },
-        { type: 'pointerMove', duration: 500, origin: 'viewport', ...coordinates[1] },
+        ...(step.type === 'swipe' ? [
+            { type: 'pause', duration: 200 },
+            { type: 'pointerMove', duration: 500, origin: 'viewport', ...coordinates[1] },
+        ] : []),
         { type: 'pointerUp', button: 0 },
     ];
     try {

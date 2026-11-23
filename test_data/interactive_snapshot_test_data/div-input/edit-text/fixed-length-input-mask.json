@@ -2,7 +2,8 @@
   "description": "Fixed length input mask: reject invalid characters and toggle placeholders",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

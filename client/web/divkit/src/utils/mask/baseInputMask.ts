@@ -136,6 +136,9 @@ export abstract class BaseInputMask {
         const diff = textDiff(this.value, newValue);
 
         if (position !== undefined) {
+            const commonSuffixLength = Math.max(0, position - diff.start - diff.added);
+            diff.added += commonSuffixLength;
+            diff.removed += commonSuffixLength;
             diff.start = Math.max(0, position - diff.added);
         }
 

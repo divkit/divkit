@@ -457,8 +457,9 @@
     }
 
     function blockOverflow(event: KeyboardEvent): void {
+        const selectedLength = (getSelectionEnd() || 0) - (getSelectionStart() || 0);
         if (
-            value.length >= maxLength &&
+            value.length - selectedLength >= maxLength &&
             !ALLOWED_BLOCKED_MULTILINE_KEYS.has(event.key) &&
             !(event.ctrlKey || event.altKey || event.metaKey)
         ) {

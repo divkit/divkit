@@ -79,6 +79,8 @@ function createInteractiveTestCase(testCase, testPath) {
         for (const step of steps) {
             if (step.type === 'tap' || step.type === 'swipe') {
                 await this.browser.yaInteractiveGesture(step);
+            } else if (step.type === 'edit_text') {
+                await this.browser.yaInteractiveEditText(step);
             } else if (step.type === 'div_action') {
                 await this.browser.execute(action => {
                     window.divkitRoot.execAction(action);
@@ -93,7 +95,15 @@ function createInteractiveTestCase(testCase, testPath) {
                     const actualText = await this.browser.execute(id => {
                         const element = [...document.querySelectorAll('[data-test-id]')]
                             .find(candidate => candidate.getAttribute('data-test-id') === id);
-                        return element ? element.innerText : null;
+                        if (!element) {
+                            return null;
+                        }
+                        const selector = 'input, textarea, [contenteditable]';
+                        const input = element.matches(selector) ? element : element.querySelector(selector);
+                        if (input instanceof HTMLInputElement || input instanceof HTMLTextAreaElement) {
+                            return input.type === 'password' ? '' : input.value;
+                        }
+                        return (input || element).innerText;
                     }, step.target.id);
                     return actualText === step.text;
                 }, {

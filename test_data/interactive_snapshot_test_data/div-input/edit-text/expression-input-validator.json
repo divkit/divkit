@@ -2,7 +2,8 @@
   "description": "Expression input validator: validate the minimum value, revalidate after threshold changes, and control empty input",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

@@ -1,7 +1,8 @@
 {
   "description": "Regex input validator: validate length and characters after pattern changes and control empty input",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

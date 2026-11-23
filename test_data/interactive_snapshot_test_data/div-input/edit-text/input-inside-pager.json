@@ -1,7 +1,8 @@
 {
   "description": "Input inside pager: edit text inside a pager page",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "card": {

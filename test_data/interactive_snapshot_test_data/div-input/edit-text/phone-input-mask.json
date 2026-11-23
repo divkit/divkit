@@ -2,7 +2,8 @@
   "description": "Phone input mask: reject invalid characters and update raw and formatted phone numbers",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {

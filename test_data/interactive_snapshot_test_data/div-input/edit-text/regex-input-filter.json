@@ -1,7 +1,8 @@
 {
   "description": "Regex input filter: reject invalid edits after pattern changes and control empty input",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {
