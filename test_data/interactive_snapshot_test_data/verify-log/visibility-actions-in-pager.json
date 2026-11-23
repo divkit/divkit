@@ -1,6 +1,7 @@
 {
   "description": "Pager visibility logs are emitted once and suppressed when returning to an already shown page.",
   "platforms": [
+    "android",
     "ios"
   ],
   "case_id": 55,

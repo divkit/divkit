@@ -1,6 +1,7 @@
 {
   "description": "A pager starting at default_item 4 runs that page's visibility actions on initial display. The test checks the description DivState's Item 4 text and a visibility log count of 1 for content_item_show/4.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
@@ -153,7 +154,8 @@
                                           {
                                             "log_id": "6",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/0"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0",
+                                            "visibility_duration": 0
                                           },
                                           {
                                             "log_id": "content_item_show/0",
@@ -173,7 +175,8 @@
                                           {
                                             "log_id": "106",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/1"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1",
+                                            "visibility_duration": 0
                                           },
                                           {
                                             "log_id": "content_item_show/1",
@@ -194,7 +197,8 @@
                                           {
                                             "log_id": "206",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/2"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2",
+                                            "visibility_duration": 0
                                           },
                                           {
                                             "log_id": "content_item_show/2",
@@ -214,7 +218,8 @@
                                           {
                                             "log_id": "306",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/3"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3",
+                                            "visibility_duration": 0
                                           },
                                           {
                                             "log_id": "content_item_show/3",
@@ -235,7 +240,8 @@
                                           {
                                             "log_id": "406",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/4"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/4",
+                                            "visibility_duration": 0
                                           },
                                           {
                                             "log_id": "content_item_show/4",
@@ -255,7 +261,8 @@
                                           {
                                             "log_id": "506",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/5"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/5",
+                                            "visibility_duration": 0
                                           },
                                           {
                                             "log_id": "content_item_show/5",

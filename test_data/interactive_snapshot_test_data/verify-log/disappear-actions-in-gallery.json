@@ -1,6 +1,7 @@
 {
   "description": "Gallery disappearance logs are absent before scrolling and emitted once after Item 1 disappears.",
   "platforms": [
+    "android",
     "ios"
   ],
   "case_id": 54,
@@ -160,7 +161,8 @@
         "type": "div_id",
         "id": "main_gallery"
       },
-      "direction": "left"
+      "direction": "left",
+      "hold_duration_ms": 300
     },
     {
       "type": "verify_log",

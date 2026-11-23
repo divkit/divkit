@@ -1,6 +1,7 @@
 package com.yandex.div.steps
 
 import android.graphics.PointF
+import android.os.SystemClock
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -13,6 +14,7 @@ import com.yandex.div.rule.UiReadyChecker
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Target
+import com.yandex.div.test.crossplatform.SightActionRecorder
 import com.yandex.div.view.ViewActions.doubleTapWithRetries
 import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
@@ -64,6 +66,8 @@ internal class InteractiveScreenshotSteps {
                     is Step.VerifyText -> verifyText(step)
 
                     is Step.VerifyFocus -> verifyFocus(step)
+
+                    is Step.VerifyLog -> verifyLog(scenario, step)
 
                     is Step.VerifySnapshot ->
                         verifySnapshot(scenario, step, snapshotIndex++, casePath, artifactsRelativePath)
@@ -132,6 +136,25 @@ internal class InteractiveScreenshotSteps {
     ) = step("Verify focused=${verification.focused} in ${verification.target}") {
         val focused = if (verification.focused) hasFocus() else doesNotHaveFocus()
         onView(verification.target).waitUntilVisible(focused)
+    }
+
+    private fun verifyLog(
+        scenario: ActivityScenario<DivScreenshotActivity>,
+        verification: Step.VerifyLog
+    ) = step(
+        "Verify log ${verification.source} '${verification.id}' " +
+            (verification.count?.let { "count=$it" } ?: "at least once")
+    ) {
+        // Actions are recorded on the main thread; delayed ones are awaited like verify_text.
+        val deadline = SystemClock.uptimeMillis() + SightActionRecorder.TIMEOUT_MS
+        while (true) {
+            var settled = false
+            scenario.onActivity { settled = it.sightActionRecorder.isSettled(verification) }
+            val remainingMillis = deadline - SystemClock.uptimeMillis()
+            if (settled || remainingMillis <= 0) break
+            Thread.sleep(minOf(SightActionRecorder.POLL_INTERVAL_MS, remainingMillis))
+        }
+        scenario.onActivity { it.sightActionRecorder.verify(verification) }
     }
 
     private fun onView(target: Target) = onView(

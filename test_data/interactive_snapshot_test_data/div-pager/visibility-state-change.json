@@ -1,6 +1,7 @@
 {
   "description": "Pager page visibility actions switch a separate description DivState as navigation progresses from item 0 through items 1 and 2. Text checks verify the resulting states; visibility logs check one event per visited page and the container's delayed event.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
@@ -153,7 +154,8 @@
                                           {
                                             "log_id": "6",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/0"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0",
+                                            "visibility_duration": 200
                                           },
                                           {
                                             "log_id": "content_item_show/0",
@@ -168,7 +170,8 @@
                                           {
                                             "log_id": "106",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/1"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1",
+                                            "visibility_duration": 200
                                           },
                                           {
                                             "log_id": "content_item_show/1",
@@ -184,7 +187,8 @@
                                           {
                                             "log_id": "206",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/2"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2",
+                                            "visibility_duration": 200
                                           },
                                           {
                                             "log_id": "content_item_show/2",
@@ -199,7 +203,8 @@
                                           {
                                             "log_id": "306",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/3"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3",
+                                            "visibility_duration": 200
                                           },
                                           {
                                             "log_id": "content_item_show:3",
@@ -215,7 +220,8 @@
                                           {
                                             "log_id": "406",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/4"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/4",
+                                            "visibility_duration": 200
                                           },
                                           {
                                             "log_id": "content_item_show:4",
@@ -230,7 +236,8 @@
                                           {
                                             "log_id": "506",
                                             "log_limit": 0,
-                                            "url": "div-action://set_state?state_id=0/body/card/description/5"
+                                            "url": "div-action://set_state?state_id=0/body/card/description/5",
+                                            "visibility_duration": 200
                                           },
                                           {
                                             "log_id": "content_item_show:5",
@@ -364,7 +371,7 @@
             "visibility_actions": [
               {
                 "log_id": "pager_container",
-                "visibility_duration": 4000,
+                "visibility_duration": 200,
                 "visibility_percentage": 80
               }
             ]
@@ -403,6 +410,11 @@
       "direction": "left"
     },
     {
+      "type": "wait",
+      "duration_ms": 200,
+      "description": "Wait for state change via visibility_action."
+    },
+    {
       "type": "verify_text",
       "target": {
         "type": "div_id",
@@ -423,6 +435,11 @@
         "id": "pager"
       },
       "direction": "left"
+    },
+    {
+      "type": "wait",
+      "duration_ms": 200,
+      "description": "Wait for state change via visibility_action."
     },
     {
       "type": "verify_text",

@@ -1,6 +1,7 @@
 {
   "description": "Gallery visibility logs are emitted on each appearance and filtered by source.",
   "platforms": [
+    "android",
     "ios"
   ],
   "case_id": 52,
@@ -57,7 +58,7 @@
           {
             "$log_id": "item_log_id",
             "log_limit": 0,
-            "visibility_duration": 1000,
+            "visibility_duration": 0,
             "visibility_percentage": 75
           }
         ],

@@ -47,6 +47,14 @@ class InteractiveScreenshotTestData(
         class VerifyText(val target: Target, val text: String) : Step()
 
         class VerifyFocus(val target: Target, val focused: Boolean) : Step()
+
+        class VerifyLog(val source: Source, val id: String, val count: Int?) : Step() {
+            enum class Source {
+                VISIBILITY, DISAPPEAR;
+
+                override fun toString() = name.lowercase()
+            }
+        }
     }
 
     sealed class Target {
@@ -114,6 +122,8 @@ class InteractiveScreenshotTestData(
 
                 "verify_focus" -> Step.VerifyFocus(parseTarget(step), step.getBoolean("focused"))
 
+                "verify_log" -> parseVerifyLog(step)
+
                 else -> throw JSONException("Unknown interactive step type: $type")
             }
         }
@@ -142,6 +152,27 @@ class InteractiveScreenshotTestData(
                 "replace" -> Step.EditText.Mode.REPLACE
                 "append" -> Step.EditText.Mode.APPEND
                 else -> throw JSONException("Unsupported edit_text mode: $mode")
+            }
+        }
+
+        private fun parseVerifyLog(step: JSONObject): Step.VerifyLog {
+            val source = parseLogSource(step)
+            val id = step.getString("id")
+            if (id.isEmpty()) {
+                throw JSONException("verify_log id must not be empty")
+            }
+            val count = if (step.has("count")) step.getInt("count") else null
+            if (count != null && count < 0) {
+                throw JSONException("verify_log count must be nonnegative, got: $count")
+            }
+            return Step.VerifyLog(source, id, count)
+        }
+
+        private fun parseLogSource(step: JSONObject): Step.VerifyLog.Source {
+            return when (val source = step.getString("source")) {
+                "visibility" -> Step.VerifyLog.Source.VISIBILITY
+                "disappear" -> Step.VerifyLog.Source.DISAPPEAR
+                else -> throw JSONException("Unsupported verify_log source: $source")
             }
         }
 

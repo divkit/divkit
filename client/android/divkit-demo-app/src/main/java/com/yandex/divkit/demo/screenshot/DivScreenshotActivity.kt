@@ -10,8 +10,15 @@ import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.DivKit
+import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
+import com.yandex.div.test.crossplatform.SightActionRecorder
+import com.yandex.div2.DivDisappearAction
+import com.yandex.div2.DivSightAction
 import com.yandex.divkit.demo.Container
+import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +34,9 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
     lateinit var divView: Div2View
         private set
 
+    lateinit var sightActionRecorder: SightActionRecorder
+        private set
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         assertionsEnabled = DivKit.isAssertionsEnabled()
@@ -35,7 +45,9 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
 
     override fun prepare() {
         setImageLoader()
+        sightActionRecorder = SightActionRecorder()
         divContext = divContext(activity = this, isRiveEnabled = false) {
+            actionHandler(SightActionRecordingHandler(sightActionRecorder))
             animationsEnabledProvider(DisabledAnimationsProvider)
         }
         divView = Div2View(divContext)
@@ -124,4 +136,24 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
 
 private object DisabledAnimationsProvider : DivAnimationsEnabledProvider {
     override val animationsEnabled = MutableStateFlow(false)
+}
+
+// Div2Logger receives only sight actions that no handler handled, so record them here.
+// DivVisibilityActionDispatcher calls this overload because useActionUid is false.
+private class SightActionRecordingHandler(
+    private val recorder: SightActionRecorder,
+) : DemoDivActionHandler(Container.uriHandler) {
+    override fun handleAction(
+        action: DivSightAction,
+        view: DivViewFacade,
+        resolver: ExpressionResolver,
+    ): Boolean {
+        val source = if (action is DivDisappearAction) {
+            Step.VerifyLog.Source.DISAPPEAR
+        } else {
+            Step.VerifyLog.Source.VISIBILITY
+        }
+        recorder.record(source, action.logId?.evaluate(resolver).orEmpty())
+        return super.handleAction(action, view, resolver)
+    }
 }

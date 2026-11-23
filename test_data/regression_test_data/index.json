@@ -2028,6 +2028,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "web",
         "ios"
       ],
@@ -2080,6 +2081,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "web",
         "ios"
       ],
@@ -2106,6 +2108,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],
@@ -2239,6 +2242,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],
@@ -2263,6 +2267,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],
@@ -5380,6 +5385,7 @@
     {
       "title": "Visibility action with local variable in url",
       "automated": [
+        "android",
         "ios"
       ],
       "platforms": [

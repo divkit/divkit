@@ -33,10 +33,16 @@ import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.actions.DivActionData
+import com.yandex.div.compose.actions.DivActionHandlingContext
+import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
+import com.yandex.div.test.crossplatform.SightActionRecorder
 import com.yandex.div2.DivData
 import java.io.File
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -57,11 +63,13 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
     private var isViewEmpty by mutableStateOf(false)
 
     val reporter = TestReporter().also { it.failOnError = failOnError }
+    val sightActionRecorder = SightActionRecorder()
     val testScope = TestScope(testDispatcher)
 
     val divContext = DivContext(
         baseContext = getApplicationContext(),
         configuration = divConfiguration {
+            actionHandler = SightActionRecordingHandler(sightActionRecorder)
             extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler())
             fontSourceProvider = TestFontSourceProvider()
             imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext())
@@ -147,4 +155,17 @@ private class SolidBackgroundExtensionHandler : DivExtensionHandler {
         environment: DivExtensionEnvironment,
         content: @Composable (Modifier) -> Unit
     ) = content(modifier.background(Color.Red))
+}
+
+private class SightActionRecordingHandler(
+    private val recorder: SightActionRecorder,
+) : DivExternalActionHandler {
+    override fun onActionTriggered(context: DivActionHandlingContext, action: DivActionData) {
+        val source = when (action.source) {
+            DivActionSource.VISIBILITY -> Step.VerifyLog.Source.VISIBILITY
+            DivActionSource.DISAPPEAR -> Step.VerifyLog.Source.DISAPPEAR
+            else -> return
+        }
+        recorder.record(source, action.id.orEmpty())
+    }
 }

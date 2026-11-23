@@ -1,6 +1,7 @@
 {
   "description": "Taps reveal a nested comments subtree through DivState changes. Visibility logs are checked for all four comment grids and for shared separator, author, date and nested DivState event IDs; shared IDs require at least one event across the subtree.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
@@ -34,7 +35,7 @@
           {
             "log_id": "comment_grid",
             "log_limit": 5,
-            "visibility_duration": 1000
+            "visibility_duration": 0
           }
         ],
         "background": [
@@ -55,7 +56,7 @@
               {
                 "log_id": "comment_marker",
                 "log_limit": 5,
-                "visibility_duration": 1000
+                "visibility_duration": 0
               }
             ],
             "width": {
@@ -82,7 +83,7 @@
               {
                 "log_id": "author_title",
                 "log_limit": 5,
-                "visibility_duration": 1000
+                "visibility_duration": 0
               }
             ],
             "width": {
@@ -110,7 +111,7 @@
               {
                 "log_id": "comment_date",
                 "log_limit": 5,
-                "visibility_duration": 1000
+                "visibility_duration": 0
               }
             ],
             "width": {
@@ -135,7 +136,7 @@
               {
                 "log_id": "comment_content_state",
                 "log_limit": 5,
-                "visibility_duration": 1000
+                "visibility_duration": 0
               }
             ],
             "margins": {
@@ -377,7 +378,7 @@
                                       {
                                         "log_id": "comment_01",
                                         "log_limit": 5,
-                                        "visibility_duration": 1000
+                                        "visibility_duration": 200
                                       }
                                     ],
                                     "comment_id": "comment_01",
@@ -408,7 +409,7 @@
                                       {
                                         "log_id": "comment_02",
                                         "log_limit": 5,
-                                        "visibility_duration": 2000
+                                        "visibility_duration": 400
                                       }
                                     ],
                                     "comment_id": "comment_02",
@@ -439,7 +440,7 @@
                                       {
                                         "log_id": "comment_03",
                                         "log_limit": 5,
-                                        "visibility_duration": 3000
+                                        "visibility_duration": 600
                                       }
                                     ],
                                     "comment_id": "comment_03",
@@ -467,7 +468,7 @@
                                       {
                                         "log_id": "comment_04",
                                         "log_limit": 5,
-                                        "visibility_duration": 4000
+                                        "visibility_duration": 800
                                       }
                                     ],
                                     "comment_id": "comment_04",

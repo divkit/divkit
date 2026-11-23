@@ -1,6 +1,7 @@
 {
   "description": "Visibility for div-text",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

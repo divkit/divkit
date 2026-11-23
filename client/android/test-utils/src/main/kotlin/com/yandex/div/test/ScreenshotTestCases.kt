@@ -151,6 +151,9 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     // Long tap on a child without longtap_actions does not reach the parent, DIVKIT-10433
     "div-action/button-actions.json",
 
+    // Visibility actions ignore visibility: invisible, so showing the text again logs no event.
+    "div-text/visibility.json",
+
     "div-action/custom-action.json",
     "div-action/scope-id/focus-element.json",
     "div-action/scope-id/set-cursor-position.json",

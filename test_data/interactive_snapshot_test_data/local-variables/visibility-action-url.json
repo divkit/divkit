@@ -1,6 +1,7 @@
 {
   "description": "A delayed visibility action resolves an element-local variable in its set_variable URL and updates the card variable's displayed text.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
@@ -64,6 +65,11 @@
         "id": "visibility_action_result"
       },
       "text": "Waiting for visibility action..."
+    },
+    {
+      "type": "wait",
+      "duration_ms": 1500,
+      "description": "Wait for variable update via visibility_action."
     },
     {
       "type": "verify_text",

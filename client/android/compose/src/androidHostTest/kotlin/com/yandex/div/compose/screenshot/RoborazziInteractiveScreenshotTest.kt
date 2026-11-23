@@ -36,6 +36,7 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Target
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
+import com.yandex.div.test.crossplatform.SightActionRecorder
 import com.yandex.div.test.crossplatform.clipSwipeToBounds
 import com.yandex.div.test.crossplatform.tapPointWithinBounds
 import org.junit.Rule
@@ -97,6 +98,7 @@ class RoborazziInteractiveScreenshotTest(
                 is Step.EditText -> performEditText(step)
                 is Step.VerifyText -> verifyText(step)
                 is Step.VerifyFocus -> verifyFocus(step)
+                is Step.VerifyLog -> verifyLog(step)
                 is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
                 is Step.Wait -> wait(step)
             }
@@ -219,6 +221,18 @@ class RoborazziInteractiveScreenshotTest(
         val isFocusMatcher = isFocused() or hasAnyDescendant(isFocused())
         onTarget(step.target)
             .assert(if (step.focused) isFocusMatcher else !isFocusMatcher)
+    }
+
+    // Delayed actions run only when the test clock advances.
+    private fun verifyLog(step: Step.VerifyLog) {
+        val recorder = contentRule.sightActionRecorder
+        var waited = 0L
+        while (!recorder.isSettled(step) && waited < SightActionRecorder.TIMEOUT_MS) {
+            wait(Step.Wait(SightActionRecorder.POLL_INTERVAL_MS))
+            contentRule.waitForIdle()
+            waited += SightActionRecorder.POLL_INTERVAL_MS
+        }
+        recorder.verify(step)
     }
 
     @OptIn(ExperimentalRoborazziApi::class)
