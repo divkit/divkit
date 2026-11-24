@@ -6,15 +6,15 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
-import com.yandex.div.compose.collection.VisibleCollectionItems
-import com.yandex.div.compose.context.WithDivKey
-import com.yandex.div.compose.di.WithLocalComponent
+import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentHorizontal
+import com.yandex.div2.DivContentAlignmentVertical
 
 @Composable
 internal fun DivContainer.Separator?.resolveSeparatorVisibility(): SeparatorVisibility {
@@ -73,58 +73,47 @@ internal fun RowScope.observeVerticalChildModifier(
 internal fun Div.observeHorizontalChildAlignment(): Alignment.Horizontal? =
     value().alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
 
-internal fun Modifier.reduceMaxConstraint(
-    reductionPx: Int,
-    isWidth: Boolean,
-): Modifier {
-    if (reductionPx <= 0) return this
-    return layout { measurable, constraints ->
-        // An unbounded size has nothing to take the reduction from.
-        val adjustedConstraints = when {
-            isWidth && constraints.hasBoundedWidth ->
-                constraints.copy(maxWidth = (constraints.maxWidth - reductionPx).coerceAtLeast(0))
-            !isWidth && constraints.hasBoundedHeight ->
-                constraints.copy(maxHeight = (constraints.maxHeight - reductionPx).coerceAtLeast(0))
-            else -> constraints
-        }
-        val placeable = measurable.measure(adjustedConstraints)
-        layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
+/**
+ * Aligns content that is larger than the container the way the container aligns its children.
+ * Compose centers a layout that reports a size beyond its constraints, e.g. a Row whose children
+ * are shifted down to a common baseline, so the start of the content would move out of the
+ * container.
+ */
+internal fun Modifier.alignContainerOverflow(
+    horizontalAlignment: DivContentAlignmentHorizontal,
+    verticalAlignment: DivContentAlignmentVertical,
+): Modifier = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    // The offsets undo the centering: half of the overflow is already outside on each side.
+    val centeredX = (placeable.measuredWidth - placeable.width) / 2
+    val centeredY = (placeable.measuredHeight - placeable.height) / 2
+    layout(placeable.width, placeable.height) {
+        placeable.placeRelative(
+            x = -centeredX * horizontalAlignment.overflowBias(layoutDirection),
+            y = -centeredY * verticalAlignment.overflowBias,
+        )
     }
 }
 
-@Composable
-internal inline fun LinearContainer(
-    collection: VisibleCollectionItems,
-    separator: DivContainer.Separator?,
-    separatorVisibility: SeparatorVisibility,
-    spacingAsItems: Boolean = false,
-    renderSeparator: @Composable (DivContainer.Separator) -> Unit,
-    renderSpacing: @Composable () -> Unit,
-    crossinline renderItem: @Composable (Div) -> Unit,
-) {
-    val items = collection.items
-    val hasItems = items.isNotEmpty()
-
-    if (hasItems && separatorVisibility.showAtStart && separator != null) {
-        renderSeparator(separator)
-    }
-
-    items.forEachIndexed { index, childDiv ->
-        // The child slot includes layout wrappers and spacers outside DivBlockView.
-        WithDivKey(childDiv) {
-            WithLocalComponent(collection.components?.get(childDiv)) { renderItem(childDiv) }
-        }
-
-        val isNotLastItem = index < items.lastIndex
-        if (isNotLastItem) {
-            when {
-                separatorVisibility.showBetween && separator != null -> renderSeparator(separator)
-                spacingAsItems || separatorVisibility.hasAnySeparator -> renderSpacing()
-            }
-        }
-    }
-
-    if (hasItems && separatorVisibility.showAtEnd && separator != null) {
-        renderSeparator(separator)
-    }
+/** -1 keeps the start of the content in place, 1 keeps its end, 0 keeps it centered. */
+private fun DivContentAlignmentHorizontal.overflowBias(layoutDirection: LayoutDirection): Int = when (this) {
+    DivContentAlignmentHorizontal.START -> -1
+    DivContentAlignmentHorizontal.END -> 1
+    DivContentAlignmentHorizontal.LEFT -> if (layoutDirection == LayoutDirection.Ltr) -1 else 1
+    DivContentAlignmentHorizontal.RIGHT -> if (layoutDirection == LayoutDirection.Ltr) 1 else -1
+    DivContentAlignmentHorizontal.CENTER,
+    DivContentAlignmentHorizontal.SPACE_AROUND,
+    DivContentAlignmentHorizontal.SPACE_BETWEEN,
+    DivContentAlignmentHorizontal.SPACE_EVENLY -> 0
 }
+
+private val DivContentAlignmentVertical.overflowBias: Int
+    get() = when (this) {
+        DivContentAlignmentVertical.TOP,
+        DivContentAlignmentVertical.BASELINE -> -1
+        DivContentAlignmentVertical.BOTTOM -> 1
+        DivContentAlignmentVertical.CENTER,
+        DivContentAlignmentVertical.SPACE_AROUND,
+        DivContentAlignmentVertical.SPACE_BETWEEN,
+        DivContentAlignmentVertical.SPACE_EVENLY -> 0
+    }

@@ -10,7 +10,6 @@
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.rememberSpannedTracks: AxisTracks</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@OptIn(ExperimentalGridApi::class) @Composable private fun List&lt;Cell&gt;.axisTracks: AxisTracks</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:private fun List&lt;Cell&gt;.lineBaseSize: Float</ID>
-    <ID>CognitiveComplexMethod:HorizontalContainerLayout.kt:@Composable internal fun ContainerHorizontalView</ID>
     <ID>CognitiveComplexMethod:ImageContentSizeModifier.kt:ImageContentSizeNode$private fun Density.resolveSize: IntSize</ID>
     <ID>CognitiveComplexMethod:ImageFilters.kt:@Composable internal fun List&lt;DivFilter&gt;?.observedTransformations: List&lt;Transformation&gt;</ID>
     <ID>CognitiveComplexMethod:IndicatorDrawing.kt:internal fun DrawScope.drawIndicators</ID>
@@ -27,19 +26,15 @@
     <ID>ComplexCondition:DivTextView.kt:ellipsis != null &amp;&amp; ellipsisText != null &amp;&amp; (!ellipsis.isPlain() || ellipsisText != DEFAULT_ELLIPSIS)</ID>
     <ID>ComplexCondition:DivTextView.kt:gradientBrush == null &amp;&amp; ranges.isEmpty() &amp;&amp; actions.isNullOrEmpty() &amp;&amp; inlineImages.isEmpty()</ID>
     <ID>ComplexCondition:GridTracks.kt:ConfiguredAxisTracks$isWrapContent || availableSize == Constraints.Infinity || !canResolveConstrainedWeights || weights.none { it &gt; 0f }</ID>
-    <ID>ForbiddenComment:HorizontalContainerLayout.kt:// TODO: Needs warning match_parent child and wrap_content container.</ID>
-    <ID>ForbiddenComment:VerticalContainerLayout.kt:// TODO: Needs warning match_parent child and wrap_content container.</ID>
     <ID>LongMethod:DivActions.kt:@Composable internal fun Div.observedActions: DivActions?</ID>
     <ID>LongMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
     <ID>LongMethod:DivTabsView.kt:@Composable internal fun DivTabsView</ID>
     <ID>LongMethod:GridTracks.kt:@OptIn(ExperimentalGridApi::class) @Composable private fun List&lt;Cell&gt;.axisTracks: AxisTracks</ID>
-    <ID>LongMethod:HorizontalContainerLayout.kt:@Composable internal fun ContainerHorizontalView</ID>
     <ID>LongMethod:IndicatorDrawing.kt:internal fun DrawScope.drawIndicators</ID>
     <ID>LongMethod:InlineImages.kt:@Composable internal fun DivText.observeInlineImages: List&lt;InlineImageData&gt;</ID>
     <ID>LongMethod:PagerContent.kt:@Composable internal fun PagerContent</ID>
     <ID>LongMethod:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$@Composable override fun Content</ID>
     <ID>LongMethod:ShimmerExtensionHandler.kt:private fun ShimmerConfig.toDrawingConfig: ShimmerDrawingConfig?</ID>
-    <ID>LongMethod:VerticalContainerLayout.kt:@Composable internal fun ContainerVerticalView</ID>
     <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
     <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
     <ID>LongMethod:WrapSeparatorDrawing.kt:private fun DrawScope.drawSeparatorShape</ID>

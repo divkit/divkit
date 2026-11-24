@@ -79,12 +79,12 @@ private fun ContainerLayout(modifier: Modifier, data: DivContainer) {
     when (data.orientation.observedValue()) {
         Orientation.HORIZONTAL -> when (data.layoutMode.observedValue()) {
             LayoutMode.WRAP -> ContainerWrapHorizontalView(modifier, data)
-            LayoutMode.NO_WRAP -> ContainerHorizontalView(modifier, data)
+            LayoutMode.NO_WRAP -> ContainerLinearView(modifier, data, isHorizontal = true)
         }
 
         Orientation.VERTICAL -> when (data.layoutMode.observedValue()) {
             LayoutMode.WRAP -> ContainerWrapVerticalView(modifier, data)
-            LayoutMode.NO_WRAP -> ContainerVerticalView(modifier, data)
+            LayoutMode.NO_WRAP -> ContainerLinearView(modifier, data, isHorizontal = false)
         }
 
         Orientation.OVERLAP -> ContainerOverlapView(modifier, data)

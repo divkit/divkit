@@ -87,7 +87,7 @@ internal fun VisibleDivBlockView(
     // Content that is animating out is drawn, but the user can no longer interact with it.
     val isExiting = visibilityTransition?.isExiting == true
     val actions = if (isExiting) null else data.observedActions()
-    val margins = if (layoutParams.applyMargins) divBase.margins?.observeInsets() else null
+    val margins = divBase.margins?.observeInsets()
     val menuOffset = DpOffset(
         x = 0.dp,
         y = -(margins?.calculateBottomPadding() ?: 0.dp),

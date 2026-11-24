@@ -24,7 +24,9 @@ import com.yandex.div.compose.setContent
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.arrayExpression
 import com.yandex.div.test.data.aspect
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.containerSeparator
@@ -34,7 +36,11 @@ import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.insets
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.matchParent
+import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div.test.data.wrapContent
@@ -59,6 +65,7 @@ class DivContainerMatchParentTest {
 
     private val size = Variable.IntegerVariable("size", 20L)
     private val visibility = Variable.StringVariable("visibility", "visible")
+    private val elements = Variable.ArrayVariable("elements", jsonArray(jsonObject("kind" to "gallery")))
 
     private val testReporter = TestReporter()
 
@@ -67,6 +74,7 @@ class DivContainerMatchParentTest {
         variableController = DivVariableController().apply {
             declare(size)
             declare(visibility)
+            declare(elements)
         }
     }
 
@@ -542,6 +550,41 @@ class DivContainerMatchParentTest {
         visibility.set("gone")
         rule.waitForIdle()
 
+        val galleryTop = rule.onNodeWithTag("gallery").getUnclippedBoundsInRoot().top
+        assertEquals(galleryTop, rule.onNodeWithTag("item3").getUnclippedBoundsInRoot().top)
+    }
+
+    @Test
+    fun `built gallery keeps its scroll position when the data adds the first match_parent child`() {
+        setContent(
+            container(
+                width = fixed(200),
+                height = fixed(200),
+                itemBuilder = itemBuilder(
+                    data = arrayExpression("@{elements}"),
+                    prototypes = listOf(
+                        prototype(
+                            selector = booleanExpression("@{getStringFromDict(it, 'kind') == 'gallery'}"),
+                            div = gallery(
+                                id = "gallery",
+                                width = fixed(200),
+                                height = fixed(100),
+                                orientation = constant(DivGallery.Orientation.VERTICAL),
+                                items = List(10) { container(id = "item$it", width = fixed(200), height = fixed(60)) },
+                            ),
+                        ),
+                        prototype(div = verticalChild("rest", matchParent())),
+                    ),
+                ),
+            )
+        )
+        rule.onNode(hasScrollToIndexAction()).performScrollToIndex(3)
+        rule.waitForIdle()
+
+        elements.set(jsonArray(jsonObject("kind" to "gallery"), jsonObject("kind" to "rest")))
+        rule.waitForIdle()
+
+        rule.onNodeWithTag("rest").assertHeightIsEqualTo(100.dp)
         val galleryTop = rule.onNodeWithTag("gallery").getUnclippedBoundsInRoot().top
         assertEquals(galleryTop, rule.onNodeWithTag("item3").getUnclippedBoundsInRoot().top)
     }

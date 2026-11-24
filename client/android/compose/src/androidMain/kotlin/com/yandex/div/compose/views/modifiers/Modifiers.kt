@@ -18,7 +18,6 @@ import com.yandex.div.compose.tooltips.tooltipInput
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.observeInsets
-import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.background.background
 import com.yandex.div.compose.views.divVisibility
@@ -85,10 +84,4 @@ internal fun Modifier.padding(value: DivEdgeInsets?): Modifier {
         top = insets.calculateTopPadding(),
         bottom = insets.calculateBottomPadding(),
     )
-}
-
-@Composable
-internal fun Modifier.verticalPaddings(value: DivEdgeInsets): Modifier {
-    val (top, bottom) = value.observeVerticalInsets()
-    return padding(top = top, bottom = bottom)
 }

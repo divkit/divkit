@@ -6,7 +6,6 @@ import com.yandex.div.compose.views.modifiers.MatchParentSize
 
 @Immutable
 internal data class DivBlockLayoutParams(
-    val applyMargins: Boolean = true,
     val matchParentWidth: MatchParentSize = MatchParentSize.Fill,
     val matchParentHeight: MatchParentSize = MatchParentSize.Fill,
     val defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
