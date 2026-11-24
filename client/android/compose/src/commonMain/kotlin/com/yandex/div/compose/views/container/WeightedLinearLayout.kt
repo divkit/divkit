@@ -16,17 +16,12 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.Placeable
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
-import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.utils.observedDpValue
-import com.yandex.div2.DivMatchParentSize
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -82,20 +77,6 @@ internal data class WeightedLinearChild(
 
 /** The share of a match_parent child: [marginsPx] stay outside the share and inside the measured size. */
 internal data class MatchParentSpec(val weight: Float, val minSize: Dp, val maxSize: Dp?, val marginsPx: Int)
-
-@Composable
-internal fun DivMatchParentSize.observeMatchParentSpec(beforeMargin: Dp, afterMargin: Dp): MatchParentSpec {
-    val minSize = this.minSize?.let { it.value.observedDpValue(it.unit) } ?: 0.dp
-    val maxSize = this.maxSize?.let { it.value.observedDpValue(it.unit) }
-    val hasValidBounds = maxSize == null || minSize <= maxSize
-    return MatchParentSpec(
-        weight = weight?.observedFloatValue()?.takeIf { it > 0f } ?: 1f,
-        minSize = if (hasValidBounds) minSize else 0.dp,
-        maxSize = if (hasValidBounds) maxSize else null,
-        // Each margin is rounded on its own, as the padding that applies it rounds it.
-        marginsPx = with(LocalDensity.current) { beforeMargin.roundToPx() + afterMargin.roundToPx() },
-    )
-}
 
 private val IntrinsicMeasurable.child: WeightedLinearChild?
     get() = parentData as? WeightedLinearChild

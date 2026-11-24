@@ -19,12 +19,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
+import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
@@ -37,6 +41,7 @@ import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.observedAspectRatio
+import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
@@ -51,6 +56,7 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
+import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVisibility
 
@@ -367,6 +373,20 @@ private fun LinearScope.observeChildModifier(child: DivBase, container: LinearCo
             isConstrained = shrinks,
         )
     }
+}
+
+@Composable
+private fun DivMatchParentSize.observeMatchParentSpec(beforeMargin: Dp, afterMargin: Dp): MatchParentSpec {
+    val minSize = this.minSize?.let { it.value.observedDpValue(it.unit) } ?: 0.dp
+    val maxSize = this.maxSize?.let { it.value.observedDpValue(it.unit) }
+    val hasValidBounds = maxSize == null || minSize <= maxSize
+    return MatchParentSpec(
+        weight = weight?.observedFloatValue()?.takeIf { it > 0f } ?: 1f,
+        minSize = if (hasValidBounds) minSize else 0.dp,
+        maxSize = if (hasValidBounds) maxSize else null,
+        // Each margin is rounded on its own, as the padding that applies it rounds it.
+        marginsPx = with(LocalDensity.current) { beforeMargin.roundToPx() + afterMargin.roundToPx() },
+    )
 }
 
 /** The alignment of a child across the container, when the child or a baseline row sets one. */
