@@ -18,12 +18,18 @@ import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.snappedItem
+import com.yandex.div.compose.views.tabs.LocalIsMeasurementPass
 import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div2.Div
 import kotlinx.coroutines.flow.filterNotNull
 
 internal fun interface PagerSelectedActionsHandler {
     fun onTargetPageCalculated(rawIndex: Int)
+}
+
+/** Receives every page the pager settles on, starting with the initial one. */
+internal fun interface PagerPageListener {
+    fun onPageSettled(itemWindow: PagerItemWindow, rawPage: Int)
 }
 
 /**
@@ -40,7 +46,9 @@ internal fun rememberPagerSelectedActionsHandler(
     settledPage: IntState,
     neighbourSizes: PagerNeighbourSizes?,
     enabled: Boolean,
+    pageListener: PagerPageListener? = null,
 ): PagerSelectedActionsHandler {
+    if (LocalIsMeasurementPass.current) return PagerSelectedActionsHandler {}
     val items = collection.items
     val parentComponent = LocalComponent.current
     val isDragged = listState.interactionSource.collectIsDraggedAsState()
@@ -49,7 +57,7 @@ internal fun rememberPagerSelectedActionsHandler(
 
     LaunchedEffect(
         collection, listState, snapPosition, itemWindow, parentComponent, enabled,
-        viewportSizePx, settledPage, neighbourSizes
+        viewportSizePx, settledPage, neighbourSizes, pageListener,
     ) {
         if (!enabled) return@LaunchedEffect
 
@@ -64,16 +72,18 @@ internal fun rememberPagerSelectedActionsHandler(
                 // The list stands still: the page it stands on is selected, unless a page resized since the previous
                 // layout, in which the list stood still too (see isResizeOf), and the selection stays.
                 else -> PagerLayoutSnapshot(
-                    page = listState.snappedPage(snapPosition, itemWindow, settledPage.intValue),
+                    page = listState.snappedRawPage(snapPosition, itemWindow, settledPage.intValue),
                     resizeCount = neighbourSizes?.resizeCount ?: 0,
                 )
             }
         }.filterNotNull().collect { layout ->
             val isResize = layout.isResizeOf(previous)
             previous = layout
-            val page = layout.page
-            if (page == null || isResize) return@collect
+            val rawPage = layout.page
+            if (rawPage == null || isResize) return@collect
+            val page = itemWindow.realIndex(rawPage)
             selection.select(page, items[page])
+            pageListener?.onPageSettled(itemWindow, rawPage)
             while (selection.pendingItems.isNotEmpty()) {
                 val item = selection.pendingItems.removeFirst()
                 val actions = item.value().selectedActions
@@ -87,7 +97,8 @@ internal fun rememberPagerSelectedActionsHandler(
 
     val onTargetPageCalculated = rememberUpdatedState<(Int) -> Unit> { rawIndex ->
         if (enabled) {
-            listState.realPage(itemWindow, rawIndex)?.let { page ->
+            listState.validRawPage(itemWindow, rawIndex)?.let { rawPage ->
+                val page = itemWindow.realIndex(rawPage)
                 selection.select(page, items[page])
             }
         }
@@ -109,18 +120,18 @@ private class PageSelection {
     }
 }
 
-private fun LazyListState.snappedPage(
+private fun LazyListState.snappedRawPage(
     snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
     settledPage: Int,
 ): Int? =
-    realPage(itemWindow, layoutInfo.snappedItem(snapPosition, settledPage)?.index)
+    validRawPage(itemWindow, layoutInfo.snappedItem(snapPosition, settledPage)?.index)
 
-private fun LazyListState.realPage(itemWindow: PagerItemWindow, rawIndex: Int?): Int? {
+private fun LazyListState.validRawPage(itemWindow: PagerItemWindow, rawIndex: Int?): Int? {
     val info = layoutInfo
     if (rawIndex == null || rawIndex !in 0 until info.totalItemsCount) return null
     if (itemWindow.realItemCount == 0 || info.totalItemsCount != itemWindow.itemCount) return null
     // Different cyclic windows can have the same virtual item count.
     if (info.visibleItemsInfo.any { it.contentType != itemWindow }) return null
-    return itemWindow.realIndex(rawIndex)
+    return rawIndex
 }

@@ -19,7 +19,7 @@ import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
-import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
+import com.yandex.div.compose.views.gallery.scroll.galleryScrolling
 import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 
@@ -43,25 +43,17 @@ internal fun GalleryGridView(
 
     BoxWithConstraints(modifier = modifier.then(IntrinsicSizeBarrier)) {
         val isLazyGridSupported = constraints.hasBoundedWidth && constraints.hasBoundedHeight
-        if (isLazyGridSupported) {
-            val density = LocalDensity.current
-            val scrollLayout = remember(gridState, density) {
-                gridState.galleryScrollLayout(density)
-            }
-            BindGalleryScrollActions(
-                id = properties.id,
-                items = items,
-                layout = scrollLayout,
-                scrollMode = properties.scrollMode,
-                alignment = properties.scrollContentAlignment,
-            )
+        if (!isLazyGridSupported) {
+            MeasuredLanesStaggeredGrid(collection, properties, clampedDefaultItem)
+            return@BoxWithConstraints
         }
-        when {
-            !isLazyGridSupported ->
-                MeasuredLanesStaggeredGrid(collection, properties, clampedDefaultItem)
-            properties.isHorizontal ->
-                GalleryLazyHorizontalStaggeredGrid(collection, gridState, properties)
-            else -> GalleryLazyVerticalStaggeredGrid(collection, gridState, properties)
+        val density = LocalDensity.current
+        val scrollLayout = remember(gridState, density) { gridState.galleryScrollLayout(density) }
+        val scrollModifier = Modifier.galleryScrolling(properties, items, scrollLayout)
+        if (properties.isHorizontal) {
+            GalleryLazyHorizontalStaggeredGrid(scrollModifier, collection, gridState, properties)
+        } else {
+            GalleryLazyVerticalStaggeredGrid(scrollModifier, collection, gridState, properties)
         }
     }
 }
@@ -86,6 +78,7 @@ private fun AdjustDefaultGridItemAlignment(
 
 @Composable
 private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
+    modifier: Modifier,
     collection: VisibleCollectionItems,
     gridState: LazyStaggeredGridState,
     properties: GalleryProperties,
@@ -100,7 +93,7 @@ private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
     )
     LazyHorizontalStaggeredGrid(
         rows = StaggeredGridCells.Fixed(properties.columnCount),
-        modifier = Modifier.galleryScrollbar(
+        modifier = modifier.galleryScrollbar(
             scrollbar = properties.scrollbar,
             scrollState = gridState,
             isHorizontal = true,
@@ -132,6 +125,7 @@ private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
 
 @Composable
 private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
+    modifier: Modifier,
     collection: VisibleCollectionItems,
     gridState: LazyStaggeredGridState,
     properties: GalleryProperties,
@@ -146,7 +140,7 @@ private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
     )
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(properties.columnCount),
-        modifier = Modifier.galleryScrollbar(
+        modifier = modifier.galleryScrollbar(
             scrollbar = properties.scrollbar,
             scrollState = gridState,
             isHorizontal = false,

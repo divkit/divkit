@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,6 +27,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.observer.rememberTabSelectionObservation
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
@@ -71,9 +73,11 @@ internal fun DivTabsView(
     }
     val scope = rememberCoroutineScope()
     val externalSelected = data.selectedTab.observedIntValue()
-    LaunchedEffect(externalSelected) {
+    val selectionObservation = rememberTabSelectionObservation(data.id)
+    LaunchedEffect(externalSelected, selectionObservation) {
         // Let the tabs state keep an ongoing animation when the new value targets the same page.
-        scope.launch { state.selectTab(externalSelected, titleAnimation) }
+        scope.launch { state.syncSelectedTab(externalSelected, titleAnimation) }.join()
+        selectionObservation?.observe(state.pagerState)
     }
 
     BindTabsScrollActions(
@@ -100,11 +104,10 @@ internal fun DivTabsView(
             .padding(contentPaddings)
     ) {
         TabTitlesView(
-            items = items,
+            data = data,
             state = state,
             style = style,
             animationType = animationType,
-            titleDelimiter = data.tabTitleDelimiter,
             titlePaddings = titlePaddings,
             onTabSelected = { index ->
                 scope.launch { state.selectTab(index, titleAnimation) }
@@ -158,7 +161,9 @@ private fun TabsContent(
         fun subcomposePage(index: Int): List<Measurable> {
             val content = pageContents[index] ?: run {
                 val newContent: @Composable () -> Unit = {
-                    DivBlockView(items[index].div)
+                    CompositionLocalProvider(LocalIsMeasurementPass provides true) {
+                        DivBlockView(items[index].div)
+                    }
                 }
                 pageContents[index] = newContent
                 newContent

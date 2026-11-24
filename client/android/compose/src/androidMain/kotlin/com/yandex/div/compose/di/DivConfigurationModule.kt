@@ -9,6 +9,7 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.compose.observer.DivComponentObserver
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.compose.video.DivVideoPreloader
 import com.yandex.div.core.DivAnimationsEnabledProvider
@@ -61,6 +62,9 @@ internal class DivConfigurationModule(
 
     @get:Provides
     val reporter: DivReporter = configuration.reporter
+
+    @get:Provides
+    val componentObserver: DivComponentObserver = configuration.componentObserver
 
     @get:Provides
     @get:Named(Names.HOST_VARIABLES)

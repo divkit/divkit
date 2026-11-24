@@ -142,6 +142,21 @@ class DivTabsStateTest {
     }
 
     @Test
+    fun `selected tab can return to its previous value during an animation`() {
+        setContent()
+        val pending = scope.launch { state.syncSelectedTab(2, slide(durationMillis = 1000)) }
+        rule.mainClock.advanceTimeBy(200)
+        assertTrue(pending.isActive)
+        assertTrue(state.currentIndex != 0)
+
+        pending.cancel()
+        scope.launch { state.syncSelectedTab(0, slide(durationMillis = 1000)) }
+        rule.mainClock.advanceTimeBy(1200)
+
+        assertEquals(0, state.currentIndex)
+    }
+
+    @Test
     fun `selection without animation jumps`() {
         setContent()
 

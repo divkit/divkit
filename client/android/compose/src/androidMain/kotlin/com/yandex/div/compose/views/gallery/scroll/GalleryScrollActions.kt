@@ -8,13 +8,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.observer.observeGalleryScroll
+import com.yandex.div.compose.observer.rememberGalleryScrollObservation
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
+import com.yandex.div.compose.views.gallery.GalleryProperties
+import com.yandex.div.compose.views.tabs.LocalIsMeasurementPass
 import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.Div
 import com.yandex.div2.DivActionScrollBy
@@ -31,6 +36,38 @@ private const val DP_PER_INCH = 160f
 private const val MAX_DEFAULT_SCROLL_DURATION = 2_000
 
 /**
+ * Runs scroll actions for [BindGalleryScrollActions]. An action can scroll in several phases or jump
+ * instantly, so only its caller knows where it starts and ends.
+ */
+internal interface GalleryScrollActionRunner {
+    suspend fun run(action: suspend () -> Unit)
+
+    /** Forgets the running action: its scroll target is being released. */
+    fun discard()
+}
+
+/**
+ * Registers a scrollable gallery as a scroll action target and observes its scrolling.
+ */
+@Composable
+internal fun Modifier.galleryScrolling(
+    properties: GalleryProperties,
+    items: List<Div>,
+    layout: GalleryScrollLayout,
+): Modifier {
+    val observation = rememberGalleryScrollObservation(properties.id, layout)
+    BindGalleryScrollActions(
+        id = properties.id,
+        items = items,
+        layout = layout,
+        scrollMode = properties.scrollMode,
+        alignment = properties.scrollContentAlignment,
+        actionRunner = observation,
+    )
+    return observeGalleryScroll(observation)
+}
+
+/**
  * Registers the gallery as a scroll action target. A null [layout] registers a gallery that cannot scroll,
  * so actions addressing it validate their arguments without moving anything.
  */
@@ -41,8 +78,9 @@ internal fun BindGalleryScrollActions(
     layout: GalleryScrollLayout? = null,
     scrollMode: DivGallery.ScrollMode = DivGallery.ScrollMode.DEFAULT,
     alignment: DivGallery.ContentAlignment = DivGallery.ContentAlignment.START,
+    actionRunner: GalleryScrollActionRunner? = null,
 ) {
-    if (id == null) return
+    if (id == null || LocalIsMeasurementPass.current) return
 
     val component = LocalDivViewContext.current.component
     val targetStorage = component.scrollTargetStorage
@@ -50,9 +88,11 @@ internal fun BindGalleryScrollActions(
     val density = LocalDensity.current
     val currentScrollMode by rememberUpdatedState(scrollMode)
     val currentAlignment by rememberUpdatedState(alignment)
-    DisposableEffect(id, items, layout, density) {
+    DisposableEffect(id, items, layout, density, actionRunner) {
         val scrolls = layout?.let {
-            GalleryScrolls(it, items, coroutineScopeProvider, density, { currentScrollMode }, { currentAlignment })
+            GalleryScrolls(
+                it, items, coroutineScopeProvider, density, { currentScrollMode }, { currentAlignment }, actionRunner,
+            )
         }
         val target = ScrollTarget(
             items = items,
@@ -82,6 +122,7 @@ private class GalleryScrolls(
     private val density: Density,
     private val scrollMode: () -> DivGallery.ScrollMode,
     private val alignment: () -> DivGallery.ContentAlignment,
+    private val actionRunner: GalleryScrollActionRunner?,
 ) {
     private var job: Job? = null
 
@@ -111,13 +152,16 @@ private class GalleryScrolls(
     }
 
     fun cancel() {
+        actionRunner?.discard()
         job?.cancel()
     }
 
     private fun launch(action: suspend () -> Unit) {
         val scope = coroutineScopeProvider.get() ?: return
         job?.cancel()
-        job = scope.launch { action() }
+        job = scope.launch {
+            if (actionRunner == null) action() else actionRunner.run(action)
+        }
     }
 
     // Offsets address a scroll position, which paging galleries do not keep.

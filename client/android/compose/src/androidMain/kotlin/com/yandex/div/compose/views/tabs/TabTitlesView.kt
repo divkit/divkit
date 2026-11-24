@@ -43,6 +43,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.observer.observeTitleScroll
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
 import com.yandex.div.compose.utils.observedValue
@@ -53,14 +54,15 @@ import kotlin.math.roundToInt
 
 @Composable
 internal fun TabTitlesView(
-    items: List<DivTabs.Item>,
+    data: DivTabs,
     state: DivTabsState,
     style: DivTabs.TabTitleStyle,
     animationType: DivTabs.TabTitleStyle.AnimationType,
-    titleDelimiter: DivTabs.TabTitleDelimiter?,
     titlePaddings: PaddingValues,
     onTabSelected: (Int) -> Unit,
 ) {
+    val items = data.items
+    val titleDelimiter = data.tabTitleDelimiter
     val itemSpacing = style.itemSpacing.observedIntValue().dp
     val appearance = TabTitleAppearance(style, titleDelimiter, itemSpacing)
     val rowHeight = style.observeRowHeight()
@@ -73,11 +75,10 @@ internal fun TabTitlesView(
     BoxWithConstraints(modifier = Modifier.fixedIntrinsics(width = intrinsicWidth, height = rowHeight).then(modifier)) {
         if (constraints.hasBoundedWidth) {
             ScrollableTitleRow(
-                items = items,
+                data = data,
                 state = state,
                 appearance = appearance,
                 animationType = animationType,
-                modifier = Modifier,
                 onTabSelected = onTabSelected,
             )
         } else {
@@ -156,13 +157,13 @@ private fun FixedTitleRow(
 
 @Composable
 private fun ScrollableTitleRow(
-    items: List<DivTabs.Item>,
+    data: DivTabs,
     state: DivTabsState,
     appearance: TabTitleAppearance,
     animationType: DivTabs.TabTitleStyle.AnimationType,
-    modifier: Modifier,
     onTabSelected: (Int) -> Unit,
 ) {
+    val items = data.items
     val (style, titleDelimiter, itemSpacing) = appearance
     val selectedIndex = state.selectedIndex
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
@@ -175,7 +176,9 @@ private fun ScrollableTitleRow(
 
     LazyRow(
         state = listState,
-        modifier = modifier.drawTitleBackgrounds(placedTitles, state, style, animationType),
+        modifier = Modifier
+            .observeTitleScroll(listState, state.pagerState, data.id)
+            .drawTitleBackgrounds(placedTitles, state, style, animationType),
         horizontalArrangement = Arrangement.spacedBy(itemSpacing),
         verticalAlignment = Alignment.CenterVertically,
     ) {

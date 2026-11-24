@@ -9,6 +9,7 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.histogram.DisabledHistogramConfiguration
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
+import com.yandex.div.compose.observer.DivComponentObserver
 import com.yandex.div.compose.patch.DivPatchDownloader
 import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.compose.video.DisabledVideoPlayerFactory
@@ -43,6 +44,7 @@ class DivConfiguration private constructor(
     val playerFactory: DivVideoPlayerFactory,
     val networkClient: DivNetworkClient,
     val reporter: DivReporter,
+    val componentObserver: DivComponentObserver,
     val variableController: DivVariableController,
     val videoPreloader: DivVideoPreloader,
     val wildcardExtensionHandlers: Map<String, DivExtensionHandler>,
@@ -77,6 +79,7 @@ class DivConfiguration private constructor(
         patchDownloader = null,
         playerFactory = playerFactory,
         reporter = reporter,
+        componentObserver = defaultComponentObserver,
         variableController = variableController,
         videoPreloader = videoPreloader,
         wildcardExtensionHandlers = emptyMap(),
@@ -96,6 +99,7 @@ class DivConfiguration private constructor(
         var imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration
         var playerFactory: DivVideoPlayerFactory = DisabledVideoPlayerFactory
         var reporter: DivReporter = DivReporter()
+        var componentObserver: DivComponentObserver = defaultComponentObserver
         var networkClient: DivNetworkClient = disabledNetworkClient
         var variableController: DivVariableController = DivVariableController()
         var videoPreloader: DivVideoPreloader = disabledVideoPreloader
@@ -116,6 +120,7 @@ class DivConfiguration private constructor(
             patchDownloader = patchDownloader,
             playerFactory = playerFactory,
             reporter = reporter,
+            componentObserver = componentObserver,
             variableController = variableController,
             videoPreloader = videoPreloader,
             wildcardExtensionHandlers = wildcardExtensionHandlers,
@@ -130,6 +135,8 @@ fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfigurati
     DivConfiguration.Builder().apply(block).build()
 
 private val defaultActionHandler = object : DivExternalActionHandler {}
+
+internal val defaultComponentObserver = object : DivComponentObserver {}
 
 private val disabledNetworkClient = DivNetworkClient {
     error("DivNetworkClient is not configured")

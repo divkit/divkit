@@ -41,6 +41,7 @@ internal class DivTabsState(
     )
 
     private var titleTransition: TitleTransition? by mutableStateOf(null)
+    private var lastSyncedSelectedTab: Int = initialIndex
 
     internal val currentIndex: Int
         get() = pagerState.currentPage
@@ -65,6 +66,16 @@ internal class DivTabsState(
 
     internal val indicatorProgress: Float
         get() = titleTransition?.progress?.value ?: abs(pagerState.currentPageOffsetFraction)
+
+    /**
+     * Applies a new selected_tab value. A value that has already been applied is skipped,
+     * so that a rebind keeps the user's selection.
+     */
+    internal suspend fun syncSelectedTab(index: Int, animation: TabTitleAnimation?) {
+        if (lastSyncedSelectedTab == index) return
+        lastSyncedSelectedTab = index
+        selectTab(index, animation)
+    }
 
     /**
      * Selects the tab at [index]: instantly without an [animation], otherwise with it. An explicit [durationMillis]

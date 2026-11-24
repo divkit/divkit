@@ -171,7 +171,7 @@ internal fun LazyStaggeredGridState.galleryScrollLayout(density: Density): Galle
     isStaggered = true,
     // Foundation's animateScrollToItem skips a hundred items per lane.
     teleportItems = { MAX_ANIMATED_ITEMS * (layoutInfo.visibleItemsInfo.maxOfOrNull { it.lane + 1 } ?: 1) },
-    currentLayoutInfo = { layoutInfo.toGalleryLayoutInfo() },
+    currentLayoutInfo = { toGalleryLayoutInfo() },
     jumpToItem = { index -> scrollToItem(index) },
     scroll = { block -> scroll { LazyLayoutScrollScope(this@galleryScrollLayout, this).block() } },
 )

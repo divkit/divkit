@@ -11,13 +11,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableIntState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.reachableSnapOffset
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
+import com.yandex.div.compose.views.tabs.LocalIsMeasurementPass
 import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.Div
@@ -37,7 +37,7 @@ internal fun BindPagerScrollActions(
     items: List<Div>,
     layout: PagerScrollLayout? = null,
 ) {
-    if (id == null) return
+    if (id == null || LocalIsMeasurementPass.current) return
 
     val component = LocalComponent.current
     val targetStorage = component.scrollTargetStorage

@@ -16,7 +16,9 @@ import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.defaultComponentObserver
 import com.yandex.div.compose.divConfiguration
+import com.yandex.div.compose.observer.DivComponentObserver
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
@@ -40,6 +42,8 @@ import kotlin.test.assertTrue
 import kotlin.test.fail
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verifyNoInteractions
 
 private const val PAGER_SIZE = 300
 private const val TOLERANCE = 0.5f
@@ -111,6 +115,19 @@ class PagerScrollTest {
         finishAnimations()
 
         assertPageAtStart(3)
+    }
+
+    @Test
+    fun `returning to the initial page before an animation settles does not report its cancelled target`() {
+        val observer = mock<DivComponentObserver>()
+        setPagerContent(componentObserver = observer)
+        performAnimated(action(url = "div-action://set_current_item?id=pager&item=4"))
+        awaitScrollStart(observedIndex = 0)
+
+        perform(action(url = "div-action://set_current_item?id=pager&item=0&animated=false"))
+        finishAnimations()
+
+        verifyNoInteractions(observer)
     }
 
     @Test
@@ -392,6 +409,7 @@ class PagerScrollTest {
         orientation: DivPager.Orientation = DivPager.Orientation.HORIZONTAL,
         alignment: DivPager.ItemAlignment = DivPager.ItemAlignment.START,
         layoutDirection: LayoutDirection = LayoutDirection.Ltr,
+        componentObserver: DivComponentObserver = defaultComponentObserver,
     ) {
         val isHorizontal = orientation == DivPager.Orientation.HORIZONTAL
         pagerData = data(pager(
@@ -417,6 +435,7 @@ class PagerScrollTest {
         val configuration = divConfiguration {
             actionHandler = this@PagerScrollTest.actionHandler
             reporter = this@PagerScrollTest.reporter
+            this.componentObserver = componentObserver
             variableController = DivVariableController().apply {
                 declare(hideAll)
                 declare(hideSecond)

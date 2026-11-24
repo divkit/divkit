@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.observer.rememberPagerPageObservation
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.pager.PagerAlignment
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
@@ -158,6 +159,7 @@ internal fun PagerContent(
         settledPage = settledPage,
         neighbourSizes = neighbourSizes,
         enabled = initialPositionAdjusted && alignmentReady,
+        pageListener = rememberPagerPageObservation(pager.id, listState),
     )
 
     val childModifier = childModifier(isHorizontal, crossAxisSizes, alignment)

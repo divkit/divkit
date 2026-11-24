@@ -25,10 +25,12 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
+import com.yandex.divkit.demo.div.DemoComponentObserver
 import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
 import com.yandex.divkit.demo.div.NestedScrollViewFactory
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
+import com.yandex.divkit.regression.ScenarioLogDelegate
 import com.yandex.divkit.regression.utils.AssetReader
 
 class RegressionComposeViewCreator(context: Context) {
@@ -37,6 +39,7 @@ class RegressionComposeViewCreator(context: Context) {
     fun createView(
         activity: Activity,
         scenarioPath: String,
+        logDelegate: ScenarioLogDelegate,
         onBound: (View) -> Unit,
     ) {
         val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
@@ -74,6 +77,7 @@ class RegressionComposeViewCreator(context: Context) {
                 )
                 fontSourceProvider = ComposeFontSourceProvider()
                 histogramConfiguration = DemoHistogramConfiguration
+                componentObserver = DemoComponentObserver(logDelegate)
                 networkClient = Container.ktorNetworkClient
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
             }

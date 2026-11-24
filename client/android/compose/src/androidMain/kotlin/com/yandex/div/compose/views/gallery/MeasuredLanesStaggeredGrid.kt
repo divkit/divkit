@@ -35,6 +35,7 @@ import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
+import com.yandex.div.compose.views.gallery.scroll.galleryScrolling
 import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutInfo
 import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutItem
 import com.yandex.div.compose.views.gallery.scroll.GalleryScrollLayout
@@ -61,13 +62,7 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
         val scrollLayout = remember(scrollState, itemPositions, alignmentKey, density) {
             itemPositions.galleryScrollLayout(scrollState, alignmentKey, density)
         }
-        BindGalleryScrollActions(
-            id = properties.id,
-            items = items,
-            layout = scrollLayout,
-            scrollMode = properties.scrollMode,
-            alignment = properties.scrollContentAlignment,
-        )
+        val scrollModifier = Modifier.galleryScrolling(properties, items, scrollLayout)
         if (defaultItem > 0) {
             AdjustDefaultItemAlignment(scrollState, itemPositions, defaultItem, properties)
         }
@@ -75,7 +70,7 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
         MeasuredLanesLayout(
             collection = collection,
             properties = properties,
-            modifier = Modifier
+            modifier = scrollModifier
                 .galleryScrollbar(properties.scrollbar, scrollState, properties.isHorizontal, properties.contentPadding)
                 .applyIf(properties.isHorizontal) { horizontalScroll(scrollState, flingBehavior = flingBehavior) }
                 .applyIf(!properties.isHorizontal) { verticalScroll(scrollState, flingBehavior = flingBehavior) },

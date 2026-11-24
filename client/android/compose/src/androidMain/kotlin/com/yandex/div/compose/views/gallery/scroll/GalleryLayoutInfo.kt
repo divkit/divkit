@@ -3,7 +3,7 @@ package com.yandex.div.compose.views.gallery.scroll
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridLayoutInfo
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import com.yandex.div.render.common.scroll.DivScrollActionUtils
@@ -35,6 +35,12 @@ internal class GalleryLayoutInfo(
     val viewportEnd: Int,
     val beforePadding: Int,
     val afterPadding: Int,
+    /**
+     * The item the scroll position is counted from and the distance scrolled past its start.
+     * A lazy staggered grid keeps them while it shows only item spacing and lays out no items.
+     */
+    val firstItemIndex: Int = items.firstOrNull()?.index ?: -1,
+    val firstItemScrollOffset: Int = 0,
 ) {
     fun item(index: Int): GalleryLayoutItem? = items.firstOrNull { it.index == index }
 
@@ -90,22 +96,25 @@ internal fun LazyListLayoutInfo.toGalleryLayoutInfo(
     )
 }
 
-internal fun LazyStaggeredGridLayoutInfo.toGalleryLayoutInfo(): GalleryLayoutInfo {
-    val isHorizontal = orientation == Orientation.Horizontal
+internal fun LazyStaggeredGridState.toGalleryLayoutInfo(): GalleryLayoutInfo {
+    val info = layoutInfo
+    val isHorizontal = info.orientation == Orientation.Horizontal
     return GalleryLayoutInfo(
-        items = visibleItemsInfo.map {
+        items = info.visibleItemsInfo.map {
             GalleryLayoutItem(
                 index = it.index,
                 offset = if (isHorizontal) it.offset.x else it.offset.y,
                 size = if (isHorizontal) it.size.width else it.size.height,
             )
         },
-        itemCount = totalItemsCount,
-        viewportSize = viewportEndOffset - viewportStartOffset,
-        viewportStart = viewportStartOffset,
-        viewportEnd = viewportEndOffset,
-        beforePadding = beforeContentPadding,
-        afterPadding = afterContentPadding,
+        itemCount = info.totalItemsCount,
+        viewportSize = info.viewportEndOffset - info.viewportStartOffset,
+        viewportStart = info.viewportStartOffset,
+        viewportEnd = info.viewportEndOffset,
+        beforePadding = info.beforeContentPadding,
+        afterPadding = info.afterContentPadding,
+        firstItemIndex = firstVisibleItemIndex,
+        firstItemScrollOffset = firstVisibleItemScrollOffset,
     )
 }
 

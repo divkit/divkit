@@ -55,6 +55,7 @@ class ComposeRendererFacade(
             fontSourceProvider = ComposeFontSourceProvider()
             networkClient = Container.ktorNetworkClient
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context))
+            componentObserver = DemoComponentObserver()
             this.variableController = hostVariableController
         }
     )

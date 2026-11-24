@@ -14,11 +14,14 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.insets
+import com.yandex.div.test.data.pager
 import com.yandex.div.test.data.tabItem
 import com.yandex.div.test.data.tabs
 import com.yandex.div.test.data.text
@@ -42,6 +45,22 @@ class DivTabsActionsTest {
     private val configuration = divConfiguration {
         actionHandler = this@DivTabsActionsTest.actionHandler
         reporter = this@DivTabsActionsTest.reporter
+    }
+
+    @Test
+    fun `initially selected pager page inside a tab runs its selected action once`() {
+        val page = text(text = "Page", selectedActions = listOf(action(url = "test://selected")))
+        val nestedPager = pager(height = fixed(100), items = listOf(page))
+        val outerTabs = tabs(items = listOf(tabItem(nestedPager, title = "Tab")))
+
+        rule.setContent(configuration = configuration, data = data(outerTabs))
+
+        rule.runOnIdle {
+            assertEquals(
+                actionData(url = "test://selected", source = DivActionSource.SELECTION),
+                actionHandler.handledAction,
+            )
+        }
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.focus.FocusBindingStorage
 import com.yandex.div.compose.images.ImageStateStorage
 import com.yandex.div.compose.layoutprovider.LayoutProviderStorage
+import com.yandex.div.compose.observer.DivComponentObserver
 import com.yandex.div.compose.scroll.ScrollTargetStorage
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
@@ -20,6 +21,7 @@ internal interface DivViewDependencies : DivContextDependencies {
     val actionHandler: DivActionHandler
     val animatorStorage: AnimatorStorage
     val collectionItemScopeStorage: CollectionItemScopeStorage
+    val componentObserver: DivComponentObserver
     val compositionKeyStorage: CompositionKeyStorage
     val coroutineScopeProvider: DivViewCoroutineScopeProvider
     val focusBindingStorage: FocusBindingStorage

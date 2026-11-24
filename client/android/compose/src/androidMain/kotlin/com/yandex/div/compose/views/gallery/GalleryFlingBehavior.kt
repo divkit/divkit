@@ -55,7 +55,7 @@ internal fun rememberGalleryGridFlingBehavior(
                 minimumFlingVelocity = minimumFlingVelocity,
                 scrollContentAlignment = scrollContentAlignment,
                 isLinearLayout = false,
-                layoutInfo = { gridState.layoutInfo.toGalleryLayoutInfo() },
+                layoutInfo = { gridState.toGalleryLayoutInfo() },
             )
         }
         rememberSnapFlingBehavior(provider)

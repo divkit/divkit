@@ -28,7 +28,7 @@ internal fun BindTabsScrollActions(
     state: DivTabsState? = null,
     animation: TabTitleAnimation? = null,
 ) {
-    if (id == null) return
+    if (id == null || LocalIsMeasurementPass.current) return
 
     val component = LocalComponent.current
     val targetStorage = component.scrollTargetStorage

@@ -20,7 +20,7 @@ class RegressionSwitchingViewCreator(
         onBound: (View) -> Unit,
     ) {
         if (Container.preferences.useComposeRenderer) {
-            composeViewCreator.createView(activity, scenarioPath, onBound)
+            composeViewCreator.createView(activity, scenarioPath, logDelegate, onBound)
         } else {
             div2ViewCreator.createDiv2ViewByConfig(activity, scenarioPath, parent, logDelegate, onBound)
         }

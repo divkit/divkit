@@ -22,6 +22,7 @@ import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
+import com.yandex.div.compose.views.gallery.scroll.galleryScrolling
 import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 
@@ -64,13 +65,7 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
     val isHorizontal = properties.isHorizontal
     val density = LocalDensity.current
     val scrollLayout = remember(listState, density) { listState.galleryScrollLayout(density) }
-    BindGalleryScrollActions(
-        id = properties.id,
-        items = items,
-        layout = scrollLayout,
-        scrollMode = properties.scrollMode,
-        alignment = properties.scrollContentAlignment,
-    )
+    val scrollModifier = Modifier.galleryScrolling(properties, items, scrollLayout)
 
     val flingBehavior = rememberGalleryListFlingBehavior(
         listState, properties.scrollMode, properties.scrollContentAlignment,
@@ -86,7 +81,7 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
     val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
     OrientedLazyList(
         isHorizontal = isHorizontal,
-        modifier = Modifier.galleryScrollbar(
+        modifier = scrollModifier.galleryScrollbar(
             scrollbar = properties.scrollbar,
             scrollState = listState,
             isHorizontal = isHorizontal,
