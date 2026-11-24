@@ -1,6 +1,7 @@
 {
   "description": "Gallery top multiline",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

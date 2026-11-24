@@ -1,6 +1,7 @@
 {
   "description": "scroll_to: enable visibility actions at the last gallery item, then scroll back to item 2 and verify its visibility action (case 58).",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

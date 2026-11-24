@@ -42,6 +42,21 @@ class InteractiveScreenshotTestData(
 
         class Wait(val delay: Long) : Step()
 
+        class ScrollTo(
+            val container: Target,
+            val destination: Target,
+            val direction: String,
+            val from: PointF,
+            val to: PointF,
+        ) : Step() {
+            companion object {
+                const val MAX_SWIPES = 10
+
+                /** A slow swipe keeps the inertia short, so it does not skip over items. */
+                const val SWIPE_DURATION_MS = 1500L
+            }
+        }
+
         class VerifySnapshot(val name: String, val target: Target? = null) : Step()
 
         class VerifyText(val target: Target, val text: String) : Step()
@@ -110,6 +125,8 @@ class InteractiveScreenshotTestData(
                     Step.Wait(delay)
                 }
 
+                "scroll_to" -> parseScrollTo(step)
+
                 "verify_snapshot" -> {
                     val name = step.getString("name")
                     if (name.isEmpty()) {
@@ -128,8 +145,8 @@ class InteractiveScreenshotTestData(
             }
         }
 
-        private fun parseTarget(step: JSONObject): Target {
-            val target = step.getJSONObject("target")
+        private fun parseTarget(step: JSONObject, key: String = "target"): Target {
+            val target = step.getJSONObject(key)
             return when (val targetType = target.getString("type")) {
                 "div_id" -> Target.DivId(target.getNonBlankString("id"))
                 "text" -> Target.Text(target.getNonBlankString("text"))
@@ -230,6 +247,27 @@ class InteractiveScreenshotTestData(
                 throw JSONException("$name coordinates must be between 0 and 1, got: ($x, $y)")
             }
             return PointF(x, y)
+        }
+
+        private fun parseScrollTo(step: JSONObject): Step.ScrollTo {
+            val direction = step.getString("scroll_direction")
+            // scroll_direction is where the destination is, so the finger moves the opposite way.
+            // iOS drags a quarter of the container from its center, but a paging gallery in
+            // Compose snaps such a short swipe back to the same item, so drag as swipe does.
+            val from = when (direction) {
+                "up" -> PointF(0.5f, 0.1f)
+                "down" -> PointF(0.5f, 0.9f)
+                "left" -> PointF(0.1f, 0.5f)
+                "right" -> PointF(0.9f, 0.5f)
+                else -> throw JSONException("Unsupported scroll_to scroll_direction: $direction")
+            }
+            return Step.ScrollTo(
+                container = parseTarget(step, "container"),
+                destination = parseTarget(step, "destination"),
+                direction = direction,
+                from = from,
+                to = PointF(1f - from.x, 1f - from.y),
+            )
         }
     }
 }

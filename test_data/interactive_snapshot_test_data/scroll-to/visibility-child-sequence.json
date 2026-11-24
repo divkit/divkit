@@ -1,6 +1,7 @@
 {
   "description": "scroll_to: child visibility actions for gallery items 0 through 4 (case 57); item 0 is initially visible.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

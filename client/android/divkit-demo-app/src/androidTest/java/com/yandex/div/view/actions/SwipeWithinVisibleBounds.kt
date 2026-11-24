@@ -9,6 +9,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.GeneralSwipeAction
 import androidx.test.espresso.action.Press
 import androidx.test.espresso.action.Swipe
+import androidx.test.espresso.action.Swiper
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.yandex.div.test.crossplatform.clipSwipeToBounds
 import org.hamcrest.Matcher
@@ -16,7 +17,9 @@ import org.hamcrest.Matcher
 class SwipeWithinVisibleBounds(
     private val normalizedFrom: PointF,
     private val normalizedTo: PointF,
-    private val holdDurationMs: Long,
+    holdDurationMs: Long,
+    private val swiper: Swiper =
+        if (holdDurationMs > 0) LinearSwiper(holdDurationMs) else Swipe.FAST,
 ) : ViewAction {
 
     override fun getConstraints(): Matcher<View> = isDisplayed()
@@ -34,7 +37,7 @@ class SwipeWithinVisibleBounds(
         val location = IntArray(2)
         view.getLocationOnScreen(location)
         GeneralSwipeAction(
-            if (holdDurationMs > 0) LinearSwiper(holdDurationMs) else Swipe.FAST,
+            swiper,
             { floatArrayOf(location[0] + from.x, location[1] + from.y) },
             { floatArrayOf(location[0] + to.x, location[1] + to.y) },
             Press.FINGER

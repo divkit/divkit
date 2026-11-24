@@ -86,6 +86,9 @@ val viewDeviceIgnoredScreenshotCases = listOf(
 
     // View stops ring scroll_backward/scroll_forward in a gallery at a wrong offset; Compose, iOS and Web match.
     "interactive_snapshot_test_data/div-gallery/scroll-actions.json",
+
+    // A vertical gallery inside a vertical gallery is not swipeable without restrict_parent_scroll.
+    "interactive_snapshot_test_data/scroll-to/nested-gallery-both-axes.json",
 )
 
 // Run only tests that are not supported by RoborazziScreenshotTest.
@@ -164,4 +167,15 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-gallery/wrap-content-height-after-scroll.json",
     "div-input/capture-focus-on-action.json",
     "div-state/multiple-root-state-switching.json",
+
+    // A paging gallery flung into its end padding does not snap back to the last item.
+    "div-gallery/items-position.json",
+
+    // Visibility actions of a visible element do not trigger when is_enabled becomes true.
+    "scroll-to/visibility-enabled-after-scroll.json",
+
+    // set_state with a path through an inactive state also switches that state.
+    "div-gallery/gallery-bottom-multiline.json",
+    "div-gallery/gallery-bottom-multiline-selected-action.json",
+    "div-gallery/gallery-top-multiline.json",
 )

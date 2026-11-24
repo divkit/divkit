@@ -1,6 +1,7 @@
 {
   "description": "Starting on default_item 2, EXPAND/COLLAPSE taps change individual page DivStates across scroll_to navigation. Text checks verify retained and untouched button states; pager snapshots check the layout with pages 0 and 2 expanded and with page 2 collapsed after expanding page 0.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

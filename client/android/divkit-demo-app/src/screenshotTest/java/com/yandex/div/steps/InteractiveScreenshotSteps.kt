@@ -20,6 +20,8 @@ import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
 import com.yandex.div.view.actions.EditTextThroughInputConnection
 import com.yandex.div.view.actions.SwipeWithinVisibleBounds
+import com.yandex.div.view.actions.isScrollDestinationVisible
+import com.yandex.div.view.actions.scrollToSwipe
 import com.yandex.div.view.waitUntilVisible
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
@@ -62,6 +64,8 @@ internal class InteractiveScreenshotSteps {
                     is Step.EditText -> performEditText(step)
 
                     is Step.Wait -> waitForStep(step)
+
+                    is Step.ScrollTo -> performScrollTo(scenario, step, uiReadyChecker)
 
                     is Step.VerifyText -> verifyText(step)
 
@@ -123,6 +127,29 @@ internal class InteractiveScreenshotSteps {
 
     private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {
         Thread.sleep(wait.delay)
+    }
+
+    private fun performScrollTo(
+        scenario: ActivityScenario<DivScreenshotActivity>,
+        scroll: Step.ScrollTo,
+        uiReadyChecker: UiReadyChecker,
+    ) = step("Scroll ${scroll.container} ${scroll.direction} to ${scroll.destination}") {
+        for (swipes in 0..Step.ScrollTo.MAX_SWIPES) {
+            if (swipes > 0) waitForUiReady(scenario, uiReadyChecker)
+            var visible = false
+            onView(scroll.container).check { container, noViewFoundException ->
+                noViewFoundException?.let { throw it }
+                visible = container.isScrollDestinationVisible(scroll.destination)
+            }
+            if (visible) return@step
+            if (swipes < Step.ScrollTo.MAX_SWIPES) {
+                onView(scroll.container).perform(scrollToSwipe(scroll))
+            }
+        }
+        throw AssertionError(
+            "Destination did not become visible after ${Step.ScrollTo.MAX_SWIPES} swipes: " +
+                "${scroll.destination}"
+        )
     }
 
     private fun verifyText(

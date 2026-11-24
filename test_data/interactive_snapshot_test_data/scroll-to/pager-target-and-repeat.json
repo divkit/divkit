@@ -1,6 +1,7 @@
 {
   "description": "scroll_to: pager selected actions at positions 0, 3, 6, and 2, with a left swipe at the last page preserving selection (case 31)",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

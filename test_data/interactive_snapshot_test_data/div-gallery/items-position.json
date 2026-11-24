@@ -1,6 +1,7 @@
 {
   "description": "In a paging gallery with asymmetric padding, scroll_to navigation to items 1 and 3 updates a position marker through visibility actions. Whole-card snapshots check item alignment and restoration of the initial layout on returning to item 0.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

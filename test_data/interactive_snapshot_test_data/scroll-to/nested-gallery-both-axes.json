@@ -1,6 +1,7 @@
 {
   "description": "scroll_to: case 64, gallery property combinations in both orientations; cross_spacing is checked with column_count=2, restrict_parent_scroll is not covered",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

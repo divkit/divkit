@@ -13,6 +13,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.doubleClick
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasTestTag
@@ -101,6 +102,7 @@ class RoborazziInteractiveScreenshotTest(
                 is Step.VerifyLog -> verifyLog(step)
                 is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
                 is Step.Wait -> wait(step)
+                is Step.ScrollTo -> performScrollTo(step)
             }
         }
 
@@ -271,6 +273,54 @@ class RoborazziInteractiveScreenshotTest(
             runCurrent()
         }
         composeRule.mainClock.advanceTimeBy(milliseconds = step.delay)
+    }
+
+    private fun performScrollTo(step: Step.ScrollTo) {
+        for (swipes in 0..Step.ScrollTo.MAX_SWIPES) {
+            if (swipes > 0) contentRule.waitForIdle()
+            if (isScrollDestinationVisible(step)) return
+            if (swipes < Step.ScrollTo.MAX_SWIPES) swipeToScroll(step)
+        }
+        throw AssertionError(
+            "Destination did not become visible after ${Step.ScrollTo.MAX_SWIPES} swipes: " +
+                "${step.destination}"
+        )
+    }
+
+    private fun isScrollDestinationVisible(step: Step.ScrollTo): Boolean {
+        val container = onTarget(step.container, unmerged = true).fetchSemanticsNode()
+        val destinations = composeRule.onAllNodes(
+            step.destination.matcher() and isPlaced() and
+                hasAnyAncestor(SemanticsMatcher("is ${step.container}") { it.id == container.id }),
+            useUnmergedTree = true,
+        ).fetchSemanticsNodes()
+        if (destinations.size > 1) {
+            throw AssertionError(
+                "Expected one destination, found ${destinations.size}: ${step.destination}"
+            )
+        }
+        val destination = destinations.singleOrNull() ?: return false
+        val center = destination.positionInWindow +
+            Offset(destination.size.width / 2f, destination.size.height / 2f)
+        return container.boundsInWindow.contains(center)
+    }
+
+    private fun swipeToScroll(step: Step.ScrollTo) {
+        val target = onTarget(step.container, unmerged = true)
+        val node = target.fetchSemanticsNode()
+        val from = PointF(node.size.width * step.from.x, node.size.height * step.from.y)
+        val to = PointF(node.size.width * step.to.x, node.size.height * step.to.y)
+        val visibleBounds = node.boundsInWindow.translate(-node.positionInWindow)
+        clipSwipeToBounds(from, to, visibleBounds.toAndroidRectF())
+        // Touch input coordinates start at the clipped bounds, not at the node position.
+        val offset = node.positionInRoot - node.boundsInRoot.topLeft
+        target.performTouchInput {
+            swipe(
+                offset + Offset(from.x, from.y),
+                offset + Offset(to.x, to.y),
+                Step.ScrollTo.SWIPE_DURATION_MS,
+            )
+        }
     }
 
     companion object {

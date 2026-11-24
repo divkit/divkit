@@ -1,6 +1,7 @@
 {
   "description": "scroll_to: case 23, expand items 2 and 0 and scroll to item 1 (collapse is not covered)",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
