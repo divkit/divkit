@@ -16,6 +16,18 @@
       }
     },
     {
+      "id": "image_preview_as_url",
+      "name": "Image URL in the <code>preview</code> property",
+      "compat": {
+        "android": {
+          "version_added": "33.13.0"
+        },
+        "ios": {
+          "version_added": "26.0.0"
+        }
+      }
+    },
+    {
       "id": "svg",
       "name": "<code>svg</code> image format",
       "compat": {

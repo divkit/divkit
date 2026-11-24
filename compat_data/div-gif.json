@@ -14,6 +14,18 @@
           "version_added": "32.30.0"
         }
       }
+    },
+    {
+      "id": "gif_preview_as_url",
+      "name": "GIF image URL in the <code>preview</code> property",
+      "compat": {
+        "android": {
+          "version_added": "33.13.0"
+        },
+        "ios": {
+          "version_added": "26.0.0"
+        }
+      }
     }
   ]
 }

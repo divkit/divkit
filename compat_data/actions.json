@@ -229,11 +229,16 @@
       "id": "action_typed_scroll_duration",
       "name": "<code>duration</code> parameter for typed scroll actions",
       "compat": {
-        "android": {
-          "version_added": "33.8.0",
-          "partial_implementation": true,
-          "notes": "Supported only for galleries and pagers."
-        },
+        "android": [
+          {
+            "version_added": "33.8.0",
+            "partial_implementation": true,
+            "notes": "Supported only for galleries and pagers."
+          },
+          {
+            "version_added": "33.12.0"
+          }
+        ],
         "ios": {
           "version_added": "33.10.0"
         },
