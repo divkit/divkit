@@ -1,5 +1,5 @@
 plugins {
-    id("divkit.convention.library-kmp")
+    id("divkit.convention.library-kmp-ios")
     id("divkit.convention.publishing-module-kmp")
     alias(libs.plugins.apiGenerator)
 }
@@ -16,7 +16,7 @@ kotlin {
             api(project(":core"))
         }
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
+            implementation(kotlin("test"))
         }
     }
 }

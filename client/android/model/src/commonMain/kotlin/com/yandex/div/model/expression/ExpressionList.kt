@@ -1,5 +1,7 @@
 package com.yandex.div.model.expression
 
+import kotlin.jvm.JvmField
+
 /**
  * A container for collection of [Expression]s.
  *

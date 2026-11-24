@@ -1,5 +1,8 @@
 package com.yandex.div.model.entity
 
+import kotlin.jvm.JvmField
+import kotlin.jvm.JvmOverloads
+
 public sealed class Field<T>(
     @JvmField public val type: Int,
     @JvmField public val overridable: Boolean

@@ -1,10 +1,13 @@
 package com.yandex.div.model.expression
 
+import kotlin.jvm.JvmField
+import kotlin.jvm.JvmStatic
+
 /**
  * Expression represents a string with special placeholders that may reference to
  * variables or operations above set of variables. For example:
- * "Profile: @{name} (@{email})"
- * can be evaluated into "Profile: John (john1@email.net)".
+ * "Profile: @{name} (@{team})"
+ * can be evaluated into "Profile: John (Design)".
  *
  * Models only hold expressions. The `:runtime` module evaluates them with `evaluate`, `observe`
  * and `observeAndGet` extensions over `ExpressionResolver` from `com.yandex.div.runtime.expression`.
