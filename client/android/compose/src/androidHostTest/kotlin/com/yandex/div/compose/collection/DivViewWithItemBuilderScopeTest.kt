@@ -110,7 +110,7 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
         }
         rule.waitForIdle()
 
-        assertEquals(cardObservers, observers)
+        assertEquals(case.removal.expectedObservers(cardObservers), observers)
     }
 
     private fun replacementBuilder(): Div = case.owner.div(
@@ -138,7 +138,15 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
         )
     }
 
-    enum class Removal { DATA, PATCH, REPLACEMENT }
+    enum class Removal {
+        DATA, PATCH, REPLACEMENT;
+
+        fun expectedObservers(cardObservers: Set<(Variable) -> Unit>): Set<(Variable) -> Unit> =
+            when (this) {
+                DATA, REPLACEMENT -> cardObservers
+                PATCH -> emptySet()
+            }
+    }
 
     /**
      * An element that owns an `item_builder`.

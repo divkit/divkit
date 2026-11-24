@@ -57,18 +57,67 @@ internal class DivComposeExpressionResolver private constructor(
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
     private val variableObserver: (Variable) -> Unit = ::onVariableChanged
-    private val declarationObserver = object : DeclarationObserver {
+    private val declarationObserver = VariableDeclarationObserver()
+
+    private inner class VariableDeclarationObserver : DeclarationObserver {
+        // Variables can leave the source before their undeclaration callbacks arrive.
+        private var observedVariables: MutableSet<Variable>? = null
+        private val observedProperties = mutableMapOf<String, Variable.PropertyVariable>()
+
+        val isObserving: Boolean get() = observedVariables != null
+
+        fun startObservingVariables() {
+            observedVariables = mutableSetOf()
+            variableSource.receiveVariablesUpdates(::observeVariable)
+            variableSource.observeDeclaration(this)
+        }
+
         override fun onDeclared(variable: Variable) {
-            variable.addObserver(variableObserver)
+            // A callback can close the last subscription during a batch of declarations.
+            if (observedVariables == null) return
+            observeVariable(variable)
+            updatePropertyObserver(variable.name)
             onVariableChanged(variable)
         }
 
         override fun onUndeclared(variable: Variable) {
-            variable.removeObserver(variableObserver)
+            if (observedVariables?.remove(variable) == true) variable.removeObserver(variableObserver)
+            updatePropertyObserver(variable.name)
             onVariableChanged(variable)
         }
+
+        private fun observeVariable(variable: Variable) {
+            if (variable is Variable.PropertyVariable) return
+            if (observedVariables?.add(variable) == true) variable.addObserver(variableObserver)
+        }
+
+        fun updatePropertyObserver(name: String) {
+            if (observedVariables == null) return
+
+            // A property's getter can keep the resolver subscribed after its consumers close.
+            val variable = variableProvider.getVariable(name) as? Variable.PropertyVariable
+            val property = variable?.takeIf {
+                !variableProvider.isConstant(name) &&
+                    varToExpressions[name]?.any(expressionObservers::containsKey) == true
+            }
+            if (observedProperties[name] === property) return
+
+            observedProperties.remove(name)?.removeObserver(variableObserver)
+            if (property != null) {
+                observedProperties[name] = property
+                property.addObserver(variableObserver)
+            }
+        }
+
+        fun stopObservingVariables() {
+            val variables = observedVariables ?: return
+            observedVariables = null
+            variableSource.removeDeclarationObserver(this)
+            variables.forEach { it.removeObserver(variableObserver) }
+            observedProperties.values.forEach { it.removeObserver(variableObserver) }
+            observedProperties.clear()
+        }
     }
-    private var isObservingVariables = false
     private var providerSubscriptions: MutableSet<AutoCloseable>? = null
     private val variableSource: VariableSource
         get() = variableProvider.controller.variableSource
@@ -122,15 +171,16 @@ internal class DivComposeExpressionResolver private constructor(
                 .add(rawExpression)
         }
 
-        if (!isObservingVariables && variableNames.any { !variableProvider.isConstant(it) }) {
-            isObservingVariables = true
-            variableSource.observeVariables(variableObserver)
-            variableSource.observeDeclaration(declarationObserver)
+        if (!declarationObserver.isObserving &&
+            variableNames.any { !variableProvider.isConstant(it) }
+        ) {
+            declarationObserver.startObservingVariables()
         }
 
         expressionObservers
             .getOrPut(rawExpression) { ObserverList() }
             .addObserver(callback)
+        variableNames.forEach(declarationObserver::updatePropertyObserver)
 
         val providerSubscription = variableProvider.subscribe(variableNames, callback)
         if (providerSubscription != null) {
@@ -138,7 +188,15 @@ internal class DivComposeExpressionResolver private constructor(
             providerSubscriptions?.add(providerSubscription)
         }
         return Disposable {
-            expressionObservers[rawExpression]?.removeObserver(callback)
+            val observers = expressionObservers[rawExpression]
+            if (observers != null && observers.removeObserver(callback) && observers.isEmpty()) {
+                expressionObservers.remove(rawExpression)
+                if (expressionObservers.isEmpty()) {
+                    declarationObserver.stopObservingVariables()
+                } else {
+                    variableNames.forEach(declarationObserver::updatePropertyObserver)
+                }
+            }
             if (providerSubscription != null) {
                 providerSubscription.close()
                 providerSubscriptions?.remove(providerSubscription)
@@ -151,11 +209,7 @@ internal class DivComposeExpressionResolver private constructor(
     fun clearObservers() {
         providerSubscriptions?.forEach { it.close() }
         providerSubscriptions?.clear()
-        if (isObservingVariables) {
-            variableSource.removeVariablesObserver(variableObserver)
-            variableSource.removeDeclarationObserver(declarationObserver)
-            isObservingVariables = false
-        }
+        declarationObserver.stopObservingVariables()
         expressionObservers.clear()
         varToExpressions.clear()
     }

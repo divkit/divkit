@@ -3,10 +3,14 @@ package com.yandex.div.compose.expressions
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.createExpressionResolver
+import com.yandex.div.compose.rootVariableProvider
 import com.yandex.div.compose.variables.DivPropertyVariableExecutor
+import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.ScopedStoredValueProvider
+import com.yandex.div.internal.variables.DeclarationObserver
+import com.yandex.div.internal.variables.VariableSource
 import com.yandex.div.internal.variables.toVariable
 import com.yandex.div.test.data.arrayExpression
 import com.yandex.div.test.data.dataArray
@@ -20,10 +24,18 @@ import org.json.JSONObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
@@ -291,6 +303,163 @@ class DivComposeExpressionResolverTest {
     }
 
     @Test
+    fun `variable observers remain while another subscription is active`() {
+        val variable = spy(Variable.IntegerVariable("value", 10))
+        val observers = liveObservers(variable)
+        variableController.declare(variable)
+        val first = expression("@{value}").observe(expressionResolver) {}
+        val values = mutableListOf<String>()
+        expression("@{value}").observeAndGet(expressionResolver, values::add)
+        val activeObservers = observers.toSet()
+
+        first.close()
+        variable.set(20)
+
+        assertEquals(activeObservers, observers)
+        assertEquals(listOf("10", "20"), values)
+    }
+
+    @Test
+    fun `variable source observers detach after the last subscription closes`() {
+        val variable = spy(Variable.IntegerVariable("value", 10))
+        val observers = liveObservers(variable)
+        variableController.declare(variable)
+        val declarationObservers = mutableListOf<DeclarationObserver>()
+        val resolver = createResolver(declarationObservers)
+        val subscription = expression("@{value}").observe(resolver) {}
+        assertTrue(observers.isNotEmpty())
+        assertTrue(declarationObservers.isNotEmpty())
+
+        subscription.close()
+
+        assertTrue(observers.isEmpty())
+        assertTrue(declarationObservers.isEmpty())
+    }
+
+    @Test
+    fun `a new subscription receives updates after the last subscription closed`() {
+        val variable = Variable.IntegerVariable("value", 10)
+        variableController.declare(variable)
+        expression("@{value}").observe(expressionResolver) {}.close()
+        val values = mutableListOf<String>()
+
+        expression("@{value}").observeAndGet(expressionResolver, values::add)
+        variable.set(20)
+
+        assertEquals(listOf("10", "20"), values)
+    }
+
+    @Test
+    fun `variable source observers detach after a reactive property subscription closes`() {
+        val parent = DivVariableController()
+        val controller = DivVariableController(parent)
+        val declarationObservers = mutableListOf<DeclarationObserver>()
+        val resolver = createResolver(declarationObservers, controller)
+        val executor = DivPropertyVariableExecutor(lazy { mock() }, mock(), resolver)
+        val counter = spy(Variable.IntegerVariable("counter", 21))
+        val observers = liveObservers(counter)
+        parent.declare(counter)
+        val counterX2 = property(
+            name = "counterX2",
+            valueType = DivEvaluableType.INTEGER,
+            get = "@{counter * 2}"
+        ).toVariable(resolver, executor, throwingErrorLogger)
+        controller.declare(assertNotNull(counterX2))
+        val values = mutableListOf<String>()
+        val subscription = expression("@{counterX2}").observeAndGet(resolver, values::add)
+        counter.set(22)
+        assertEquals(listOf("42", "44"), values)
+
+        subscription.close()
+
+        assertTrue(observers.isEmpty())
+        assertTrue(declarationObservers.isEmpty())
+    }
+
+    @Test
+    fun `a property declared after subscribing starts notifying its consumer`() {
+        val counter = Variable.IntegerVariable("counter", 21)
+        variableController.declare(counter)
+        val values = mutableListOf<String>()
+        expression("@{counterX2}").observe(expressionResolver, values::add)
+
+        variableController.declare(createProperty())
+        counter.set(22)
+
+        assertEquals(listOf("42", "44"), values)
+    }
+
+    @Test
+    fun `a removed property stops notifying its consumer`() {
+        val counter = Variable.IntegerVariable("counter", 21)
+        variableController.declare(counter)
+        val property = spy(createProperty())
+        val observers = liveObservers(property)
+        variableController.declare(property)
+        var updates = 0
+        expressionResolver.subscribeToExpression("counterX2", listOf("counterX2")) { updates++ }
+        assertTrue(observers.isNotEmpty())
+
+        variableController.removeAll("counterX2")
+        val updatesAfterRemoval = updates
+        counter.set(22)
+
+        assertTrue(observers.isEmpty())
+        assertEquals(updatesAfterRemoval, updates)
+    }
+
+    @Test
+    fun `a redeclared property observes its new getter`() {
+        val counter = Variable.IntegerVariable("counter", 21)
+        val replacement = Variable.IntegerVariable("replacement", 10)
+        variableController.declare(counter, replacement)
+        variableController.declare(createProperty())
+        val values = mutableListOf<Any?>()
+        expressionResolver.subscribeToExpression("counterX2", listOf("counterX2")) {
+            values.add(variableController.get("counterX2")?.getValue())
+        }
+        variableController.removeAll("counterX2")
+
+        variableController.declare(createProperty("@{replacement * 3}"))
+        counter.set(22)
+        replacement.set(11)
+
+        assertEquals(listOf<Any?>(null, 30L, 33L), values)
+    }
+
+    @Test
+    fun `closing during a declaration batch does not observe subsequent declarations`() {
+        val first = Variable.IntegerVariable("first", 10)
+        val second = spy(Variable.IntegerVariable("second", 20))
+        lateinit var subscription: AutoCloseable
+        subscription = expressionResolver.subscribeToExpression("first", listOf("first")) {
+            subscription.close()
+        }
+
+        variableController.declare(first, second)
+
+        verify(second, never()).addObserver(any())
+    }
+
+    @Test
+    fun `closing from another callback detaches from the removed variable`() {
+        val variable = spy(Variable.IntegerVariable("value", 10))
+        variableController.declare(variable)
+        val firstResolver = createExpressionResolver(variableController = variableController)
+        val resolverNotifiedNext = createExpressionResolver(variableController = variableController)
+        lateinit var subscription: AutoCloseable
+        firstResolver.subscribeToExpression("value", listOf("value")) { subscription.close() }
+        resolverNotifiedNext.subscribeToExpression("value", listOf("value")) {}
+        subscription = expressionResolver.subscribeToExpression("value", listOf("value")) {}
+        val observer = argumentCaptor<(Variable) -> Unit>()
+        verify(variable, times(3)).addObserver(observer.capture())
+
+        variableController.removeAll("value")
+
+        verify(variable).removeObserver(observer.lastValue)
+    }
+
+    @Test
     fun `withPropertyNewValueVariable() shadows variable`() {
         variableController.declare(Variable.StringVariable("value", "initial value"))
 
@@ -352,6 +521,52 @@ class DivComposeExpressionResolverTest {
         variable.set("updated")
 
         assertEquals(listOf("", "declared", "updated"), newValues)
+    }
+
+    private fun createProperty(getter: String = "@{counter * 2}"): Variable = assertNotNull(
+        property(
+            name = "counterX2",
+            valueType = DivEvaluableType.INTEGER,
+            get = getter
+        ).toVariable(expressionResolver, propertyVariableExecutor, throwingErrorLogger)
+    )
+
+    private fun liveObservers(variable: Variable): Set<(Variable) -> Unit> {
+        val observers = mutableSetOf<(Variable) -> Unit>()
+        doAnswer {
+            observers.add(it.getArgument(0))
+            it.callRealMethod()
+        }.whenever(variable).addObserver(any())
+        doAnswer {
+            observers.remove(it.getArgument<(Variable) -> Unit>(0))
+            it.callRealMethod()
+        }.whenever(variable).removeObserver(any())
+        return observers
+    }
+
+    private fun createResolver(
+        declarationObservers: MutableList<DeclarationObserver>,
+        controller: DivVariableController = variableController,
+    ): DivComposeExpressionResolver {
+        val originalSource = controller.variableSource
+        val source = object : VariableSource by originalSource {
+            override fun observeDeclaration(observer: DeclarationObserver) {
+                originalSource.observeDeclaration(observer)
+                declarationObservers.add(observer)
+            }
+
+            override fun removeDeclarationObserver(observer: DeclarationObserver) {
+                originalSource.removeDeclarationObserver(observer)
+                declarationObservers.remove(observer)
+            }
+        }
+        val sourceController = mock<DivVariableController> {
+            on { variableSource } doReturn source
+        }
+        val provider = object : VariableAndConstantProvider by rootVariableProvider(controller) {
+            override val controller = sourceController
+        }
+        return createExpressionResolver(variableProvider = provider)
     }
 
     private fun evaluate(expression: String): String {

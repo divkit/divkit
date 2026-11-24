@@ -35,6 +35,7 @@ import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.itemBuilder
 import com.yandex.div.test.data.jsonArray
 import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.property
 import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.scrollToAction
 import com.yandex.div.test.data.setVariableAction
@@ -51,6 +52,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionScrollDestination
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivData
+import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTrigger
@@ -66,8 +68,11 @@ import org.json.JSONArray
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
@@ -676,6 +681,40 @@ class DivViewWithGalleryItemBuilderTest {
     }
 
     @Test
+    fun `replacing the gallery switches its data subscription`() {
+        val oldElements = Variable.ArrayVariable("oldElements", elements(1))
+        val newElements = Variable.ArrayVariable("newElements", jsonArray())
+        variableController.declare(oldElements, newElements)
+        val oldData = spy(arrayExpression("@{oldElements}"))
+        val prototypes = listOf(prototype(div = item(), id = expression("@{it.getString('id')}")))
+        val card = data(
+            container(items = listOf(builtGallery(oldData, prototypes, id = "target"))),
+            variables = listOf(property(
+                name = "replacementData",
+                valueType = DivEvaluableType.ARRAY,
+                get = "@{newElements}"
+            ))
+        )
+        setContent(card)
+        rule.onNodeWithTag("item0").assertExists()
+        val replacement = builtGallery(
+            data = arrayExpression("@{replacementData}"),
+            prototypes = prototypes,
+            id = "target"
+        )
+
+        applyPatch(card, DivPatch.Change("target", listOf(replacement)))
+        clearInvocations(oldData)
+        oldElements.set(jsonArray(jsonObject("id" to "stale")))
+        newElements.set(jsonArray(jsonObject("id" to "new")))
+
+        rule.onNodeWithTag("new").assertExists()
+        rule.onNodeWithTag("item0").assertDoesNotExist()
+        rule.onNodeWithTag("stale").assertDoesNotExist()
+        verify(oldData, never()).evaluate(any())
+    }
+
+    @Test
     fun `item observers are released when the data is emptied`() {
         val elements = Variable.ArrayVariable("elements", jsonArray())
         variableController.declare(elements)
@@ -742,7 +781,37 @@ class DivViewWithGalleryItemBuilderTest {
 
         applyPatch(card, DivPatch.Change("target"))
 
-        assertEquals(cardObservers, observers)
+        assertTrue(observers.isEmpty())
+    }
+
+    @Test
+    fun `reactive sibling keeps observing after a patch removes the gallery`() {
+        val elements = Variable.ArrayVariable("elements", jsonArray())
+        val label = spy(Variable.StringVariable("label", "before"))
+        variableController.declare(elements)
+        val observers = declareObservedVariable(label)
+        val card = data(container(items = listOf(
+            builtGallery(
+                data = arrayExpression("@{elements}"),
+                prototypes = listOf(prototype(
+                    div = item(id = "item", text = expression("@{label}"))
+                )),
+                id = "target"
+            ),
+            text(id = "sibling", text = expression("@{label}"))
+        )))
+        setContent(card)
+        rule.onNodeWithTag("sibling").assertTextEquals("before")
+        val siblingObservers = observers.toSet()
+        elements.set(jsonArray(jsonObject()))
+        rule.onNodeWithTag("item").assertTextEquals("before")
+        assertTrue(observers.size > siblingObservers.size)
+
+        applyPatch(card, DivPatch.Change("target"))
+        label.set("after")
+
+        assertEquals(siblingObservers, observers)
+        rule.onNodeWithTag("sibling").assertTextEquals("after")
     }
 
     private fun setContent(content: Div) = setContent(data(content))
@@ -780,8 +849,10 @@ class DivViewWithGalleryItemBuilderTest {
      * Declares a card variable [name] and returns its live observers, so that a leaked scope stays
      * visible.
      */
-    private fun declareObservedVariable(name: String): Set<(Variable) -> Unit> {
-        val variable = spy(Variable.BooleanVariable(name, false))
+    private fun declareObservedVariable(name: String): Set<(Variable) -> Unit> =
+        declareObservedVariable(spy(Variable.BooleanVariable(name, false)))
+
+    private fun declareObservedVariable(variable: Variable): Set<(Variable) -> Unit> {
         val observers = mutableSetOf<(Variable) -> Unit>()
         doAnswer {
             observers.add(it.getArgument(0))
