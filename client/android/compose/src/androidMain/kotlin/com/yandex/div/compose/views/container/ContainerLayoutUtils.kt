@@ -6,8 +6,13 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
@@ -15,6 +20,7 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
+import com.yandex.div2.DivMatchParentSize
 
 @Composable
 internal fun DivContainer.Separator?.resolveSeparatorVisibility(): SeparatorVisibility {
@@ -72,6 +78,20 @@ internal fun RowScope.observeVerticalChildModifier(
 @Composable
 internal fun Div.observeHorizontalChildAlignment(): Alignment.Horizontal? =
     value().alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
+
+@Composable
+internal fun DivMatchParentSize.observeMatchParentSpec(beforeMargin: Dp, afterMargin: Dp): MatchParentSpec {
+    val minSize = this.minSize?.let { it.value.observedDpValue(it.unit) } ?: 0.dp
+    val maxSize = this.maxSize?.let { it.value.observedDpValue(it.unit) }
+    val hasValidBounds = maxSize == null || minSize <= maxSize
+    return MatchParentSpec(
+        weight = weight?.observedFloatValue()?.takeIf { it > 0f } ?: 1f,
+        minSize = if (hasValidBounds) minSize else 0.dp,
+        maxSize = if (hasValidBounds) maxSize else null,
+        // Each margin is rounded on its own, as the padding that applies it rounds it.
+        marginsPx = with(LocalDensity.current) { beforeMargin.roundToPx() + afterMargin.roundToPx() },
+    )
+}
 
 /**
  * Aligns content that is larger than the container the way the container aligns its children.
