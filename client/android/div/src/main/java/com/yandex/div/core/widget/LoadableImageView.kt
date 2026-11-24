@@ -29,6 +29,10 @@ open class LoadableImageView(
 
     internal var loadReference: LoadReference? = null
 
+    internal var skipRedundantDrawableLayout = false
+
+    private var settingImageDrawable = false
+
     private var imageChangeCallback: (() -> Unit)? = null
 
     private var sourceDrawable: Drawable? = null
@@ -111,17 +115,35 @@ open class LoadableImageView(
 
         if (externalImage != null) {
             if (this.drawable !== externalImage) {
-                super.setImageDrawable(externalImage)
+                applyImageDrawable(externalImage)
             }
             imageChangeCallback?.invoke()
             return
         }
 
-        super.setImageDrawable(
+        applyImageDrawable(
             _imageTransformer.transform(drawable)?.scaleAccordingToDensity()
         )
 
         imageChangeCallback?.invoke()
+    }
+
+    override fun requestLayout() {
+        val skipDrawableLayout = skipRedundantDrawableLayout && settingImageDrawable
+        if (skipDrawableLayout && isAttachedToWindow && hasDrawableIndependentSize) {
+            return
+        }
+        super.requestLayout()
+    }
+
+    private fun applyImageDrawable(drawable: Drawable?) {
+        val wasSettingImageDrawable = settingImageDrawable
+        settingImageDrawable = true
+        try {
+            super.setImageDrawable(drawable)
+        } finally {
+            settingImageDrawable = wasSettingImageDrawable
+        }
     }
 
     @CallSuper

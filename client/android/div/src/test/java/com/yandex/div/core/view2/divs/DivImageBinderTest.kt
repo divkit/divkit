@@ -68,6 +68,22 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `layout optimization is reset when identical data is rebound with flag disabled`() {
+        val (view, divImage) = createTestDiv("with_action.json")
+        val optimizedBinder = DivImageBinder(
+            baseBinder, imageLoader, placeholderLoader, animationsEnabledController,
+            imageLayoutOptimizationEnabled = true
+        )
+
+        optimizedBinder.bindView(view, divImage, divView)
+        Assert.assertTrue(view.skipRedundantDrawableLayout)
+
+        binder.bindView(view, divImage, divView)
+
+        Assert.assertFalse(view.skipRedundantDrawableLayout)
+    }
+
+    @Test
     fun `url action applied`() {
         val (view, divImage) = createTestDiv("with_action.json")
 

@@ -10,6 +10,8 @@ import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.experiments.Experiment.IMAGE_LAYOUT_OPTIMIZATION_ENABLED
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageLoader
@@ -55,7 +57,14 @@ internal class DivImageBinder @Inject constructor(
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val animationsEnabledController: DivAnimationsEnabledController,
+    @param:ExperimentFlag(IMAGE_LAYOUT_OPTIMIZATION_ENABLED)
+    private val imageLayoutOptimizationEnabled: Boolean = IMAGE_LAYOUT_OPTIMIZATION_ENABLED.defaultValue,
 ) : DivViewBinder<DivBlock.Image, DivImageView>(baseBinder) {
+
+    override fun bindView(view: DivImageView, divBlock: DivBlock.Image, divView: Div2View) {
+        view.skipRedundantDrawableLayout = imageLayoutOptimizationEnabled
+        super.bindView(view, divBlock, divView)
+    }
 
     override fun DivImageView.bind(
         divBlock: DivBlock.Image,

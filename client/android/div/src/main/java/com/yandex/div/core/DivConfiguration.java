@@ -111,6 +111,7 @@ public class DivConfiguration {
     private boolean mPermanentDebugPanelEnabled;
     private boolean mRenderEffectEnabled;
     private boolean mDeferredVideoPlayerCreationEnabled;
+    private final boolean mImageLayoutOptimizationEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
 
@@ -160,6 +161,7 @@ public class DivConfiguration {
             float recyclerScrollInterceptionAngle,
             boolean renderEffectEnabled,
             boolean deferredVideoPlayerCreationEnabled,
+            boolean imageLayoutOptimizationEnabled,
             @NonNull DivAnimationsEnabledProvider animationsEnabledProvider,
             @NonNull DivCompatibilityFeatures compatibilityFeatures
     ) {
@@ -208,6 +210,7 @@ public class DivConfiguration {
         mPagerPageClipEnabled = pagerChildrenClipEnabled;
         mRenderEffectEnabled = renderEffectEnabled;
         mDeferredVideoPlayerCreationEnabled = deferredVideoPlayerCreationEnabled;
+        mImageLayoutOptimizationEnabled = imageLayoutOptimizationEnabled;
         mAnimationsEnabledProvider = animationsEnabledProvider;
         mCompatibilityFeatures = compatibilityFeatures;
     }
@@ -320,6 +323,12 @@ public class DivConfiguration {
     @ExperimentFlag(experiment = Experiment.VISIBILITY_TOKEN_INDEX_ENABLED)
     public boolean isVisibilityTokenIndexEnabled() {
         return mVisibilityTokenIndexEnabled;
+    }
+
+    @Provides
+    @ExperimentFlag(experiment = Experiment.IMAGE_LAYOUT_OPTIMIZATION_ENABLED)
+    public boolean isImageLayoutOptimizationEnabled() {
+        return mImageLayoutOptimizationEnabled;
     }
 
     @Provides
@@ -584,6 +593,8 @@ public class DivConfiguration {
         private boolean mRenderEffectEnabled = Experiment.RENDER_EFFECT_ENABLED.getDefaultValue();
         private boolean mDeferredVideoPlayerCreationEnabled =
                 Experiment.DEFER_VIDEO_PLAYER_CREATION_ENABLED.getDefaultValue();
+        private boolean mImageLayoutOptimizationEnabled =
+                Experiment.IMAGE_LAYOUT_OPTIMIZATION_ENABLED.getDefaultValue();
         @NonNull
         private DivAnimationsEnabledProvider mAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT;
         @NonNull
@@ -899,6 +910,16 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * Skips drawable-induced layout requests for regular images with drawable-independent dimensions.
+         * Disabled by default. Does not apply to GIFs.
+         */
+        @NonNull
+        public Builder enableImageLayoutOptimization(boolean enable) {
+            mImageLayoutOptimizationEnabled = enable;
+            return this;
+        }
+
         @NonNull
         public Builder animationsEnabledProvider(@NonNull DivAnimationsEnabledProvider provider) {
             mAnimationsEnabledProvider = provider;
@@ -969,6 +990,7 @@ public class DivConfiguration {
                     mRecyclerScrollInterceptionAngle,
                     mRenderEffectEnabled,
                     mDeferredVideoPlayerCreationEnabled,
+                    mImageLayoutOptimizationEnabled,
                     mAnimationsEnabledProvider,
                     mCompatibilityFeatures);
         }

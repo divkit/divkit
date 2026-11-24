@@ -42,6 +42,12 @@ open class AspectImageView @JvmOverloads constructor(
             }
         }
 
+    private var hasDrawableDependentMeasurement = false
+
+    internal val hasDrawableIndependentSize: Boolean
+        get() = measuredWidth > 0 && measuredHeight > 0 &&
+            !hasDrawableDependentMeasurement
+
     private val transformMatrix = Matrix()
 
     private var isMatrixInvalidated = true
@@ -55,6 +61,13 @@ open class AspectImageView @JvmOverloads constructor(
     override fun getBaseline() = measuredHeight - paddingBottom
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val hasIndependentHeight = MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY ||
+            (aspectRatio > 0f && aspectRatio.isFinite())
+        if (MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.EXACTLY || !hasIndependentHeight) {
+            // Keep this for the view's lifetime: an exact second pass can depend on
+            // intrinsic dimensions from an earlier pass cached by View.measure().
+            hasDrawableDependentMeasurement = true
+        }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         applyAspectRatio(widthMeasureSpec, heightMeasureSpec)
     }

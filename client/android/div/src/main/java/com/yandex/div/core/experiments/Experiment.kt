@@ -77,4 +77,8 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
         "defer_video_player_creation",
         defaultValue = false,
     ),
+    IMAGE_LAYOUT_OPTIMIZATION_ENABLED(
+        "image_layout_optimization_enabled",
+        defaultValue = false,
+    ),
 }
