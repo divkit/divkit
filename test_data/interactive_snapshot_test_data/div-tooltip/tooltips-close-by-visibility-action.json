@@ -1,6 +1,7 @@
 {
   "description": "#117 Tooltips: close the tooltip through its original visibility action (hide_tooltip after 3000 ms); tooltip duration remains 0. Verify the tooltip snapshot, visibility/disappear logs and status changes from false to true, then snapshot the card after disappearance. Tapping outside is not covered; its necessity is pending discussion. Animation progress is not verified. All snapshots capture the page without an element target.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

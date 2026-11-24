@@ -203,6 +203,25 @@ class RoborazziInteractiveScreenshotTest(
     }
 
     private fun verifyText(step: Step.VerifyText) {
+        var failure: AssertionError? = null
+        waitUntil(VERIFY_TEXT_TIMEOUT_MS) {
+            failure = try {
+                assertText(step)
+                null
+            } catch (e: AssertionError) {
+                e
+            }
+            // Waiting must not hide an ambiguous target.
+            failure == null || isAmbiguous(step.target)
+        }
+        failure?.let { throw it }
+    }
+
+    private fun isAmbiguous(target: Target) = composeRule
+        .onAllNodes(target.matcher() and isPlaced(), useUnmergedTree = target is Target.Text)
+        .fetchSemanticsNodes().size > 1
+
+    private fun assertText(step: Step.VerifyText) {
         val target = onTarget(step.target)
         val input = onInput(step.target)
         // A missing or ambiguous target fails in assertTextEquals below with its usual message.
@@ -226,14 +245,18 @@ class RoborazziInteractiveScreenshotTest(
     }
 
     // Delayed actions run only when the test clock advances.
+    private fun waitUntil(timeoutMs: Long, condition: () -> Boolean) {
+        var waited = 0L
+        while (!condition() && waited < timeoutMs) {
+            wait(Step.Wait(POLL_INTERVAL_MS))
+            contentRule.waitForIdle()
+            waited += POLL_INTERVAL_MS
+        }
+    }
+
     private fun verifyLog(step: Step.VerifyLog) {
         val recorder = contentRule.sightActionRecorder
-        var waited = 0L
-        while (!recorder.isSettled(step) && waited < SightActionRecorder.TIMEOUT_MS) {
-            wait(Step.Wait(SightActionRecorder.POLL_INTERVAL_MS))
-            contentRule.waitForIdle()
-            waited += SightActionRecorder.POLL_INTERVAL_MS
-        }
+        waitUntil(SightActionRecorder.TIMEOUT_MS) { recorder.isSettled(step) }
         recorder.verify(step)
     }
 
@@ -361,6 +384,8 @@ private fun TouchInjectionScope.swipeAndHold(start: Offset, end: Offset, holdDur
 }
 
 private const val SWIPE_DURATION_MS = 200L
+private const val VERIFY_TEXT_TIMEOUT_MS = 3_000L
+private const val POLL_INTERVAL_MS = 50L
 
 private fun Target.matcher() = when (this) {
     is Target.DivId -> hasTestTag(id)

@@ -1,6 +1,7 @@
 {
   "description": "#117 Tooltips: restore the original non-animated tooltip and close it through duration=1500 ms. Verify the tooltip snapshot and visibility log, wait for the original disappear action to change its status text, then verify the disappear log, visibility status and the card after disappearance. No hide_tooltip action is used to close this tooltip. Tapping outside is not covered; its necessity is pending discussion. Animation progress is not verified. All snapshots capture the page without an element target.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

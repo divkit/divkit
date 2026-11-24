@@ -1,6 +1,7 @@
 {
   "description": "#469 Tooltip on different positions: use position buttons to show the tooltip at top, right, left, center, and bottom, then close it with its cross. The left button extends the original card. General content snapshots verify all five positions. Outside taps are outside the agreed scope of this case; full-screen frame containment is not asserted separately.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

@@ -1,6 +1,7 @@
 {
   "description": "#117 Tooltips: close the tooltip using its original cross action. Verify visibility/disappear logs and the tooltip snapshot, then compare the restored card with the same initial snapshot. Tapping outside is not covered; its necessity is pending discussion. Animation progress is not verified. All snapshots capture the page without an element target.",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
