@@ -1,6 +1,5 @@
 import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
 import dev.detekt.gradle.Detekt
-import java.io.File
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
@@ -66,7 +65,7 @@ kotlin {
         }
 
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
+            implementation(kotlin("test"))
         }
 
         getByName("androidHostTest").dependencies {

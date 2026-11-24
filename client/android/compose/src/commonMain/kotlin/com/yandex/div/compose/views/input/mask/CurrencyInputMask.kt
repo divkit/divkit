@@ -1,40 +1,12 @@
 package com.yandex.div.compose.views.input.mask
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import com.yandex.div.compose.di.LocalComponent
-import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div2.DivCurrencyInputMask
-import java.text.DecimalFormat
-import java.text.NumberFormat
-import java.util.Locale
+import com.yandex.div.compose.locale.CurrencyFormatInfo
 
-@Composable
-internal fun DivCurrencyInputMask.rememberCurrencyInputMask(): InputMask {
-    val localeTag = locale?.observedValue()
-    val reporter = LocalComponent.current.reporter
-
-    return remember(localeTag) {
-        val locale = if (localeTag == null) {
-            Locale.getDefault()
-        } else {
-            Locale.forLanguageTag(localeTag).also {
-                val finalTag = it.toLanguageTag()
-                if (finalTag != localeTag) {
-                    reporter.reportWarning("Original locale tag '$localeTag' is not equals to final one '$finalTag'")
-                }
-            }
-        }
-        CurrencyInputMask(locale)
-    }
-}
-
-internal class CurrencyInputMask(locale: Locale) : InputMask() {
-    private val formatter = NumberFormat.getCurrencyInstance(locale) as DecimalFormat
-    private val decimalSeparator = formatter.decimalFormatSymbols.decimalSeparator
-    private val groupingSeparator = formatter.decimalFormatSymbols.groupingSeparator
-    private val groupingSize = if (formatter.isGroupingUsed) formatter.groupingSize else 0
-    private val maxFractionDigits = formatter.maximumFractionDigits
+internal class CurrencyInputMask(format: CurrencyFormatInfo) : InputMask() {
+    private val decimalSeparator = format.decimalSeparator
+    private val groupingSeparator = format.groupingSeparator
+    private val groupingSize = format.groupingSize
+    private val maxFractionDigits = format.maxFractionDigits
 
     /** The raw variable holds the decimal separator of the locale or, as the View renderer writes it, the point. */
     override fun sanitize(raw: String): String {

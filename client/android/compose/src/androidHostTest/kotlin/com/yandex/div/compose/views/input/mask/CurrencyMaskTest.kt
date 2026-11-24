@@ -28,11 +28,32 @@ class CurrencyMaskTest {
 
     private val rawVar = Variable.StringVariable("currency_raw", "")
     private val displayVar = Variable.StringVariable("currency_display", "")
+    private val testReporter = TestReporter()
     private val configuration = divConfiguration {
-        reporter = TestReporter()
+        reporter = testReporter
         variableController = DivVariableController().apply { declare(rawVar, displayVar) }
     }
     private val field get() = rule.onNode(hasSetTextAction())
+
+    @Test
+    fun `normalized locale tag reports the original warning`() {
+        setContent("EN-us")
+
+        field.performTextInput("1234.56")
+
+        field.assertTextEquals("1,234.56")
+        assertEquals(
+            listOf("Original locale tag 'EN-us' is not equals to final one 'en-US'"),
+            testReporter.warnings,
+        )
+    }
+
+    @Test
+    fun `canonical locale tag does not report a warning`() {
+        setContent("en-US")
+
+        assertEquals(emptyList(), testReporter.warnings)
+    }
 
     @Test
     fun `en-US typing digits groups by thousands`() {
