@@ -627,6 +627,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],
@@ -2553,6 +2554,7 @@
       "title": "Variables triggers",
       "case_id": 71,
       "automated": [
+        "android",
         "ios",
         "web"
       ],
@@ -3463,6 +3465,7 @@
       "title": "Currency input mask",
       "case_id": 106,
       "automated": [
+        "android",
         "ios"
       ],
       "platforms": [

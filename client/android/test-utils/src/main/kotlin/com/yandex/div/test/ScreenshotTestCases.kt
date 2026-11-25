@@ -165,8 +165,10 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-gallery/state-change-variable-synchronization.json",
     "div-gallery/state-preservation-with-variables.json",
     "div-gallery/wrap-content-height-after-scroll.json",
-    "div-input/capture-focus-on-action.json",
     "div-state/multiple-root-state-switching.json",
+
+    // A tap on an element without actions does not clear the input focus.
+    "div-input/capture-focus-on-action.json",
 
     // A paging gallery flung into its end padding does not snap back to the last item.
     "div-gallery/items-position.json",
