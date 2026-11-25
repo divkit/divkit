@@ -1,24 +1,17 @@
 from __future__ import annotations
 
+import builtins
 import hashlib
 import json
 import uuid
 import warnings
 from collections import defaultdict
+from collections.abc import Iterator, Mapping, Sequence
 from functools import reduce
 from types import MappingProxyType
 from typing import (
     Any,
-    Dict,
-    FrozenSet,
-    Iterator,
-    List,
-    Mapping,
     Optional,
-    Sequence,
-    Set,
-    Tuple,
-    Type,
     Union,
     get_args,
     get_origin,
@@ -36,6 +29,9 @@ from .serialization import (
     dump,
 )
 
+# ``Optional`` / ``Union`` build field types at runtime: before 3.14 ``X | Y``
+# is a ``types.UnionType``, which casting does not treat as a union.
+
 TYPE_FIELD = "type"
 
 
@@ -44,9 +40,9 @@ class BaseEntity:
     __field_names__: Mapping[uuid.UUID, str]
     __field_types__: Mapping[str, type]
 
-    __subclasses_registry__: Dict[str, Type[BaseEntity]] = {}
-    __related_templates__: FrozenSet[Type[BaseDiv]] = frozenset({})
-    __template_name__: Optional[str] = None
+    __subclasses_registry__: builtins.dict[str, type[BaseEntity]] = {}
+    __related_templates__: frozenset[type[BaseDiv]] = frozenset({})
+    __template_name__: str | None = None
 
     def __init__(self, **kwargs: Any) -> None:
         if self.__fields__ and not self.__field_types__:
@@ -55,7 +51,7 @@ class BaseEntity:
                 f"Class {class_name} fields are not prepared yet, you may "
                 f"need to call {class_name}.update_forward_refs().",
             )
-        self._instance_related_templates: Set[Type[BaseDiv]] = set()
+        self._instance_related_templates: set[type[BaseDiv]] = set()
         for field_name, value in kwargs.items():
             if value is not None:
                 setattr(self, field_name, value)
@@ -136,7 +132,7 @@ class BaseEntity:
 
     @classmethod
     def _extract_fields(cls) -> Mapping[str, _Field]:
-        fields: Dict[str, _Field] = {}
+        fields: dict[str, _Field] = {}
         for base in cls.__bases__:
             base_fields = getattr(base, "__fields__", None)
             if issubclass(base, BaseEntity) and base_fields:
@@ -224,7 +220,7 @@ class BaseEntity:
         cls,
         *ref_types_seq: Mapping[uuid.UUID, Any],
     ) -> Mapping[uuid.UUID, Any]:
-        all_refs: Dict[uuid.UUID, List[Any]] = defaultdict(list)
+        all_refs: dict[uuid.UUID, list[Any]] = defaultdict(list)
         for ref_types in ref_types_seq:
             for ref_uid, ref_type in ref_types.items():
                 all_refs[ref_uid].append(ref_type)
@@ -253,7 +249,7 @@ class BaseEntity:
     def _extract_ref_types_from_values(
         self,
     ) -> Mapping[uuid.UUID, Any]:
-        ref_types: Dict[uuid.UUID, Any] = {}
+        ref_types: dict[uuid.UUID, Any] = {}
         for field_name, field_type in self.__field_types__.items():
             field_value = getattr(self, field_name, None)
             if isinstance(field_value, _Field) and field_value.ref_to:
@@ -278,14 +274,14 @@ class BaseEntity:
             ref_types_seq.append(self._extract_ref_types_from_obj(field_value))
         return self._merge_ref_types(*ref_types_seq)
 
-    def related_templates(self) -> Set[Type[BaseDiv]]:
+    def related_templates(self) -> set[type[BaseDiv]]:
         return {
             *self.__related_templates__,
             *self._instance_related_templates,
         }
 
-    def dict(self) -> Dict[str, Any]:
-        result: Dict[str, Any] = {}
+    def dict(self) -> builtins.dict[str, Any]:
+        result: dict[str, Any] = {}
         for field_name, field in self.__fields__.items():
             field_value = getattr(self, field_name, field.default)
             if field_value is not None:
@@ -306,11 +302,11 @@ class BaseEntity:
     @classmethod
     def _build_schema(
         cls,
-        definitions: Dict[str, SchemaType],
+        definitions: builtins.dict[str, SchemaType],
         exclude: ExcludeFieldsType,
     ) -> SchemaType:
-        properties: Dict[str, Any] = {}
-        required: List[str] = []
+        properties: dict[str, Any] = {}
+        required: list[str] = []
         for field_name, field in cls.__fields__.items():
             if (
                 not cls._can_add_field_to_schema(field_name, field)
@@ -339,7 +335,7 @@ class BaseEntity:
     @classmethod
     def schema_as_ref(
         cls,
-        definitions: Dict[str, SchemaType],
+        definitions: builtins.dict[str, SchemaType],
         exclude: ExcludeFieldsType,
     ) -> SchemaType:
         schema_name = cls.__name__
@@ -356,11 +352,11 @@ class BaseEntity:
 
 class BaseDiv(BaseEntity):
     __tpl_values__: Mapping[str, Any]
-    __refs__: Mapping[str, Set[Optional[str]]]
-    __local_referred_fields__: FrozenSet[str]
+    __refs__: Mapping[str, set[str | None]]
+    __local_referred_fields__: frozenset[str]
 
-    __base_type__: Optional[str] = None
-    __template__: Optional[Dict[str, Any]] = None
+    __base_type__: str | None = None
+    __template__: dict[str, Any] | None = None
 
     def __init_subclass__(cls, *args: Any, **kwargs: Any) -> None:
         cls.__base_type__ = cls._get_base_type()
@@ -370,7 +366,7 @@ class BaseDiv(BaseEntity):
         super().__init_subclass__(*args, **kwargs)
 
     @classmethod
-    def _extract_local_referred_fields(cls) -> FrozenSet[str]:
+    def _extract_local_referred_fields(cls) -> frozenset[str]:
         return frozenset(
             {
                 field_name
@@ -403,7 +399,7 @@ class BaseDiv(BaseEntity):
         field_types: Mapping[str, type],
         tpl_values: Mapping[str, Any],
     ) -> Mapping[str, type]:
-        new_field_types: Dict[str, Any] = {**field_types}
+        new_field_types: dict[str, Any] = {**field_types}
         for field_name in tpl_values:
             new_field_types[field_name] = Optional[new_field_types[field_name]]
         return MappingProxyType(new_field_types)
@@ -412,8 +408,8 @@ class BaseDiv(BaseEntity):
     def _extract_related_templates(
         cls,
         tpl_values: Mapping[str, Any],
-    ) -> FrozenSet[Type[BaseDiv]]:
-        related_templates: Set[Type[BaseDiv]] = set()
+    ) -> frozenset[type[BaseDiv]]:
+        related_templates: set[type[BaseDiv]] = set()
         if cls.__base_type__:
             related_templates.add(cls)
             for base_cls in cls.__bases__:
@@ -428,7 +424,7 @@ class BaseDiv(BaseEntity):
         cls,
         field_types: Mapping[str, Any],
     ) -> Mapping[str, Any]:
-        tpl_values: Dict[str, Any] = {}
+        tpl_values: dict[str, Any] = {}
         for name, field_type in field_types.items():
             if not hasattr(cls, name):
                 continue
@@ -453,7 +449,7 @@ class BaseDiv(BaseEntity):
     def _extract_ref_types_from_fields(
         cls,
     ) -> Mapping[uuid.UUID, Any]:
-        ref_types: Dict[uuid.UUID, Any] = {}
+        ref_types: dict[uuid.UUID, Any] = {}
         for field_name, field in cls.__fields__.items():
             if not field.ref_to:
                 continue
@@ -470,7 +466,7 @@ class BaseDiv(BaseEntity):
         return MappingProxyType(ref_types)
 
     @staticmethod
-    def _make_union(type: Type[Any]) -> Set[Type[Any]]:
+    def _make_union(type: type[Any]) -> set[type[Any]]:
         if get_origin(type) is Union:
             return set(get_args(type))
         return {type}
@@ -478,10 +474,10 @@ class BaseDiv(BaseEntity):
     @classmethod
     def _validate_subclass(
         cls,
-        ref_type: Type[Any],
-        expected_field_type: Type[Any],
+        ref_type: type[Any],
+        expected_field_type: type[Any],
     ) -> bool:
-        def _check_origins() -> Iterator[Tuple[Tuple[Any, ...], Tuple[Any, ...]]]:
+        def _check_origins() -> Iterator[tuple[tuple[Any, ...], tuple[Any, ...]]]:
             for ref in cls._make_union(ref_type):
                 for expect in cls._make_union(expected_field_type):
                     if get_origin(expect) == get_origin(ref):
@@ -530,7 +526,7 @@ class BaseDiv(BaseEntity):
                 )
 
     @classmethod
-    def _get_base_type(cls) -> Optional[str]:
+    def _get_base_type(cls) -> str | None:
         if len(cls.__bases__) > 1:
             raise TypeError(
                 "Types conflict: base class cannot be uniquely identified",
@@ -552,7 +548,7 @@ class BaseDiv(BaseEntity):
             setattr(cls, TYPE_FIELD, _Field(default=type_value))
 
     @classmethod
-    def template(cls) -> Dict[str, Any]:
+    def template(cls) -> dict[str, Any]:
         if not cls.__base_type__:
             raise TypeError(f"Component {cls.__name__} is not a template")
         if cls.__template__ is None:
@@ -560,7 +556,7 @@ class BaseDiv(BaseEntity):
         return cls.__template__
 
     @classmethod
-    def _build_template(cls) -> Dict[str, Any]:
+    def _build_template(cls) -> dict[str, Any]:
         template = {TYPE_FIELD: cls.__base_type__}
         for field_name, tpl_field_value in cls.__tpl_values__.items():
             field = cls.__fields__[field_name]
@@ -584,9 +580,9 @@ class BaseDiv(BaseEntity):
     @classmethod
     def schema(
         cls,
-        exclude_fields: Optional[Sequence[str]] = None,
+        exclude_fields: Sequence[str] | None = None,
     ) -> SchemaType:
-        definitions: Dict[str, SchemaType] = {}
+        definitions: dict[str, SchemaType] = {}
         exclude = _make_exclude_fields(exclude_fields)
         schema = cls._build_schema(definitions, exclude)
         schema["definitions"] = definitions

@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 import uuid
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Any, Dict, Mapping, Optional
+from typing import Any
 
 
 @dataclass()
 class _Field:
     uid: uuid.UUID = field(default_factory=uuid.uuid4)
-    name: Optional[str] = field(default=None)
-    default: Optional[Any] = field(default=None)
-    description: Optional[str] = field(default=None)
-    constraints: Dict[str, Any] = field(default_factory=dict)
-    ref_to: Optional[_Field] = field(default=None)
+    name: str | None = field(default=None)
+    default: Any | None = field(default=None)
+    description: str | None = field(default=None)
+    constraints: dict[str, Any] = field(default_factory=dict)
+    ref_to: _Field | None = field(default=None)
     is_ref: bool = field(default=False)
 
     @property
@@ -31,26 +32,26 @@ class _Field:
             self.constraints[c_key] = c_value
 
 
-def _make_constraints(**kwargs: Any) -> Dict[str, Any]:
+def _make_constraints(**kwargs: Any) -> dict[str, Any]:
     return {k: v for k, v in kwargs.items() if v is not None}
 
 
 def Field(
-    name: Optional[str] = None,
-    description: Optional[str] = None,
-    default: Optional[Any] = None,
-    format: Optional[str] = None,
-    gt: Optional[float] = None,
-    ge: Optional[float] = None,
-    lt: Optional[float] = None,
-    le: Optional[float] = None,
-    multiple_of: Optional[float] = None,
-    min_items: Optional[int] = None,
-    max_items: Optional[int] = None,
-    unique_items: Optional[bool] = None,
-    min_length: Optional[int] = None,
-    max_length: Optional[int] = None,
-    regex: Optional[str] = None,
+    name: str | None = None,
+    description: str | None = None,
+    default: Any | None = None,
+    format: str | None = None,
+    gt: float | None = None,
+    ge: float | None = None,
+    lt: float | None = None,
+    le: float | None = None,
+    multiple_of: float | None = None,
+    min_items: int | None = None,
+    max_items: int | None = None,
+    unique_items: bool | None = None,
+    min_length: int | None = None,
+    max_length: int | None = None,
+    regex: str | None = None,
 ) -> Any:
     return _Field(
         name=name,

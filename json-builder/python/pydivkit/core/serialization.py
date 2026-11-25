@@ -6,13 +6,8 @@ from contextlib import suppress
 from types import MappingProxyType
 from typing import (
     Any,
-    Dict,
-    List,
     Mapping,
-    Optional,
     Sequence,
-    Set,
-    Type,
     Union,
     get_args,
     get_origin,
@@ -21,6 +16,12 @@ from typing import (
 from .fields import Expr, _Field
 from .types.union import get_union_types, inject_types, is_union_injected
 
+# Runtime typing objects, kept on purpose:
+# - ``Mapping`` / ``Sequence`` are the typing aliases: ``isinstance`` against
+#   them looks at ``type(obj)`` only, while the ABCs also honour ``__class__``;
+# - ``Union[...]`` built at runtime: before 3.14 ``X | Y`` is a
+#   ``types.UnionType``, which the casting below does not treat as a union.
+
 TYPE_FIELD = "type"
 
 # ExcludeFieldsType: str -> ExcludeFieldsType | bool
@@ -28,12 +29,12 @@ ExcludeFieldsType = Mapping[str, Any]
 
 
 def _make_exclude_fields(
-    exclude_fields: Optional[Sequence[str]] = None,
+    exclude_fields: Sequence[str] | None = None,
 ) -> ExcludeFieldsType:
     if not exclude_fields:
         return MappingProxyType({})
-    exclude: Dict[str, Any] = {}
-    exclude_nested: Dict[str, List[str]] = defaultdict(list)
+    exclude: dict[str, Any] = {}
+    exclude_nested: dict[str, list[str]] = defaultdict(list)
     for exclude_field in exclude_fields:
         if not exclude_field:
             raise ValueError("Field name cannot be empty")
@@ -172,7 +173,7 @@ def dump(obj: Any) -> Any:
 
 def _update_related_templates(
     value: Any,
-    related_templates: Set[Type[Any]],
+    related_templates: set[type[Any]],
 ) -> None:
     from .entities import BaseEntity
 

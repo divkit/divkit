@@ -1,7 +1,3 @@
-import sys
-
-import pytest
-
 from pydivkit import (
     Div,
     DivAction,
@@ -16,9 +12,6 @@ from pydivkit import (
 )
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 9), reason="subscripting requires python3.9 or higher"
-)
 def test_sequence_collections_type():
     from collections.abc import Sequence
 
@@ -50,9 +43,6 @@ def test_ref_collections_union_type():
     assert "card" in make_div(images)
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 9), reason="subscripting requires python3.9 or higher"
-)
 def test_union_type():
     from collections.abc import Sequence
 
@@ -91,9 +81,6 @@ def test_sequence_typing_type():
     assert "card" in make_div(images)
 
 
-@pytest.mark.skipif(
-    sys.version_info < (3, 9), reason="subscripting requires python3.9 or higher"
-)
 def test_optional_sequence():
     from collections.abc import Sequence
 

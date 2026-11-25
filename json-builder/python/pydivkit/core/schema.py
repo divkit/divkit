@@ -1,14 +1,10 @@
 from __future__ import annotations
 
 import enum
+from collections.abc import Mapping, Sequence
 from types import MappingProxyType
 from typing import (
     Any,
-    Dict,
-    Mapping,
-    Optional,
-    Sequence,
-    Type,
     Union,
     get_args,
     get_origin,
@@ -20,7 +16,7 @@ TYPE_FIELD = "type"
 
 # ExcludeFieldsType: str -> ExcludeFieldsType | bool
 ExcludeFieldsType = Mapping[str, Any]
-SchemaType = Dict[str, Any]
+SchemaType = dict[str, Any]
 
 
 BUILTIN_TYPES_TO_SCHEMA: Mapping[type, Mapping[str, Any]] = MappingProxyType(
@@ -49,7 +45,7 @@ def _type_field_to_schema(field: _Field) -> SchemaType:
     }
 
 
-def _enum_to_schema(type_: Type[enum.Enum]) -> SchemaType:
+def _enum_to_schema(type_: type[enum.Enum]) -> SchemaType:
     return {
         "type": "string",
         "enum": [enum_el.value for enum_el in type_],
@@ -58,7 +54,7 @@ def _enum_to_schema(type_: Type[enum.Enum]) -> SchemaType:
 
 def _list_to_schema(
     type_: Any,
-    definitions: Dict[str, SchemaType],
+    definitions: dict[str, SchemaType],
     exclude: ExcludeFieldsType,
 ) -> SchemaType:
     item_type, *_ = get_args(type_)
@@ -76,10 +72,10 @@ def _dict_to_schema() -> SchemaType:
 
 
 def _union_to_schema(
-    field: Optional[_Field],
+    field: _Field | None,
     type_: Any,
     exclude: ExcludeFieldsType,
-    definitions: Dict[str, SchemaType],
+    definitions: dict[str, SchemaType],
 ) -> SchemaType:
     return {
         "anyOf": [
@@ -101,10 +97,10 @@ def _add_field_extra_to_schema(
 
 
 def _field_to_schema(
-    field: Optional[_Field],
+    field: _Field | None,
     type_: Any,
     exclude: ExcludeFieldsType,
-    definitions: Dict[str, SchemaType],
+    definitions: dict[str, SchemaType],
 ) -> SchemaType:
     from .entities import BaseEntity
     from .serialization import _unpack_optional_type
@@ -112,7 +108,7 @@ def _field_to_schema(
     type_ = _unpack_optional_type(type_)
     origin = get_origin(type_)
 
-    schema: Optional[SchemaType] = None
+    schema: SchemaType | None = None
     if field and field.name == TYPE_FIELD and field.default:
         schema = _type_field_to_schema(field)
     elif type_ in BUILTIN_TYPES_TO_SCHEMA:
