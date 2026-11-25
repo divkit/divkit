@@ -13,12 +13,14 @@ import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
+import com.yandex.test.rules.NoPasswordPreviewRule
 import com.yandex.test.screenshot.ScreenshotRule
 import org.json.JSONObject
 import org.junit.rules.TestRule
 
 fun classRule(activityRule: ActivityScenarioRule<*>): TestRule {
     return NoAnimationsRule()
+        .chain(NoPasswordPreviewRule())
         .chain(ClosePopupsRule())
         .chain(activityRule)
         .chain(ActivityClassRule(activityRule))

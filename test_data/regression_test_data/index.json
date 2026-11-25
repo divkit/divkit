@@ -4799,6 +4799,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
