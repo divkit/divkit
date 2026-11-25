@@ -385,7 +385,7 @@ private fun RenderTextLines(
         }
     }
     val intrinsics = remember(measurer, input) {
-        SourceTextIntrinsics(measurer, input)
+        SourceTextIntrinsics(measurer, annotatedText.text, input.style, input.inlineContent)
     }
     val lines = rememberLineMetricsText(input, measurer, availableWidth, maxLines)
     val textModifier = if (lines.text.text.text == annotatedText.text.text) {
@@ -475,7 +475,9 @@ private fun rememberEllipsizedTextRendering(
     }
     // Intrinsic-size containers must keep measuring the full text to avoid repeated truncation.
     val intrinsics = remember(measurer, measuredInput) {
-        SourceTextIntrinsics(measurer, measuredInput)
+        SourceTextIntrinsics(
+            measurer, measuredInput.text.text, measuredInput.style, measuredInput.inlineContent
+        )
     }
     val rendering = ellipsisResult.toTextRendering(
         sourceText = sourceText,

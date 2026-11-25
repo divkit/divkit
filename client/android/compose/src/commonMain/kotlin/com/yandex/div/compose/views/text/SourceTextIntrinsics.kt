@@ -1,21 +1,26 @@
 package com.yandex.div.compose.views.text
 
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.ui.layout.IntrinsicMeasurable
 import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Constraints
 
 // Keep the untruncated width for containers using width(IntrinsicSize.Max). Intrinsic heights
 // come from the rendered text, including any larger font in its custom ellipsis.
 internal class SourceTextIntrinsics(
     private val measurer: TextMeasurer,
-    private val input: TextMeasureInput,
+    private val text: AnnotatedString,
+    private val style: TextStyle,
+    inlineContent: Map<String, InlineTextContent>,
 ) : LayoutModifier {
-    private val placeholders = input.text.text.placeholders(input.inlineContent)
+    private val placeholders = text.placeholders(inlineContent)
 
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
         val placeable = measurable.measure(constraints)
@@ -24,8 +29,8 @@ internal class SourceTextIntrinsics(
 
     override fun IntrinsicMeasureScope.maxIntrinsicWidth(measurable: IntrinsicMeasurable, height: Int): Int {
         return measurer.measure(
-            text = input.text.text,
-            style = input.style,
+            text = text,
+            style = style,
             softWrap = false,
             placeholders = placeholders,
         ).size.width
