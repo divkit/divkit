@@ -1,47 +1,8 @@
 package com.yandex.div.compose.utils.scroll
 
-import androidx.compose.foundation.gestures.snapping.SnapPosition
-import androidx.compose.foundation.layout.BoxWithConstraintsScope
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-
-internal enum class CrossAxisAlignment {
-    START, CENTER, END;
-
-    fun toVerticalAlignment(): Alignment.Vertical = when (this) {
-        START -> Alignment.Top
-        CENTER -> Alignment.CenterVertically
-        END -> Alignment.Bottom
-    }
-
-    fun toHorizontalAlignment(): Alignment.Horizontal = when (this) {
-        START -> Alignment.Start
-        CENTER -> Alignment.CenterHorizontally
-        END -> Alignment.End
-    }
-
-    fun toBoxAlignment(isHorizontal: Boolean): Alignment =
-        if (isHorizontal) {
-            when (this) {
-                START -> Alignment.TopStart
-                CENTER -> Alignment.CenterStart
-                END -> Alignment.BottomStart
-            }
-        } else {
-            when (this) {
-                START -> Alignment.TopStart
-                CENTER -> Alignment.TopCenter
-                END -> Alignment.TopEnd
-            }
-        }
-}
 
 internal fun DivAlignmentHorizontal.toCrossAxisAlignment(layoutDirection: LayoutDirection): CrossAxisAlignment =
     when (this) {
@@ -61,43 +22,3 @@ internal fun DivAlignmentVertical.toCrossAxisAlignment(): CrossAxisAlignment =
         DivAlignmentVertical.CENTER -> CrossAxisAlignment.CENTER
         DivAlignmentVertical.BOTTOM -> CrossAxisAlignment.END
     }
-
-internal fun PaddingValues.getScrollAxisPaddings(
-    isHorizontal: Boolean,
-    layoutDirection: LayoutDirection,
-): Pair<Dp, Dp> {
-    return if (isHorizontal) {
-        Pair(calculateStartPadding(layoutDirection), calculateEndPadding(layoutDirection))
-    } else {
-        Pair(calculateTopPadding(), calculateBottomPadding())
-    }
-}
-
-internal fun BoxWithConstraintsScope.isScrollAxisBounded(isHorizontal: Boolean): Boolean =
-    if (isHorizontal) constraints.hasBoundedWidth else constraints.hasBoundedHeight
-
-/** Size available to a match_parent item along the scroll axis: the viewport without content padding. */
-internal fun PaddingValues.scrollAxisContentSize(
-    viewportSize: Dp,
-    isHorizontal: Boolean,
-    layoutDirection: LayoutDirection,
-): Dp {
-    val (startPadding, endPadding) = getScrollAxisPaddings(isHorizontal, layoutDirection)
-    return (viewportSize - startPadding - endPadding).coerceAtLeast(0.dp)
-}
-
-/**
- * Returns the item's target start relative to the viewport, including content padding.
- * Lazy list/grid item offsets are content-relative: subtract [startPaddingPx] before comparing them.
- */
-internal fun desiredSnapOffset(
-    snapPosition: SnapPosition,
-    viewportSizePx: Int,
-    itemSizePx: Int,
-    startPaddingPx: Int,
-    endPaddingPx: Int,
-): Int = when (snapPosition) {
-    SnapPosition.Center -> (viewportSizePx - itemSizePx) / 2
-    SnapPosition.End -> viewportSizePx - endPaddingPx - itemSizePx
-    else -> startPaddingPx
-}

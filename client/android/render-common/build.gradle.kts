@@ -1,6 +1,7 @@
 plugins {
     id("divkit.convention.library-kmp-ios")
     id("divkit.convention.publishing-module-kmp")
+    id("divkit.convention.jvm-api-check")
 }
 
 kotlin {

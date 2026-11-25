@@ -39,6 +39,7 @@ kotlin {
             api(project(":core"))
 
             implementation(project(":div-evaluable"))
+            implementation(project(":render-common"))
             implementation(project.dependencies.platform(libs.androidx.compose.bom))
             implementation(libs.androidx.compose.foundation)
             implementation(libs.androidx.compose.foundation.layout)
@@ -56,7 +57,6 @@ kotlin {
             implementation(project(":coil-core"))
             implementation(project(":div-core"))
             implementation(project(":div-storage"))
-            implementation(project(":render-common"))
 
             implementation(libs.androidx.compose.material3)
             implementation(libs.androidx.core)
