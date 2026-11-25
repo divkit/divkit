@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
-    id("divkit.convention.library-kmp")
+    id("divkit.convention.library-kmp-ios")
     id("divkit.convention.publishing-module-kmp")
     id("divkit.convention.jvm-api-check")
 }

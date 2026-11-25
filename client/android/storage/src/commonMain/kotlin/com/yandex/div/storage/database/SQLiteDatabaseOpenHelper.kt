@@ -273,7 +273,7 @@ private class DriverCursor(
 
     override fun moveToNext(): Boolean = read { statement.step() }
     override fun getColumnIndex(name: String): Int = read { statement.getColumnNames().indexOf(name) }
-    override fun getString(index: Int): String = read { statement.getText(index) }
+    override fun getString(index: Int): String = read { statement.readText(index) }
     override fun getBlob(index: Int): ByteArray = read { statement.getBlob(index) }
     override fun isNull(index: Int): Boolean = read { statement.isNull(index) }
 

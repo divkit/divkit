@@ -3,14 +3,14 @@ package com.yandex.div.storage.internal
 import com.yandex.div.storage.RawJsonRepositoryException
 import com.yandex.div.storage.database.StorageException
 import com.yandex.div.storage.internal.rawjson.RawJson
-import com.yandex.div.storage.util.concurrentMap
+import com.yandex.div.storage.util.ConcurrentMap
 
 private typealias JsonId = String
 
 internal class RawJsonRepositoryImpl<T : Any>(
     private val divStorage: DivStorage<T>,
 ) : RawJsonRepository<T> {
-    private val inMemoryData = concurrentMap<JsonId, RawJson<T>>()
+    private val inMemoryData = ConcurrentMap<JsonId, RawJson<T>>()
 
     private var areJsonsSynchronizedWithInMemory = false
     private var jsonIdsWithErrors = setOf<JsonId>()
