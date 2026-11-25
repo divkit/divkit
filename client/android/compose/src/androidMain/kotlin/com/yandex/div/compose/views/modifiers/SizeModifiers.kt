@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,8 +20,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.applyIf
-import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observedValue
@@ -51,7 +50,19 @@ internal fun Modifier.size(
     val horizontalAlignment = data.alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
         ?: layoutParams.defaultHorizontalAlignment
     val width = data.width
-    if (aspectRatio != null && width is DivSize.WrapContent) {
+    if (aspectRatio == null) {
+        val verticalAlignment = data.alignmentVertical?.observedValue()?.toVerticalAlignment()
+            ?: layoutParams.defaultVerticalAlignment
+        return sizeWithoutAspectRatio(
+            width = width,
+            height = data.height,
+            horizontalAlignment = horizontalAlignment,
+            verticalAlignment = verticalAlignment,
+            matchParentWidth = matchParentWidth,
+            matchParentHeight = matchParentHeight,
+        )
+    }
+    if (width is DivSize.WrapContent) {
         if (div is Div.Image || div is Div.GifImage) {
             val verticalAlignment = data.alignmentVertical?.observedValue()?.toVerticalAlignment()
                 ?: layoutParams.defaultVerticalAlignment
@@ -76,25 +87,48 @@ internal fun Modifier.size(
                 .wrapContentHeight(align = verticalAlignment, unbounded = true)
         }
     }
-    return this
-        .width(
-            width = width,
-            horizontalAlignment = horizontalAlignment,
-            matchParent = matchParentWidth,
-        )
-        .applyIfNotNull(aspectRatio) { ratio ->
-            aspectRatio(ratio)
-        }
-        .applyIf(aspectRatio == null) {
-            val verticalAlignment = data.alignmentVertical?.observedValue()?.toVerticalAlignment()
-                ?: layoutParams.defaultVerticalAlignment
-            height(
-                height = data.height,
-                verticalAlignment = verticalAlignment,
-                matchParent = matchParentHeight,
-            )
-        }
+    return width(width, horizontalAlignment, matchParentWidth).aspectRatio(aspectRatio)
 }
+
+@Composable
+private fun Modifier.sizeWithoutAspectRatio(
+    width: DivSize,
+    height: DivSize,
+    horizontalAlignment: Alignment.Horizontal,
+    verticalAlignment: Alignment.Vertical,
+    matchParentWidth: MatchParentSize,
+    matchParentHeight: MatchParentSize,
+): Modifier {
+    if (width is DivSize.Fixed && height is DivSize.Fixed) {
+        return fixedSizeWithAlignment(
+            width = width.value.observedValue(),
+            height = height.value.observedValue(),
+            alignment = combineAlignment(horizontalAlignment, verticalAlignment),
+        )
+    }
+    val wrapWidth = width.wrapContentWithoutSizeBounds
+    val wrapHeight = height.wrapContentWithoutSizeBounds
+    if (wrapWidth != null && wrapHeight != null) {
+        val unboundedWidth = wrapWidth.constrained?.observedValue() != true
+        val unboundedHeight = wrapHeight.constrained?.observedValue() != true
+        return if (unboundedWidth == unboundedHeight) {
+            wrapContentSize(
+                align = combineAlignment(horizontalAlignment, verticalAlignment),
+                unbounded = unboundedWidth,
+            )
+        } else {
+            wrapContentWidth(align = horizontalAlignment, unbounded = unboundedWidth)
+                .wrapContentHeight(align = verticalAlignment, unbounded = unboundedHeight)
+        }
+    }
+    return width(width, horizontalAlignment, matchParentWidth)
+        .height(height, verticalAlignment, matchParentHeight)
+}
+
+private val DivSize.wrapContentWithoutSizeBounds: DivWrapContentSize?
+    get() = (this as? DivSize.WrapContent)?.value?.takeIf {
+        it.minSize == null && it.maxSize == null
+    }
 
 @Composable
 private fun Modifier.width(
