@@ -3,7 +3,6 @@ package com.yandex.test.screenshot
 import android.content.Context
 import android.os.Build
 import android.view.View
-import com.yandex.test.util.performOnMain
 import io.qameta.allure.kotlin.Allure
 import io.qameta.allure.kotlin.model.Parameter
 import java.io.File
@@ -26,6 +25,7 @@ fun captureScreenshots(
     stepId: Int? = null,
     expectedScreenshot: String = "",
     expectedSuite: String = "",
+    fromScreen: Boolean = false,
 ) {
     val (suiteName, caseName) =
         stepId?.let { "$artifactsRelativePath/${casePath.caseName}" to "step$it" }
@@ -35,9 +35,7 @@ fun captureScreenshots(
         saveDeviceProperties(view.context)
     }
 
-    val screenshots = performOnMain {
-        ScreenshotCaptor.takeScreenshots(view, suiteName, caseName)
-    }
+    val screenshots = ScreenshotCaptor.takeScreenshots(view, suiteName, caseName, fromScreen)
     report(screenshots)
 
     if (expectedScreenshot.isEmpty() && expectedSuite.isEmpty()) return

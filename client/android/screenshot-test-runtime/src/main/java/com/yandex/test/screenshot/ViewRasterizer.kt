@@ -16,6 +16,9 @@ import android.view.View
 import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.createBitmap
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import com.yandex.test.util.performOnMain
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
@@ -53,6 +56,10 @@ internal object ViewRasterizer {
     private val backgroundLooper: Looper
         get() = backgroundThread.looper
 
+    private val uiDevice by lazy {
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    }
+
     fun rasterize(view: View): Bitmap {
         if (!view.isRenderable) {
             return emptyViewBitmap(view)
@@ -70,10 +77,7 @@ internal object ViewRasterizer {
             return emptyViewBitmap(view)
         }
 
-        val viewRect = view.rectInWindow().apply {
-            val elevationInset = -view.elevation.toInt()
-            inset(elevationInset, elevationInset)
-        }
+        val viewRect = view.captureRect(onScreen = false)
         val bitmap = createBitmap(viewRect.width(), viewRect.height())
         val handler = Handler(backgroundLooper)
 
@@ -88,6 +92,16 @@ internal object ViewRasterizer {
                 }
             }
         }
+    }
+
+    fun screenCopy(view: View): Bitmap {
+        val rect = performOnMain { view.takeIf { it.isRenderable }?.captureRect(onScreen = true) }
+            ?: return performOnMain { emptyViewBitmap(view) }
+        val screen = checkNotNull(uiDevice.takeScreenshot()) { "Can not take screenshot of $view" }
+        check(rect.intersect(0, 0, screen.width, screen.height)) { "$view is outside the screen" }
+        // UiAutomation may return a hardware bitmap.
+        val bitmap = if (screen.isHardware) screen.copy(Bitmap.Config.ARGB_8888, false) else screen
+        return Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height())
     }
 
     private fun emptyViewBitmap(view: View): Bitmap {
@@ -107,12 +121,17 @@ internal object ViewRasterizer {
     private val View.isRenderable
         get() = !isLayoutRequested && width > 0 && height > 0
 
-    private fun View.rectInWindow(): Rect {
-        val locationInWindow = IntArray(2).apply {
-            getLocationInWindow(this)
+    private val Bitmap.isHardware
+        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && config == Bitmap.Config.HARDWARE
+
+    private fun View.captureRect(onScreen: Boolean): Rect {
+        val location = IntArray(2).apply {
+            if (onScreen) getLocationOnScreen(this) else getLocationInWindow(this)
         }
+        val elevationInset = -elevation.toInt()
         return Rect(0, 0, width, height).apply {
-            offsetTo(locationInWindow[0], locationInWindow[1])
+            offsetTo(location[0], location[1])
+            inset(elevationInset, elevationInset)
         }
     }
 }

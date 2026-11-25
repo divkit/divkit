@@ -5,10 +5,15 @@ import android.os.SystemClock
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Root
+import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.doesNotHaveFocus
 import androidx.test.espresso.matcher.ViewMatchers.hasFocus
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.util.TreeIterables
 import com.yandex.div.internal.KLog
 import com.yandex.div.rule.UiReadyChecker
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
@@ -27,8 +32,11 @@ import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.StepsDsl
+import com.yandex.test.util.activeRoots
+import com.yandex.test.util.performOnMain
 import io.qameta.allure.kotlin.Allure.step
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.sameInstance
 import org.json.JSONObject
 
 private const val TAG = "InteractiveTestStepsPerformer"
@@ -184,12 +192,27 @@ internal class InteractiveScreenshotSteps {
         scenario.onActivity { it.sightActionRecorder.verify(verification) }
     }
 
-    private fun onView(target: Target) = onView(
-        when (target) {
+    private fun onView(target: Target): ViewInteraction {
+        val matcher = when (target) {
             is Target.DivId -> withTagValue(equalTo(target.id))
             is Target.Text -> withText(target.text)
         }
-    )
+        if (popupRoots().isEmpty()) return onView(matcher)
+        // Espresso picks only the topmost focusable window, so the window is chosen by the target.
+        val roots = performOnMain {
+            activeRoots.filter { root ->
+                TreeIterables.breadthFirstViewTraversal(root.decorView).any(matcher::matches)
+            }
+        }
+        if (roots.size > 1) throw ambiguousTarget(target, roots.size)
+        val root = roots.singleOrNull() ?: return onView(matcher)
+        return onView(matcher).inRoot(withDecorView(sameInstance(root.decorView)))
+    }
+
+    private fun popupRoots(): List<Root> = activeRoots.filter(isPlatformPopup()::matches)
+
+    private fun ambiguousTarget(target: Target, windows: Int) =
+        AssertionError("$target is found in $windows windows")
 
     private fun verifySnapshot(
         scenario: ActivityScenario<DivScreenshotActivity>,
@@ -198,6 +221,7 @@ internal class InteractiveScreenshotSteps {
         casePath: String,
         artifactsRelativePath: String
     ) = step("Verify screenshot step$snapshotIndex") {
+        val popups = popupRoots()
         var screenshotView: View? = null
         when (val target = verification.target) {
             is Target.Text -> onView(target).check { view, noViewFoundException ->
@@ -206,11 +230,20 @@ internal class InteractiveScreenshotSteps {
             }
 
             is Target.DivId -> scenario.onActivity { activity ->
-                screenshotView = activity.divView.findViewWithTag(target.id)
+                val views = (listOf(activity.divView) + popups.map(Root::getDecorView))
+                    .mapNotNull { it.findViewWithTag<View>(target.id) }
+                if (views.size > 1) throw ambiguousTarget(target, views.size)
+                screenshotView = views.singleOrNull()
                     ?: throw AssertionError("Failed to find screenshot target with div_id '${target.id}'")
             }
 
-            null -> scenario.onActivity { activity -> screenshotView = activity.divView }
+            null -> scenario.onActivity { activity ->
+                screenshotView = if (popups.isEmpty()) {
+                    activity.divView
+                } else {
+                    activity.findViewById<View>(android.R.id.content)
+                }
+            }
         }
         val view = screenshotView ?: throw AssertionError("Screenshot view is unavailable")
 
@@ -219,7 +252,8 @@ internal class InteractiveScreenshotSteps {
             artifactsRelativePath,
             casePath,
             stepId = snapshotIndex,
-            expectedScreenshot = verification.name
+            expectedScreenshot = verification.name,
+            fromScreen = popups.isNotEmpty(),
         )
     }
 }

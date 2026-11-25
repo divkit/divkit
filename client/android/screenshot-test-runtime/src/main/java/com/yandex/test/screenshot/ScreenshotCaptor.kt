@@ -6,30 +6,35 @@ import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.os.Build
 import android.view.View
-import androidx.annotation.MainThread
+import com.yandex.test.util.performOnMain
 
 object ScreenshotCaptor {
     /**
+     * @param fromScreen crop the view area from a screenshot to include popups above the activity
      * @return collection of relative screenshot paths
      */
-    @MainThread
     fun takeScreenshots(
         view: View,
         suiteName: String,
-        name: String
+        name: String,
+        fromScreen: Boolean = false
     ): Collection<String> {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            ViewRasterizer
-                .rasterize(view)
-                .save(ScreenshotType.ViewRender.asFile(suiteName, name))
-            return listOf(ScreenshotType.ViewRender.relativeScreenshotPath(suiteName, name))
-        } else {
-            val window = view.context.asActivity().window
-            ViewRasterizer
-                .pixelCopy(window, view)
-                .save(ScreenshotType.ViewPixelCopy.asFile(suiteName, name))
-            return listOf(ScreenshotType.ViewPixelCopy.relativeScreenshotPath(suiteName, name))
+        val bitmap = when {
+            fromScreen -> ViewRasterizer.screenCopy(view)
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.O -> performOnMain {
+                ViewRasterizer.rasterize(view)
+            }
+            else -> performOnMain {
+                ViewRasterizer.pixelCopy(view.context.asActivity().window, view)
+            }
         }
+        val type = if (fromScreen || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ScreenshotType.ViewPixelCopy
+        } else {
+            ScreenshotType.ViewRender
+        }
+        bitmap.save(type.asFile(suiteName, name))
+        return listOf(type.relativeScreenshotPath(suiteName, name))
     }
 
     private fun Context.asActivity(): Activity {

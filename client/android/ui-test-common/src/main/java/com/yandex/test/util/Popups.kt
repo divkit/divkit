@@ -19,7 +19,7 @@ fun assertPopupDisplayed() {
     )
 }
 
-internal val activeRoots: List<Root>
+val activeRoots: List<Root>
     @SuppressLint("RestrictedApi")
     get() = performOnMain {
         Reflection.staticField("BASE")

@@ -89,13 +89,6 @@ val viewDeviceIgnoredScreenshotCases = listOf(
 
     // A vertical gallery inside a vertical gallery is not swipeable without restrict_parent_scroll.
     "interactive_snapshot_test_data/scroll-to/nested-gallery-both-axes.json",
-
-    // The View runner cannot find targets or take snapshots in a tooltip window yet, DIVKIT-10793
-    "interactive_snapshot_test_data/div-tooltip/tooltip-positions.json",
-    "interactive_snapshot_test_data/div-tooltip/tooltip-with-bring-to-top-view.json",
-    "interactive_snapshot_test_data/div-tooltip/tooltips-close-button.json",
-    "interactive_snapshot_test_data/div-tooltip/tooltips-close-by-duration.json",
-    "interactive_snapshot_test_data/div-tooltip/tooltips-close-by-visibility-action.json",
 )
 
 // Run only tests that are not supported by RoborazziScreenshotTest.
@@ -185,4 +178,7 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-gallery/gallery-bottom-multiline.json",
     "div-gallery/gallery-bottom-multiline-selected-action.json",
     "div-gallery/gallery-top-multiline.json",
+
+    // set_state inside a tooltip does not support a relative path: "Invalid set_state path".
+    "div-tooltip/tooltip-with-states.json",
 )

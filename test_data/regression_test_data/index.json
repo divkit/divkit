@@ -3691,6 +3691,7 @@
       "title": "Tooltips",
       "case_id": 117,
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -3891,6 +3892,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios",
         "web"
       ],
