@@ -384,20 +384,6 @@ private fun TextLayoutResult.findSoftBreaks(
         }
 }
 
-internal fun AnnotatedString.placeholders(
-    inlineContent: Map<String, InlineTextContent>,
-): List<AnnotatedString.Range<Placeholder>> {
-    return getStringAnnotations(0, length)
-        .mapNotNull { annotation ->
-            val inlineTextContent = inlineContent[annotation.item] ?: return@mapNotNull null
-            AnnotatedString.Range(
-                item = inlineTextContent.placeholder,
-                start = annotation.start,
-                end = annotation.end,
-            )
-        }
-}
-
 private fun AnnotatedText.truncatedTo(
     length: Int,
     ellipsis: AnnotatedText,

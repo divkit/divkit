@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.text
 
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,10 +22,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.constrainHeight
-import com.yandex.div.compose.expressions.observedIntValue
-import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.DivText
 import kotlin.math.ceil
 
 /**
@@ -69,40 +66,19 @@ internal data class TextLineLimits(
         }
 }
 
-@Composable
-internal fun DivText.observeLineLimits(): TextLineLimits {
-    val maxLines = maxLines?.observedIntValue()?.coerceAtLeast(1)
-    return TextLineLimits(
-        maxLines = maxLines,
-        minHiddenLines = if (maxLines != null) minHiddenLines.observedSaturatedIntValue() else 0,
-        autoEllipsize = autoEllipsize.observedValue(false) && truncate.observedValue().hasMarker(),
-    )
-}
-
-private fun DivText.Truncate.hasMarker(): Boolean {
-    return when (this) {
-        DivText.Truncate.NONE -> false
-        DivText.Truncate.START, DivText.Truncate.MIDDLE, DivText.Truncate.END -> true
-    }
-}
-
-@Composable
-private fun Expression<Long>?.observedSaturatedIntValue(): Int {
-    return observedValue(0L).coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
-}
-
 internal fun TextMeasurer.measureMaxLines(
     limits: TextLineLimits,
-    input: TextMeasureInput,
+    text: AnnotatedString,
+    style: TextStyle,
     width: Int,
+    inlineContent: Map<String, InlineTextContent>,
 ): Int {
-    val (text, style, inlineContent) = input
     if (limits.minHiddenLines == 0) return limits.layoutMaxLines
     val layout = measure(
-        text = text.text,
+        text = text,
         style = style,
         maxLines = limits.layoutMaxLines,
-        placeholders = text.text.placeholders(inlineContent),
+        placeholders = text.placeholders(inlineContent),
         constraints = Constraints(maxWidth = width),
     )
     return if (layout.didOverflowHeight) requireNotNull(limits.maxLines) else limits.layoutMaxLines
@@ -119,11 +95,10 @@ internal fun TextMeasurer.measureMaxLines(
 @Composable
 internal fun Modifier.textHeightLimit(
     limits: TextLineLimits,
-    input: TextMeasureInput,
+    text: AnnotatedString,
+    style: TextStyle,
+    inlineContent: Map<String, InlineTextContent>,
 ): Modifier {
-    val text = input.text.text
-    val style = input.style
-    val inlineContent = input.inlineContent
     val maxLines = limits.maxLines
     if (maxLines == null || limits.autoEllipsize && limits.minHiddenLines == 0) {
         return this
@@ -159,11 +134,10 @@ internal fun Modifier.textHeightLimit(
  */
 @Composable
 internal fun rememberSingleLineTruncation(
-    input: TextMeasureInput,
+    text: AnnotatedString,
+    style: TextStyle,
+    inlineContent: Map<String, InlineTextContent>,
 ): SingleLineTruncation {
-    val text = input.text.text
-    val style = input.style
-    val inlineContent = input.inlineContent
     val measurer = rememberTextMeasurer()
     val placeholders = remember(text, inlineContent) { text.placeholders(inlineContent) }
     val currentText = rememberUpdatedState(text)
