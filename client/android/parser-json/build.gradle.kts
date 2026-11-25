@@ -5,6 +5,8 @@ plugins {
 }
 
 kotlin {
+    jvm()
+
     android {
         namespace = "com.yandex.div.parser.json"
 
@@ -19,6 +21,10 @@ kotlin {
             implementation(libs.androidx.collection)
         }
 
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+
         androidMain.dependencies {
             api(project(":div-data"))
 
@@ -31,6 +37,14 @@ kotlin {
             implementation(libs.mockito.kotlin)
         }
     }
+}
+
+tasks.named("metalavaGenerateSignature") {
+    dependsOn("scheme_parser")
+}
+
+tasks.named("metalavaCheckCompatibility") {
+    dependsOn("scheme_parser")
 }
 
 schemas {

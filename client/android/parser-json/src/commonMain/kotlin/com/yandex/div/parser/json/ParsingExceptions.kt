@@ -33,7 +33,7 @@ internal fun missingValue(key: String, path: String): ParsingException {
 internal fun typeMismatch(json: JsonObject, key: String, value: Any): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
-        message = "Value for key '$key' has wrong type ${value.javaClass.name}",
+        message = "Value for key '$key' has wrong type ${typeName(value)}",
         source = json,
     )
 }
@@ -41,7 +41,7 @@ internal fun typeMismatch(json: JsonObject, key: String, value: Any): ParsingExc
 internal fun typeMismatch(json: JsonArray, key: String, index: Int, value: Any): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
-        message = "Value at $index position of '$key' has wrong type ${value.javaClass.name}",
+        message = "Value at $index position of '$key' has wrong type ${typeName(value)}",
         source = json,
     )
 }
@@ -61,7 +61,8 @@ internal fun typeMismatch(
 ): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
-        message = "Expression '$expressionKey': '$rawExpression' received value of wrong type: '$wrongTypeValue'",
+        message = "Expression '$expressionKey': '$rawExpression' received value of wrong type: " +
+            "'$wrongTypeValue'",
         cause = cause,
     )
 }
@@ -72,7 +73,7 @@ internal fun typeMismatch(
 ): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
-        message = "Item builder data at $index position has wrong type: ${value.javaClass.name}"
+        message = "Item builder data at $index position has wrong type: ${typeName(value)}"
     )
 }
 
@@ -101,7 +102,8 @@ internal fun invalidValue(
 ): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.INVALID_VALUE,
-        message = "Field '$expressionKey' with expression '$rawExpression' received wrong value: '$wrongValue'",
+        message = "Field '$expressionKey' with expression '$rawExpression' received wrong value: " +
+            "'$wrongValue'",
         cause = cause,
     )
 }
@@ -229,6 +231,11 @@ internal fun suppressMissingValueOrThrow(exception: ParsingException) {
         return
     }
     throw exception
+}
+
+private fun typeName(value: Any): String {
+    val type = value::class
+    return type.qualifiedName ?: type.simpleName ?: "unknown"
 }
 
 private fun Any?.trimLength(): String {
