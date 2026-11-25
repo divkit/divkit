@@ -10,7 +10,7 @@ internal expect class Calendar(dateTime: DateTime) {
 
     fun set(field: Field, value: Int)
 
-    fun getActualMaximum(field: Field): Int
+    fun daysInMonth(): Int
 
     enum class Field {
         YEAR,

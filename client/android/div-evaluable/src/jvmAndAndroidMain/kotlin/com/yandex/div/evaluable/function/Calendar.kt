@@ -24,8 +24,8 @@ internal actual class Calendar actual constructor(
         calendar.set(field.toJavaCalendarField(), value)
     }
 
-    actual fun getActualMaximum(field: Field): Int {
-        return calendar.getActualMaximum(field.toJavaCalendarField())
+    actual fun daysInMonth(): Int {
+        return calendar.getActualMaximum(JavaCalendar.DAY_OF_MONTH)
     }
 
     actual enum class Field {

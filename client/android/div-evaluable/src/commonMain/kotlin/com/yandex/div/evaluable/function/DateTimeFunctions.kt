@@ -1,7 +1,6 @@
 package com.yandex.div.evaluable.function
 
 import com.yandex.div.core.util.currentTimeMillis
-import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
@@ -125,7 +124,6 @@ internal object SetMonth : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -155,7 +153,6 @@ internal object SetDay : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -165,7 +162,7 @@ internal object SetDay : Function() {
         val value = args[1] as Long
 
         val calendar = Calendar(datetime)
-        val daysInMonth: Int = calendar.getActualMaximum(Calendar.Field.DAY_OF_MONTH)
+        val daysInMonth: Int = calendar.daysInMonth()
         when (value) {
             in 1..daysInMonth -> calendar.set(Calendar.Field.DAY_OF_MONTH, value.toInt())
             -1L -> calendar.set(Calendar.Field.DAY_OF_MONTH, 0)
@@ -187,7 +184,6 @@ internal object SetHours : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -218,7 +214,6 @@ internal object SetMinutes : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -248,7 +243,6 @@ internal object SetSeconds : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -278,7 +272,6 @@ internal object SetMillis : Function() {
     override val resultType = EvaluableType.DATETIME
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -308,7 +301,6 @@ internal object GetYear : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -332,7 +324,6 @@ internal object GetMonth : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -356,7 +347,6 @@ internal object GetDay : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -380,7 +370,6 @@ internal object GetDayOfWeek : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -406,7 +395,6 @@ internal object GetHours : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -430,7 +418,6 @@ internal object GetMinutes : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -454,7 +441,6 @@ internal object GetSeconds : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -478,7 +464,6 @@ internal object GetMillis : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,

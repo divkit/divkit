@@ -24,7 +24,6 @@ internal object GetIntervalSeconds : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -50,7 +49,6 @@ internal object GetIntervalTotalSeconds : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -76,7 +74,6 @@ internal object GetIntervalMinutes : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -102,7 +99,6 @@ internal object GetIntervalTotalMinutes : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -128,7 +124,6 @@ internal object GetIntervalHours : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -154,7 +149,6 @@ internal object GetIntervalTotalHours : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -180,7 +174,6 @@ internal object GetIntervalTotalDays : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
@@ -206,7 +199,6 @@ internal object GetIntervalTotalWeeks : Function() {
     override val resultType = EvaluableType.INTEGER
     override val isPure = true
 
-    @Throws(EvaluableException::class)
     override fun evaluate(
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
