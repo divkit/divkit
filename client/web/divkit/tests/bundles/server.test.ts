@@ -7,6 +7,12 @@ import {
 } from 'vitest';
 
 import { render } from '@divkitframework/divkit';
+import {
+    cardWithTrigger,
+    catchRejections,
+    setStoredValue,
+    startAnimator
+} from './variableTriggers';
 
 const json = {
     card: {
@@ -73,6 +79,28 @@ describe('test server bundle', () => {
         });
         // Svelte actions do not run on the server, the text needs its style before hydration
         expect(html).toContain('font-size:2em;line-height:1.4;max-height:2.8em;-webkit-line-clamp:2;color:#ff0000');
+    });
+
+    test('should not run variable triggers', async() => {
+        const rejections = catchRejections();
+        const onError = vi.fn();
+        const set = vi.fn();
+
+        const html = render({
+            id: 'test',
+            json: cardWithTrigger([startAnimator, setStoredValue]),
+            store: {
+                set
+            },
+            onError
+        });
+        await rejections.settle();
+
+        expect(rejections.reasons).toEqual([]);
+        expect(onError).not.toHaveBeenCalled();
+        expect(set).not.toHaveBeenCalled();
+        // The server draws the first frame, the trigger runs its actions after hydration
+        expect(html).toContain('Padding 16');
     });
 
     test('should log error on empty id', () => {

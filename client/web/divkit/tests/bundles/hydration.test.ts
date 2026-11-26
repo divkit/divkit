@@ -13,6 +13,7 @@ import {
 
 import { render as renderOnServer } from '@divkitframework/divkit';
 import { render } from '@divkitframework/divkit/client-hydratable';
+import { cardWithTrigger, startAnimator } from './variableTriggers';
 
 const json = {
     card: {
@@ -63,5 +64,32 @@ describe('test hydration of the server bundle', () => {
         const html = renderOnServer({ id: 'test', json });
 
         expect(html).toContain('font-size:2em;line-height:1.4;max-height:2.8em;-webkit-line-clamp:2;color:#ff0000');
+    });
+
+    test('an animator that a variable trigger starts runs after hydration', async() => {
+        const animated = cardWithTrigger([startAnimator]);
+        // The server bundle runs where there is no document
+        vi.stubGlobal('document', undefined);
+        const html = renderOnServer({ id: 'test', json: animated });
+        vi.unstubAllGlobals();
+        // The server skips the trigger even though jsdom provides frames
+        expect(html).toContain('Padding 16');
+        document.body.innerHTML = `<div id="root">${html}</div>`;
+        // jsdom stamps frames with its own clock, while the animator counts by performance.now()
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) =>
+            setTimeout(() => callback(performance.now()), 16));
+        vi.stubGlobal('cancelAnimationFrame', (frame: number) => clearTimeout(frame));
+
+        render({
+            id: 'test',
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            target: document.querySelector('#root')!,
+            json: animated,
+            hydrate: true
+        });
+
+        await vi.waitFor(() => {
+            expect(document.body.textContent).toContain('Padding 8');
+        });
     });
 });

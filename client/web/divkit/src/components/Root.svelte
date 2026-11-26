@@ -1945,6 +1945,12 @@
         if (!Array.isArray(variableTriggers) || !variableTriggers.length) {
             return;
         }
+        // The server draws only the first frame, and the triggers run again in the browser after
+        // hydration. On the server their actions would be repeated, and the variables they set would
+        // reach only the part of the markup drawn after the trigger
+        if (import.meta.env.SSR) {
+            return;
+        }
         if (!process.env.ENABLE_EXPRESSIONS) {
             log(wrapError(new Error('variable_trigger is not supported')));
             return;
@@ -2013,14 +2019,25 @@
                 ) {
                     prevConditionResult = Boolean(conditionResult.condition);
 
-                    if (componentContext) {
-                        await componentContext.execAnyActions(trigger.actions, {
-                            logType: 'trigger'
-                        });
-                    } else {
-                        await execAnyActions(trigger.actions, {
-                            logType: 'trigger'
-                        });
+                    // The store does not wait for this callback: a failed action is logged here,
+                    // otherwise it becomes an unhandled rejection
+                    try {
+                        if (componentContext) {
+                            await componentContext.execAnyActions(trigger.actions, {
+                                logType: 'trigger'
+                            });
+                        } else {
+                            await execAnyActions(trigger.actions, {
+                                logType: 'trigger'
+                            });
+                        }
+                    } catch (err: unknown) {
+                        log(wrapError(new Error('variable_trigger action failed'), {
+                            additional: {
+                                condition: trigger.condition,
+                                originalError: err
+                            }
+                        }));
                     }
                 } else {
                     prevConditionResult = Boolean(conditionResult.condition);

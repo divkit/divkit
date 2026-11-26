@@ -11319,6 +11319,8 @@
   "client/web/divkit/tests/bundles/package.json":"divkit/public/client/web/divkit/tests/bundles/package.json",
   "client/web/divkit/tests/bundles/server.test.ts":"divkit/public/client/web/divkit/tests/bundles/server.test.ts",
   "client/web/divkit/tests/bundles/ssr.test.ts":"divkit/public/client/web/divkit/tests/bundles/ssr.test.ts",
+  "client/web/divkit/tests/bundles/triggers.test.ts":"divkit/public/client/web/divkit/tests/bundles/triggers.test.ts",
+  "client/web/divkit/tests/bundles/variableTriggers.ts":"divkit/public/client/web/divkit/tests/bundles/variableTriggers.ts",
   "client/web/divkit/tests/components/animationCopyTriggers.test.ts":"divkit/public/client/web/divkit/tests/components/animationCopyTriggers.test.ts",
   "client/web/divkit/tests/components/extensions.test.ts":"divkit/public/client/web/divkit/tests/components/extensions.test.ts",
   "client/web/divkit/tests/components/hideImagesWithoutUrl.test.ts":"divkit/public/client/web/divkit/tests/components/hideImagesWithoutUrl.test.ts",
