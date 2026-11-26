@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.text
 
+import android.graphics.RadialGradient
 import android.graphics.Shader
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -10,14 +11,20 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.utils.gradient.LinearGradientBrush
+import com.yandex.div.compose.utils.gradient.RadialGradientBrush
 import com.yandex.div.core.DivAnimationsEnabledProvider
+import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.render.common.gradient.AnimatedGradientMath
 import com.yandex.div.test.data.animatedTextGradient
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
+import com.yandex.div2.DivAnimatedTextGradient
+import com.yandex.div2.DivRadialGradient
+import com.yandex.div2.DivStaticTextGradient
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextGradient
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -75,6 +82,33 @@ class AnimatedTextGradientTest {
             phase = phase,
         ) { x, _ -> x }
         assertEquals(expectedTranslation, brush.createShader(GRADIENT_SIZE).translationX(), TOLERANCE)
+    }
+
+    @Test
+    fun `controlled frame time translates the radial gradient in DivText`() {
+        val radial = DivRadialGradient(
+            colors = ConstantExpressionList(listOf(0xFFFF0000.toInt(), 0xFF0000FF.toInt())),
+        )
+        val gradient = DivTextGradient.Animated(
+            DivAnimatedTextGradient(
+                duration = Expression.constant(DURATION_MILLIS),
+                gradient = DivStaticTextGradient.Radial(radial),
+            ),
+        )
+        render(text(id = TEXT_ID, text = Expression.constant(TEXT), textGradient = gradient))
+
+        rule.mainClock.advanceTimeBy(HALF_CYCLE_MILLIS / 2)
+        rule.mainClock.advanceTimeByFrame()
+
+        val brush = assertIs<RadialGradientBrush>(renderedText().spanStyles.single().item.brush)
+        val phase = AnimatedGradientMath.phase(rule.mainClock.currentTime, DURATION_MILLIS)
+        val expectedCenterX = GRADIENT_SIZE.width * (2f * phase - 0.5f)
+
+        assertIs<RadialGradient>(brush.createShader(GRADIENT_SIZE))
+        brush.withGeometry(GRADIENT_SIZE) { center, _ ->
+            assertEquals(expectedCenterX, center.x, TOLERANCE)
+            assertEquals(GRADIENT_SIZE.height / 2, center.y)
+        }
     }
 
     @Test

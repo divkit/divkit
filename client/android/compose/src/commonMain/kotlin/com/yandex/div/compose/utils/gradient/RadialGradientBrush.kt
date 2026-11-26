@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.TileMode
 import com.yandex.div.render.common.gradient.AnimatedGradientMath
 import com.yandex.div.render.common.gradient.GradientGeometry
 import com.yandex.div.render.common.gradient.GradientGeometry.RelativeRadius
-import com.yandex.div2.DivRadialGradientRelativeRadius
 
 @Immutable
 internal data class RadialGradientBrush(
@@ -38,10 +37,20 @@ internal data class RadialGradientBrush(
         data class Fixed(val value: Float) : Radius()
 
         @Immutable
-        data class Relative(val type: DivRadialGradientRelativeRadius.Value) : Radius()
+        data class Relative(val type: RelativeRadius) : Radius()
     }
 
-    override fun createShader(size: Size): Shader {
+    override fun createShader(size: Size): Shader = withGeometry(size) { center, radius ->
+        RadialGradientShader(
+            center = center,
+            radius = radius,
+            colors = colors,
+            colorStops = colorStops,
+            tileMode = TileMode.Clamp,
+        )
+    }
+
+    internal inline fun <T> withGeometry(size: Size, consume: (center: Offset, radius: Float) -> T): T {
         val width = size.width
         val height = size.height
 
@@ -51,19 +60,7 @@ internal data class RadialGradientBrush(
         val radius = when (radius) {
             is Radius.Fixed -> radius.value
             is Radius.Relative -> GradientGeometry.relativeRadius(
-                type = when (radius.type) {
-                    DivRadialGradientRelativeRadius.Value.NEAREST_CORNER ->
-                        RelativeRadius.NEAREST_CORNER
-
-                    DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER ->
-                        RelativeRadius.FARTHEST_CORNER
-
-                    DivRadialGradientRelativeRadius.Value.NEAREST_SIDE ->
-                        RelativeRadius.NEAREST_SIDE
-
-                    DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE ->
-                        RelativeRadius.FARTHEST_SIDE
-                },
+                type = radius.type,
                 centerX = centerX,
                 centerY = centerY,
                 width = width,
@@ -74,13 +71,7 @@ internal data class RadialGradientBrush(
         val translationX = animationPhase
             ?.let { AnimatedGradientMath.radialTranslation(width = width, phase = it) }
             ?: 0f
-        return RadialGradientShader(
-            center = Offset(centerX + translationX, centerY),
-            radius = radius.coerceAtLeast(MIN_RADIUS),
-            colors = colors,
-            colorStops = colorStops,
-            tileMode = TileMode.Clamp,
-        )
+        return consume(Offset(centerX + translationX, centerY), radius.coerceAtLeast(MIN_RADIUS))
     }
 
     private fun Center.absoluteValue(parentSize: Float): Float = when (this) {

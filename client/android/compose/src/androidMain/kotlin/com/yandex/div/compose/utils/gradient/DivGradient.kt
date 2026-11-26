@@ -14,10 +14,12 @@ import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div.json.expressions.ExpressionList
+import com.yandex.div.render.common.gradient.GradientGeometry.RelativeRadius
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
+import com.yandex.div2.DivRadialGradientRelativeRadius
 
 @Composable
 internal fun DivLinearGradient.observeLinearGradient(animationPhase: Float? = null): Brush? {
@@ -90,6 +92,15 @@ private fun DivRadialGradientRadius.observedRadius(): Radius {
             Radius.Fixed(value.observedValue().toPx())
 
         is DivRadialGradientRadius.Relative ->
-            Radius.Relative(value.value.observedValue())
+            Radius.Relative(value.value.observedValue().toRelativeRadius())
+    }
+}
+
+private fun DivRadialGradientRelativeRadius.Value.toRelativeRadius(): RelativeRadius {
+    return when (this) {
+        DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> RelativeRadius.NEAREST_CORNER
+        DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> RelativeRadius.FARTHEST_CORNER
+        DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> RelativeRadius.NEAREST_SIDE
+        DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> RelativeRadius.FARTHEST_SIDE
     }
 }
