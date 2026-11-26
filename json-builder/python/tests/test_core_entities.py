@@ -1,5 +1,6 @@
 import enum
-from typing import Any, Mapping, Optional, Sequence, Union
+import sys
+from typing import Any, Iterator, Mapping, Optional, Sequence, Union
 
 import pytest
 
@@ -613,3 +614,277 @@ class TestIntegration:
         schema = TextTemplate.schema()
         assert schema["type"] == "object"
         assert "definitions" in schema
+
+
+# ---------------------------------------------------------------------------
+# BaseEntity.__init__: defaults of fields that were not passed
+# ---------------------------------------------------------------------------
+def _reference_init(self: BaseEntity, **kwargs: Any) -> None:
+    """``BaseEntity.__init__`` before the ``__init_defaults__`` fast path."""
+    if self.__fields__ and not self.__field_types__:
+        class_name = self.__class__.__name__
+        raise TypeError(
+            f"Class {class_name} fields are not prepared yet, you may "
+            f"need to call {class_name}.update_forward_refs().",
+        )
+    self._instance_related_templates = set()
+    for field_name, value in kwargs.items():
+        if value is not None:
+            setattr(self, field_name, value)
+    for field_name, field in self.__fields__.items():
+        if field_name not in kwargs:
+            setattr(self, field_name, field.default)
+
+
+def _snapshot(value: Any) -> Any:
+    if isinstance(value, BaseEntity):
+        return (
+            type(value),
+            [(key, _snapshot(item)) for key, item in vars(value).items()],
+            value.related_templates(),
+            value.dict(),
+        )
+    if isinstance(value, (list, tuple)):
+        return [_snapshot(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _snapshot(item) for key, item in value.items()}
+    return value
+
+
+def _build(cls: type, init: Any, **kwargs: Any) -> Any:
+    instance = cls.__new__(cls)
+    try:
+        init(instance, **kwargs)
+    except Exception as error:
+        return type(error), str(error)
+    return _snapshot(instance)
+
+
+def _assert_matches_reference_init(cls: type, **kwargs: Any) -> None:
+    assert _build(cls, BaseEntity.__init__, **kwargs) == _build(
+        cls,
+        _reference_init,
+        **kwargs,
+    )
+
+
+def _iter_subclasses(cls: type) -> Iterator[type]:
+    for subclass in cls.__subclasses__():
+        yield subclass
+        yield from _iter_subclasses(subclass)
+
+
+class TestBaseEntityInitDefaults:
+    def test_none_defaults_skip_type_casting(self, monkeypatch):
+        from pydivkit.core import entities
+
+        class NoneDefaults(BaseEntity):
+            label: Optional[str] = Field()
+            items: Optional[Sequence[int]] = Field()
+            anything: Any = Field()
+
+        casted = []
+        original_cast = entities._cast_value_type
+
+        def spy(value, type_):
+            casted.append(value)
+            return original_cast(value, type_)
+
+        monkeypatch.setattr(entities, "_cast_value_type", spy)
+        entity = NoneDefaults(label="x")
+
+        assert casted == ["x"]
+        assert vars(entity) == {
+            "_instance_related_templates": set(),
+            "label": "x",
+            "items": None,
+            "anything": None,
+        }
+        assert entity.dict() == {"label": "x"}
+
+    def test_required_field_is_still_validated(self):
+        class Required(BaseEntity):
+            name: str = Field()
+            label: Optional[str] = Field()
+
+        with pytest.raises(ValueError, match="has wrong type"):
+            Required()
+        _assert_matches_reference_init(Required)
+
+    def test_non_none_default_is_cast(self):
+        class Color(str, enum.Enum):
+            RED = "red"
+
+        class WithEnumDefault(BaseEntity):
+            color: Color = Field(default="red")
+
+        assert WithEnumDefault().color is Color.RED
+
+    def test_default_is_read_at_init_time(self):
+        class MutableDefault(BaseEntity):
+            label: Optional[str] = Field()
+
+        MutableDefault.__fields__["label"].default = "late"
+
+        assert MutableDefault().label == "late"
+
+    def test_pep604_union_matches_reference_init(self):
+        if sys.version_info < (3, 10):
+            pytest.skip("PEP 604 unions require Python 3.10+")
+
+        class Pep604(BaseEntity):
+            label: "str | None" = Field()
+            items: "list[int] | None" = Field()
+
+        _assert_matches_reference_init(Pep604)
+        _assert_matches_reference_init(Pep604, label="x")
+
+    def test_custom_setattr_receives_every_default(self):
+        class Recording(BaseEntity):
+            first: Optional[str] = Field()
+            second: Optional[int] = Field()
+
+            def __setattr__(self, key, value):
+                self.__dict__.setdefault("_recorded", []).append(key)
+                super().__setattr__(key, value)
+
+        entity = Recording(first="a")
+
+        assert entity._recorded == ["_instance_related_templates", "first", "second"]
+
+    def test_mixin_setattr_receives_every_default(self):
+        class RecordingMixin:
+            def __setattr__(self, key, value):
+                self.__dict__.setdefault("_recorded", []).append(key)
+                super().__setattr__(key, value)
+
+        class WithMixin(BaseEntity, RecordingMixin):
+            first: Optional[str] = Field()
+            second: Optional[int] = Field()
+
+        entity = WithMixin(first="a")
+
+        assert entity._recorded == ["_instance_related_templates", "first", "second"]
+
+    def test_setattr_added_after_class_creation_receives_defaults(self):
+        recorded = []
+
+        def recording_setattr(self, key, value):
+            recorded.append(key)
+            BaseEntity.__setattr__(self, key, value)
+
+        class LatePatched(BaseEntity):
+            first: Optional[str] = Field()
+            second: Optional[int] = Field()
+
+        LatePatched.__setattr__ = recording_setattr  # type: ignore[method-assign]
+        LatePatched(first="a")
+
+        assert recorded == ["_instance_related_templates", "first", "second"]
+
+    def test_tpl_values_are_not_stored_on_instance(self):
+        class TplDefaults(BaseDiv):
+            type: str = Field(name="type", default="tpl_defaults")
+            color: Optional[str] = Field()
+            text: Optional[str] = Field()
+
+        class TplDefaultsChild(TplDefaults):
+            color = "red"
+
+        entity = TplDefaultsChild(text="t")
+
+        assert "color" not in vars(entity)
+        assert entity.dict() == {
+            "type": TplDefaultsChild.template_name,
+            "text": "t",
+        }
+        _assert_matches_reference_init(TplDefaultsChild, text="t")
+
+    def test_defaults_follow_update_forward_refs(self, monkeypatch):
+        class ForwardRefEntity(BaseEntity):
+            target: Optional["_InitDefaultsTarget"] = Field()  # noqa: F821
+            label: Optional[str] = Field()
+
+        class ForwardRefTarget(BaseEntity):
+            value: Optional[int] = Field()
+
+        with pytest.raises(TypeError, match="not prepared yet"):
+            ForwardRefEntity()
+
+        monkeypatch.setitem(globals(), "_InitDefaultsTarget", ForwardRefTarget)
+        ForwardRefEntity.update_forward_refs()
+        entity = ForwardRefEntity(target=ForwardRefTarget(value=1))
+
+        assert entity.dict() == {"target": {"value": 1}}
+        assert vars(entity)["label"] is None
+        _assert_matches_reference_init(ForwardRefEntity)
+
+    def test_template_with_forward_refs_keeps_tpl_semantics(self, monkeypatch):
+        class ForwardTpl(BaseDiv):
+            type: str = Field(name="type", default="forward_tpl")
+            color: Optional["_InitDefaultsColor"] = Field()  # noqa: F821
+            text: Optional[str] = Field()
+
+        class ForwardTplChild(ForwardTpl):
+            color = "red"
+
+        monkeypatch.setitem(globals(), "_InitDefaultsColor", str)
+        ForwardTpl.update_forward_refs()
+        ForwardTplChild.update_forward_refs()
+
+        assert "color" not in vars(ForwardTplChild(text="t"))
+        _assert_matches_reference_init(ForwardTplChild, text="t")
+
+    def test_generated_classes_match_reference_init(self):
+        import pydivkit  # noqa: F401 - registers the generated classes
+
+        classes = sorted(
+            {
+                cls
+                for cls in _iter_subclasses(BaseEntity)
+                if cls.__module__.startswith("pydivkit.div.") and cls.__fields__
+            },
+            key=lambda cls: f"{cls.__module__}.{cls.__qualname__}",
+        )
+        assert len(classes) > 150
+        for cls in classes:
+            _assert_matches_reference_init(cls)
+
+    def test_nested_entities_match_reference_init(self):
+        from pydivkit import (
+            DivAction,
+            DivContainer,
+            DivImage,
+            DivMatchParentSize,
+            DivText,
+        )
+
+        class Badge(DivContainer):
+            label: str = Field()
+            width = DivMatchParentSize()
+            items = [DivText(text=Ref(label), font_size=12)]
+
+        def build() -> DivContainer:
+            return DivContainer(
+                items=[
+                    DivText(text="plain", max_lines=None),
+                    DivImage(image_url="https://example.com/i.png"),
+                    Badge(label="badge"),
+                ],
+                actions=[DivAction(log_id="tap", url="https://example.com")],
+            )
+
+        current = _snapshot(build())
+        current_init = BaseEntity.__init__
+        classes = (BaseEntity, *_iter_subclasses(BaseEntity))
+        try:
+            for cls in classes:
+                if cls.__dict__.get("__init__") is current_init:
+                    type.__setattr__(cls, "__init__", _reference_init)
+            reference = _snapshot(build())
+        finally:
+            for cls in classes:
+                if cls.__dict__.get("__init__") is _reference_init:
+                    type.__setattr__(cls, "__init__", current_init)
+
+        assert current == reference

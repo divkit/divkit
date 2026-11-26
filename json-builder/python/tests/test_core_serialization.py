@@ -335,3 +335,23 @@ class TestMergeTypes:
     def test_incompatible_raises(self) -> None:
         with pytest.raises(TypeError, match="Incompatible"):
             _merge_types(int, str)
+
+
+# ---------------------------------------------------------------------------
+# dump: Sequence / Mapping checks use the real type, like typing aliases do
+# ---------------------------------------------------------------------------
+class _ListProxy:
+    """Reports ``list`` as ``__class__``; ``type()`` is still ``_ListProxy``."""
+
+    @property  # type: ignore[misc]
+    def __class__(self):  # type: ignore[override]
+        return list
+
+    def __iter__(self):
+        return iter([1])
+
+
+def test_dump_ignores_spoofed_class():
+    proxy = _ListProxy()
+
+    assert dump(proxy) is proxy

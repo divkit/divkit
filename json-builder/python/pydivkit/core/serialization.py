@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import enum
-from collections import defaultdict
+from collections import abc, defaultdict
 from contextlib import suppress
 from types import MappingProxyType
 from typing import (
@@ -13,6 +13,9 @@ from typing import (
     get_origin,
 )
 
+# Circular import: ``entities`` imports this module, so ``BaseEntity`` is read
+# from the module at call time instead of importing it inside hot functions.
+from . import entities as _entities
 from .fields import Expr, _Field
 from .types.union import get_union_types, inject_types, is_union_injected
 
@@ -105,7 +108,7 @@ def _cast_union(value: Any, type_: Any) -> Any:
 
 
 def _cast_entity_or_coerce(value: Any, type_: Any) -> Any:
-    from .entities import BaseEntity
+    BaseEntity = _entities.BaseEntity
 
     if isinstance(value, type_):
         return value
@@ -154,13 +157,14 @@ def _cast_value_type(value: Any, type_: Any) -> Any:
 
 
 def dump(obj: Any) -> Any:
-    from .entities import BaseEntity
+    BaseEntity = _entities.BaseEntity
 
     if isinstance(obj, (str, bytes)):
         return obj
-    if isinstance(obj, Sequence):
+    # Same as ``isinstance(obj, typing.Sequence)``, without the typing overhead.
+    if issubclass(type(obj), abc.Sequence):
         return [dump(obj_item) for obj_item in obj]
-    if isinstance(obj, Mapping):
+    if issubclass(type(obj), abc.Mapping):
         return {k: dump(v) for k, v in obj.items()}
     if isinstance(obj, Expr):
         return str(obj)
@@ -175,7 +179,7 @@ def _update_related_templates(
     value: Any,
     related_templates: set[type[Any]],
 ) -> None:
-    from .entities import BaseEntity
+    BaseEntity = _entities.BaseEntity
 
     if isinstance(value, BaseEntity):
         related_templates.update(value.related_templates())

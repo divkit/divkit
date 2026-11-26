@@ -33,6 +33,7 @@ from .serialization import (
 # is a ``types.UnionType``, which casting does not treat as a union.
 
 TYPE_FIELD = "type"
+NONE_TYPE = type(None)
 
 
 class BaseEntity:
@@ -43,6 +44,8 @@ class BaseEntity:
     __subclasses_registry__: builtins.dict[str, type[BaseEntity]] = {}
     __related_templates__: frozenset[type[BaseDiv]] = frozenset({})
     __template_name__: str | None = None
+    # Fields for which ``setattr(self, name, None)`` just stores ``None``.
+    __nullable_fields__: frozenset[str] = frozenset()
 
     def __init__(self, **kwargs: Any) -> None:
         if self.__fields__ and not self.__field_types__:
@@ -55,8 +58,16 @@ class BaseEntity:
         for field_name, value in kwargs.items():
             if value is not None:
                 setattr(self, field_name, value)
+        nullable = self.__nullable_fields__
+        if type(self).__setattr__ not in _PLAIN_SETATTRS:
+            nullable = frozenset()
         for field_name, field in self.__fields__.items():
-            if field_name not in kwargs:
+            if field_name in kwargs:
+                continue
+            if field.default is None and field_name in nullable:
+                # Skip the costly casting in ``__setattr__``: same result.
+                object.__setattr__(self, field_name, None)
+            else:
                 setattr(self, field_name, field.default)
 
     @classproperty
@@ -129,6 +140,27 @@ class BaseEntity:
             cls.__field_types__ = cls._extract_field_types(cls.__fields__)
         except (NameError, AttributeError):
             cls.__field_types__ = MappingProxyType({})
+        cls.__nullable_fields__ = cls._extract_nullable_fields()
+
+    @classmethod
+    def _extract_nullable_fields(cls) -> frozenset[str]:
+        custom_setattr = any(
+            "__setattr__" in base.__dict__
+            for base in cls.__mro__
+            if base.__module__ not in (__name__, "builtins")
+        )
+        if custom_setattr:
+            return frozenset()
+        tpl_values = getattr(cls, "__tpl_values__", {})
+        return frozenset(
+            name
+            for name, type_ in cls.__field_types__.items()
+            if name not in tpl_values
+            and (
+                type_ is Any
+                or (get_origin(type_) is Union and NONE_TYPE in get_args(type_))
+            )
+        )
 
     @classmethod
     def _extract_fields(cls) -> Mapping[str, _Field]:
@@ -392,6 +424,7 @@ class BaseDiv(BaseEntity):
             cls.__tpl_values__,
         )
         cls._validate_ref_types()
+        cls.__nullable_fields__ = cls._extract_nullable_fields()
 
     @classmethod
     def _make_fields_optional_from_tpl_values(
@@ -587,3 +620,6 @@ class BaseDiv(BaseEntity):
         schema = cls._build_schema(definitions, exclude)
         schema["definitions"] = definitions
         return schema
+
+
+_PLAIN_SETATTRS = (BaseEntity.__setattr__, BaseDiv.__setattr__)
