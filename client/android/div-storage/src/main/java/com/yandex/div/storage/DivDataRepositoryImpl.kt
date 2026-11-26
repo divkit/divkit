@@ -10,12 +10,12 @@ import com.yandex.div.storage.analytics.CardErrorLoggerFactory
 import com.yandex.div.storage.database.StorageException
 import com.yandex.div.storage.histogram.HistogramNameProvider
 import com.yandex.div.storage.histogram.HistogramRecorder
+import com.yandex.div.storage.internal.CardRepositoryReader
 import com.yandex.div.storage.templates.DivParsingHistogramProxy
 import com.yandex.div.storage.templates.TemplatesContainer
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import java.util.Calendar
-import java.util.Collections
 import javax.inject.Provider
 
 internal class DivDataRepositoryImpl(
@@ -26,13 +26,11 @@ internal class DivDataRepositoryImpl(
         private val divParsingHistogramProxy: Provider<DivParsingHistogramProxy>,
         private val cardErrorFactory: CardErrorLoggerFactory,
 ) : DivDataRepository {
-    private val inMemoryData =
-            Collections.synchronizedMap(linkedMapOf<String, DivDataRepository.DivDataWithMeta>())
-
-    @Volatile
-    private var areCardsSynchronizedWithInMemory = false
-    @Volatile
-    private var cardsWithErrors = mapOf<String, List<DivDataRepositoryException>>()
+    private val cardReader = CardRepositoryReader(
+            cardId = DivDataRepository.DivDataWithMeta::id,
+            errorCardId = DivDataRepositoryException::cardId,
+            loadFromStorage = ::loadFromStorage,
+    )
 
     @AnyThread
     override fun put(payload: DivDataRepository.Payload): DivDataRepositoryResult {
@@ -81,7 +79,7 @@ internal class DivDataRepositoryImpl(
             histogramRecorder.reportDivDataLoadTime(HistogramClock.uptime() - parseStarted)
         }
 
-        results.forEach { inMemoryData[it.id] = it }
+        cardReader.updateCache(results)
 
         val validStoragePayload = if (validPayload.size == payload.divs.size) {
             payload
@@ -117,44 +115,8 @@ internal class DivDataRepositoryImpl(
 
     @AnyThread
     override fun getAll(): DivDataRepositoryResult {
-        if (areCardsSynchronizedWithInMemory && cardsWithErrors.isEmpty()) {
-            return DivDataRepositoryResult(inMemoryValues(), emptyList())
-        }
-
-        val (cardsToRequest, cardsToExclude) = if (areCardsSynchronizedWithInMemory) {
-            cardsWithErrors.keys to emptySet<String>()
-        } else {
-            emptySet<String>() to synchronized(inMemoryData) {
-                inMemoryData.keys.minus(cardsWithErrors.keys)
-            }
-        }
-
-        val storageResults = loadFromStorage(cardsToRequest, cardsToExclude)
-        val loaded = cache(storageResults.resultData)
-        val loadedIds = loaded.mapTo(HashSet()) { it.id }
-        val resultsWithInMemory = storageResults.copy(
-                resultData = loaded + inMemoryValues().filterNot { it.id in loadedIds })
-        areCardsSynchronizedWithInMemory = true
-
-        cardsWithErrors = storageResults.errors.groupBy { it.cardId }.filterKeysNotNull()
-
-        return resultsWithInMemory
-    }
-
-    private fun inMemoryValues() = synchronized(inMemoryData) { inMemoryData.values.toList() }
-
-    private fun cache(cards: List<DivDataRepository.DivDataWithMeta>) = synchronized(inMemoryData) {
-        cards.map { card -> inMemoryData.getOrPut(card.id) { card } }
-    }
-
-    private fun <K, V> Map<K?, V>.filterKeysNotNull(): Map<K, V> {
-        val newMap = LinkedHashMap<K, V>(size)
-        for ((key, value) in entries) {
-            if (key != null) {
-                newMap[key] = value
-            }
-        }
-        return newMap
+        val (cards, errors) = cardReader.getAll()
+        return DivDataRepositoryResult(cards, errors)
     }
 
     @AnyThread
@@ -163,24 +125,14 @@ internal class DivDataRepositoryImpl(
             return DivDataRepositoryResult.EMPTY
         }
 
-        val idsToLoad = ids.toMutableSet()
-        val inMemoryResults = ArrayList<DivDataRepository.DivDataWithMeta>(ids.size)
-        ids.forEach { id ->
-            inMemoryData[id]?.let {
-                inMemoryResults.add(it)
-                idsToLoad.remove(id)
-            }
-        }
-
-        if (idsToLoad.isNotEmpty()) {
-            val storageResults = loadFromStorage(idsToLoad, emptySet())
-            val loaded = cache(storageResults.resultData)
-            return storageResults.copy(resultData = loaded + inMemoryResults)
-        }
-        return DivDataRepositoryResult(inMemoryResults, emptyList())
+        val (cards, errors) = cardReader.get(ids)
+        return DivDataRepositoryResult(cards, errors)
     }
 
-    private fun loadFromStorage(ids: Set<String>, idsToExclude: Set<String>): DivDataRepositoryResult {
+    private fun loadFromStorage(
+            ids: Set<String>,
+            idsToExclude: Set<String>,
+    ): CardRepositoryReader.ReadResult<DivDataRepository.DivDataWithMeta, DivDataRepositoryException> {
         val exceptions = mutableListOf<DivDataRepositoryException>()
         val (rawData, errors) = divStorage.loadData(ids.toList(), idsToExclude.toList())
         exceptions.addAll(errors.toDivDataRepositoryExceptions())
@@ -221,21 +173,15 @@ internal class DivDataRepositoryImpl(
 
         histogramRecorder.reportDivDataLoadTime(HistogramClock.uptime() - parseStarted)
 
-        return DivDataRepositoryResult(results, exceptions)
+        return CardRepositoryReader.ReadResult(results, exceptions)
     }
 
     @AnyThread
     override fun remove(predicate: (RawDataAndMetadata) -> Boolean): DivDataRepositoryRemoveResult {
         val (deletedIds, storageErrors) = divStorage.remove(predicate)
         val exceptions = storageErrors.toDivDataRepositoryExceptions()
-        removeFromInMemory(deletedIds)
+        cardReader.removeFromCache(deletedIds)
         return DivDataRepositoryRemoveResult(deletedIds, exceptions)
-    }
-
-    private fun removeFromInMemory(deletedRecords: Set<String>) {
-        deletedRecords.forEach {
-            inMemoryData.remove(it)
-        }
     }
 
     @Throws(ParsingException::class)
