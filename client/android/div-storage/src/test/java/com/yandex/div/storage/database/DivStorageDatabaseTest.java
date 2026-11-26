@@ -58,7 +58,7 @@ public class DivStorageDatabaseTest {
                 SQLiteDatabase spyDb = spy(SQLiteDatabase.create(null));
                 spyDb.setForeignKeyConstraintsEnabled(true);
                 doNothing().when(spyDb).close();
-                DatabaseOpenHelper.Database db = mHelper.wrapDataBase(spyDb);
+                DatabaseOpenHelper.Database db = AndroidSQLiteDatabaseOpenHelperKt.asStorageDatabase(spyDb);
                 doReturn(db).when(mHelper).getWritableDatabase();
                 doReturn(db).when(mHelper).getReadableDatabase();
             }

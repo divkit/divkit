@@ -2,10 +2,12 @@ package com.yandex.div.storage.database
 
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.SQLiteDriver
+import androidx.sqlite.SQLiteException
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.execSQL
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.storage.util.closeAll
+import kotlin.time.TimeSource
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.locks.ReentrantLock
 import kotlinx.atomicfu.locks.SynchronizedObject
@@ -14,20 +16,35 @@ import kotlinx.atomicfu.locks.synchronized
 import kotlinx.atomicfu.locks.withLock
 
 /**
- * SQLiteDriver adapter for the database boundary used by the existing storage algorithms.
- * Acquisitions share a reference-counted connection, like the Android open helper.
- * Transactions and cursors are confined to the thread that starts them.
- * A failed cursor read closes the cursor and releases its connection lock.
- * Connections wait up to five seconds for locks held by other connections to the same file.
+ * Shares a reference-counted database and runs its schema migrations during opening.
+ * The SQLiteDriver constructor uses one connection with a five-second busy timeout.
+ * Platform pools can supply their own database adapter and transaction handling.
  */
 @InternalApi
 public class SQLiteDatabaseOpenHelper(
-    private val driver: SQLiteDriver,
-    private val path: String,
     private val version: Int,
     private val create: DatabaseOpenHelper.CreateCallback,
     private val upgrade: DatabaseOpenHelper.UpgradeCallback,
+    private val open: (writable: Boolean) -> OpenedDatabase,
+    private val reportOpenTime: ((Long) -> Unit)? = null,
 ) : DatabaseOpenHelper {
+    public constructor(
+        driver: SQLiteDriver,
+        path: String,
+        version: Int,
+        create: DatabaseOpenHelper.CreateCallback,
+        upgrade: DatabaseOpenHelper.UpgradeCallback,
+    ) : this(version, create, upgrade, open = { openDriverDatabase(driver, path) })
+
+    /** A database and the state needed to lease it. A platform adapter may manage its own pool. */
+    @InternalApi
+    public class OpenedDatabase(
+        internal val database: TransactionOutcomeDatabase,
+        internal val isReadOnly: Boolean,
+        internal val isOpen: () -> Boolean,
+        internal val schemaVersion: () -> Int,
+    )
+
     private val managerLock = SynchronizedObject()
     private var database: SharedDatabase? = null
     private var opening = false
@@ -36,21 +53,30 @@ public class SQLiteDatabaseOpenHelper(
         require(version >= 1)
     }
 
-    override val readableDatabase: DatabaseOpenHelper.Database get() = acquireDatabase()
-    override val writableDatabase: DatabaseOpenHelper.Database get() = acquireDatabase()
+    override val readableDatabase: DatabaseOpenHelper.Database
+        get() = acquireDatabase(writable = false)
+    override val writableDatabase: DatabaseOpenHelper.Database
+        get() = acquireDatabase(writable = true)
 
-    private fun acquireDatabase(): DatabaseOpenHelper.Database = synchronized(managerLock) {
+    private fun acquireDatabase(writable: Boolean): DatabaseOpenHelper.Database = synchronized(managerLock) {
         check(!opening) { "Recursive database initialization" }
-        val shared = database?.takeIf { it.database.isOpen } ?: run {
+        val current = database?.takeIf { it.opened.isOpen() && (!writable || !it.opened.isReadOnly) }
+        val shared = current ?: run {
             opening = true
             try {
-                SharedDatabase(openDatabase()).also { database = it }
+                val report = reportOpenTime
+                val started = report?.let { TimeSource.Monotonic.markNow() }
+                val opened = SharedDatabase(openDatabase(writable))
+                database = opened
+                // An exception from the reporter must leave the opened database available for retry.
+                if (started != null) report(started.elapsedNow().inWholeMicroseconds)
+                opened
             } finally {
                 opening = false
             }
         }
         shared.usersCount++
-        val db = shared.database
+        val db = shared.opened.database
         object : DatabaseOpenHelper.Database by db, TransactionOutcomeDatabase {
             private var closed = false
 
@@ -78,42 +104,69 @@ public class SQLiteDatabaseOpenHelper(
         }
     }
 
-    private class SharedDatabase(val database: DriverDatabase) {
+    private class SharedDatabase(val opened: OpenedDatabase) {
         var usersCount = 0
     }
 
     @Suppress("TooGenericExceptionCaught")
-    private fun openDatabase(): DriverDatabase {
-        val connection = driver.open(path)
-        val database = DriverDatabase(connection)
+    private fun openDatabase(writable: Boolean): OpenedDatabase {
+        val opened = open(writable)
         try {
-            connection.execSQL("PRAGMA busy_timeout = 5000")
-            connection.execSQL("PRAGMA foreign_keys = ON")
-            val oldVersion = connection.scalar("PRAGMA user_version").toInt()
-            check(oldVersion <= version) { "Cannot downgrade database" }
-            if (oldVersion != version) {
-                database.beginTransaction()
-                AutoCloseable { database.endTransaction() }.use {
-                    val currentVersion = connection.scalar("PRAGMA user_version").toInt()
-                    check(currentVersion <= version) { "Cannot downgrade database" }
-                    when {
-                        currentVersion == 0 -> create.onCreate(database)
-                        currentVersion < version -> upgrade.onUpgrade(database, currentVersion, version)
-                    }
-                    connection.execSQL("PRAGMA user_version = $version")
-                    database.setTransactionSuccessful()
-                }
-            }
-            return database
+            migrateIfNeeded(opened)
+            return opened
         } catch (error: Throwable) {
-            closeAll(database, failure = error)
+            closeAll(opened.database, failure = error)
             throw error
         }
     }
+
+    private fun migrateIfNeeded(opened: OpenedDatabase) {
+        val database = opened.database
+        if (readVersion(opened) == version) return
+        if (opened.isReadOnly) throw SQLiteException("Cannot upgrade a read-only database")
+        database.beginTransaction()
+        AutoCloseable { database.endTransaction() }.use {
+            val currentVersion = readVersion(opened)
+            when {
+                currentVersion == 0 -> create.onCreate(database)
+                currentVersion < version -> upgrade.onUpgrade(database, currentVersion, version)
+            }
+            database.execSQL("PRAGMA user_version = $version")
+            database.setTransactionSuccessful()
+        }
+    }
+
+    private fun readVersion(opened: OpenedDatabase): Int {
+        val currentVersion = opened.schemaVersion()
+        if (currentVersion > version) throw SQLiteException("Cannot downgrade database")
+        return currentVersion
+    }
 }
 
-private class DriverDatabase(connection: SQLiteConnection) : TransactionOutcomeDatabase {
-    override val supportsReadTransactions: Boolean get() = true
+@Suppress("TooGenericExceptionCaught")
+private fun openDriverDatabase(driver: SQLiteDriver, path: String): SQLiteDatabaseOpenHelper.OpenedDatabase {
+    val connection = driver.open(path)
+    try {
+        connection.execSQL("PRAGMA busy_timeout = 5000")
+        connection.execSQL("PRAGMA foreign_keys = ON")
+        val database = DriverDatabase(connection, isReadOnly = false)
+        return SQLiteDatabaseOpenHelper.OpenedDatabase(
+            database,
+            isReadOnly = false,
+            isOpen = { database.isOpen },
+            schemaVersion = { connection.scalar("PRAGMA user_version").toInt() },
+        )
+    } catch (error: Throwable) {
+        closeAll(connection, failure = error)
+        throw error
+    }
+}
+
+internal class DriverDatabase(
+    connection: SQLiteConnection,
+    isReadOnly: Boolean,
+) : TransactionOutcomeDatabase {
+    override val supportsReadTransactions: Boolean = !isReadOnly
     private val lock = reentrantLock()
     private val transactions = mutableListOf<Transaction>()
     private val open = atomic(true)
@@ -182,6 +235,7 @@ private class DriverDatabase(connection: SQLiteConnection) : TransactionOutcomeD
 
     @Suppress("TooGenericExceptionCaught")
     override fun beginReadTransaction(): Boolean {
+        check(supportsReadTransactions) { "Read transactions are unsupported" }
         lock.lock()
         if (transactions.isNotEmpty()) {
             lock.unlock()

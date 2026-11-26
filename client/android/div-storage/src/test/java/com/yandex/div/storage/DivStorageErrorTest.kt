@@ -1,10 +1,8 @@
 package com.yandex.div.storage
 
 import androidx.test.core.app.ApplicationProvider
-import com.yandex.div.storage.database.AndroidDatabaseOpenHelper
 import com.yandex.div.storage.database.AndroidDatabaseOpenHelperProvider
 import com.yandex.div.storage.database.DatabaseOpenHelper
-import com.yandex.div.storage.database.asStorageCursor
 import java.util.UUID
 import org.json.JSONObject
 import org.junit.Assert
@@ -16,7 +14,6 @@ import org.mockito.kotlin.argThat
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
@@ -74,15 +71,13 @@ class DivStorageErrorTest {
 
         kotlin.test.assertIs<DivStorageErrorException>(error.cause)
     }
-    private var dbHelper: AndroidDatabaseOpenHelper? = null
-    private var db: DatabaseOpenHelper.Database = mock()
-    private val openHelperProvider: AndroidDatabaseOpenHelperProvider =
-            AndroidDatabaseOpenHelperProvider { context, name, version, ccb, ucb ->
-                dbHelper ?: spy(AndroidDatabaseOpenHelper(context, name, version, ccb, ucb, mock())).apply {
-                    whenever(writableDatabase).doReturn(db)
-                    whenever(readableDatabase).doReturn(db)
-                }.also { dbHelper = it }
-            }
+    private val db: DatabaseOpenHelper.Database = mock()
+    private val openHelperProvider = AndroidDatabaseOpenHelperProvider { _, _, _, _, _ ->
+        object : DatabaseOpenHelper {
+            override val writableDatabase = db
+            override val readableDatabase = db
+        }
+    }
     private val underTest = AndroidDivStorage(
             context = ApplicationProvider.getApplicationContext(),
             openHelperProvider = openHelperProvider,
@@ -142,14 +137,22 @@ class DivStorageErrorTest {
     ))
 
     private fun createCursor(listData: List<RestoredData>): DatabaseOpenHelper.Cursor {
-        return object: StubCursor() {
-            private var countMovingToNext = 0
-            override fun moveToNext(): Boolean {
-                return countMovingToNext++ < listData.size - 1
+        return object : DatabaseOpenHelper.Cursor {
+            override var isClosed = false
+                private set
+            override fun close() { isClosed = true }
+            override fun moveToFirst(): Boolean {
+                countMovingToNext = 0
+                return listData.isNotEmpty()
             }
 
-            override fun getColumnIndex(columnName: String?): Int {
-                return when(columnName) {
+            private var countMovingToNext = 0
+            override fun moveToNext(): Boolean {
+                return ++countMovingToNext < listData.size
+            }
+
+            override fun getColumnIndex(name: String): Int {
+                return when(name) {
                     "card_id", "layout_id" -> 0
                     "group_id" -> 1
                     "card_data" -> 2
@@ -158,30 +161,30 @@ class DivStorageErrorTest {
                 }
             }
 
-            override fun getBlob(columnIndex: Int): ByteArray {
-                return when(columnIndex) {
+            override fun getBlob(index: Int): ByteArray {
+                return when(index) {
                     2 -> listData[countMovingToNext].cardData!!
                     3 -> listData[countMovingToNext].metaData!!
                     else -> TODO()
                 }
             }
 
-            override fun getString(columnIndex: Int): String {
-                return when(columnIndex) {
+            override fun getString(index: Int): String {
+                return when(index) {
                     0 -> listData[countMovingToNext].id
                     1 -> listData[countMovingToNext].groupId
                     else -> TODO()
                 }
             }
 
-            override fun isNull(columnIndex: Int): Boolean {
-                return when(columnIndex) {
+            override fun isNull(index: Int): Boolean {
+                return when(index) {
                     2 -> listData[countMovingToNext].cardData
                     3 -> listData[countMovingToNext].metaData
                     else -> TODO()
                 } == null
             }
-        }.asStorageCursor()
+        }
     }
 
     private fun validByteArray() = JSONObject().toString().toByteArray()

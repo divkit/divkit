@@ -5,6 +5,7 @@ import androidx.sqlite.SQLiteDriver
 import androidx.sqlite.SQLiteException
 import androidx.sqlite.SQLiteStatement
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import androidx.sqlite.execSQL
 import com.yandex.div.storage.removeDatabase
 import com.yandex.div.storage.temporaryDatabasePath
 import kotlin.test.AfterTest
@@ -167,6 +168,48 @@ class SQLiteDatabaseOpenHelperTest {
     }
 
     @Test
+    fun `reader can fall back to read only and writer opens a new connection`() {
+        helper.writableDatabase.use { it.execSQL("CREATE TABLE records(value TEXT)") }
+        val openError = SQLiteException("write access unavailable")
+        driver.openError = openError
+        val readWriteHelper = SQLiteDatabaseOpenHelper(
+            version = 1,
+            create = {},
+            upgrade = { _, _, _ -> },
+            open = { writable ->
+                val isReadOnly = !writable && driver.openError != null
+                val connection = if (isReadOnly) BundledSQLiteDriver().open(path) else driver.open(path)
+                if (isReadOnly) {
+                    connection.execSQL("PRAGMA query_only = ON")
+                }
+                SQLiteDatabaseOpenHelper.OpenedDatabase(
+                    DriverDatabase(connection, isReadOnly),
+                    isReadOnly = isReadOnly,
+                    isOpen = { true },
+                    schemaVersion = { 1 },
+                )
+            },
+        )
+
+        readWriteHelper.readableDatabase.use { reader ->
+            reader.rawQuery("SELECT value FROM records", null).use { cursor ->
+                assertFalse(cursor.moveToFirst())
+            }
+            assertSame(openError, assertFailsWith<SQLiteException> { readWriteHelper.writableDatabase })
+
+            driver.openError = null
+            readWriteHelper.writableDatabase.use { writer ->
+                reader.close()
+                writer.execSQL("INSERT INTO records VALUES ('saved')")
+                writer.rawQuery("SELECT value FROM records", null).use { cursor ->
+                    assertTrue(cursor.moveToFirst())
+                    assertEquals("saved", cursor.getString(0))
+                }
+            }
+        }
+    }
+
+    @Test
     fun `schema creation preserves its error when rollback also fails`() {
         val creationError = SQLiteException("create failed")
         val rollbackError = SQLiteException("rollback failed")
@@ -201,11 +244,13 @@ class SQLiteDatabaseOpenHelperTest {
 
     private class FailingDriver : SQLiteDriver, AutoCloseable {
         var failures = emptyMap<String, SQLiteException>()
+        var openError: SQLiteException? = null
         var closeError: SQLiteException? = null
         var closed = false
         private val connections = mutableListOf<SQLiteConnection>()
 
         override fun open(fileName: String): SQLiteConnection {
+            openError?.let { throw it }
             val connection = BundledSQLiteDriver().open(fileName)
             connections.add(connection)
             return object : SQLiteConnection by connection {

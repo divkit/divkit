@@ -9,6 +9,7 @@ import com.yandex.div.storage.database.AndroidDatabaseOpenHelper
 import com.yandex.div.storage.database.DatabaseOpenHelper
 import com.yandex.div.storage.database.DatabaseOpenHelperProvider
 import com.yandex.div.storage.database.TransactionOutcomeDatabase
+import com.yandex.div.storage.database.asStorageDatabase
 import com.yandex.div.storage.histogram.HistogramRecorder
 import com.yandex.div.storage.internal.DivStorage as CommonDivStorage
 import com.yandex.div.storage.internal.RawDataAndMetadata as CommonRawData
@@ -163,12 +164,10 @@ class AndroidReadOnlyStorageTest {
         block: (DatabaseOpenHelperProvider) -> Unit,
     ) {
         val file = context.getDatabasePath(name)
-        val helper = AndroidDatabaseOpenHelper(context, name, version, {}, { _, _, _ -> },
-            histogramRecorder)
         SQLiteDatabase.openDatabase(file.path, null, SQLiteDatabase.OPEN_READONLY).use { native ->
             assertTrue(native.isReadOnly)
             assertEquals(version, native.version)
-            val actual = helper.wrapDataBase(native) as TransactionOutcomeDatabase
+            val actual = native.asStorageDatabase()
             val borrowed = object : TransactionOutcomeDatabase by actual {
                 override fun close() = Unit
                 override fun rawQuery(

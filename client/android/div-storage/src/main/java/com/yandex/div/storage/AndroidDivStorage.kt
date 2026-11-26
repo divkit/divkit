@@ -1,12 +1,13 @@
 package com.yandex.div.storage
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabaseLockedException
+import androidx.sqlite.SQLiteException
 import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.ActionOnError as CommonActionOnError
 import com.yandex.div.storage.StorageCodec
 import com.yandex.div.storage.database.AndroidDatabaseOpenHelperProvider
 import com.yandex.div.storage.database.ExecutionResult
+import com.yandex.div.storage.database.isAndroidDatabaseLocked
 import com.yandex.div.storage.internal.DivStorage as CommonDivStorage
 import com.yandex.div.storage.internal.RawDataAndMetadata as CommonRawData
 import com.yandex.div.storage.internal.rawjson.RawJson as CommonRawJson
@@ -31,9 +32,9 @@ internal class AndroidDivStorage(
         },
         databaseNamePrefix = databaseNamePrefix,
         reportMigrationError = { error, message -> KAssert.fail(error) { message } },
-        sqlExceptionFactory = { message, cause -> android.database.SQLException(message, cause) },
+        sqlExceptionFactory = { message, cause -> SQLiteException(message, cause) },
         // Preserve the SQL exception boundary of the original Android loadData implementation.
-        shouldCatchLoadException = { it is SQLiteDatabaseLockedException },
+        shouldCatchLoadException = ::isAndroidDatabaseLocked,
     )
 
     override val migrations get() = delegate.migrations
@@ -129,4 +130,3 @@ private fun <T, R> CommonDivStorage.LoadDataResult<T>.asAndroid(
 
 private fun CommonDivStorage.RemoveResult.asAndroid(): DivStorage.RemoveResult =
     DivStorage.RemoveResult(ids, errors)
-
