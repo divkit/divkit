@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.container
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
@@ -36,24 +35,6 @@ internal fun DivContainer.Separator?.resolveSeparatorVisibility(): SeparatorVisi
         showBetween = showBetween,
         showAtEnd = showAtEnd,
     )
-}
-
-@Immutable
-internal data class SeparatorVisibility(
-    val showAtStart: Boolean,
-    val showBetween: Boolean,
-    val showAtEnd: Boolean,
-) {
-    val hasAnySeparator: Boolean
-        get() = showAtStart || showBetween || showAtEnd
-
-    companion object {
-        val None = SeparatorVisibility(
-            showAtStart = false,
-            showBetween = false,
-            showAtEnd = false,
-        )
-    }
 }
 
 internal fun SeparatorVisibility.effectiveItemSpacing(itemSpacing: Long): Long =

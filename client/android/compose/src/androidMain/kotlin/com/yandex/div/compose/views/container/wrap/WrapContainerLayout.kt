@@ -8,17 +8,10 @@ import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowColumnOverflow
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.FlowRowOverflow
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.layout.onPlaced
-import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
@@ -54,24 +47,21 @@ internal fun ContainerWrapView(modifier: Modifier, data: DivContainer, isHorizon
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val itemSeparator = data.separator.observeWrapSeparator()
     val lineSeparator = data.lineSeparator.observeWrapSeparator()
-    // A separator between the children takes the place of the spacing.
-    val itemSpacing = itemSeparator?.betweenSize(alongWidth = isHorizontal) ?: data.itemSpacing.observedDpValue()
-    val lineSpacing = lineSeparator?.betweenSize(alongWidth = !isHorizontal) ?: data.lineSpacing.observedDpValue()
+    val separators = remember(itemSeparator, lineSeparator, isHorizontal) {
+        WrapSeparatorLayout(itemSeparator, lineSeparator, isHorizontal)
+    }
+    val itemSpacing = separators.itemSpacing { data.itemSpacing.observedDpValue() }
+    val lineSpacing = separators.lineSpacing { data.lineSpacing.observedDpValue() }
     val items = data.observeItems()
     val (visibleItems, components) = items.observeVisible()
-    val separatorGeometry = rememberSeparatorGeometry(
-        enabled = (itemSeparator != null || lineSeparator != null) && visibleItems.isNotEmpty(),
-        childCount = visibleItems.size,
-        isHorizontal = isHorizontal,
+    val separatorGeometry = separators.rememberGeometry(visibleItems.size)
+    val containerModifier = separators.decorate(
+        modifier = modifier
+            .padding(data.paddings)
+            .alignContainerOverflow(horizontalAlignment, verticalAlignment),
+        geometry = separatorGeometry,
+        isRtl = isRtlLayout,
     )
-    val containerModifier = modifier
-        .padding(data.paddings)
-        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
-        .separatorEdgePadding(
-            horizontal = if (isHorizontal) itemSeparator else lineSeparator,
-            vertical = if (isHorizontal) lineSeparator else itemSeparator,
-        )
-        .drawWrapSeparators(separatorGeometry, isHorizontal, itemSeparator, lineSeparator, isRtlLayout)
 
     // Children keep being laid out outside a constrained cross axis. An item larger than its line
     // overflows it the way the line is aligned.
@@ -136,66 +126,4 @@ private fun DivContentAlignmentVertical.toLineAlignment(): Alignment.Vertical = 
     DivContentAlignmentVertical.SPACE_AROUND,
     DivContentAlignmentVertical.SPACE_EVENLY -> Alignment.CenterVertically
     else -> toCrossAxisVerticalAlignment()
-}
-
-/** Separators at the edges take space around the lines. */
-private fun Modifier.separatorEdgePadding(horizontal: SeparatorDrawInfo?, vertical: SeparatorDrawInfo?): Modifier {
-    if (horizontal == null && vertical == null) return this
-    return padding(
-        start = horizontal?.edgeSize(atStart = true, alongWidth = true) ?: 0.dp,
-        end = horizontal?.edgeSize(atStart = false, alongWidth = true) ?: 0.dp,
-        top = vertical?.edgeSize(atStart = true, alongWidth = false) ?: 0.dp,
-        bottom = vertical?.edgeSize(atStart = false, alongWidth = false) ?: 0.dp,
-    )
-}
-
-@Composable
-private fun rememberSeparatorGeometry(
-    enabled: Boolean,
-    childCount: Int,
-    isHorizontal: Boolean,
-): WrapSeparatorGeometry? {
-    if (!enabled) return null
-    val geometry = remember(isHorizontal) { WrapSeparatorGeometry(isHorizontal) }
-    SideEffect {
-        geometry.resize(childCount)
-    }
-    return geometry
-}
-
-private fun Modifier.trackChildPlacement(
-    geometry: WrapSeparatorGeometry?,
-    index: Int,
-): Modifier {
-    geometry ?: return this
-    return onPlaced { layoutCoordinates ->
-        val position = layoutCoordinates.positionInParent()
-        geometry.updateChild(
-            index = index,
-            rect = Rect(
-                left = position.x,
-                top = position.y,
-                right = position.x + layoutCoordinates.size.width,
-                bottom = position.y + layoutCoordinates.size.height,
-            ),
-        )
-    }
-}
-
-private fun Modifier.drawWrapSeparators(
-    geometry: WrapSeparatorGeometry?,
-    isHorizontal: Boolean,
-    itemSeparator: SeparatorDrawInfo?,
-    lineSeparator: SeparatorDrawInfo?,
-    isRtl: Boolean,
-): Modifier {
-    geometry ?: return this
-    return drawWithCache {
-        val itemSeparatorPx = itemSeparator?.toPx(this)
-        val lineSeparatorPx = lineSeparator?.toPx(this)
-        onDrawWithContent {
-            drawContent()
-            drawWrapSeparators(geometry, isHorizontal, itemSeparatorPx, lineSeparatorPx, isRtl)
-        }
-    }
 }
