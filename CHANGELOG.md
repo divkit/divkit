@@ -1,3 +1,44 @@
+## 33.14.0
+
+### Android Client
+* Added KMP `model` module with DivKit models and templates.
+* Added `DivFontSource.FontFamily` for supplying a Compose `FontFamily` from `DivFontSourceProvider`.
+* Added `scope_id` support for Compose variable actions. Action parameters are evaluated in the source context, while the variable is updated in the target element's scope.
+* Added appearance and disappearance transitions when an expression changes element visibility in the Compose renderer, including tooltip content.
+* Added opt-in indexing for appearance and disappearance action tracking via.
+* Added opt-in suppression of redundant image layout requests via.
+* Added support for observing gallery scrolls, pager page changes, tab selection, and tab title scrolling in the Compose renderer.
+* Deprecated `DivFontSource.Typeface`. Use `DivFontSource.FontFamily` instead.
+* Fixed a crash of a vertical `div-container` with `wrap_content` width and `aspect` in the Compose renderer when several children are `match_parent` along both axes and the height is not limited.
+* Fixed a crash when Android reports an out-of-bounds text ellipsis offset.
+* Fixed a memory leak that could retain a destroyed Android Activity after its last DivKit Compose expression subscription was closed.
+* Fixed ambiguous scroll targets and duplicate pager selection actions in Compose tab content.
+* Fixed backgrounds and borders on masked text ranges with different font sizes or baseline offsets in the Compose renderer.
+* Fixed children and lines of a `div-container` with `item_spacing`, `line_spacing` or separators piling up at the end of the container in the Compose renderer when they do not fit: they now overflow the container and keep the content alignment.
+* Fixed missed zero-duration appear and disappear actions during rapid visibility changes in the View and Compose renderers.
+* In the Android View renderer, `div-image` with an SVG and `tint_color` now stays vector and sharp instead of being rasterized at 1x.
+* Items of a `div-container` with `layout_mode: wrap` in the Compose renderer start at the edge of their line unless they have their own alignment, instead of following the content alignment of the container inside the line.
+* Moved currency input-mask logic to common Kotlin sources and isolated JVM locale APIs in the Compose renderer, preserving existing formatting behavior.
+* Prepared the Compose renderer for Kotlin Multiplatform builds using Compose Multiplatform 1.12.2, preserving its Android API.
+* Separators of a `div-container` with `layout_mode: wrap` in the Compose renderer are drawn as on the web: line separators go over the item separators and are centered along the lines rather than the container, and the cross-axis margins of item separators are taken inside the line.
+* Switched image loading in the Compose renderer from Coil's OkHttp fetcher to a Ktor-based network client on the `ktor-client-okhttp` engine; image requests now carry Ktor's default `User-Agent` and `Accept-Charset` headers. Added the `network-ktor` module with `KtorNetworkClient`, a Ktor implementation of `DivNetworkClient` for Android, JVM and iOS; `KtorNetworkClient(engineFactory)` creates it with an engine on a dispatcher of its own.
+* Views with any prior drawable-dependent measurement retain normal layout requests.
+* `DivConfiguration.Builder.enableImageLayoutOptimization(boolean)`, disabled by default.
+* `DivConfiguration.Builder.enableVisibilityTokenIndex(boolean)`, disabled by default.
+* `div-container` in the Compose renderer keeps its `paddings` when the content does not fit.
+* `div-pager` in the Compose renderer now keeps the position of the current page instead of the page itself when its pages change (`item_builder` data, patches, visibility), and runs `selected_actions` only when the position changes.
+* `match_parent` children of a horizontal `div-container` in the Compose renderer share the space with `min_size` and `max_size` taken into account, as in a vertical one.
+* `match_parent` children with `aspect` in the Compose renderer fill an `overlap` `div-container` that wraps its content, as other `match_parent` children do.
+
+### iOS Client
+* Fixed `visibility_actions` not firing when an element becomes visible after a card update on iOS versions earlier than 26.
+* Improved performance of `DivKitComponents.reset(cardId:)` by avoiding scans of other cards when clearing local variables, properties, and custom functions.
+
+### Web Client
+* Fixed losing the first digit when replacing a masked phone number.
+* Fixed replacing selected text in a multiline input at its maximum length.
+
+
 ## 33.13.0
 
 ### Android Client
