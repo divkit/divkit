@@ -22,16 +22,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.LookaheadScope
+import androidx.compose.ui.layout.onGloballyPositioned
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.DivVisibilityState
+import com.yandex.div.compose.views.transition.BindStateChangeSnapshots
 import com.yandex.div.compose.views.transition.LocalStateChangeTransitionContext
+import com.yandex.div.compose.views.transition.StateChangeBoundsMatching
+import com.yandex.div.compose.views.transition.StateChangeBoundsStart
+import com.yandex.div.compose.views.transition.StateChangeSnapshots
 import com.yandex.div.compose.views.transition.StateChangeTransitionScene
 import com.yandex.div.compose.views.transition.StateChangeTransitionScope
 import com.yandex.div.compose.views.transition.StateChangeTransitionState
-import com.yandex.div.compose.views.transition.BindStateChangeSnapshots
-import com.yandex.div.compose.views.transition.StateChangeSnapshots
 import com.yandex.div.compose.views.transition.visibleStateTransitionIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div2.Div
@@ -43,11 +48,11 @@ import kotlinx.coroutines.flow.first
 internal fun TransitioningStateContent(
     modifier: Modifier,
     transitionModifier: Modifier,
+    lookaheadScope: LookaheadScope?,
     initialState: DivState.State,
     activeState: DivState.State,
     parentPath: DivStatePath,
     divId: String,
-    parentContentActive: Boolean,
     boundaryVisibility: DivVisibilityState,
     contentAlignment: Alignment,
     onTransitionFinished: () -> Unit,
@@ -55,8 +60,8 @@ internal fun TransitioningStateContent(
     val entries = remember {
         mutableStateListOf(StateChangeContentEntry(initialState, initiallyVisible = true))
     }
-    val scene = remember { StateChangeTransitionScene() }
-    UpdateStateChangeEntries(entries, activeState, boundaryVisibility)
+    val scene = remember(lookaheadScope) { StateChangeTransitionScene(lookaheadScope) }
+    UpdateStateChangeEntries(entries, activeState, boundaryVisibility, scene)
     val orderedEntries = entries.sortedBy { it.contentActive }
 
     StateChangeContentLayout(
@@ -66,11 +71,8 @@ internal fun TransitioningStateContent(
     ) {
         orderedEntries.forEach { entry ->
             key(entry) {
-                val contentActive = parentContentActive && entry.contentActive &&
-                    entry.state.stateId == activeState.stateId
                 entry.Content(
                     transitionModifier = transitionModifier,
-                    contentActive = contentActive,
                     parentPath = parentPath,
                     divId = divId,
                     scene = scene,
@@ -91,7 +93,6 @@ internal fun TransitioningStateContent(
 @Composable
 private fun StateChangeContentEntry.Content(
     transitionModifier: Modifier,
-    contentActive: Boolean,
     parentPath: DivStatePath,
     divId: String,
     scene: StateChangeTransitionScene,
@@ -128,7 +129,9 @@ private fun StateChangeContentEntry.Content(
                 )
                 if (this@Content.contentActive) {
                     Box(
-                        modifier = transitionModifier,
+                        modifier = transitionModifier.applyIf(transitionState.boundsMatching?.isFinished == false) {
+                            onGloballyPositioned { transitionState.finishBoundsMatching() }
+                        },
                         contentAlignment = contentAlignment,
                     ) {
                         WithStatePath(parentPath, divId, state) {
@@ -138,7 +141,7 @@ private fun StateChangeContentEntry.Content(
                                     scope = transitionScope,
                                     contentActive = true,
                                     overlayCaptured = false,
-                                    snapshotParentId = null,
+                                    snapshotParent = null,
                                 )
                             ) {
                                 state.div?.let { DivBlockView(it) }
@@ -195,20 +198,28 @@ private fun UpdateStateChangeEntries(
     entries: MutableList<StateChangeContentEntry>,
     activeState: DivState.State,
     boundaryVisibility: DivVisibilityState,
+    scene: StateChangeTransitionScene,
 ) {
     val divViewContext = LocalDivViewContext.current
     val parentComponent = LocalComponent.current
     val contentVisible = LocalStateChangeTransitionContext.current.contentVisible
     boundaryVisibility.invalidation
-    val previousIds = entries
+    val previous = entries
         .lastOrNull { it.contentActive }
         ?.takeIf { it.state.stateId != activeState.stateId }
         ?.transitionState
-        ?.snapshotRenderedIds()
+    val previousIds = previous?.renderedIds
+    val bounds = if (scene.lookaheadScope != null && previous != null) {
+        previous.snapshots.captureBounds(previous.uniqueRenderedIds, scene.coordinates)
+    } else null
     SideEffect {
         val boundaryVisible = boundaryVisibility.currentVisibility() ?: return@SideEffect
         val visible = boundaryVisible && contentVisible
-        entries.updateActiveState(activeState, if (visible) previousIds else emptySet()) {
+        entries.updateActiveState(
+            activeState,
+            renderedPreviousIds = if (visible) previousIds else emptySet(),
+            initialBounds = if (visible) bounds else null,
+        ) {
             if (visible) {
                 it.visibleStateTransitionIds(divViewContext, parentComponent)
             } else {
@@ -238,6 +249,7 @@ private fun RemoveWhenExitFinished(
 internal fun MutableList<StateChangeContentEntry>.updateActiveState(
     activeState: DivState.State,
     renderedPreviousIds: Set<String>? = null,
+    initialBounds: Map<String, StateChangeBoundsStart>? = null,
     stateTransitionIds: (Div?) -> Set<String>,
 ) {
     val previousEntry = lastOrNull { it.contentActive }
@@ -245,29 +257,25 @@ internal fun MutableList<StateChangeContentEntry>.updateActiveState(
         previousEntry.state = activeState
     } else {
         val previousIds = renderedPreviousIds
-            ?: previousEntry?.transitionState?.snapshotRenderedIds().orEmpty()
+            ?: previousEntry?.transitionState?.renderedIds.orEmpty()
         val targetIds = stateTransitionIds(activeState.div)
-        val commonIds = previousIds intersect targetIds
-        filterNot { it.contentActive }.forEach { entry ->
-            entry.transitionState.unregisterOverlays(entry.exitingIds intersect targetIds)
-            entry.exitingIds = entry.exitingIds - targetIds
-            entry.commonIds = entry.transitionIds intersect targetIds
-            entry.transitionState.snapshots.capture(entry.exitingIds, entry.commonIds)
+        val candidates = initialBounds?.keys ?: previousIds
+        val commonIds = candidates intersect targetIds
+        if (initialBounds == null) {
+            filterNot { it.contentActive }.forEach { it.matchTargetIds(targetIds) }
         }
-        if (previousEntry != null) {
-            previousEntry.transitionIds = previousIds
-            previousEntry.exitingIds = previousIds - targetIds
-            previousEntry.commonIds = commonIds
-            previousEntry.transitionState.captureExitValues(previousEntry.exitingIds)
-            previousEntry.transitionState.snapshots.capture(previousEntry.exitingIds, commonIds)
-            previousEntry.contentActive = false
-        }
+        previousEntry?.beginExit(previousIds, commonIds, initialBounds?.keys)
 
         removeAll { !it.contentActive && it.state.stateId == activeState.stateId }
-        val targetEntry = StateChangeContentEntry(activeState, initiallyVisible = false)
+        val boundsMatching = initialBounds?.let { sources ->
+            StateChangeBoundsMatching(sources) { matched ->
+                filterNot { it.contentActive }.forEach { it.confirmBoundsMatches(matched) }
+            }
+        }
+        val targetEntry = StateChangeContentEntry(activeState, initiallyVisible = false, boundsMatching)
             .also(::add)
         targetEntry.transitionIds = targetIds
-        targetEntry.enteringIds = targetIds - previousIds
+        targetEntry.enteringIds = targetIds - candidates
         targetEntry.commonIds = commonIds
         targetEntry.contentActive = true
         targetEntry.enterVisibility.targetState = true
@@ -278,17 +286,50 @@ internal fun MutableList<StateChangeContentEntry>.updateActiveState(
     }
 }
 
+private fun StateChangeContentEntry.beginExit(
+    previousIds: Set<String>,
+    predictedCommon: Set<String>,
+    boundsIds: Set<String>?,
+) {
+    transitionIds = previousIds
+    matchableIds = boundsIds.orEmpty()
+    // A declared ID in a gallery can be offscreen, or repeated by a template. Keep the source
+    // available until the first placed tree confirms a match, without freezing speculative exits.
+    commonIds = if (boundsIds == null) predictedCommon else emptySet()
+    exitingIds = previousIds - commonIds
+    transitionState.captureExitValues(exitingIds)
+    transitionState.snapshots.capture(exitingIds, commonIds, pendingIds = predictedCommon - commonIds)
+    contentActive = false
+}
+
+/** The first placed incoming tree settles the predicted matches: the confirmed ones stay, the others exit. */
+private fun StateChangeContentEntry.confirmBoundsMatches(incomingIds: Set<String>) {
+    val matched = exitingIds intersect incomingIds intersect matchableIds
+    if (matched.isNotEmpty() || transitionState.snapshots.pendingIds.isNotEmpty()) {
+        matchTargetIds(commonIds + matched, matched)
+    }
+}
+
+private fun StateChangeContentEntry.matchTargetIds(targetIds: Set<String>, runtimeMatches: Set<String>? = null) {
+    transitionState.unregisterOverlays(exitingIds intersect targetIds)
+    exitingIds -= targetIds
+    commonIds = transitionIds intersect targetIds
+    transitionState.snapshots.capture(exitingIds, commonIds, runtimeMatches)
+}
+
 internal class StateChangeContentEntry(
     state: DivState.State,
     initiallyVisible: Boolean,
+    boundsMatching: StateChangeBoundsMatching? = null,
 ) {
     var state by mutableStateOf(state)
     var enteringIds by mutableStateOf(emptySet<String>())
     var exitingIds by mutableStateOf(emptySet<String>())
     var commonIds by mutableStateOf(emptySet<String>())
     var transitionIds = emptySet<String>()
+    var matchableIds = emptySet<String>()
     var contentActive by mutableStateOf(initiallyVisible)
-    val transitionState = StateChangeTransitionState()
+    val transitionState = StateChangeTransitionState(boundsMatching)
     var layoutWidth = 0
     var layoutHeight = 0
     var hasLayoutSize = false

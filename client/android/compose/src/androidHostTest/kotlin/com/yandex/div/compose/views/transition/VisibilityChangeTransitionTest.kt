@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RuntimeEnvironment
 import kotlin.test.Test
@@ -161,7 +162,7 @@ class VisibilityChangeTransitionTest {
 
     @Test
     fun `visibility alpha is not applied on top of a state snapshot`() {
-        val stateTransition = StateChangeTransitionModifier(appearanceAlpha = 1f, snapshotId = "content")
+        val stateTransition = StateChangeTransitionModifier(appearanceAlpha = 1f, snapshotNode = mock())
 
         val combined = stateTransition.withVisibilityTransition(runningTransition(), blocksPointerInput = false)
 

@@ -23,6 +23,7 @@ import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.variables.mutableStateFromIntegerVariable
 import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
+import com.yandex.div.compose.views.transition.deferBoundsMatching
 import com.yandex.div.compose.views.transition.slideTransitionParent
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
@@ -94,8 +95,11 @@ private fun PagerView(
         infiniteScroll = infiniteScroll,
     )
 
+    val pagesComposed = viewportSizePx.intValue > 0
     Box(
         modifier = modifier
+            // Pages are composed after the viewport is measured. A zero viewport composes none.
+            .deferBoundsMatching { pagesComposed || viewportSizePx.intValue <= 0 }
             .then(IntrinsicSizeBarrier)
             .constrainUnboundedMax(isWidth = isHorizontal)
             .onMeasureConstraints { constraints ->

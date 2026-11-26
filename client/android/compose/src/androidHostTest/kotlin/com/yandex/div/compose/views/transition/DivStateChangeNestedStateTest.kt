@@ -47,7 +47,7 @@ class DivStateChangeNestedStateTest : StateChangeTransitionTestBase() {
         composeRule.runOnIdle {
             assertEquals(
                 emptySet(),
-                boundaryTracker.transitionStateOf(OUTGOING_ID).snapshotRenderedIds(),
+                boundaryTracker.transitionStateOf(OUTGOING_ID).renderedIds,
             )
         }
     }
@@ -66,7 +66,7 @@ class DivStateChangeNestedStateTest : StateChangeTransitionTestBase() {
             assertTrue(boundaryTracker.transitionStateOf(OUTGOING_ID).snapshots.exiting.isEmpty())
             assertEquals(
                 emptySet(),
-                boundaryTracker.transitionStateOf(INCOMING_ID).snapshotRenderedIds(),
+                boundaryTracker.transitionStateOf(INCOMING_ID).renderedIds,
             )
         }
     }
@@ -86,7 +86,7 @@ class DivStateChangeNestedStateTest : StateChangeTransitionTestBase() {
             assertTrue(boundaryTracker.transitionStateOf(OUTGOING_ID).snapshots.exiting.isEmpty())
             assertEquals(
                 setOf(INCOMING_ID),
-                boundaryTracker.transitionStateOf(INCOMING_ID).snapshotRenderedIds(),
+                boundaryTracker.transitionStateOf(INCOMING_ID).renderedIds,
             )
         }
     }

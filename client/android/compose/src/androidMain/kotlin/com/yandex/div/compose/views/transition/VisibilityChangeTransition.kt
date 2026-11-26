@@ -57,7 +57,7 @@ internal fun StateChangeTransitionModifier.withVisibilityTransition(
             }
             .then(appearance.modifier)
             .applyIf(transition.isExiting && blocksPointerInput) { then(BlockPointerInput) },
-        appearanceAlpha = if (snapshotId == null) appearance.appearanceAlpha else appearanceAlpha,
+        appearanceAlpha = if (snapshotNode == null) appearance.appearanceAlpha else appearanceAlpha,
     )
 }
 

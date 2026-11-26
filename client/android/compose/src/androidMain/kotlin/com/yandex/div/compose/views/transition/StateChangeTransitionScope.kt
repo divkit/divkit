@@ -12,6 +12,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.IntSize
@@ -34,15 +35,14 @@ internal class StateChangeTransitionScope(
     val scene: StateChangeTransitionScene = StateChangeTransitionScene(),
 )
 
-internal class StateChangeTransitionState {
+internal class StateChangeTransitionState(val boundsMatching: StateChangeBoundsMatching? = null) {
     private val currentValues = mutableMapOf<String, StateChangeVisualState>()
     private val exitValues = mutableMapOf<String, StateChangeVisualState>()
     private val currentLayouts = mutableMapOf<String, StateChangeLayoutState>()
     private val exitLayouts = mutableMapOf<String, StateChangeLayoutState>()
     private val renderedIdCounts = mutableMapOf<String, Int>()
     private val overlayLayers = mutableStateListOf<StateChangeOverlay>()
-    private val overlayIds = mutableListOf<String>()
-    private val overlayIndices = mutableMapOf<String, Int>()
+    private val overlayIndices = mutableMapOf<Any, Int>()
     val snapshots = StateChangeSnapshotCache()
 
     fun updateCurrent(id: String, values: StateChangeVisualState) {
@@ -65,11 +65,14 @@ internal class StateChangeTransitionState {
     fun getExitLayout(id: String): StateChangeLayoutState? = exitLayouts[id]
 
     fun registerRenderedId(id: String) {
-        renderedIdCounts[id] = (renderedIdCounts[id] ?: 0) + 1
+        val count = (renderedIdCounts[id] ?: 0) + 1
+        renderedIdCounts[id] = count
+        boundsMatching?.onTargetCountChanged(id, count)
     }
 
     fun unregisterRenderedId(id: String) {
         val remainingCount = (renderedIdCounts[id] ?: 0) - 1
+        boundsMatching?.onTargetCountChanged(id, remainingCount)
         if (remainingCount > 0) {
             renderedIdCounts[id] = remainingCount
         } else {
@@ -77,14 +80,22 @@ internal class StateChangeTransitionState {
         }
     }
 
-    fun snapshotRenderedIds(): Set<String> = renderedIdCounts.keys.toSet()
+    val uniqueRenderedIds: Set<String> get() = renderedIdCounts.filterValues { it == 1 }.keys
 
-    fun registerOverlay(id: String, layer: GraphicsLayer, visualState: StateChangeVisualState) {
-        val overlay = StateChangeOverlay(layer, visualState)
-        val index = overlayIndices[id]
+    /** Settles bounds matching on the first placed tree, once no content defers it. */
+    fun finishBoundsMatching() {
+        val matching = boundsMatching?.takeUnless { it.isFinished || it.isDeferred } ?: return
+        // The first placed incoming tree includes builder items.
+        matching.finish(uniqueRenderedIds)
+    }
+
+    val renderedIds: Set<String> get() = renderedIdCounts.keys.toSet()
+
+    fun registerOverlay(id: String, owner: Any, layer: GraphicsLayer, visualState: StateChangeVisualState) {
+        val overlay = StateChangeOverlay(id, owner, layer, visualState)
+        val index = overlayIndices[owner]
         if (index == null) {
-            overlayIndices[id] = overlayLayers.size
-            overlayIds += id
+            overlayIndices[owner] = overlayLayers.size
             overlayLayers += overlay
         } else {
             overlayLayers[index] = overlay
@@ -94,14 +105,9 @@ internal class StateChangeTransitionState {
     fun unregisterOverlays(ids: Set<String>) {
         if (ids.isEmpty()) return
 
-        for (index in overlayIds.lastIndex downTo 0) {
-            if (overlayIds[index] in ids) {
-                overlayIds.removeAt(index)
-                overlayLayers.removeAt(index)
-            }
-        }
+        overlayLayers.removeAll { it.id in ids }
         overlayIndices.clear()
-        overlayIds.forEachIndexed { index, id -> overlayIndices[id] = index }
+        overlayLayers.forEachIndexed { index, overlay -> overlayIndices[overlay.owner] = index }
         snapshots.remove(ids)
     }
 
@@ -109,11 +115,13 @@ internal class StateChangeTransitionState {
 }
 
 internal data class StateChangeOverlay(
+    val id: String,
+    val owner: Any,
     val layer: GraphicsLayer,
     val visualState: StateChangeVisualState,
 )
 
-internal class StateChangeTransitionScene {
+internal class StateChangeTransitionScene(val lookaheadScope: LookaheadScope? = null) {
     var coordinates: LayoutCoordinates? = null
         private set
     var size by mutableStateOf(IntSize.Zero)
@@ -134,7 +142,7 @@ internal data class StateChangeTransitionContext(
     val contentActive: Boolean = true,
     val contentVisible: Boolean = true,
     val overlayCaptured: Boolean = false,
-    val snapshotParentId: String? = null,
+    val snapshotParent: StateChangeSnapshotNode? = null,
 )
 
 internal val LocalStateChangeTransitionContext =

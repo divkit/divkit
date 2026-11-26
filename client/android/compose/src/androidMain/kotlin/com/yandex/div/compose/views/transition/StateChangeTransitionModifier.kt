@@ -3,10 +3,9 @@ package com.yandex.div.compose.views.transition
 import androidx.compose.animation.EnterExitState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.TransformOrigin
@@ -22,6 +21,7 @@ import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivTransitionTrigger
 import com.yandex.div2.DivVisibility
+import com.yandex.div2.DivVisibility.VISIBLE
 
 internal data class StateChangeTransitionModifier(
     val modifier: Modifier = Modifier,
@@ -29,12 +29,13 @@ internal data class StateChangeTransitionModifier(
     val capturesOverlay: Boolean = false,
     val releasesOverlayCapture: Boolean = false,
     val snapshotModifier: Modifier = Modifier,
-    val snapshotId: String? = null,
+    val snapshotNode: StateChangeSnapshotNode? = null,
+    val boundsSizeModifier: Modifier = Modifier,
 )
 
 private data class StateChangeGeometry(
     val modifier: Modifier,
-    val slideGeometry: SlideGeometry?,
+    val slideGeometry: State<SlideGeometry?>,
 )
 
 internal data class StateChangeAnimation(
@@ -55,63 +56,56 @@ internal fun Modifier.applyStateChangeTransition(
     val transitionContext = LocalStateChangeTransitionContext.current
     val scope = transitionContext.scope ?: return StateChangeTransitionModifier(this)
     val id = data.id ?: return StateChangeTransitionModifier(this)
-    val contentActive = transitionContext.contentActive
     val ancestorOverlayCaptured = transitionContext.overlayCaptured
-    val releasesOverlayCapture = !contentActive && ancestorOverlayCaptured && id in scope.commonIds
-    val snapshot = rememberStateChangeSnapshot(
-        data,
-        visibility,
-        scope,
-        id,
-        capturesScene,
-        transitionContext.snapshotParentId,
-        alphaOverride,
-    )
+    val releasesOverlayCapture = !transitionContext.contentActive && ancestorOverlayCaptured && id in scope.commonIds
+    val snapshot = rememberStateChangeSnapshot(data, visibility, scope, id, capturesScene, alphaOverride)
     if (data.transitionTriggers?.contains(DivTransitionTrigger.STATE_CHANGE) == false) {
+        val modifier = if (scope.scene.lookaheadScope == null) this else {
+            withStateChangeGeometry(scope, id, snapshot?.node).modifier
+        }
         return StateChangeTransitionModifier(
-            modifier = this,
+            modifier = modifier,
             appearanceAlpha = 0f.takeIf { releasesOverlayCapture },
             releasesOverlayCapture = releasesOverlayCapture,
         ).withSnapshot(snapshot, StateChangeVisualState(snapshot?.baseAlpha ?: 0f))
     }
 
-    val geometry = withStateChangeGeometry(scope, id)
-    val isEntering = id in scope.enteringIds
+    val visible = transitionContext.contentActive && transitionContext.contentVisible && visibility == VISIBLE
+    val bounds = stateChangeBoundsModifiers(scope, id, snapshot?.boundsSpecs, visible)
+    val geometry = then(bounds?.content ?: Modifier).withStateChangeGeometry(scope, id, snapshot?.node)
     val isExiting = id in scope.exitingIds
     val baseAlpha = alphaOverride
         ?: if (visibility == DivVisibility.VISIBLE) data.alpha.observedFloatValue() else 0f
     val cachedLayer = rememberCachedTransitionLayer(snapshot, ancestorOverlayCaptured, data.transitionOut)
-    val transition = data.selectStateChangeTransition(isEntering, isExiting)
-    if (transition == null) {
+    val transition = data.selectStateChangeTransition(id in scope.enteringIds, isExiting)
+    val appearance = if (transition == null) {
         SideEffect { scope.transitionState.updateCurrent(id, StateChangeVisualState(baseAlpha)) }
-        return StateChangeTransitionModifier(
+        StateChangeTransitionModifier(
             modifier = geometry.modifier.cacheStateChangeContent(cachedLayer),
             appearanceAlpha = 0f.takeIf { releasesOverlayCapture },
             releasesOverlayCapture = releasesOverlayCapture,
         ).withSnapshot(snapshot, StateChangeVisualState(baseAlpha))
-    }
-
-    val animation = resolveStateChangeAnimation(
-        transition = transition,
-        data = data,
-        visibility = visibility,
-        scope = scope,
-        id = id,
-        slideGeometry = geometry.slideGeometry,
-        isExiting = isExiting,
-    )
-    if (snapshot != null) {
-        return StateChangeTransitionModifier(geometry.modifier).withSnapshot(
-            snapshot,
-            animation.visualState.copy(alpha = animation.resolveAppearanceAlpha(false)),
+    } else {
+        val animation = resolveStateChangeAnimation(
+            transition = transition,
+            data = data,
+            visibility = visibility,
+            scope = scope,
+            id = id,
+            slideGeometry = geometry.slideGeometry.value,
+            isExiting = isExiting,
         )
+        if (snapshot == null) {
+            geometry.modifier.applyStateChangeAnimation(scope, id, animation, cachedLayer)
+        } else {
+            StateChangeTransitionModifier(geometry.modifier).withSnapshot(
+                snapshot,
+                animation.visualState.copy(alpha = animation.resolveAppearanceAlpha(false)),
+            )
+        }
     }
-    return geometry.modifier.applyStateChangeAnimation(
-        scope = scope,
-        id = id,
-        animation = animation,
-        cachedLayer = cachedLayer,
-    )
+    // Div sizing sits between the two bounds modifiers, so the size one is applied apart from the content one.
+    return appearance.copy(boundsSizeModifier = bounds?.size ?: Modifier)
 }
 
 @Composable
@@ -134,14 +128,19 @@ private fun DivBase.selectStateChangeTransition(
     else -> null
 }
 
+@Composable
 private fun StateChangeTransitionModifier.withSnapshot(
     snapshot: StateChangeSnapshot?,
     visualState: StateChangeVisualState,
-): StateChangeTransitionModifier = if (snapshot == null) this else copy(
-    appearanceAlpha = 1f,
-    snapshotModifier = Modifier.cacheStateChangeContent(snapshot.layer, visualState),
-    snapshotId = snapshot.id,
-)
+): StateChangeTransitionModifier {
+    if (snapshot == null) return this
+    SideEffect { snapshot.node.visualState = visualState }
+    return copy(
+        appearanceAlpha = 1f,
+        snapshotModifier = Modifier.cacheStateChangeContent(snapshot.layer, visualState),
+        snapshotNode = snapshot.node,
+    )
+}
 
 @Composable
 private fun rememberStateChangeSnapshot(
@@ -150,25 +149,25 @@ private fun rememberStateChangeSnapshot(
     scope: StateChangeTransitionScope,
     id: String,
     capturesScene: Boolean,
-    snapshotParentId: String?,
     alphaOverride: Float?,
 ): StateChangeSnapshot? {
-    val store = scope.transitionState.snapshots.layerStore ?: return null
-    val transition = if (data.transitionTriggers?.contains(DivTransitionTrigger.STATE_CHANGE) != false) {
-        data.transitionOut?.frozenAppearance()
-    } else {
-        null
-    }
+    val parent = LocalStateChangeTransitionContext.current.snapshotParent
+    val cache = scope.transitionState.snapshots
+    val store = cache.layerStore ?: return null
+    val node = remember(store, id, parent) { StateChangeSnapshotNode(id, parent, cache, store) }
+    val enabled = data.transitionTriggers?.contains(DivTransitionTrigger.STATE_CHANGE) != false
     val snapshot = StateChangeSnapshot(
-        id = id,
-        parentId = snapshotParentId,
-        layer = store.layer(id),
-        transition = transition,
+        node = node,
+        transition = if (enabled) data.transitionOut?.frozenAppearance() else null,
+        boundsSpecs = if (enabled && scope.scene.lookaheadScope != null) {
+            data.transitionChange?.observedBoundsSpecs()
+        } else null,
         baseAlpha = alphaOverride
             ?: if (visibility == DivVisibility.VISIBLE) data.alpha.observedFloatValue() else 0f,
         capturesScene = capturesScene,
+        visible = visibility == VISIBLE && LocalStateChangeTransitionContext.current.contentVisible,
     )
-    SideEffect { scope.transitionState.snapshots.update(snapshot) }
+    SideEffect { cache.update(snapshot) }
     return snapshot
 }
 
@@ -176,11 +175,12 @@ private fun rememberStateChangeSnapshot(
 private fun Modifier.withStateChangeGeometry(
     scope: StateChangeTransitionScope,
     id: String,
+    node: StateChangeSnapshotNode?,
 ): StateChangeGeometry {
     val contentActive = LocalStateChangeTransitionContext.current.contentActive
-    var slideGeometry by remember(scope.scene, id) { mutableStateOf<SlideGeometry?>(null) }
+    val slideGeometry = remember(scope.scene, id) { mutableStateOf<SlideGeometry?>(null) }
     val geometryModifier = Modifier.onGloballyPositioned { coordinates ->
-        scope.transitionState.snapshots.updateCoordinates(id, coordinates)
+        node?.coordinates = coordinates
         val sceneCoordinates = scope.scene.coordinates ?: return@onGloballyPositioned
         val position = sceneCoordinates.localPositionOf(coordinates, Offset.Zero)
         val layout = StateChangeLayoutState(
@@ -188,8 +188,9 @@ private fun Modifier.withStateChangeGeometry(
             bounds = ElementBounds(position, coordinates.size),
             positionInRoot = coordinates.positionInRoot(),
         )
+        node?.layout = layout
         scope.transitionState.snapshots.updateLayout(id, layout)
-        slideGeometry = layout.slideGeometry
+        slideGeometry.value = layout.slideGeometry
         if (contentActive) {
             scope.transitionState.updateCurrentLayout(id, layout)
         }

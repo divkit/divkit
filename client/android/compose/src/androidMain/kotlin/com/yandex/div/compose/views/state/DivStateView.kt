@@ -26,7 +26,9 @@ import com.yandex.div.compose.views.modifiers.clipToBounds
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.compose.views.observeDivVisibility
 import com.yandex.div.compose.views.transition.LocalStateChangeTransitionContext
+import com.yandex.div.compose.views.transition.WithChangeBoundsScope
 import com.yandex.div.compose.views.transition.containsStateChangeTransitions
+import com.yandex.div.compose.views.transition.hasChangeBounds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -92,7 +94,6 @@ private fun StateContent(
         }
         .observeDivVisibility(boundaryVisibility)
         .padding(data.paddings)
-    val parentContentActive = LocalStateChangeTransitionContext.current.contentActive
     val activeStateData = activeState.div?.value()
     val contentAlignment = toAlignment(
         activeStateData?.alignmentHorizontal.observedValue(DivAlignmentHorizontal.START),
@@ -102,6 +103,7 @@ private fun StateContent(
     val animationsEnabled = component.animationConfiguration.isEnabledAsState()
     val committedState = transitionContentState.committedState
     val transitionsAvailable = transitionsEnabled && animationsEnabled
+    val hasChangeBounds = data.hasChangeBounds(transitionsAvailable)
     val (activeStateHasTransitions, committedStateHasTransitions) = rememberTransitionPresence(
         transitionsAvailable,
         activeState = activeState,
@@ -110,7 +112,7 @@ private fun StateContent(
     val useTransitionContent = transitionContentState.shouldUseTransitionContent(
         activeState = activeState,
         transitionsAvailable = transitionsAvailable,
-        activeStateHasTransitions = activeStateHasTransitions,
+        activeStateHasTransitions = hasChangeBounds || activeStateHasTransitions,
         committedStateHasTransitions = committedStateHasTransitions,
     )
 
@@ -118,18 +120,20 @@ private fun StateContent(
         val transitionModifier = Modifier
             .applyIf(!data.width.isWrapContent) { fillMaxWidth() }
             .applyIf(!data.height.isWrapContent) { fillMaxHeight() }
-        TransitioningStateContent(
-            modifier = contentModifier,
-            transitionModifier = transitionModifier,
-            initialState = committedState,
-            activeState = activeState,
-            parentPath = parentPath,
-            divId = divId,
-            parentContentActive = parentContentActive,
-            boundaryVisibility = boundaryVisibility,
-            contentAlignment = contentAlignment,
-            onTransitionFinished = transitionContentState::onTransitionFinished,
-        )
+        WithChangeBoundsScope(hasChangeBounds) { lookaheadScope ->
+            TransitioningStateContent(
+                modifier = contentModifier,
+                transitionModifier = transitionModifier,
+                lookaheadScope = lookaheadScope,
+                initialState = committedState,
+                activeState = activeState,
+                parentPath = parentPath,
+                divId = divId,
+                boundaryVisibility = boundaryVisibility,
+                contentAlignment = contentAlignment,
+                onTransitionFinished = transitionContentState::onTransitionFinished,
+            )
+        }
     } else {
         RegularStateContent(contentModifier, contentAlignment, parentPath, divId, activeState)
     }

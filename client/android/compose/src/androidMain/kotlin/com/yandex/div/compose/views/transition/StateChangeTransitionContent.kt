@@ -37,7 +37,7 @@ internal fun WithStateChangeTransition(
             overlayCaptured =
                 (transitionContext.overlayCaptured && !stateChangeTransition.releasesOverlayCapture) ||
                     stateChangeTransition.capturesOverlay,
-            snapshotParentId = stateChangeTransition.snapshotId ?: transitionContext.snapshotParentId,
+            snapshotParent = stateChangeTransition.snapshotNode ?: transitionContext.snapshotParent,
         )
     ) {
         content(stateChangeTransition)

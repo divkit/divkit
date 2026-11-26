@@ -18,6 +18,7 @@ internal fun RegisterOverlayLayer(
     animation: StateChangeAnimation,
     layer: GraphicsLayer?,
     layerOffset: IntOffset = IntOffset.Zero,
+    owner: Any = id,
 ) {
     val translation = animation.appearance.resolveTranslation(
         animation.visualState,
@@ -41,7 +42,7 @@ internal fun RegisterOverlayLayer(
                 x = (layout.positionInRoot.x - scenePosition.x + layerOffset.x).roundToInt(),
                 y = (layout.positionInRoot.y - scenePosition.y + layerOffset.y).roundToInt(),
             )
-            scope.transitionState.registerOverlay(id, this, animation.visualState)
+            scope.transitionState.registerOverlay(id, owner, this, animation.visualState)
         }
     }
 }

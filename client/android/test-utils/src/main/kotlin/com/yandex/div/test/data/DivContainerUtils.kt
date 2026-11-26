@@ -12,6 +12,7 @@ import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivAspect
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBorder
+import com.yandex.div2.DivChangeTransition
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
@@ -57,7 +58,8 @@ fun container(
     transitionOut: DivAppearanceTransition? = null,
     variables: List<DivVariable>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
-    width: DivSize = matchParent()
+    width: DivSize = matchParent(),
+    transitionChange: DivChangeTransition? = null,
 ): Div {
     return Div.Container(
         value = DivContainer(
@@ -86,6 +88,7 @@ fun container(
             paddings = paddings,
             selectedActions = selectedActions,
             separator = separator,
+            transitionChange = transitionChange,
             transitionOut = transitionOut,
             variables = variables,
             visibility = visibility,

@@ -10,6 +10,7 @@ import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.hasTestTag
@@ -21,9 +22,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div.test.data.action
@@ -46,6 +49,8 @@ import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.wrapContent
 import com.yandex.div2.Div
+import com.yandex.div2.DivChangeBoundsTransition
+import com.yandex.div2.DivChangeTransition
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
@@ -53,15 +58,15 @@ import com.yandex.div2.DivPageContentSize
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
 import com.yandex.div2.DivPatch
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.runner.RunWith
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithPatchTest {
@@ -78,6 +83,35 @@ class DivViewWithPatchTest {
             actionHandler = this@DivViewWithPatchTest.actionHandler
         }
     )
+
+    @Test
+    fun `state bounds use the geometry after a patch replaces the source subtree`() {
+        fun source(width: Int) = container(
+            id = "source",
+            items = listOf(container(id = "box", width = fixed(width), height = fixed(20))),
+        )
+        val data = data(state(id = "switcher", states = listOf(
+            state(stateId = "first", div = source(30)),
+            state(stateId = "second", div = container(
+                id = "box", width = fixed(120), height = fixed(20),
+                transitionChange = DivChangeTransition.Bounds(DivChangeBoundsTransition(startDelay = constant(192L))),
+            )),
+        )))
+        setContent(data)
+        val box = rule.onNodeWithTag("box")
+        assertEquals(30.dp, box.getUnclippedBoundsInRoot().right)
+        assertTrue(applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("source", listOf(source(60)))))))
+        assertEquals(60.dp, box.getUnclippedBoundsInRoot().right)
+
+        rule.mainClock.autoAdvance = false
+        rule.runOnIdle {
+            divContext.getViewContext(data).component.stateStorage.setActiveState(DivStatePath.parse("0/switcher/second"))
+        }
+        rule.mainClock.advanceTimeBy(96)
+        assertEquals(60.dp, box.getUnclippedBoundsInRoot().right)
+        rule.mainClock.advanceTimeBy(512)
+        assertEquals(120.dp, box.getUnclippedBoundsInRoot().right)
+    }
 
     @Test
     fun `patch replaces a child in the rendered container`() {

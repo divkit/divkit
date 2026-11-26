@@ -14,6 +14,7 @@ import com.yandex.div.test.data.text
 import com.yandex.div2.DivVisibility
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
@@ -32,7 +33,7 @@ class StateChangeTransitionContentTest {
     fun `null scope supplies neutral transition and preserves context`() {
         val context = StateChangeTransitionContext(
             contentVisible = false,
-            snapshotParentId = "parent",
+            snapshotParent = mock(),
         )
         var providedContext: StateChangeTransitionContext? = null
         rule.setContent {

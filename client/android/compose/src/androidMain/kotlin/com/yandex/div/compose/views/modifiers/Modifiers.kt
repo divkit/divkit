@@ -49,6 +49,7 @@ internal fun Modifier.apply(
         .tooltipBringToTop(divBase.id)
         .divVisibility(visibility)
         .applyIfNotNull(margins) { padding(it) }
+        .then(stateChangeTransition.boundsSizeModifier)
         .size(div, layoutParams, margins)
         .then(stateChangeTransition.modifier)
         .visibilityActions(divBase)
