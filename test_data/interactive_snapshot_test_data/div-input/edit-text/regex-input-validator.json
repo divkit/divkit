@@ -1,6 +1,7 @@
 {
-  "description": "Regex input validator: validate length and characters after pattern changes and control empty input",
+  "description": "#147 Regex input validator: validate length and characters after pattern changes and control empty input",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],
@@ -302,13 +303,18 @@
       "name": "valid_digits_errors_hidden"
     },
     {
-      "type": "edit_text",
-      "target": {
-        "type": "div_id",
-        "id": "regex_input"
-      },
-      "mode": "replace",
-      "text": "[a-zA-Z]+"
+      "type": "div_action",
+      "action": {
+        "log_id": "set_regex",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "regex",
+          "value": {
+            "type": "string",
+            "value": "[a-zA-Z]+"
+          }
+        }
+      }
     },
     {
       "type": "verify_text",
