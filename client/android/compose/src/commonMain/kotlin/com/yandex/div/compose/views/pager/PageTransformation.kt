@@ -18,40 +18,11 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.util.lerp
-import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.maxScrollOffset
 import com.yandex.div.compose.pager.minScrollOffset
 import com.yandex.div.compose.pager.snapOffset
-import com.yandex.div.compose.utils.toEasing
-import com.yandex.div2.DivPageTransformation
 import kotlin.math.abs
 import kotlin.math.roundToInt
-
-@Composable
-internal fun observePageTransformation(data: DivPageTransformation?): PageTransformation? = when (data) {
-    null -> null
-    is DivPageTransformation.Slide -> with(data.value) {
-        PageTransformation(
-            nextPageAlpha.observedFloatValue(),
-            previousPageAlpha.observedFloatValue(),
-            nextPageScale.observedFloatValue(),
-            previousPageScale.observedFloatValue(),
-            interpolator.observedValue().toEasing(),
-        )
-    }
-    is DivPageTransformation.Overlap -> with(data.value) {
-        PageTransformation(
-            nextPageAlpha.observedFloatValue(),
-            previousPageAlpha.observedFloatValue(),
-            nextPageScale.observedFloatValue(),
-            previousPageScale.observedFloatValue(),
-            interpolator.observedValue().toEasing(),
-            overlap = true,
-            reversedStackingOrder = reversedStackingOrder.observedValue(),
-        )
-    }
-}
 
 internal data class PageTransformation(
     val nextAlpha: Float,
