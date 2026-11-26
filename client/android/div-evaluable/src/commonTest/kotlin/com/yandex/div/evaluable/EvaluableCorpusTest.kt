@@ -5,6 +5,7 @@ import com.yandex.div.core.json.JsonObject
 import com.yandex.div.core.type.DataArray
 import com.yandex.div.core.type.DataObject
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import com.yandex.div.evaluable.internal.LiteralsEscaper
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.types.Url
@@ -70,7 +71,7 @@ class EvaluableCorpusTest {
         val warnings = mutableListOf<String>()
         val values = (0 until variables.length()).associate { index ->
             val variable = variables.getObject(index)
-            variable.getString("name") to variable.literalValue()
+            variable.getString("name") to variable.variableValue()
         }
         val evaluator = Evaluator(
             EvaluationContext(
@@ -111,6 +112,11 @@ class EvaluableCorpusTest {
         }
         val expectedWarnings = case.optArray("expected_warnings") ?: JsonArray()
         assertEquals(expectedWarnings.map { it as String }.sorted(), warnings.sorted())
+    }
+
+    private fun JsonObject.variableValue(): Any = when (getString("type")) {
+        "string" -> LiteralsEscaper.process(getString("value"))
+        else -> literalValue()
     }
 
     private fun JsonObject.literalValue(): Any = when (val type = getString("type")) {
