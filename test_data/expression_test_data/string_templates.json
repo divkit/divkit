@@ -449,6 +449,287 @@
       ]
     },
     {
+      "name": "string template with nested expression value containing @{",
+      "expression": "@{'@{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "@{X"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "\\@{X"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression and escaped quote",
+      "expression": "@{'it\\'s @{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "it's X"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "X"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression and escaped expression start",
+      "expression": "@{'\\@{source} = @{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "@{source} = X"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "X"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value",
+      "expression": "@{'Value: @{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "Value: string value"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "string value"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value containing single quote",
+      "expression": "@{'@{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "it's a test"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "it's a test"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value containing backslash",
+      "expression": "@{'@{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "a\\\\b"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "a\\\\\\\\b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value containing single quote and prefix",
+      "expression": "@{'Value: @{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "Value: it's a test"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "it's a test"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value containing backslash and prefix",
+      "expression": "@{'Value: @{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "Value: a\\\\b"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "a\\\\\\\\b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value containing single quote and suffix",
+      "expression": "@{'@{source} suffix'}",
+      "expected": {
+        "type": "string",
+        "value": "it's a test suffix"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "it's a test"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression value containing single quote and whitespace",
+      "expression": "@{ '@{source}' }",
+      "expected": {
+        "type": "string",
+        "value": "it's a test"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "it's a test"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression dict value containing double quote",
+      "expression": "@{'@{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "{\"dq\":\"\\\"\"}"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "dict",
+          "value": {
+            "dq": "\""
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "string template with multi-level nested expression value containing single quote",
+      "expression": "@{'var = @{'@{var}'}'}",
+      "expected": {
+        "type": "string",
+        "value": "var = it's"
+      },
+      "variables": [
+        {
+          "name": "var",
+          "type": "string",
+          "value": "it's"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with nested expression escaped quote and value containing single quote",
+      "expression": "@{'q\\'q @{source}'}",
+      "expected": {
+        "type": "string",
+        "value": "q'q it's"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "it's"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string template with escaped quote and value containing single quote",
+      "expression": "'q\\'q @{source}'",
+      "expected": {
+        "type": "string",
+        "value": "'q'q it's'"
+      },
+      "variables": [
+        {
+          "name": "source",
+          "type": "string",
+          "value": "it's"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
       "name": "string template with expression surrounded by apostrophes",
       "expression": "Set '@{engine_url}' as your homepage?",
       "expected": {

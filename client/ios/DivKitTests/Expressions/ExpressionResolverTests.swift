@@ -83,6 +83,105 @@ struct ExpressionResolverTests {
   }
 
   @Test
+  func resolveString_WithNestedExpression_DictWithDoubleQuote() {
+    environment.variables["source"] = .dict(["dq": "\""])
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'@{source}'}")) ==
+        "{\"dq\":\"\\\"\"}"
+    )
+  }
+
+  @Test
+  func resolveString_WithNestedExpression_StringWithBackslash() {
+    environment.variables["source"] = .string("a\\b")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'@{source}'}")) ==
+        "a\\b"
+    )
+  }
+
+  @Test
+  func resolveString_WithNestedExpression_WithPrefix_StringWithSingleQuote() {
+    environment.variables["source"] = .string("it's a test")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'Value: @{source}'}")) ==
+        "Value: it's a test"
+    )
+  }
+
+  @Test
+  func resolveString_WithNestedExpression_WithPrefix_StringWithBackslash() {
+    environment.variables["source"] = .string("a\\b")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'Value: @{source}'}")) ==
+        "Value: a\\b"
+    )
+  }
+
+  @Test
+  func resolveString_WithNestedExpression_WithSuffix_StringWithSingleQuote() {
+    environment.variables["source"] = .string("it's a test")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'@{source} suffix'}")) ==
+        "it's a test suffix"
+    )
+  }
+
+  @Test
+  func resolveString_WithNestedExpression_WhitespaceAroundQuotes_StringWithSingleQuote() {
+    environment.variables["source"] = .string("it's a test")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{ '@{source}' }")) ==
+        "it's a test"
+    )
+  }
+
+  @Test
+  func resolveString_WithNestedExpression_StringWithSingleQuote() {
+    environment.variables["source"] = .string("it's a test")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'@{source}'}")) ==
+        "it's a test"
+    )
+  }
+
+  // Distinct literals: parsedExpressionCache is process-global and tests run in parallel.
+  @Test
+  func resolveString_SameTemplate_NestedThenTopLevel() {
+    environment.variables["source"] = .string("it's")
+
+    #expect(
+      expressionResolver.resolveString(expression("@{'q\\'q nestThenTop @{source}'}")) ==
+        "q'q nestThenTop it's"
+    )
+    #expect(
+      expressionResolver.resolveString("'q\\'q nestThenTop @{source}'") ==
+        "'q'q nestThenTop it's'"
+    )
+  }
+
+  @Test
+  func resolveString_SameTemplate_TopLevelThenNested() {
+    environment.variables["source"] = .string("it's")
+
+    #expect(
+      expressionResolver.resolveString("'q\\'q topThenNest @{source}'") ==
+        "'q'q topThenNest it's'"
+    )
+    #expect(
+      expressionResolver.resolveString(expression("@{'q\\'q topThenNest @{source}'}")) ==
+        "q'q topThenNest it's"
+    )
+  }
+
+  @Test
   func resolveString_Boolean() {
     #expect(
       expressionResolver.resolveString(expression("@{boolean_var}")) ==
@@ -608,14 +707,23 @@ struct GetStoredCardScopeExpressionTests {
     )
 
     let ternaryGlobal = "@{getStoredStringValue('g', 'global', 'fb')}"
-    #expect(resolver(storage: storage, cardId: cardA).resolveString(expression(ternaryGlobal)) == "global_only")
-    #expect(resolver(storage: storage, cardId: cardB).resolveString(expression(ternaryGlobal)) == "global_only")
+    #expect(resolver(storage: storage, cardId: cardA)
+      .resolveString(expression(ternaryGlobal)) == "global_only"
+    )
+    #expect(resolver(storage: storage, cardId: cardB)
+      .resolveString(expression(ternaryGlobal)) == "global_only"
+    )
 
     let binaryImplicitGlobal = "@{getStoredStringValue('g', 'fb')}"
-    #expect(resolver(storage: storage, cardId: cardA).resolveString(expression(binaryImplicitGlobal)) == "global_only")
+    #expect(resolver(storage: storage, cardId: cardA)
+      .resolveString(expression(binaryImplicitGlobal)) == "global_only"
+    )
   }
 
-  private func resolver(storage: DivPersistentValuesStorage, cardId: DivCardID) -> ExpressionResolver {
+  private func resolver(
+    storage: DivPersistentValuesStorage,
+    cardId: DivCardID
+  ) -> ExpressionResolver {
     ExpressionResolver(
       functionsProvider: FunctionsProvider(
         persistentValuesStorage: storage,

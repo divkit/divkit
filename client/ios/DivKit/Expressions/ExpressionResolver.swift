@@ -214,21 +214,34 @@ public final class ExpressionResolver {
     return nil
   }
 
-  private func resolveStringBasedLink<String>(_ link: ExpressionLink<String>) -> String? {
-    resolveStringBasedLink(link, initializer: { $0 as? String })
+  private func resolveStringBasedLink<String>(
+    _ link: ExpressionLink<String>,
+    escapeEvaluatedValues: Bool = false
+  ) -> String? {
+    resolveStringBasedLink(
+      link,
+      initializer: { $0 as? String },
+      escapeEvaluatedValues: escapeEvaluatedValues
+    )
   }
 
   private func resolveStringBasedLink<T>(
     _ link: ExpressionLink<T>,
-    initializer: (String) -> T?
+    initializer: (String) -> T?,
+    escapeEvaluatedValues: Bool = false
   ) -> T? {
     var stringValue = ""
+
+    func appendEvaluated(_ value: String) {
+      stringValue += escapeEvaluatedValues ? ExpressionValueConverter.escape(value) : value
+    }
+
     for item in link.items {
       switch item {
       case let .calcExpression(expression):
         do {
           if let value: String = try evaluate(expression) {
-            stringValue += value
+            appendEvaluated(value)
           }
         } catch {
           errorTracker(ExpressionError(error.localizedDescription, expression: link.rawValue))
@@ -239,7 +252,7 @@ public final class ExpressionResolver {
       case let .nestedExpression(expression):
         if let nestedLink: ExpressionLink<String> = resolveNestedLink(expression),
            let value: String = resolveStringBasedLink(nestedLink) {
-          stringValue += value
+          appendEvaluated(value)
         }
       }
     }
@@ -256,7 +269,10 @@ public final class ExpressionResolver {
   }
 
   private func resolveNestedLink<T>(_ nestedLink: ExpressionLink<String>) -> ExpressionLink<T>? {
-    guard let expressionString: String = resolveStringBasedLink(nestedLink) else {
+    guard let expressionString: String = resolveStringBasedLink(
+      nestedLink,
+      escapeEvaluatedValues: true
+    ) else {
       return nil
     }
     return ExpressionLink<T>(

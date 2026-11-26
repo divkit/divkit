@@ -75,6 +75,19 @@ enum ExpressionValueConverter {
     }
   }
 
+  /// Escapes a computed value for insertion into expression source.
+  /// Backslash is replaced first, then `'` and `@{`.
+  static func escape(_ value: String) -> String {
+    // Fast path: `\`, `'` and `@`.
+    guard value.utf8.contains(where: { $0 == 0x5C || $0 == 0x27 || $0 == 0x40 }) else {
+      return value
+    }
+    return value
+      .replacingOccurrences(of: "\\", with: "\\\\")
+      .replacingOccurrences(of: "'", with: "\\'")
+      .replacingOccurrences(of: "@{", with: "\\@{")
+  }
+
   static func unescape(_ value: String, errorTracker: ExpressionErrorTracker?) -> String? {
     if !value.contains("\\") {
       return value

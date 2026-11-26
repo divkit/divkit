@@ -21,13 +21,18 @@ public struct ExpressionLink<T: Sendable>: Sendable {
     rawValue: String,
     validator: AnyValueValidator<T>? = nil,
     errorTracker: ExpressionErrorTracker? = nil,
-    resolveNested: Bool = true
+    resolveNested: Bool = true,
+    unescapeStrings: Bool = true
   ) {
     guard rawValue.contains(expressionPrefix) else {
       return nil
     }
 
-    if resolveNested, let cachedLink = parsedExpressionCache.withLock({ $0[rawValue] }) {
+    let cacheKey = ParsedExpressionCacheKey(
+      rawValue: rawValue,
+      unescapeStrings: unescapeStrings
+    )
+    if resolveNested, let cachedLink = parsedExpressionCache.withLock({ $0[cacheKey] }) {
       self.items = cachedLink.items
       self.variablesNames = cachedLink.variablesNames
       self.rawValue = rawValue
@@ -38,8 +43,11 @@ public struct ExpressionLink<T: Sendable>: Sendable {
     var items = [Item]()
 
     func appendString(_ value: String) {
-      if let unescapedValue = ExpressionValueConverter.unescape(value, errorTracker: errorTracker) {
-        items.append(.string(unescapedValue))
+      let string = unescapeStrings
+        ? ExpressionValueConverter.unescape(value, errorTracker: errorTracker)
+        : value
+      if let string {
+        items.append(.string(string))
       }
     }
 
@@ -62,7 +70,8 @@ public struct ExpressionLink<T: Sendable>: Sendable {
           let value = String(currentValue[start...end])
           if resolveNested, let link = ExpressionLink<String>(
             rawValue: value,
-            errorTracker: errorTracker
+            errorTracker: errorTracker,
+            unescapeStrings: false
           ) {
             items.append(.nestedExpression(link))
             variablesNames.append(contentsOf: link.variablesNames)
@@ -99,7 +108,7 @@ public struct ExpressionLink<T: Sendable>: Sendable {
         if $0.count >= parsedExpressionCacheLimit {
           $0.removeAll(keepingCapacity: true)
         }
-        $0[rawValue] = ParsedExpressionLink(items: items, variablesNames: variablesNames)
+        $0[cacheKey] = ParsedExpressionLink(items: items, variablesNames: variablesNames)
       }
     }
   }
@@ -127,10 +136,15 @@ private struct ParsedExpressionLink {
   let variablesNames: [String]
 }
 
+private struct ParsedExpressionCacheKey: Hashable {
+  let rawValue: String
+  let unescapeStrings: Bool
+}
+
 private let parsedExpressionCacheLimit = 1024
 
 private let parsedExpressionCache =
-  AllocatedUnfairLock<[String: ParsedExpressionLink]>(uncheckedState: [:])
+  AllocatedUnfairLock<[ParsedExpressionCacheKey: ParsedExpressionLink]>(uncheckedState: [:])
 
 extension StringProtocol {
   fileprivate func makeLinkIndices() -> (String.Index, String.Index)? {
