@@ -18,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -54,7 +53,6 @@ internal fun TransitioningStateContent(
     parentPath: DivStatePath,
     divId: String,
     boundaryVisibility: DivVisibilityState,
-    contentAlignment: Alignment,
     onTransitionFinished: () -> Unit,
 ) {
     val entries = remember {
@@ -77,7 +75,6 @@ internal fun TransitioningStateContent(
                     divId = divId,
                     scene = scene,
                     boundaryVisibility = boundaryVisibility,
-                    contentAlignment = contentAlignment,
                     onRemoved = {
                         entries.remove(entry)
                         if (entries.none { !it.contentActive }) {
@@ -97,7 +94,6 @@ private fun StateChangeContentEntry.Content(
     divId: String,
     scene: StateChangeTransitionScene,
     boundaryVisibility: DivVisibilityState,
-    contentAlignment: Alignment,
     onRemoved: () -> Unit,
 ) {
     BindStateChangeSnapshots(transitionState.snapshots)
@@ -132,7 +128,7 @@ private fun StateChangeContentEntry.Content(
                         modifier = transitionModifier.applyIf(transitionState.boundsMatching?.isFinished == false) {
                             onGloballyPositioned { transitionState.finishBoundsMatching() }
                         },
-                        contentAlignment = contentAlignment,
+                        contentAlignment = state.observedContentAlignment(),
                     ) {
                         WithStatePath(parentPath, divId, state) {
                             val transitionContext = LocalStateChangeTransitionContext.current

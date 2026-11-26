@@ -26,6 +26,7 @@ import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div.test.data.wrapContent
+import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAnimationInterpolator
 import com.yandex.div2.DivChangeBoundsTransition
 import com.yandex.div2.DivChangeSetTransition
@@ -124,6 +125,25 @@ class DivStateChangeBoundsTest : StateChangeTransitionTestBase() {
         composeRule.waitForIdle()
         composeRule.mainClock.advanceTimeBy(64)
         assertEquals(120.dp, composeRule.onNodeWithTag("box").getUnclippedBoundsInRoot().right)
+    }
+
+    @Test
+    fun `the outgoing state keeps its own alignment in the switch frame`() {
+        val state = renderStateChange(
+            selector = null,
+            outgoing = alignedBox(DivAlignmentHorizontal.LEFT),
+            incoming = alignedBox(DivAlignmentHorizontal.RIGHT),
+            stateWidth = fixed(200),
+        )
+        val box = composeRule.onNodeWithTag("box")
+        state.set(INCOMING)
+        val lefts = List(2) {
+            composeRule.mainClock.advanceTimeByFrame()
+            box.getUnclippedBoundsInRoot().left
+        }
+        assertEquals(listOf(0.dp, 0.dp), lefts)
+        composeRule.mainClock.advanceTimeBy(1100)
+        assertEquals(160.dp, box.getUnclippedBoundsInRoot().left)
     }
 
     @Test
@@ -444,6 +464,14 @@ class DivStateChangeBoundsTest : StateChangeTransitionTestBase() {
         val shown = box.getUnclippedBoundsInRoot()
         assertEquals(120.dp, shown.right - shown.left)
     }
+
+    private fun alignedBox(alignment: DivAlignmentHorizontal) = container(
+        id = "box",
+        width = fixed(40),
+        height = fixed(40),
+        alignmentHorizontal = alignment,
+        transitionChange = DivChangeTransition.Bounds(DivChangeBoundsTransition(duration = constant(1000L))),
+    )
 
     private fun nestedBounds(
         parentOffset: Int,

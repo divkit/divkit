@@ -94,11 +94,6 @@ private fun StateContent(
         }
         .observeDivVisibility(boundaryVisibility)
         .padding(data.paddings)
-    val activeStateData = activeState.div?.value()
-    val contentAlignment = toAlignment(
-        activeStateData?.alignmentHorizontal.observedValue(DivAlignmentHorizontal.START),
-        activeStateData?.alignmentVertical.observedValue(DivAlignmentVertical.TOP),
-    )
     val transitionsEnabled = data.transitionAnimationSelector.observedValue().allowsStateChange()
     val animationsEnabled = component.animationConfiguration.isEnabledAsState()
     val committedState = transitionContentState.committedState
@@ -130,16 +125,24 @@ private fun StateContent(
                 parentPath = parentPath,
                 divId = divId,
                 boundaryVisibility = boundaryVisibility,
-                contentAlignment = contentAlignment,
                 onTransitionFinished = transitionContentState::onTransitionFinished,
             )
         }
     } else {
-        RegularStateContent(contentModifier, contentAlignment, parentPath, divId, activeState)
+        RegularStateContent(contentModifier, activeState.observedContentAlignment(), parentPath, divId, activeState)
     }
     SideEffect {
         transitionContentState.updateAfterComposition(activeState, useTransitionContent)
     }
+}
+
+@Composable
+internal fun DivState.State.observedContentAlignment(): Alignment {
+    val stateData = div?.value()
+    return toAlignment(
+        stateData?.alignmentHorizontal.observedValue(DivAlignmentHorizontal.START),
+        stateData?.alignmentVertical.observedValue(DivAlignmentVertical.TOP),
+    )
 }
 
 @Composable

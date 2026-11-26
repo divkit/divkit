@@ -51,13 +51,10 @@ internal fun StateChangeContentLayout(
                 }
             }
         }
-        val activePlaceable = entries
-            .indexOfFirst { it.contentActive }
-            .takeIf { it >= 0 }
-            ?.let(placeables::get)
+        val sizePlaceable = placeables.lastOrNull()
         layout(
-            width = constraints.constrainWidth(activePlaceable?.width ?: 0),
-            height = constraints.constrainHeight(activePlaceable?.height ?: 0),
+            width = constraints.constrainWidth(sizePlaceable?.width ?: 0),
+            height = constraints.constrainHeight(sizePlaceable?.height ?: 0),
         ) {
             placeables.forEach { it.place(0, 0) }
         }

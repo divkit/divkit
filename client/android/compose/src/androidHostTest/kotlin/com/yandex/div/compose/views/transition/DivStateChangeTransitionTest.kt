@@ -11,7 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -21,7 +23,9 @@ import com.yandex.div.compose.setContent
 import com.yandex.div.compose.views.DivVisibilityState
 import com.yandex.div.compose.views.observeDivVisibility
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.trigger
@@ -71,6 +75,72 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
         composeRule.mainClock.advanceTimeBy(TRANSITION_DURATION_MS)
         composeRule.onNodeWithContentDescription(OUTGOING).assertDoesNotExist()
         composeRule.onNodeWithContentDescription(INCOMING).assertExists()
+    }
+
+    @Test
+    fun `switching away from a transition keeps the state height`() {
+        val heights = mutableListOf<Int>()
+        val state = renderStateChange(
+            selector = DivTransitionSelector.STATE_CHANGE,
+            outgoing = container(
+                id = OUTGOING_ID,
+                height = fixed(40),
+                transitionOut = fade(duration = TRANSITION_DURATION_MS),
+            ),
+            incoming = container(id = INCOMING_ID, height = fixed(40)),
+            modifier = Modifier.onSizeChanged { heights += it.height },
+        )
+
+        state.set(INCOMING)
+        composeRule.waitForIdle()
+        repeat(2) { composeRule.mainClock.advanceTimeByFrame() }
+
+        composeRule.onNodeWithTag(INCOMING_ID).assertExists()
+        assertEquals(listOf(40), heights)
+    }
+
+    @Test
+    fun `first switch into a transition keeps the state height`() {
+        val heights = mutableListOf<Int>()
+        val state = renderStateChange(
+            selector = DivTransitionSelector.STATE_CHANGE,
+            outgoing = container(id = OUTGOING_ID, height = fixed(40)),
+            incoming = text(
+                text = INCOMING,
+                id = INCOMING_ID,
+                height = fixed(40),
+                transitionIn = fade(duration = TRANSITION_DURATION_MS),
+            ),
+            modifier = Modifier.onSizeChanged { heights += it.height },
+        )
+
+        state.set(INCOMING)
+        composeRule.waitForIdle()
+        repeat(2) { composeRule.mainClock.advanceTimeByFrame() }
+
+        composeRule.onNodeWithTag(INCOMING_ID).assertExists()
+        assertEquals(listOf(40), heights.distinct())
+    }
+
+    @Test
+    fun `switching to a taller state applies the taller height without a zero frame`() {
+        val heights = mutableListOf<Int>()
+        val state = renderStateChange(
+            selector = DivTransitionSelector.STATE_CHANGE,
+            outgoing = container(
+                id = OUTGOING_ID,
+                height = fixed(40),
+                transitionOut = fade(duration = TRANSITION_DURATION_MS),
+            ),
+            incoming = container(id = INCOMING_ID, height = fixed(60)),
+            modifier = Modifier.onSizeChanged { heights += it.height },
+        )
+
+        state.set(INCOMING)
+        composeRule.waitForIdle()
+        repeat(2) { composeRule.mainClock.advanceTimeByFrame() }
+
+        assertEquals(listOf(40, 60), heights)
     }
 
     @Test
