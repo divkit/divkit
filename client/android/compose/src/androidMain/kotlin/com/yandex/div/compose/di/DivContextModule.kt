@@ -5,12 +5,10 @@ import android.content.ContextWrapper
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
-import coil3.network.NetworkClient
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.images.ImageLoaderFactory
-import com.yandex.div.compose.images.KtorImageNetworkClient
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.patch.DefaultPatchDownloader
 import com.yandex.div.compose.patch.DivPatchDownloader
@@ -33,9 +31,6 @@ import kotlinx.coroutines.SupervisorJob
 
 @BindingContainer
 internal interface DivContextModule {
-
-    @Binds
-    fun bindImageNetworkClient(impl: KtorImageNetworkClient): NetworkClient
 
     @Binds
     fun bindImagePreloader(impl: CoilImagePreloader): ImagePreloader

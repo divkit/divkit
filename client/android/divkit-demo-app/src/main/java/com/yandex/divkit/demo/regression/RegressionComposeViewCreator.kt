@@ -19,6 +19,7 @@ import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.lottie.CompositeDivLottieResourceLoader
 import com.yandex.div.lottie.DivLottieAssetResourceLoader
 import com.yandex.div.lottie.DivLottieRawResResourceLoader
+import com.yandex.div.network.OkHttpDivNetworkClient
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
@@ -78,7 +79,7 @@ class RegressionComposeViewCreator(context: Context) {
                 fontSourceProvider = ComposeFontSourceProvider()
                 histogramConfiguration = DemoHistogramConfiguration
                 componentObserver = DemoComponentObserver(logDelegate)
-                networkClient = Container.ktorNetworkClient
+                networkClient = OkHttpDivNetworkClient(Container.httpClient)
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
             }
         )

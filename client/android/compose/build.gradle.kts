@@ -41,9 +41,7 @@ kotlin {
             implementation(project(":render-common"))
             implementation(libs.compose.foundation)
             implementation(libs.coil.core)
-            implementation(libs.coil.network.core)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.core)
         }
 
         androidMain.dependencies {
@@ -62,7 +60,7 @@ kotlin {
             implementation(libs.androidx.compose.material3)
             implementation(libs.androidx.core)
             implementation(libs.coil.compose)
-            implementation(libs.ktor.client.okhttp)
+            implementation(libs.coil.network)
         }
 
         commonTest.dependencies {
@@ -80,7 +78,6 @@ kotlin {
             implementation(libs.json)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.mockito.kotlin)
-            implementation(libs.okhttp.mockwebserver)
             implementation(libs.robolectric)
             implementation(libs.roborazzi)
             implementation(libs.roborazzi.compose)
