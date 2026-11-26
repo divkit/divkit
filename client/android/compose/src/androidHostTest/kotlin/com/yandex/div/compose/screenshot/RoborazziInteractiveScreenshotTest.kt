@@ -4,6 +4,8 @@ import android.graphics.PointF
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.lerp
 import androidx.compose.ui.graphics.toAndroidRectF
+import androidx.compose.ui.platform.InspectableValue
+import androidx.compose.ui.platform.ValueElement
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -236,6 +238,7 @@ class RoborazziInteractiveScreenshotTest(
         } else {
             target.assertTextEquals(step.text)
         }
+        target.assert(isNotTransparent())
     }
 
     private fun verifyFocus(step: Step.VerifyFocus) {
@@ -394,6 +397,14 @@ private fun Target.matcher() = when (this) {
 
 // Div-tabs measures pages in compositions that are never placed, so their nodes duplicate visible ones.
 private fun isPlaced() = SemanticsMatcher("is placed") { it.layoutInfo.isPlaced }
+
+// An invisible element keeps its node and text, only zero alpha on it or an ancestor hides it.
+private fun isNotTransparent() = SemanticsMatcher("is not transparent") { node ->
+    generateSequence(node.layoutInfo) { it.parentInfo }
+        .flatMap { it.getModifierInfo() }
+        .mapNotNull { it.modifier as? InspectableValue }
+        .none { ValueElement("alpha", 0f) in it.inspectableElements }
+}
 
 // The wrapper is the layout parent: without an id it may lack semantics and not be the parent.
 private fun hasWrapper(matcher: SemanticsMatcher) =
