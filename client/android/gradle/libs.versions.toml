@@ -48,7 +48,7 @@ androidx-appcompat = "1.6.1"
 androidx-benchmark = "1.5.0"
 androidx-collection = "1.6.0"
 androidx-compose-bom = "2026.06.01"
-compose-multiplatform = "1.12.2"
+compose-multiplatform = "1.11.1"  # Compose 1.12.x Android artifacts require compileSdk 37.
 androidx-constraintlayout = "2.2.2"
 androidx-core = "1.16.0"
 androidx-espresso = "3.7.0"
@@ -106,6 +106,7 @@ androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-mani
 androidx-compose-ui-text = { module = "androidx.compose.ui:ui-text" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
 
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
 androidx-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx-espresso" }

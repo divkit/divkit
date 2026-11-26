@@ -1351,6 +1351,8 @@
   "client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/input/MaxLengthInputTransformationTest.kt":"divkit/public/client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/input/MaxLengthInputTransformationTest.kt",
   "client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/input/mask/CurrencyInputMaskTest.kt":"divkit/public/client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/input/mask/CurrencyInputMaskTest.kt",
   "client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/pager/PagerScrollPositionTest.kt":"divkit/public/client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/pager/PagerScrollPositionTest.kt",
+  "client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/font/DivFontSource.kt":"divkit/public/client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/font/DivFontSource.kt",
+  "client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/locale/CurrencyFormatInfo.kt":"divkit/public/client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/locale/CurrencyFormatInfo.kt",
   "client/android/compose/src/test/screenshots/div-background/gradient-angles.webp":"divkit/public/client/android/compose/src/test/screenshots/div-background/gradient-angles.webp",
   "client/android/compose/src/test/screenshots/div-background/gradient-positions.webp":"divkit/public/client/android/compose/src/test/screenshots/div-background/gradient-positions.webp",
   "client/android/compose/src/test/screenshots/div-background/logical-position.webp":"divkit/public/client/android/compose/src/test/screenshots/div-background/logical-position.webp",

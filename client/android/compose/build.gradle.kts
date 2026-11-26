@@ -3,8 +3,7 @@ import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
-    id("divkit.convention.library-kmp")
-    id("divkit.convention.jvm-api-check")
+    id("divkit.convention.library-kmp-ios")
     id("divkit.convention.publishing-module-kmp")
     id("divkit.convention.stub-aar")
     alias(libs.plugins.compose.multiplatform)
@@ -40,11 +39,7 @@ kotlin {
 
             implementation(project(":div-evaluable"))
             implementation(project(":render-common"))
-            implementation(project.dependencies.platform(libs.androidx.compose.bom))
-            implementation(libs.androidx.compose.foundation)
-            implementation(libs.androidx.compose.foundation.layout)
-            implementation(libs.androidx.compose.ui)
-            implementation(libs.androidx.compose.ui.text)
+            implementation(libs.compose.foundation)
             implementation(libs.coil.core)
             implementation(libs.coil.network.core)
             implementation(libs.kotlinx.coroutines.core)
@@ -53,6 +48,12 @@ kotlin {
 
         androidMain.dependencies {
             api(project(":div-data"))
+
+            implementation(project.dependencies.platform(libs.androidx.compose.bom))
+            implementation(libs.androidx.compose.foundation)
+            implementation(libs.androidx.compose.foundation.layout)
+            implementation(libs.androidx.compose.ui)
+            implementation(libs.androidx.compose.ui.text)
 
             implementation(project(":coil-core"))
             implementation(project(":div-core"))
@@ -90,6 +91,12 @@ kotlin {
             implementation(libs.coil.svg)
         }
     }
+}
+
+tasks.register("checkJvmApi") {
+    group = "verification"
+    description = "Fails if common code uses JVM-only APIs."
+    dependsOn("compileCommonMainKotlinMetadata")
 }
 
 extensions.configure<KotlinMultiplatformAndroidComponentsExtension> {
