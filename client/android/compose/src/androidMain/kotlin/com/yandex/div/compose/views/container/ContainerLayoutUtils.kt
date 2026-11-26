@@ -60,18 +60,11 @@ internal fun SeparatorVisibility.effectiveItemSpacing(itemSpacing: Long): Long =
     if (hasAnySeparator) 0L else itemSpacing
 
 @Composable
-internal fun RowScope.observeVerticalChildModifier(
-    item: Div,
-    defaultAlignment: Alignment.Vertical? = null,
-    alignByBaseline: Boolean = false,
-): Modifier {
-    val childAlignment = item.value().alignmentVertical?.observedValue()
-    return when {
-        childAlignment == DivAlignmentVertical.BASELINE -> Modifier.alignByBaseline()
-        childAlignment != null -> Modifier.align(childAlignment.toVerticalAlignment())
-        alignByBaseline -> Modifier.alignByBaseline()
-        defaultAlignment != null -> Modifier.align(defaultAlignment)
-        else -> Modifier
+internal fun RowScope.observeVerticalChildModifier(item: Div): Modifier {
+    return when (val childAlignment = item.value().alignmentVertical?.observedValue()) {
+        null -> Modifier
+        DivAlignmentVertical.BASELINE -> Modifier.alignByBaseline()
+        else -> Modifier.align(childAlignment.toVerticalAlignment())
     }
 }
 

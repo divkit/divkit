@@ -2,6 +2,7 @@
 
 package com.yandex.div.compose.views.container.wrap
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowColumnOverflow
@@ -17,237 +18,136 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div.compose.views.container.alignContainerOverflow
 import com.yandex.div.compose.views.container.observeHorizontalChildAlignment
 import com.yandex.div.compose.views.container.observeVerticalChildModifier
-import com.yandex.div.compose.views.container.resolveSeparatorVisibility
 import com.yandex.div.compose.views.container.toCrossAxisHorizontalAlignment
 import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
 import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
 import com.yandex.div.compose.views.modifiers.padding
+import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 
+/**
+ * A horizontal or vertical container that wraps its children into lines. The content alignment
+ * arranges the items along a line and the lines across the container; inside a line an item starts
+ * at the line's edge unless it has an alignment of its own.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer) {
+internal fun ContainerWrapView(modifier: Modifier, data: DivContainer, isHorizontal: Boolean) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
-    val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = true)
+    val itemSeparator = data.separator.observeWrapSeparator()
+    val lineSeparator = data.lineSeparator.observeWrapSeparator()
+    // A separator between the children takes the place of the spacing.
+    val itemSpacing = itemSeparator?.betweenSize(alongWidth = isHorizontal) ?: data.itemSpacing.observedDpValue()
+    val lineSpacing = lineSeparator?.betweenSize(alongWidth = !isHorizontal) ?: data.lineSpacing.observedDpValue()
     val items = data.observeItems()
     val (visibleItems, components) = items.observeVisible()
     val separatorGeometry = rememberSeparatorGeometry(
-        enabled = wrapLayoutState.hasSeparatorsToDraw && visibleItems.isNotEmpty(),
+        enabled = (itemSeparator != null || lineSeparator != null) && visibleItems.isNotEmpty(),
         childCount = visibleItems.size,
-        isHorizontal = true,
+        isHorizontal = isHorizontal,
     )
-
     val containerModifier = modifier
         .padding(data.paddings)
         .alignContainerOverflow(horizontalAlignment, verticalAlignment)
-        .applyIf(wrapLayoutState.hasEdgePadding) {
-            padding(
-                start = wrapLayoutState.mainAxisStartPadding,
-                end = wrapLayoutState.mainAxisEndPadding,
-                top = wrapLayoutState.crossAxisStartPadding,
-                bottom = wrapLayoutState.crossAxisEndPadding,
-            )
-        }
-        .drawHorizontalWrapSeparators(separatorGeometry, wrapLayoutState, isRtlLayout)
+        .separatorEdgePadding(
+            horizontal = if (isHorizontal) itemSeparator else lineSeparator,
+            vertical = if (isHorizontal) lineSeparator else itemSeparator,
+        )
+        .drawWrapSeparators(separatorGeometry, isHorizontal, itemSeparator, lineSeparator, isRtlLayout)
 
-    FlowRow(
-        modifier = containerModifier,
-        horizontalArrangement = horizontalAlignment
-            .toHorizontalArrangement(wrapLayoutState.effectiveItemSpacing),
-        verticalArrangement = verticalAlignment
-            .toVerticalArrangement(wrapLayoutState.effectiveLineSpacing),
-        // DivKit keeps laying out children outside a constrained cross axis.
-        overflow = FlowRowOverflow.Visible,
-    ) {
-        val defaultHorizontalAlignment = when (horizontalAlignment) {
-            DivContentAlignmentHorizontal.SPACE_AROUND,
-            DivContentAlignmentHorizontal.SPACE_EVENLY -> Alignment.CenterHorizontally
-            else -> horizontalAlignment.toCrossAxisHorizontalAlignment()
+    // Children keep being laid out outside a constrained cross axis. An item larger than its line
+    // overflows it the way the line is aligned.
+    if (isHorizontal) {
+        FlowRow(
+            modifier = containerModifier,
+            horizontalArrangement = horizontalAlignment.toHorizontalArrangement(itemSpacing),
+            verticalArrangement = verticalAlignment.toVerticalArrangement(lineSpacing),
+            overflow = FlowRowOverflow.Visible,
+        ) {
+            val layoutParams = DivBlockLayoutParams(defaultHorizontalAlignment = horizontalAlignment.toLineAlignment())
+            WrapItems(visibleItems, components, separatorGeometry, layoutParams) { observeVerticalChildModifier(it) }
         }
-        val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
-        val alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE
-        visibleItems.forEachIndexed { index, item ->
-            WithDivKey(item) {
-                WithLocalComponent(components?.get(item)) {
-                    DivBlockView(
-                        data = item,
-                        modifier = observeVerticalChildModifier(
-                            item = item,
-                            defaultAlignment = defaultVerticalAlignment,
-                            alignByBaseline = alignByBaseline,
-                        ).trackChildPlacement(separatorGeometry, index),
-                        layoutParams = DivBlockLayoutParams(
-                            // Match View's horizontal line gravity. Wrap children do not inherit
-                            // the container's vertical content alignment.
-                            defaultHorizontalAlignment = defaultHorizontalAlignment,
-                        ),
-                    )
-                }
-            }
+    } else {
+        FlowColumn(
+            modifier = containerModifier,
+            verticalArrangement = verticalAlignment.toVerticalArrangement(itemSpacing),
+            horizontalArrangement = horizontalAlignment.toHorizontalArrangement(lineSpacing),
+            overflow = FlowColumnOverflow.Visible,
+        ) {
+            val layoutParams = DivBlockLayoutParams(defaultVerticalAlignment = verticalAlignment.toLineAlignment())
+            WrapItems(visibleItems, components, separatorGeometry, layoutParams) { observeLineAlignment(it) }
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
-    val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
-    val verticalAlignment = data.contentAlignmentVertical.observedValue()
-    val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = false)
-    val items = data.observeItems()
-    val (visibleItems, components) = items.observeVisible()
-    val separatorGeometry = rememberSeparatorGeometry(
-        enabled = wrapLayoutState.hasSeparatorsToDraw && visibleItems.isNotEmpty(),
-        childCount = visibleItems.size,
-        isHorizontal = false,
-    )
-
-    val containerModifier = modifier
-        .padding(data.paddings)
-        .alignContainerOverflow(horizontalAlignment, verticalAlignment)
-        .applyIf(wrapLayoutState.hasEdgePadding) {
-            padding(
-                top = wrapLayoutState.mainAxisStartPadding,
-                bottom = wrapLayoutState.mainAxisEndPadding,
-                start = wrapLayoutState.crossAxisStartPadding,
-                end = wrapLayoutState.crossAxisEndPadding,
-            )
-        }
-        .drawVerticalWrapSeparators(separatorGeometry, wrapLayoutState, isRtlLayout)
-
-    FlowColumn(
-        modifier = containerModifier,
-        verticalArrangement = verticalAlignment
-            .toVerticalArrangement(wrapLayoutState.effectiveItemSpacing),
-        horizontalArrangement = horizontalAlignment
-            .toHorizontalArrangement(wrapLayoutState.effectiveLineSpacing),
-        overflow = FlowColumnOverflow.Visible,
-    ) {
-        val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
-        val defaultVerticalAlignment = when (verticalAlignment) {
-            DivContentAlignmentVertical.SPACE_AROUND,
-            DivContentAlignmentVertical.SPACE_EVENLY -> Alignment.CenterVertically
-            else -> verticalAlignment.toCrossAxisVerticalAlignment()
-        }
-        visibleItems.forEachIndexed { index, item ->
-            WithDivKey(item) {
-                WithLocalComponent(components?.get(item)) {
-                    val childAlignment = item.observeHorizontalChildAlignment()
-                    DivBlockView(
-                        data = item,
-                        modifier = Modifier
-                            .align(childAlignment ?: defaultHorizontalAlignment)
-                            .trackChildPlacement(separatorGeometry, index),
-                        layoutParams = DivBlockLayoutParams(
-                            // Match View's vertical line gravity. Wrap children do not inherit
-                            // the container's horizontal content alignment.
-                            defaultVerticalAlignment = defaultVerticalAlignment,
-                        ),
-                    )
-                }
-            }
-        }
-    }
-}
-
-private class WrapLayoutState(
-    val itemSeparatorDrawInfo: SeparatorDrawInfo?,
-    val lineSeparatorDrawInfo: SeparatorDrawInfo?,
-    val itemSeparatorVisibility: SeparatorVisibility,
-    val lineSeparatorVisibility: SeparatorVisibility,
-    val effectiveItemSpacing: Dp,
-    val effectiveLineSpacing: Dp,
-    val mainAxisStartPadding: Dp,
-    val mainAxisEndPadding: Dp,
-    val crossAxisStartPadding: Dp,
-    val crossAxisEndPadding: Dp,
+private inline fun WrapItems(
+    items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
+    separatorGeometry: WrapSeparatorGeometry?,
+    layoutParams: DivBlockLayoutParams,
+    crossinline alignment: @Composable (Div) -> Modifier,
 ) {
-    val hasSeparatorsToDraw =
-        (itemSeparatorDrawInfo != null && itemSeparatorVisibility.hasAnySeparator) ||
-            (lineSeparatorDrawInfo != null && lineSeparatorVisibility.hasAnySeparator)
-
-    val hasEdgePadding =
-        mainAxisStartPadding != 0.dp ||
-            mainAxisEndPadding != 0.dp ||
-            crossAxisStartPadding != 0.dp ||
-            crossAxisEndPadding != 0.dp
+    items.forEachIndexed { index, item ->
+        WithDivKey(item) {
+            WithLocalComponent(components?.get(item)) {
+                DivBlockView(
+                    data = item,
+                    modifier = alignment(item).trackChildPlacement(separatorGeometry, index),
+                    layoutParams = layoutParams,
+                )
+            }
+        }
+    }
 }
 
 @Composable
-private fun resolveWrapLayoutState(data: DivContainer, isHorizontal: Boolean): WrapLayoutState {
-    val itemSeparatorVisibility = data.separator.resolveSeparatorVisibility()
-    val lineSeparatorVisibility = data.lineSeparator.resolveSeparatorVisibility()
-    val itemSeparatorDrawInfo = if (itemSeparatorVisibility.hasAnySeparator) {
-        data.separator?.resolveDrawInfo()
-    } else {
-        null
-    }
-    val lineSeparatorDrawInfo = if (lineSeparatorVisibility.hasAnySeparator) {
-        data.lineSeparator?.resolveDrawInfo()
-    } else {
-        null
-    }
-
-    val effectiveItemSpacing = when {
-        itemSeparatorVisibility.showBetween && itemSeparatorDrawInfo != null ->
-            itemSeparatorDrawInfo.mainAxisTotalDp(isHorizontal)
-        else -> data.itemSpacing.observedDpValue()
-    }
-
-    val effectiveLineSpacing = when {
-        lineSeparatorVisibility.showBetween && lineSeparatorDrawInfo != null ->
-            lineSeparatorDrawInfo.crossAxisTotalDp(isHorizontal)
-        else -> data.lineSpacing.observedDpValue()
-    }
-
-    return WrapLayoutState(
-        itemSeparatorDrawInfo = itemSeparatorDrawInfo,
-        lineSeparatorDrawInfo = lineSeparatorDrawInfo,
-        itemSeparatorVisibility = itemSeparatorVisibility,
-        lineSeparatorVisibility = lineSeparatorVisibility,
-        effectiveItemSpacing = effectiveItemSpacing,
-        effectiveLineSpacing = effectiveLineSpacing,
-        mainAxisStartPadding = separatorEdgePadding(
-            itemSeparatorVisibility.showAtStart, itemSeparatorDrawInfo,
-        ) { it.mainAxisTotalDp(isHorizontal) },
-        mainAxisEndPadding = separatorEdgePadding(
-            itemSeparatorVisibility.showAtEnd, itemSeparatorDrawInfo,
-        ) { it.mainAxisTotalDp(isHorizontal) },
-        crossAxisStartPadding = separatorEdgePadding(
-            lineSeparatorVisibility.showAtStart, lineSeparatorDrawInfo,
-        ) { it.crossAxisTotalDp(isHorizontal) },
-        crossAxisEndPadding = separatorEdgePadding(
-            lineSeparatorVisibility.showAtEnd, lineSeparatorDrawInfo,
-        ) { it.crossAxisTotalDp(isHorizontal) },
-    )
+private fun ColumnScope.observeLineAlignment(item: Div): Modifier {
+    val alignment = item.observeHorizontalChildAlignment() ?: return Modifier
+    return Modifier.align(alignment)
 }
 
-private inline fun separatorEdgePadding(
-    isVisible: Boolean,
-    drawInfo: SeparatorDrawInfo?,
-    totalSize: (SeparatorDrawInfo) -> Dp,
-): Dp = if (isVisible && drawInfo != null) totalSize(drawInfo) else 0.dp
+// Space-around and space-evenly center a line that has no free space; space-between starts it.
+private fun DivContentAlignmentHorizontal.toLineAlignment(): Alignment.Horizontal = when (this) {
+    DivContentAlignmentHorizontal.SPACE_AROUND,
+    DivContentAlignmentHorizontal.SPACE_EVENLY -> Alignment.CenterHorizontally
+    else -> toCrossAxisHorizontalAlignment()
+}
+
+private fun DivContentAlignmentVertical.toLineAlignment(): Alignment.Vertical = when (this) {
+    DivContentAlignmentVertical.SPACE_AROUND,
+    DivContentAlignmentVertical.SPACE_EVENLY -> Alignment.CenterVertically
+    else -> toCrossAxisVerticalAlignment()
+}
+
+/** Separators at the edges take space around the lines. */
+private fun Modifier.separatorEdgePadding(horizontal: SeparatorDrawInfo?, vertical: SeparatorDrawInfo?): Modifier {
+    if (horizontal == null && vertical == null) return this
+    return padding(
+        start = horizontal?.edgeSize(atStart = true, alongWidth = true) ?: 0.dp,
+        end = horizontal?.edgeSize(atStart = false, alongWidth = true) ?: 0.dp,
+        top = vertical?.edgeSize(atStart = true, alongWidth = false) ?: 0.dp,
+        bottom = vertical?.edgeSize(atStart = false, alongWidth = false) ?: 0.dp,
+    )
+}
 
 @Composable
 private fun rememberSeparatorGeometry(
@@ -282,49 +182,20 @@ private fun Modifier.trackChildPlacement(
     }
 }
 
-private fun Modifier.drawHorizontalWrapSeparators(
+private fun Modifier.drawWrapSeparators(
     geometry: WrapSeparatorGeometry?,
-    state: WrapLayoutState,
+    isHorizontal: Boolean,
+    itemSeparator: SeparatorDrawInfo?,
+    lineSeparator: SeparatorDrawInfo?,
     isRtl: Boolean,
 ): Modifier {
     geometry ?: return this
     return drawWithCache {
-        val params = state.toDrawParams(this)
-
+        val itemSeparatorPx = itemSeparator?.toPx(this)
+        val lineSeparatorPx = lineSeparator?.toPx(this)
         onDrawWithContent {
             drawContent()
-            drawHorizontalWrapSeparators(geometry, params, isRtl)
+            drawWrapSeparators(geometry, isHorizontal, itemSeparatorPx, lineSeparatorPx, isRtl)
         }
-    }
-}
-
-private fun Modifier.drawVerticalWrapSeparators(
-    geometry: WrapSeparatorGeometry?,
-    state: WrapLayoutState,
-    isRtl: Boolean,
-): Modifier {
-    geometry ?: return this
-    return drawWithCache {
-        val params = state.toDrawParams(this)
-
-        onDrawWithContent {
-            drawContent()
-            drawVerticalWrapSeparators(geometry, params, isRtl)
-        }
-    }
-}
-
-private fun WrapLayoutState.toDrawParams(density: Density): WrapSeparatorDrawParams {
-    return with(density) {
-        WrapSeparatorDrawParams(
-            itemSeparatorInfo = itemSeparatorDrawInfo?.toPx(this),
-            itemSeparatorVisibility = itemSeparatorVisibility,
-            lineSeparatorInfo = lineSeparatorDrawInfo?.toPx(this),
-            lineSeparatorVisibility = lineSeparatorVisibility,
-            mainAxisStartPadding = mainAxisStartPadding.toPx(),
-            mainAxisEndPadding = mainAxisEndPadding.toPx(),
-            crossAxisStartPadding = crossAxisStartPadding.toPx(),
-            crossAxisEndPadding = crossAxisEndPadding.toPx(),
-        )
     }
 }

@@ -21,8 +21,6 @@
     <ID>CognitiveComplexMethod:RangeDecorations.kt:private fun TextLayoutResult.lineRects: List&lt;RangeLine&gt;</ID>
     <ID>CognitiveComplexMethod:SelectedActions.kt:@Composable internal fun rememberPagerSelectedActionsHandler: PagerSelectedActionsHandler</ID>
     <ID>CognitiveComplexMethod:TimerController.kt:TimerController$private fun scheduleNextTick</ID>
-    <ID>CognitiveComplexMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
-    <ID>CognitiveComplexMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
     <ID>ComplexCondition:DivTextView.kt:ellipsis != null &amp;&amp; ellipsisText != null &amp;&amp; (!ellipsis.isPlain() || ellipsisText != DEFAULT_ELLIPSIS)</ID>
     <ID>ComplexCondition:DivTextView.kt:gradientBrush == null &amp;&amp; ranges.isEmpty() &amp;&amp; actions.isNullOrEmpty() &amp;&amp; inlineImages.isEmpty()</ID>
     <ID>ComplexCondition:GridTracks.kt:ConfiguredAxisTracks$isWrapContent || availableSize == Constraints.Infinity || !canResolveConstrainedWeights || weights.none { it &gt; 0f }</ID>
@@ -35,8 +33,6 @@
     <ID>LongMethod:PagerContent.kt:@Composable internal fun PagerContent</ID>
     <ID>LongMethod:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$@Composable override fun Content</ID>
     <ID>LongMethod:ShimmerExtensionHandler.kt:private fun ShimmerConfig.toDrawingConfig: ShimmerDrawingConfig?</ID>
-    <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
-    <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
     <ID>LongMethod:WrapSeparatorDrawing.kt:private fun DrawScope.drawSeparatorShape</ID>
     <ID>LoopWithTooManyJumpStatements:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$while</ID>
     <ID>MagicNumber:BlurTransformation.kt:BlurTransformation$0.1f</ID>
@@ -117,7 +113,6 @@
     <ID>ReturnCount:TextEllipsis.kt:EndTextEllipsizer$private fun ellipsizeManually: TextEllipsisResult</ID>
     <ID>ReturnCount:TimerController.kt:TimerController$private fun getValueVariable: Variable.IntegerVariable?</ID>
     <ID>ReturnCount:VisibilityTrackingNode.kt:VisibilityTrackingNode$private fun calculateVisibilityFraction: Float</ID>
-    <ID>ReturnCount:WrapSeparatorDrawing.kt:@Composable internal fun DivContainer.Separator?.resolveDrawInfo: SeparatorDrawInfo?</ID>
     <ID>ReturnCount:WrapSeparatorDrawing.kt:private fun DrawScope.drawSeparatorShape</ID>
     <ID>ThrowsCount:DivComposeExpressionResolver.kt:DivComposeExpressionResolver$private fun &lt;R : Any, T : Any&gt; tryResolve: T</ID>
     <ID>TooGenericExceptionCaught:DivComposeExpressionResolver.kt:DivComposeExpressionResolver$e: Exception</ID>

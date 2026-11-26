@@ -1,0 +1,124 @@
+{
+  "description": "Horizontal wrap container whose item separators are taller than the lines and cross the line separators. Line separators are drawn over all item separators",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "box": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 60
+      },
+      "height": {
+        "type": "fixed",
+        "value": 10
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#CCCCCC"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "layout_mode": "wrap",
+          "width": {
+            "type": "fixed",
+            "value": 240
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "paddings": {
+            "left": 10,
+            "top": 20,
+            "right": 10,
+            "bottom": 20
+          },
+          "separator": {
+            "show_between": true,
+            "style": {
+              "type": "shape_drawable",
+              "color": "#0000FF",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 12
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 30
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 0
+                }
+              }
+            }
+          },
+          "line_separator": {
+            "show_between": true,
+            "show_at_end": true,
+            "style": {
+              "type": "shape_drawable",
+              "color": "#FF0000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 200
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 0
+                }
+              }
+            }
+          },
+          "items": [
+            {
+              "type": "box"
+            },
+            {
+              "type": "box"
+            },
+            {
+              "type": "box"
+            },
+            {
+              "type": "box"
+            },
+            {
+              "type": "box"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "description": "Horizontal wrap container with content_alignment_vertical: baseline. The items of a line do not inherit the baseline alignment: texts of different font sizes that have no alignment_vertical start at the top of their line; a text with its own alignment_vertical keeps it",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "sized_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000EE"
+        }
+      },
+      "paddings": {
+        "left": 4,
+        "right": 4
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "layout_mode": "wrap",
+          "content_alignment_vertical": "baseline",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "item_spacing": 8,
+          "line_spacing": 8,
+          "items": [
+            {
+              "type": "sized_text",
+              "text": "Small",
+              "font_size": 12
+            },
+            {
+              "type": "sized_text",
+              "text": "Large",
+              "font_size": 36
+            },
+            {
+              "type": "sized_text",
+              "text": "Medium",
+              "font_size": 20
+            },
+            {
+              "type": "sized_text",
+              "text": "Huge",
+              "font_size": 48
+            },
+            {
+              "type": "sized_text",
+              "text": "Tiny",
+              "font_size": 10
+            },
+            {
+              "type": "sized_text",
+              "text": "Bottom",
+              "font_size": 14,
+              "alignment_vertical": "bottom"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

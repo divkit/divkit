@@ -21,8 +21,7 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.views.container.wrap.ContainerWrapHorizontalView
-import com.yandex.div.compose.views.container.wrap.ContainerWrapVerticalView
+import com.yandex.div.compose.views.container.wrap.ContainerWrapView
 import com.yandex.div.compose.views.modifiers.clipToBounds
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContainer.LayoutMode
@@ -78,12 +77,12 @@ private fun DivWrapContentSize.observedMinSize(): Dp {
 private fun ContainerLayout(modifier: Modifier, data: DivContainer) {
     when (data.orientation.observedValue()) {
         Orientation.HORIZONTAL -> when (data.layoutMode.observedValue()) {
-            LayoutMode.WRAP -> ContainerWrapHorizontalView(modifier, data)
+            LayoutMode.WRAP -> ContainerWrapView(modifier, data, isHorizontal = true)
             LayoutMode.NO_WRAP -> ContainerLinearView(modifier, data, isHorizontal = true)
         }
 
         Orientation.VERTICAL -> when (data.layoutMode.observedValue()) {
-            LayoutMode.WRAP -> ContainerWrapVerticalView(modifier, data)
+            LayoutMode.WRAP -> ContainerWrapView(modifier, data, isHorizontal = false)
             LayoutMode.NO_WRAP -> ContainerLinearView(modifier, data, isHorizontal = false)
         }
 
