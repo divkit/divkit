@@ -20,6 +20,7 @@ import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.regression.RegressionComposeViewCreator
 import com.yandex.divkit.demo.regression.RegressionDiv2ViewCreator
 import com.yandex.divkit.demo.regression.RegressionSwitchingViewCreator
+import com.yandex.divkit.demo.screenshot.LocalNetworkInterceptor
 import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DemoUriHandler
@@ -53,6 +54,7 @@ internal object Container {
             NaiveSSLContext.getInstance("TLS").socketFactory,
             NaiveSSLContext.NaiveTrustManager()
         )
+        .addInterceptor(LocalNetworkInterceptor)
         .addNetworkInterceptor {
             val request = it.request()
             val host = request.url.host

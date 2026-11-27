@@ -68,6 +68,7 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
     override fun cleanup() {
         divView.cleanup()
         Container.imageLoaderOverride = null
+        LocalNetworkInterceptor.stop()
     }
 
     override fun onDestroy() {
@@ -81,10 +82,12 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
             IMAGE_LOADER_GLIDE -> Preferences.ImageLoaderOption.GLIDE
             else -> return
         }
+        val local = imageLoaderName == IMAGE_LOADER_LOCAL
         Container.imageLoaderOverride = Container.createImageLoader(
             loader = loader,
-            useOnlyLocalImages = imageLoaderName == IMAGE_LOADER_LOCAL,
+            useOnlyLocalImages = local,
         )
+        if (local) LocalNetworkInterceptor.start(applicationContext.assets) else LocalNetworkInterceptor.stop()
     }
 
     private fun Div2View.onBound(testCase: JSONObject) {

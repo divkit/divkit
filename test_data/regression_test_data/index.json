@@ -5185,6 +5185,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [

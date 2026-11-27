@@ -73,7 +73,7 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
             extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler())
             fontSourceProvider = TestFontSourceProvider()
             imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext())
-            networkClient = LocalNetworkClient()
+            networkClient = LocalNetworkClient(getApplicationContext())
             reporter = this@ComposeContentRoborazziRule.reporter
         },
         debugConfiguration = DivDebugConfiguration(

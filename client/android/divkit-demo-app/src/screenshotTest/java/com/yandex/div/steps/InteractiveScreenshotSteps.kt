@@ -86,6 +86,7 @@ internal class InteractiveScreenshotSteps {
                 }
             }
         }
+        waitForUiReady(scenario, uiReadyChecker)
     }
 
     private fun performAction(
