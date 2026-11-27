@@ -80,7 +80,6 @@
         prepareVars
     } from '../expressions/json';
     import { evalExpression } from '../expressions/eval';
-    import { Truthy } from '../utils/truthy';
     import { createConstVariable, createVariable, TYPE_TO_CLASS, Variable, variableValueFromString, type VariableType } from '../expressions/variable';
     import { GlobalVariablesController } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
@@ -240,8 +239,7 @@
     const localVariables = new Map<string, Variable>();
     // Local and global variables combined, with local in precedence
     const variables = new Map<string, Variable>();
-    // Stores for notify unset global variables
-    const awaitingGlobalVariables = new Map<string, Writable<any>>();
+    const awaitingGlobalVariables = new Map<string, Writable<Variable | undefined>>();
     const awaitingGlobalVariablesFacades = new Map<string, Variable>();
 
     let timersController: TimersController | null = null;
@@ -333,9 +331,14 @@
             }
         }
 
-        const stores = prepared.vars.map(name => {
-            return vars.get(name) || awaitVariableChanges(name);
-        }).filter(Truthy);
+        let namedStores: Set<Readable<unknown>> | undefined;
+        const stores: Readable<unknown>[] = prepared.vars.map(name =>
+            vars.get(name) || awaitVariableChanges(name, variable => {
+                // Bind the scoped map before the first value is delivered.
+                vars.set(name, variable);
+                (namedStores ??= new Set(stores)).add(variable);
+            })
+        );
 
         return writable<MaybeMissing<T>>(undefined, set => {
             const usedVars = new Map<Variable, Unsubscriber>();
@@ -345,14 +348,16 @@
                 const res = prepared.applyVars(vars, customFunctions, keepComplex);
 
                 for (const [instance, unsubscribe] of usedVars) {
-                    if (!res.usedVars?.has(instance)) {
+                    if (!res.usedVars?.has(instance) || namedStores?.has(instance)) {
                         unsubscribe();
                         usedVars.delete(instance);
                     }
                 }
                 if (res.usedVars) {
+                    // A lookup by name can resolve to a variable already observed by derived(stores).
+                    namedStores ??= new Set(stores);
                     for (const instance of res.usedVars) {
-                        if (!usedVars.has(instance)) {
+                        if (!usedVars.has(instance) && !namedStores.has(instance)) {
                             let isFirst = true;
                             usedVars.set(instance, instance.subscribe(() => {
                                 if (!isFirst) {
@@ -2103,14 +2108,19 @@
         parentOfMap.delete(id);
     }
 
-    function awaitVariableChanges(variableName: string): Readable<any> {
-        const store = awaitingGlobalVariables.get(variableName) || writable(undefined);
-
-        if (!awaitingGlobalVariables.has(variableName)) {
+    function awaitVariableChanges(variableName: string, bind: (variable: Variable) => void): Readable<unknown> {
+        let store = awaitingGlobalVariables.get(variableName);
+        if (!store) {
+            store = writable<Variable | undefined>();
             awaitingGlobalVariables.set(variableName, store);
         }
 
-        return store;
+        return derived(store, (variable, set) => {
+            if (variable) {
+                bind(variable);
+                return variable.subscribe(set);
+            }
+        });
     }
 
     function awaitGlobalVariable(variableName: string, variableType: VariableType, value: unknown): Variable {
@@ -2924,17 +2934,15 @@
         });
     }
 
-    globalVariablesStore.subscribe(newVarName => {
+    const unsubscribeGlobalVariables = globalVariablesStore.subscribe(newVarName => {
         if (newVarName && !variables.has(newVarName)) {
             const varInstance = globalVariables.get(newVarName) as Variable;
             variables.set(newVarName, varInstance);
 
             const awaitingStore = awaitingGlobalVariables.get(newVarName);
             if (awaitingStore) {
-                let counter = 0;
-                varInstance.subscribe(() => {
-                    awaitingStore.set(++counter);
-                });
+                awaitingGlobalVariables.delete(newVarName);
+                awaitingStore.set(varInstance);
             }
 
             const facade = awaitingGlobalVariablesFacades.get(newVarName);
@@ -3017,6 +3025,7 @@
     });
 
     onDestroy(() => {
+        unsubscribeGlobalVariables();
         isMounted = false;
         rootInstancesCount--;
 
