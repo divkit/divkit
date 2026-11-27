@@ -28,7 +28,7 @@ Cover the behavior with an automated test first and add a test case here only fo
 
 `case_id` – test case id in the test management system.
 
-`automated` – list of platforms where automated tests check everything the test case expects. Android `DivKit Playground` does not show test cases automated for `android`.
+`automated` – list of platforms where automated tests check everything the test case expects. A platform is removed while such a test is excluded or quarantined; keep an empty list rather than deleting the field, because the release sync does not send a deleted field. Android `DivKit Playground` does not show test cases automated for `android`.
 
 `unsupported_platforms` – platforms not listed in `platforms`, each with a reason: the test case does not apply there, e.g. `{"web": "divkit-asset support is not expected"}`, or another test replaced it, e.g. `{"android": "test is replaced by interactive_snapshot_test_data/div-container/patch_container.json"}`.
 

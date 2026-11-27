@@ -3705,8 +3705,7 @@
       "title": "Tooltips",
       "case_id": 117,
       "automated": [
-        "android",
-        "ios"
+        "android"
       ],
       "tags": [
         "Tooltips",
@@ -3757,9 +3756,7 @@
       "platforms": [
         "ios"
       ],
-      "automated": [
-        "ios"
-      ],
+      "automated": [],
       "tags": [
         "Tooltips"
       ],
@@ -3826,7 +3823,6 @@
         "web"
       ],
       "automated": [
-        "ios",
         "web"
       ],
       "tags": [
@@ -4840,7 +4836,6 @@
         "web"
       ],
       "automated": [
-        "android",
         "ios"
       ],
       "tags": [
