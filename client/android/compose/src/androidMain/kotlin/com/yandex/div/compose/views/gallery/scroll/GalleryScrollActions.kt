@@ -24,27 +24,8 @@ import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.Div
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivGallery
-import kotlin.math.abs
-import kotlin.math.roundToInt
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-
-// DivGallerySmoothScroller pace: 50 ms per inch of seeking, extended by the deceleration phase.
-private const val MILLISECONDS_PER_INCH = 50f
-private const val LINEAR_SCROLL_FRACTION = .3356f
-private const val DP_PER_INCH = 160f
-private const val MAX_DEFAULT_SCROLL_DURATION = 2_000
-
-/**
- * Runs scroll actions for [BindGalleryScrollActions]. An action can scroll in several phases or jump
- * instantly, so only its caller knows where it starts and ends.
- */
-internal interface GalleryScrollActionRunner {
-    suspend fun run(action: suspend () -> Unit)
-
-    /** Forgets the running action: its scroll target is being released. */
-    fun discard()
-}
 
 /**
  * Registers a scrollable gallery as a scroll action target and observes its scrolling.
@@ -114,7 +95,18 @@ internal fun BindGalleryScrollActions(
     }
 }
 
-/** Runs one scroll action at a time on [layout]; a new action cancels the running one, as the View renderer does. */
+/**
+ * Runs scroll actions for [BindGalleryScrollActions]. An action can scroll in several phases or jump
+ * instantly, so only its caller knows where it starts and ends.
+ */
+internal interface GalleryScrollActionRunner {
+    suspend fun run(action: suspend () -> Unit)
+
+    /** Forgets the running action: its scroll target is being released. */
+    fun discard()
+}
+
+/** Runs one scroll action at a time on [layout]; a new action cancels the running one. */
 private class GalleryScrolls(
     private val layout: GalleryScrollLayout,
     private val items: List<Div>,
@@ -132,7 +124,7 @@ private class GalleryScrolls(
 
     fun scrollToOffset(offset: Int, animated: Boolean, duration: Int?) {
         val state = offsetScrollState() ?: return
-        launch { state.scrollToGalleryOffset(offset.dpToPx(), animated, duration, density) }
+        launch { state.scrollByDistance((offset.dpToPx() - state.scrollOffset).toFloat(), animated, duration) }
     }
 
     fun scrollBy(step: Int, offset: Int, overflow: DivActionScrollBy.Overflow, animated: Boolean, duration: Int?) {
@@ -147,7 +139,9 @@ private class GalleryScrolls(
             }
         } else if (offset != 0) {
             val state = offsetScrollState() ?: return
-            launch { state.scrollByGalleryOffset(offset.dpToPx(), overflow, animated, duration, density) }
+            launch {
+                state.scrollByDistance(state.galleryOffsetDistance(offset.dpToPx(), overflow), animated, duration)
+            }
         }
     }
 
@@ -170,26 +164,10 @@ private class GalleryScrolls(
     private fun Int.dpToPx(): Int = with(density) { dp.roundToPx() }
 }
 
-internal suspend fun ScrollableState.scrollToGalleryOffset(
-    offset: Int,
-    animated: Boolean,
-    duration: Int?,
-    density: Density,
-) {
-    val state = requireNotNull(scrollIndicatorState)
-    scrollByDistance((offset - state.scrollOffset).toFloat(), animated, duration, density)
-}
+private val ScrollableState.scrollOffset: Int
+    get() = requireNotNull(scrollIndicatorState).scrollOffset
 
-internal suspend fun ScrollableState.scrollByGalleryOffset(
-    offset: Int,
-    overflow: DivActionScrollBy.Overflow,
-    animated: Boolean,
-    duration: Int?,
-    density: Density,
-) {
-    scrollByDistance(galleryOffsetDistance(offset, overflow), animated, duration, density)
-}
-
+/** Distance of a scroll by [offset] from the position that is [itemDistance] away from the current one. */
 internal fun ScrollableState.galleryOffsetDistance(
     offset: Int,
     overflow: DivActionScrollBy.Overflow,
@@ -202,21 +180,10 @@ internal fun ScrollableState.galleryOffsetDistance(
     return (target - state.scrollOffset).toFloat()
 }
 
-internal suspend fun ScrollableState.scrollByDistance(
-    distance: Float,
-    animated: Boolean,
-    duration: Int?,
-    density: Density,
-): Float = if (animated) {
-    animateScrollBy(distance, tween(durationMillis = duration ?: defaultScrollDuration(distance, density)))
-} else {
-    scrollBy(distance)
+private suspend fun ScrollableState.scrollByDistance(distance: Float, animated: Boolean, duration: Int?) {
+    when {
+        !animated -> scrollBy(distance)
+        duration == null -> animateScrollBy(distance)
+        else -> animateScrollBy(distance, tween(duration))
+    }
 }
-
-/** Duration of an animation without an explicit one: the View renderer's smooth scroller pace. */
-internal fun defaultScrollDuration(distancePx: Float, density: Density): Int {
-    val inches = abs(distancePx) / (density.density * DP_PER_INCH)
-    return (inches * MILLISECONDS_PER_INCH / LINEAR_SCROLL_FRACTION).roundToInt()
-        .coerceIn(1, MAX_DEFAULT_SCROLL_DURATION)
-}
-

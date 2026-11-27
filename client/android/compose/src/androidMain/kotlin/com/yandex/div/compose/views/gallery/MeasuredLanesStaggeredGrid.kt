@@ -1,21 +1,16 @@
 package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.layout.LazyLayoutScrollScope
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
@@ -25,22 +20,23 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import com.yandex.div.compose.collection.VisibleCollectionItems
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
+import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
+import com.yandex.div.compose.views.gallery.scroll.ApplyDefaultItem
 import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
-import com.yandex.div.compose.views.gallery.scroll.galleryScrolling
+import com.yandex.div.compose.views.gallery.scroll.DefaultItem
 import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutInfo
 import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutItem
 import com.yandex.div.compose.views.gallery.scroll.GalleryScrollLayout
+import com.yandex.div.compose.views.gallery.scroll.galleryScrolling
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
-import kotlinx.coroutines.flow.first
 
 /**
  * Staggered grid whose lane size comes from the content: an unbounded cross axis needs a natural lane
@@ -51,144 +47,73 @@ import kotlinx.coroutines.flow.first
 internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
     collection: VisibleCollectionItems,
     properties: GalleryProperties,
-    defaultItem: Int,
+    defaultItem: DefaultItem,
 ) {
     val items = collection.items
     if (isScrollAxisBounded(properties.isHorizontal)) {
         val scrollState = rememberScrollState()
-        val itemPositions = remember { MeasuredItemPositions() }
-        val alignmentKey = properties.resolveScrollAlignmentKey()
-        val density = LocalDensity.current
-        val scrollLayout = remember(scrollState, itemPositions, alignmentKey, density) {
-            itemPositions.galleryScrollLayout(scrollState, alignmentKey, density)
+        // Scroll-axis positions relative to the content start, written on every measurement. The items
+        // are data classes: an equal list is not a change, so observers wake up only when the items move.
+        var itemPositions by remember { mutableStateOf(emptyList<GalleryLayoutItem>()) }
+        val (beforePadding, afterPadding) = properties.scrollAxisPaddingsPx()
+        val scrollLayout = remember(scrollState, beforePadding, afterPadding) {
+            GalleryScrollLayout(
+                scrollState = scrollState,
+                currentLayoutInfo = { itemPositions.toGalleryLayoutInfo(scrollState, beforePadding, afterPadding) },
+            )
         }
-        val scrollModifier = Modifier.galleryScrolling(properties, items, scrollLayout)
-        if (defaultItem > 0) {
-            AdjustDefaultItemAlignment(scrollState, itemPositions, defaultItem, properties)
-        }
-        val flingBehavior = rememberGalleryLanesFlingBehavior(scrollState, itemPositions, properties)
+        ApplyDefaultItem(scrollLayout, defaultItem, properties.scrollContentAlignment)
+        val flingBehavior = rememberGalleryFlingBehavior(properties, scrollLayout)
         MeasuredLanesLayout(
             collection = collection,
             properties = properties,
-            modifier = scrollModifier
-                .galleryScrollbar(properties.scrollbar, scrollState, properties.isHorizontal, properties.contentPadding)
+            modifier = Modifier
+                .galleryScrolling(properties, items, scrollLayout)
+                .galleryScrollbar(properties, scrollState)
                 .applyIf(properties.isHorizontal) { horizontalScroll(scrollState, flingBehavior = flingBehavior) }
                 .applyIf(!properties.isHorizontal) { verticalScroll(scrollState, flingBehavior = flingBehavior) },
-            matchParentMaxSize = properties.contentPadding.scrollAxisContentSize(
-                viewportSize = if (properties.isHorizontal) maxWidth else maxHeight,
-                isHorizontal = properties.isHorizontal,
-                layoutDirection = LocalLayoutDirection.current,
+            matchParentMaxSize = scrollAxisContentSize(
+                properties.contentPadding, properties.isHorizontal, LocalLayoutDirection.current,
             ),
-            itemPositions = itemPositions,
+            onItemsPositioned = { itemPositions = it },
         )
     } else {
-        BindGalleryScrollActions(properties.id, items)
-        MeasuredLanesLayout(
-            collection,
-            properties,
-            Modifier,
-            matchParentMaxSize = Dp.Unspecified,
-            itemPositions = null,
-        )
+        NonScrollableGalleryView(Modifier, collection, properties)
     }
 }
 
-/** Scroll-axis positions of laid out items, relative to the content start after the content padding. */
-internal class MeasuredItemPositions {
-    var offsets by mutableStateOf(IntArray(0))
-        private set
-    var sizes by mutableStateOf(IntArray(0))
-        private set
-
-    // Written during measurement; equal arrays are skipped so observers wake up only on real changes.
-    fun update(offsets: IntArray, sizes: IntArray) {
-        if (!this.offsets.contentEquals(offsets)) this.offsets = offsets
-        if (!this.sizes.contentEquals(sizes)) this.sizes = sizes
-    }
-}
-
-/** Every item is laid out, so distances are exact and no item is skipped. */
-private fun MeasuredItemPositions.galleryScrollLayout(
-    scrollState: ScrollState,
-    alignmentKey: GalleryScrollAlignmentKey,
-    density: Density,
-): GalleryScrollLayout = GalleryScrollLayout(
-    scrollState = scrollState,
-    density = density,
-    isStaggered = false,
-    teleportItems = { Int.MAX_VALUE },
-    currentLayoutInfo = { toGalleryLayoutInfo(scrollState, alignmentKey) },
-    jumpToItem = { index -> scrollState.scrollTo(offsets[index]) },
-    scroll = { block ->
-        scrollState.scroll { MeasuredLanesScrollScope(this, scrollState, this@galleryScrollLayout).block() }
-    },
-)
-
-private class MeasuredLanesScrollScope(
-    scope: ScrollScope,
-    private val scrollState: ScrollState,
-    private val positions: MeasuredItemPositions,
-) : LazyLayoutScrollScope, ScrollScope by scope {
-
-    override val itemCount: Int
-        get() = positions.offsets.size
-
-    override val firstVisibleItemIndex: Int
-        get() = positions.offsets.indices
-            .firstOrNull { positions.offsets[it] + positions.sizes[it] > scrollState.value } ?: 0
-
-    override val firstVisibleItemScrollOffset: Int
-        get() = scrollState.value - positions.offsets.getOrElse(firstVisibleItemIndex) { 0 }
-
-    override val lastVisibleItemIndex: Int
-        get() = positions.offsets.indexOfLast { it < scrollState.value + scrollState.viewportSize }.coerceAtLeast(0)
-
-    override fun snapToItem(index: Int, offset: Int) {
-        scrollBy(calculateDistanceTo(index, offset).toFloat())
-    }
-
-    override fun calculateDistanceTo(targetIndex: Int, targetOffset: Int): Int =
-        positions.offsets.getOrElse(targetIndex) { scrollState.value } - scrollState.value + targetOffset
-}
-
-// Same coordinates as LazyStaggeredGridLayoutInfo: offsets start after the content padding.
-internal fun MeasuredItemPositions.toGalleryLayoutInfo(
-    scrollState: ScrollState,
-    alignmentKey: GalleryScrollAlignmentKey,
-): GalleryLayoutInfo {
-    val viewportSize = scrollState.viewportSize
-    return GalleryLayoutInfo(
-        items = offsets.indices.map { index ->
-            GalleryLayoutItem(index = index, offset = offsets[index] - scrollState.value, size = sizes[index])
-        },
-        itemCount = offsets.size,
-        viewportSize = viewportSize,
-        viewportStart = -alignmentKey.startPaddingPx,
-        viewportEnd = viewportSize - alignmentKey.startPaddingPx,
-        beforePadding = alignmentKey.startPaddingPx,
-        afterPadding = alignmentKey.endPaddingPx,
-    )
-}
-
-// Applies default_item once, like the lazy grid; a restored or user-changed position is kept.
+/** Lays out every item in the lanes without scrolling: the gallery is as long as its content. */
 @Composable
-private fun AdjustDefaultItemAlignment(
-    scrollState: ScrollState,
-    itemPositions: MeasuredItemPositions,
-    targetIndex: Int,
+internal fun NonScrollableGalleryView(
+    modifier: Modifier,
+    collection: VisibleCollectionItems,
     properties: GalleryProperties,
 ) {
-    val alignmentKey = properties.resolveScrollAlignmentKey()
-    var isAdjusted by rememberSaveable(scrollState) { mutableStateOf(false) }
-    LaunchedEffect(scrollState, targetIndex) {
-        if (isAdjusted) return@LaunchedEffect
-        snapshotFlow { scrollState.viewportSize }.first { it > 0 }
-        if (targetIndex !in itemPositions.offsets.indices) return@LaunchedEffect
-        val desiredOffset = alignmentKey.desiredScrollOffset(scrollState.viewportSize, itemPositions.sizes[targetIndex])
-        scrollState.scrollTo((itemPositions.offsets[targetIndex] - desiredOffset).coerceIn(0, scrollState.maxValue))
-        isAdjusted = true
-    }
+    BindGalleryScrollActions(properties.id, collection.items)
+    MeasuredLanesLayout(collection, properties, modifier, matchParentMaxSize = Dp.Unspecified, onItemsPositioned = null)
 }
+
+@Composable
+private fun GalleryProperties.scrollAxisPaddingsPx(): Pair<Int, Int> {
+    val (before, after) = contentPadding.getScrollAxisPaddings(isHorizontal, LocalLayoutDirection.current)
+    return with(LocalDensity.current) { before.roundToPx() to after.roundToPx() }
+}
+
+/**
+ * Layout info of items positioned relative to the content start after the content padding, the coordinates
+ * of a lazy layout. Every item is laid out, so distances are exact.
+ */
+private fun List<GalleryLayoutItem>.toGalleryLayoutInfo(
+    scrollState: ScrollState,
+    beforePadding: Int,
+    afterPadding: Int,
+) = GalleryLayoutInfo(
+    items = map { it.copy(offset = it.offset - scrollState.value) },
+    itemCount = size,
+    viewportSize = scrollState.viewportSize,
+    beforePadding = beforePadding,
+    afterPadding = afterPadding,
+)
 
 @Suppress("DEPRECATION")
 @Composable
@@ -197,14 +122,14 @@ private fun MeasuredLanesLayout(
     properties: GalleryProperties,
     modifier: Modifier,
     matchParentMaxSize: Dp,
-    itemPositions: MeasuredItemPositions?,
+    onItemsPositioned: ((List<GalleryLayoutItem>) -> Unit)?,
 ) {
     val items = collection.items
     val isHorizontal = properties.isHorizontal
     val density = LocalDensity.current
     val itemSpacingPx = with(density) { properties.itemSpacing.roundToPx() }
     val crossSpacingPx = with(density) { properties.crossSpacing.roundToPx() }
-    val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
+    val crossAlignment = properties.crossAlignment
 
     MultiMeasureLayout(
         modifier = modifier.padding(properties.contentPadding),
@@ -228,7 +153,7 @@ private fun MeasuredLanesLayout(
             columnCount = properties.columnCount,
             itemSpacing = itemSpacingPx,
             crossSpacing = crossSpacingPx,
-            itemPositions = itemPositions,
+            onItemsPositioned = onItemsPositioned,
         )
     }
 }
@@ -240,20 +165,19 @@ private fun MeasureScope.measureStaggeredGridLanes(
     columnCount: Int,
     itemSpacing: Int,
     crossSpacing: Int,
-    itemPositions: MeasuredItemPositions?,
+    onItemsPositioned: ((List<GalleryLayoutItem>) -> Unit)?,
 ): MeasureResult {
     if (measurables.isEmpty()) {
-        itemPositions?.update(IntArray(0), IntArray(0))
+        onItemsPositioned?.invoke(emptyList())
         return layout(constraints.constrainWidth(0), constraints.constrainHeight(0)) {}
     }
 
     val totalCrossSpacing = crossSpacing * (columnCount - 1)
     val lanes = measureLanes(measurables, constraints, isHorizontal, columnCount, totalCrossSpacing)
     val positioned = lanes.placeables.positionInLanes(columnCount, itemSpacing, isHorizontal)
-    itemPositions?.update(
-        offsets = IntArray(positioned.items.size) { positioned.items[it].mainAxisOffset },
-        sizes = IntArray(positioned.items.size) { positioned.items[it].mainAxisSize(isHorizontal) },
-    )
+    onItemsPositioned?.invoke(positioned.items.mapIndexed { index, item ->
+        GalleryLayoutItem(index, item.mainAxisOffset, item.mainAxisSize)
+    })
     val crossAxisSize = lanes.laneCrossAxisSize * columnCount + totalCrossSpacing
     val width = (if (isHorizontal) positioned.mainAxisSize else crossAxisSize)
         .coerceIn(constraints.minWidth, constraints.maxWidth)
@@ -304,12 +228,13 @@ private fun List<Placeable>.positionInLanes(
     val items = map { placeable ->
         val laneIndex = laneMainAxisEnds.indices.minBy { laneMainAxisEnds[it] }
         val mainAxisOffset = laneMainAxisEnds[laneIndex]
-        laneMainAxisEnds[laneIndex] += if (isHorizontal) placeable.width else placeable.height
-        laneMainAxisEnds[laneIndex] += itemSpacing
+        val itemSize = if (isHorizontal) placeable.width else placeable.height
+        laneMainAxisEnds[laneIndex] += itemSize + itemSpacing
         PositionedStaggeredGridItem(
             placeable = placeable,
             laneIndex = laneIndex,
             mainAxisOffset = mainAxisOffset,
+            mainAxisSize = itemSize,
         )
     }
     val mainAxisSize = laneMainAxisEnds.maxOrNull()
@@ -348,6 +273,5 @@ private data class PositionedStaggeredGridItem(
     val placeable: Placeable,
     val laneIndex: Int,
     val mainAxisOffset: Int,
-) {
-    fun mainAxisSize(isHorizontal: Boolean): Int = if (isHorizontal) placeable.width else placeable.height
-}
+    val mainAxisSize: Int,
+)

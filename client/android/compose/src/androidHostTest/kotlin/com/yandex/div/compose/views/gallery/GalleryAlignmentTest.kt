@@ -31,22 +31,6 @@ class GalleryAlignmentTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun `paging snap positions account for asymmetric content padding`() {
-        val actual = DivGallery.ContentAlignment.entries.map { alignment ->
-            alignment.toSnapPosition().position(
-                layoutSize = 200,
-                itemSize = 40,
-                beforeContentPadding = 16,
-                afterContentPadding = 24,
-                itemIndex = 2,
-                itemCount = 8,
-            )
-        }
-
-        assertEquals(listOf(0, 64, 120), actual)
-    }
-
-    @Test
     fun `default scroll mode aligns content to start`() {
         assertEquals(
             DivGallery.ContentAlignment.START,
@@ -99,7 +83,7 @@ class GalleryAlignmentTest {
     }
 
     @Test
-    fun `list alignment is reactive while default item is not`() {
+    fun `list default item is applied once`() {
         val alignment = Variable.StringVariable("alignment", "center")
         val defaultItem = Variable.IntegerVariable("default_item", 2)
         val variableController = DivVariableController().apply {
@@ -146,18 +130,12 @@ class GalleryAlignmentTest {
         alignment.set("end")
         composeRule.waitForIdle()
 
-        val endItemBounds = item.fetchSemanticsNode().boundsInRoot
-        assertEquals(galleryBounds.right, endItemBounds.right, absoluteTolerance = 0.5f)
-
-        alignment.set("start")
-        composeRule.waitForIdle()
-
-        val startItemBounds = item.fetchSemanticsNode().boundsInRoot
-        assertEquals(galleryBounds.left, startItemBounds.left, absoluteTolerance = 0.5f)
+        val finalItemBounds = item.fetchSemanticsNode().boundsInRoot
+        assertEquals(galleryBounds.center.x, finalItemBounds.center.x, absoluteTolerance = 0.5f)
     }
 
     @Test
-    fun `grid alignment is reactive while default item is not`() {
+    fun `grid default item is applied once`() {
         val alignment = Variable.StringVariable("alignment", "center")
         val defaultItem = Variable.IntegerVariable("default_item", 4)
         val variableController = DivVariableController().apply {
@@ -204,14 +182,8 @@ class GalleryAlignmentTest {
         alignment.set("end")
         composeRule.waitForIdle()
 
-        val endItemBounds = item.fetchSemanticsNode().boundsInRoot
-        assertEquals(galleryBounds.right, endItemBounds.right, absoluteTolerance = 0.5f)
-
-        alignment.set("start")
-        composeRule.waitForIdle()
-
-        val startItemBounds = item.fetchSemanticsNode().boundsInRoot
-        assertEquals(galleryBounds.left, startItemBounds.left, absoluteTolerance = 0.5f)
+        val finalItemBounds = item.fetchSemanticsNode().boundsInRoot
+        assertEquals(galleryBounds.center.x, finalItemBounds.center.x, absoluteTolerance = 0.5f)
     }
 
     @Test

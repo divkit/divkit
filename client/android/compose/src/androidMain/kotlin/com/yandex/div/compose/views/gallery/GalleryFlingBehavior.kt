@@ -1,129 +1,60 @@
 package com.yandex.div.compose.views.gallery
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
-import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutInfo
-import com.yandex.div.compose.views.gallery.scroll.toGalleryLayoutInfo
-import com.yandex.div.render.common.scroll.SnapPositions
-import com.yandex.div.render.common.scroll.findDirectionalSnapPosition
+import com.yandex.div.compose.views.gallery.scroll.GalleryScrollLayout
 import com.yandex.div2.DivGallery
 import kotlin.math.abs
+import kotlin.math.sign
 
 @Composable
-internal fun rememberGalleryListFlingBehavior(
-    listState: LazyListState,
-    scrollMode: DivGallery.ScrollMode,
-    scrollContentAlignment: DivGallery.ContentAlignment,
-): FlingBehavior = when (scrollMode) {
-    DivGallery.ScrollMode.DEFAULT -> ScrollableDefaults.flingBehavior()
-    DivGallery.ScrollMode.PAGING -> {
-        val layoutDirection = LocalLayoutDirection.current
-        val minimumFlingVelocity = LocalViewConfiguration.current.minimumFlingVelocity
-        val provider = remember(listState, scrollContentAlignment, minimumFlingVelocity, layoutDirection) {
-            GallerySnapLayoutInfoProvider(
-                minimumFlingVelocity = minimumFlingVelocity,
-                scrollContentAlignment = scrollContentAlignment,
-                isLinearLayout = true,
-                layoutInfo = { listState.layoutInfo.toGalleryLayoutInfo(layoutDirection) },
-                nearestItemProvider = SnapLayoutInfoProvider(listState, scrollContentAlignment.toSnapPosition()),
-            )
-        }
-        rememberSnapFlingBehavior(provider)
-    }
-}
-
-@Composable
-internal fun rememberGalleryGridFlingBehavior(
-    gridState: LazyStaggeredGridState,
-    scrollMode: DivGallery.ScrollMode,
-    scrollContentAlignment: DivGallery.ContentAlignment,
-): FlingBehavior = when (scrollMode) {
-    DivGallery.ScrollMode.DEFAULT -> ScrollableDefaults.flingBehavior()
-    DivGallery.ScrollMode.PAGING -> {
-        val minimumFlingVelocity = LocalViewConfiguration.current.minimumFlingVelocity
-        val provider = remember(gridState, scrollContentAlignment, minimumFlingVelocity) {
-            GallerySnapLayoutInfoProvider(
-                minimumFlingVelocity = minimumFlingVelocity,
-                scrollContentAlignment = scrollContentAlignment,
-                isLinearLayout = false,
-                layoutInfo = { gridState.toGalleryLayoutInfo() },
-            )
-        }
-        rememberSnapFlingBehavior(provider)
-    }
-}
-
-@Composable
-internal fun rememberGalleryLanesFlingBehavior(
-    scrollState: ScrollState,
-    itemPositions: MeasuredItemPositions,
+internal fun rememberGalleryFlingBehavior(
     properties: GalleryProperties,
+    scrollLayout: GalleryScrollLayout,
 ): FlingBehavior = when (properties.scrollMode) {
     DivGallery.ScrollMode.DEFAULT -> ScrollableDefaults.flingBehavior()
     DivGallery.ScrollMode.PAGING -> {
+        val alignment = properties.scrollContentAlignment
         val minimumFlingVelocity = LocalViewConfiguration.current.minimumFlingVelocity
-        val alignmentKey = properties.resolveScrollAlignmentKey()
-        val provider = remember(scrollState, itemPositions, alignmentKey, minimumFlingVelocity) {
-            GallerySnapLayoutInfoProvider(
-                minimumFlingVelocity = minimumFlingVelocity,
-                scrollContentAlignment = alignmentKey.alignment,
-                isLinearLayout = false,
-                layoutInfo = { itemPositions.toGalleryLayoutInfo(scrollState, alignmentKey) },
-            )
+        val provider = remember(scrollLayout, alignment, minimumFlingVelocity) {
+            GallerySnapLayoutInfoProvider(scrollLayout, alignment, minimumFlingVelocity)
         }
         rememberSnapFlingBehavior(provider)
     }
 }
 
+/**
+ * Lets a fling decay and snaps to the item nearest in its direction, like Foundation's provider for lazy
+ * lists. Works on any gallery layout and keeps the snap positions within the content edges.
+ */
 private class GallerySnapLayoutInfoProvider(
+    private val scrollLayout: GalleryScrollLayout,
+    private val alignment: DivGallery.ContentAlignment,
     private val minimumFlingVelocity: Float,
-    private val scrollContentAlignment: DivGallery.ContentAlignment,
-    private val isLinearLayout: Boolean,
-    private val layoutInfo: () -> GalleryLayoutInfo,
-    private val nearestItemProvider: SnapLayoutInfoProvider? = null,
 ) : SnapLayoutInfoProvider {
-    override fun calculateApproachOffset(velocity: Float, decayOffset: Float): Float = 0f
+
+    // Paging scrolls page by page: however fast, a fling decays over one viewport at most and then snaps
+    // to the next item in its direction, which may lie farther when the spacing exceeds the viewport.
+    override fun calculateApproachOffset(velocity: Float, decayOffset: Float): Float {
+        val layout = scrollLayout.layoutInfo
+        val averageItemSize = if (layout.items.isEmpty()) 0 else layout.items.sumOf { it.size } / layout.items.size
+        val distance = minOf(abs(decayOffset), layout.viewportSize.toFloat()) - averageItemSize
+        return distance.coerceAtLeast(0f) * decayOffset.sign
+    }
 
     override fun calculateSnapOffset(velocity: Float): Float {
-        val snapToNearest = abs(velocity) <= minimumFlingVelocity
-        if (snapToNearest && nearestItemProvider != null) return nearestItemProvider.calculateSnapOffset(0f)
-
-        val layout = layoutInfo()
-        val contentEnd = layout.viewportEnd - layout.afterPadding
-        val visibleStart = if (isLinearLayout) 0 else layout.viewportStart
-        val visibleEnd = if (isLinearLayout) contentEnd else layout.viewportEnd
-        val visibleItems = layout.items.filter {
-            it.offset - it.spacingBefore < visibleEnd && it.offset + it.size + it.spacingAfter > visibleStart
+        val layout = scrollLayout.layoutInfo
+        val offsets = layout.items.map { layout.coerceToContent(layout.snapOffset(it, alignment)) }
+        val target = when {
+            velocity > minimumFlingVelocity -> offsets.filter { it >= 0 }.minOrNull()
+            velocity < -minimumFlingVelocity -> offsets.filter { it <= 0 }.maxOrNull()
+            else -> null
         }
-        val candidates = if (isLinearLayout) layout.items else visibleItems
-        val target = if (snapToNearest) {
-            visibleItems.minByOrNull { abs(layout.snapOffset(it, scrollContentAlignment)) }
-        } else {
-            val completeStart = if (isLinearLayout) layout.viewportStart else 0
-            val completeEnd = if (isLinearLayout) layout.viewportEnd else contentEnd
-            val completeItems = candidates.filter { it.offset >= completeStart && it.offset + it.size <= completeEnd }
-            val positions = object : SnapPositions {
-                override val itemCount = layout.itemCount
-                override val isLinearLayout = this@GallerySnapLayoutInfoProvider.isLinearLayout
-                override val firstCompletelyVisible = completeItems.firstOrNull()?.index ?: -1
-                override val lastCompletelyVisible = completeItems.lastOrNull()?.index ?: -1
-                override val firstVisible = visibleItems.firstOrNull()?.index ?: -1
-                override val lastVisible = visibleItems.lastOrNull()?.index ?: -1
-            }
-            val targetIndex = findDirectionalSnapPosition(velocity > 0, positions)
-            candidates.firstOrNull { it.index == targetIndex }
-        }
-        return target?.let { layout.snapOffset(it, scrollContentAlignment).toFloat() }
-            ?: nearestItemProvider?.calculateSnapOffset(0f)
-            ?: 0f
+        return (target ?: offsets.minByOrNull { abs(it) } ?: 0).toFloat()
     }
 }

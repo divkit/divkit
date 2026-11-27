@@ -335,7 +335,7 @@ class GalleryGridViewTest {
     fun `paging wrap content gallery snaps an item to the center after fling`() {
         setGalleryContent(
             height = wrapContent(),
-            itemSizes = List(12) { 100L to 50L },
+            itemSizes = List(40) { 100L to 50L },
             orientation = DivGallery.Orientation.HORIZONTAL,
             scrollMode = DivGallery.ScrollMode.PAGING,
         )
@@ -346,7 +346,7 @@ class GalleryGridViewTest {
         composeRule.waitForIdle()
 
         val galleryCenter = itemBounds("gallery").center.x
-        val closestDistance = List(12) { abs(unclippedItemBounds(it).center.x - galleryCenter) }.min()
+        val closestDistance = List(40) { abs(unclippedItemBounds(it).center.x - galleryCenter) }.min()
         assertTrue(unclippedItemBounds(0).left < itemBounds("gallery").left)
         assertEquals(0f, closestDistance, absoluteTolerance = 0.5f)
     }

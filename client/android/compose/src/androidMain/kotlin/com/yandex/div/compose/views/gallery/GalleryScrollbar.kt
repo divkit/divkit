@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.ScrollIndicatorState
 import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -16,20 +15,14 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
-import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.DivGallery
 import kotlin.math.roundToInt
 
 @Composable
-internal fun Modifier.galleryScrollbar(
-    scrollbar: Expression<DivGallery.Scrollbar>,
-    scrollState: ScrollableState,
-    isHorizontal: Boolean,
-    contentPadding: PaddingValues,
-): Modifier {
-    if (scrollbar.observedValue() == DivGallery.Scrollbar.NONE) return this
+internal fun Modifier.galleryScrollbar(properties: GalleryProperties, scrollState: ScrollableState): Modifier {
+    if (!properties.hasScrollbar) return this
     val state = scrollState.scrollIndicatorState ?: return this
+    val isHorizontal = properties.isHorizontal
+    val contentPadding = properties.contentPadding
 
     val color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
     return drawWithCache {
@@ -83,45 +76,15 @@ private fun DrawScope.drawScrollbar(
         else -> ((track.length - thumbLength) * scrollOffset / (range - extent))
             .roundToInt().toFloat().coerceIn(0f, track.length - thumbLength)
     }
+    // The thumb runs along the bottom edge of a horizontal gallery and the end edge of a vertical one.
+    val bounds = track.bounds
     if (isHorizontal) {
-        drawHorizontalScrollbar(track, thumbOffset, thumbLength, isRtl, color)
+        val left = if (isRtl) bounds.right - thumbOffset - thumbLength else bounds.left + thumbOffset
+        drawRect(color, Offset(left, bounds.bottom - track.thickness), Size(thumbLength, track.thickness))
     } else {
-        drawVerticalScrollbar(track, thumbOffset, thumbLength, isRtl, color)
+        val left = if (isRtl) bounds.left else bounds.right - track.thickness
+        drawRect(color, Offset(left, bounds.top + thumbOffset), Size(track.thickness, thumbLength))
     }
-}
-
-private fun DrawScope.drawHorizontalScrollbar(
-    track: ScrollbarTrack,
-    thumbOffset: Float,
-    thumbLength: Float,
-    isRtl: Boolean,
-    color: Color,
-) {
-    val left = if (isRtl) {
-        track.bounds.right - thumbOffset - thumbLength
-    } else {
-        track.bounds.left + thumbOffset
-    }
-    drawRect(
-        color = color,
-        topLeft = Offset(left, track.bounds.bottom - track.thickness),
-        size = Size(thumbLength, track.thickness),
-    )
-}
-
-private fun DrawScope.drawVerticalScrollbar(
-    track: ScrollbarTrack,
-    thumbOffset: Float,
-    thumbLength: Float,
-    isRtl: Boolean,
-    color: Color,
-) {
-    val left = if (isRtl) track.bounds.left else track.bounds.right - track.thickness
-    drawRect(
-        color = color,
-        topLeft = Offset(left, track.bounds.top + thumbOffset),
-        size = Size(track.thickness, thumbLength),
-    )
 }
 
 private fun ScrollableState.visibleItemsSpan(isHorizontal: Boolean): Int {

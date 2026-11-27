@@ -2,10 +2,8 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CognitiveComplexMethod:AdjustScrollToItem.kt:private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible: Boolean</ID>
     <ID>CognitiveComplexMethod:CoilImagePreloader.kt:CoilImagePreloader$override suspend fun preloadImages: PreloadResult</ID>
     <ID>CognitiveComplexMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
-    <ID>CognitiveComplexMethod:GalleryFlingBehavior.kt:GallerySnapLayoutInfoProvider$override fun calculateSnapOffset: Float</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.observeItemBaseSizes: FloatArray</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.rememberSpannedTracks: AxisTracks</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@OptIn(ExperimentalGridApi::class) @Composable private fun List&lt;Cell&gt;.axisTracks: AxisTracks</ID>
@@ -75,7 +73,6 @@
     <ID>MaxLineLength:TabTitlesView.kt:drawTitleBackground(placedTitles.boundsOf(index), inactiveBackground, tabShape, layoutDirection, density)</ID>
     <ID>NewLineAtEndOfFile:DivFontSourceProvider.kt:com.yandex.div.compose.font.DivFontSourceProvider.kt</ID>
     <ID>ReturnCount:AccessibilityModifiers.kt:@Composable internal fun Modifier.accessibility: Modifier</ID>
-    <ID>ReturnCount:AdjustScrollToItem.kt:private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible: Boolean</ID>
     <ID>ReturnCount:ArrayActionsHandler.kt:ArrayActionsHandler$private fun getArrayVariable: VariableWithValue?</ID>
     <ID>ReturnCount:BackgroundModifiers.kt:@Composable private fun Modifier.background: Modifier</ID>
     <ID>ReturnCount:BlurTransformation.kt:BlurTransformation$override suspend fun transform: Bitmap</ID>

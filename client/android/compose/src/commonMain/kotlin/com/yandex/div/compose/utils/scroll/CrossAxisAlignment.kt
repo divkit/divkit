@@ -1,6 +1,5 @@
 package com.yandex.div.compose.utils.scroll
 
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -55,28 +54,13 @@ internal fun PaddingValues.getScrollAxisPaddings(
 internal fun BoxWithConstraintsScope.isScrollAxisBounded(isHorizontal: Boolean): Boolean =
     if (isHorizontal) constraints.hasBoundedWidth else constraints.hasBoundedHeight
 
-/** Size available to a match_parent item along the scroll axis: the viewport without content padding. */
-internal fun PaddingValues.scrollAxisContentSize(
-    viewportSize: Dp,
+/** Size available to a match_parent item along the scroll axis: the viewport without [contentPadding]. */
+internal fun BoxWithConstraintsScope.scrollAxisContentSize(
+    contentPadding: PaddingValues,
     isHorizontal: Boolean,
     layoutDirection: LayoutDirection,
 ): Dp {
-    val (startPadding, endPadding) = getScrollAxisPaddings(isHorizontal, layoutDirection)
+    val (startPadding, endPadding) = contentPadding.getScrollAxisPaddings(isHorizontal, layoutDirection)
+    val viewportSize = if (isHorizontal) maxWidth else maxHeight
     return (viewportSize - startPadding - endPadding).coerceAtLeast(0.dp)
-}
-
-/**
- * Returns the item's target start relative to the viewport, including content padding.
- * Lazy list/grid item offsets are content-relative: subtract [startPaddingPx] before comparing them.
- */
-internal fun desiredSnapOffset(
-    snapPosition: SnapPosition,
-    viewportSizePx: Int,
-    itemSizePx: Int,
-    startPaddingPx: Int,
-    endPaddingPx: Int,
-): Int = when (snapPosition) {
-    SnapPosition.Center -> (viewportSizePx - itemSizePx) / 2
-    SnapPosition.End -> viewportSizePx - endPaddingPx - itemSizePx
-    else -> startPaddingPx
 }

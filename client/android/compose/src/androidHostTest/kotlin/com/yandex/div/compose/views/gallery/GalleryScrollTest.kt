@@ -105,6 +105,7 @@ class GalleryScrollTest {
     private val defaultItem = Variable.IntegerVariable("default_item", 8)
     private val paging = Variable.StringVariable("scroll_mode", "default")
     private val startPadding = Variable.IntegerVariable("start_padding", 0)
+    private val galleryWidth = Variable.IntegerVariable("gallery_width", 0)
     private val configuration = divConfiguration {
         reporter = TestReporter()
         variableController = DivVariableController().apply {
@@ -112,6 +113,7 @@ class GalleryScrollTest {
             declare(visibleItems)
             declare(defaultItem)
             declare(startPadding)
+            declare(galleryWidth)
             declare(paging)
         }
     }
@@ -197,25 +199,50 @@ class GalleryScrollTest {
     }
 
     @Test
-    fun `list reclamps original default when more items appear`() {
+    fun `default item is applied once to the items present`() {
         visibleItems.set(2)
         setGalleryContent()
+        val itemStart = itemBounds(1).left
 
         visibleItems.set(16)
+        composeRule.waitForIdle()
+
+        assertEquals(itemStart, itemBounds(1).left, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `list default item waits for the gallery to get a size`() {
+        setZeroWidthGalleryContent(columnCount = 1, height = fixed(108))
+
+        galleryWidth.set(300)
         composeRule.waitForIdle()
 
         assertDefaultItemCentered()
     }
 
     @Test
-    fun `grid reclamps original default when more items appear`() {
-        visibleItems.set(2)
-        setGalleryContent(columnCount = 2)
+    fun `wrap content grid default item waits for the gallery to get a size`() {
+        setZeroWidthGalleryContent(columnCount = 2, height = wrapContent())
 
-        visibleItems.set(16)
+        galleryWidth.set(300)
         composeRule.waitForIdle()
 
         assertDefaultItemCentered()
+    }
+
+    private fun setZeroWidthGalleryContent(columnCount: Long, height: DivSize) {
+        galleryData = data(gallery(
+            columnCount = constant(columnCount),
+            defaultItem = constant(8L),
+            height = height,
+            id = "gallery",
+            items = List(16) { index ->
+                text(id = "item$index", text = constant(index.toString()), width = fixed(100), height = fixed(50))
+            },
+            scrollContentAlignment = constant(DivGallery.ContentAlignment.CENTER),
+            width = fixed(intExpression("@{gallery_width}")),
+        ))
+        setContent()
     }
 
     @Test
@@ -377,29 +404,54 @@ class GalleryScrollTest {
             swipeWithVelocity(start = center, end = centerLeft, endVelocity = 0f)
         }
 
-        assertEquals(galleryBounds().right, itemBounds(10).right, absoluteTolerance = 0.5f)
+        assertEquals(galleryBounds().right, itemBounds(12).right, absoluteTolerance = 0.5f)
     }
 
     @Test
-    fun `grid forward fling centers the last fully visible item`() {
-        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+    fun `paging fling decays over a viewport at most`() {
+        visibleItems.set(40)
+        setGalleryContent(scrollMode = DivGallery.ScrollMode.PAGING, itemsCount = 40)
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 7_000f)
+        }
+
+        // The default item 8 was centered and the drag moves one item and a half; a viewport holds three.
+        val centeredItem = (0 until 40).single { isItemCentered(it) }
+        assertTrue(centeredItem in 10..13, "Item $centeredItem is centered")
+    }
+
+    @Test
+    fun `grid fling snaps to an item in its direction`() {
+        visibleItems.set(40)
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING, itemsCount = 40)
 
         composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
             swipeWithVelocity(start = center, end = centerLeft, endVelocity = 1000f)
         }
 
-        assertEquals(galleryBounds().center.x, itemBounds(12).center.x, absoluteTolerance = 0.5f)
+        assertSnappedItemCentered()
+        // The default item, centered before the fling, is left behind.
+        val galleryCenter = galleryBounds().center.x
+        assertTrue(
+            composeRule.onAllNodesWithTag("item8").fetchSemanticsNodes().all { it.boundsInRoot.center.x < galleryCenter }
+        )
     }
 
     @Test
-    fun `grid backward fling centers the first fully visible item`() {
-        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+    fun `grid backward fling snaps to an item in its direction`() {
+        visibleItems.set(40)
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING, itemsCount = 40)
 
         composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
             swipeWithVelocity(start = center, end = centerRight, endVelocity = 1000f)
         }
 
-        assertEquals(galleryBounds().center.x, itemBounds(4).center.x, absoluteTolerance = 0.5f)
+        assertSnappedItemCentered()
+        val galleryCenter = galleryBounds().center.x
+        assertTrue(
+            composeRule.onAllNodesWithTag("item8").fetchSemanticsNodes().all { it.boundsInRoot.center.x > galleryCenter }
+        )
     }
 
     @Test
@@ -953,11 +1005,10 @@ class GalleryScrollTest {
 
         composeRule.runOnIdle {
             scrollScope.launch {
-                state.galleryScrollLayout(composeRule.density).scrollToItem(
+                state.galleryScrollLayout().scrollToItem(
                     GalleryScrollDestination(index = 0, toEnd = true),
                     animated = true,
                     alignment = DivGallery.ContentAlignment.CENTER,
-                    duration = null,
                 )
             }
         }
@@ -1015,16 +1066,20 @@ class GalleryScrollTest {
 
     @Test
     fun `distant grid end action reaches the end of a long earlier lane`() {
-        setLazyGridContent(itemWidths = listOf(10_000) + List(80) { 100 })
+        setLazyGridContent(itemWidths = listOf(20_000) + List(120) { 100 })
 
-        scrollGridTo(index = 80, animated = false, toEnd = true)
+        scrollGridTo(index = 120, animated = false, toEnd = true)
 
-        val item = composeRule.onNodeWithTag("item0").fetchSemanticsNode()
-        assertEquals(
-            galleryBounds().right,
-            item.positionInRoot.x + item.size.width,
-            absoluteTolerance = 0.5f,
-        )
+        assertItemEndsAtGalleryEnd(0)
+    }
+
+    @Test
+    fun `distant grid end animation reaches the end of a long earlier lane`() {
+        setLazyGridContent(itemWidths = listOf(20_000) + List(120) { 100 })
+
+        scrollGridTo(index = 120, animated = true, toEnd = true)
+
+        assertItemEndsAtGalleryEnd(0)
     }
 
     @Test
@@ -1057,7 +1112,7 @@ class GalleryScrollTest {
     }
 
     @Test
-    fun `scroll without duration animates at a distance based pace`() {
+    fun `scroll without duration uses the default scroll animation`() {
         defaultItem.set(0)
         setGalleryContent()
 
@@ -1065,7 +1120,6 @@ class GalleryScrollTest {
         val elapsed = awaitScrollEnd(observedIndex = 1)
 
         assertTrue(isItemCentered(4))
-        // 300 dp at 50 ms per inch, extended by the deceleration phase: about 280 ms.
         assertTrue(elapsed in 100..1_000, "Scrolled in $elapsed ms")
     }
 
@@ -1210,11 +1264,10 @@ class GalleryScrollTest {
     private fun scrollGridTo(index: Int, animated: Boolean, toEnd: Boolean = false) {
         composeRule.runOnIdle {
             scrollScope.launch {
-                lazyGridState.galleryScrollLayout(composeRule.density).scrollToItem(
+                lazyGridState.galleryScrollLayout().scrollToItem(
                     GalleryScrollDestination(index, toEnd),
                     animated = animated,
                     alignment = DivGallery.ContentAlignment.CENTER,
-                    duration = null,
                 )
             }
         }
@@ -1332,6 +1385,11 @@ class GalleryScrollTest {
         ).fetchSemanticsNodes().minOf { abs(it.boundsInRoot.center.x - galleryCenter) }
 
         assertEquals(0f, closestDistance, absoluteTolerance = 0.5f)
+    }
+
+    private fun assertItemEndsAtGalleryEnd(index: Int) {
+        val item = composeRule.onNodeWithTag("item$index").fetchSemanticsNode()
+        assertEquals(galleryBounds().right, item.positionInRoot.x + item.size.width, absoluteTolerance = 0.5f)
     }
 
     private fun galleryBounds() = composeRule.onNodeWithTag("gallery").fetchSemanticsNode().boundsInRoot
