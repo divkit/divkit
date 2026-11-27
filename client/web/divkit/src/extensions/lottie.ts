@@ -47,6 +47,14 @@ interface LottiePlayer {
     loadAnimation: LoadAnimation;
 }
 
+export interface LottieOptions {
+    // Loads the lottie_url file in place of fetch and response.json(), and resolves with
+    // the animation for the player. Inline lottie_json bypasses the loader. The signal aborts
+    // once lottie_url changes or the view is gone, and a result after that is dropped.
+    // The player changes the animation it gets, so every call resolves with a new object
+    loadAnimationData?(url: string, opts: { signal?: AbortSignal }): Promise<object>;
+}
+
 interface LazyLottiePlayer {
     // Called for every animation, so it should load the player only once, as a dynamic import does
     loadPlayer(): Promise<LottiePlayer>;
@@ -65,7 +73,7 @@ const ON_SCREEN_SHARE = 0.01;
 
 type ScreenListener = (isOnScreen: boolean) => void;
 
-export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer) {
+export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer, options: LottieOptions = {}) {
     // A lazy player loads together with the animation file. One that throws at once fails
     // the animation as one that fails to load
     const loadPlayer = typeof player === 'function' ?
@@ -73,6 +81,27 @@ export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer)
         () => Promise.resolve()
             .then(() => player.loadPlayer())
             .then(it => it.loadAnimation.bind(it));
+
+    // The loader starts at once, as fetch does, so no newer lottie_url aborts the load before it starts.
+    // One that throws at once fails the animation as one that rejects
+    const loadAnimationData = (url: string, signal: AbortSignal | undefined): Promise<object> => {
+        if (options.loadAnimationData) {
+            try {
+                return Promise.resolve(options.loadAnimationData(url, { signal }));
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        }
+
+        return fetch(url, { signal })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Response is not ok');
+                }
+
+                return res.json();
+            });
+    };
 
     // All the animations share one observer: one callback for all the views that change at once
     let screenObserver: IntersectionObserver | undefined;
@@ -150,9 +179,13 @@ export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer)
         }
 
         private startLoad(): number {
-            this.loadAbort?.abort();
+            // A host loader may run code once its load aborts, even unmount the view, so the new load
+            // is already current then and the unmount makes it stale
+            const previousAbort = this.loadAbort;
+            const loadNumber = ++this.loadNumber;
             this.loadAbort = typeof AbortController === 'undefined' ? undefined : new AbortController();
-            return ++this.loadNumber;
+            previousAbort?.abort();
+            return loadNumber;
         }
 
         private stopLoad(): void {
@@ -167,14 +200,7 @@ export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer)
             }
 
             if (url) {
-                return fetch(url, { signal })
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error('Response is not ok');
-                        }
-
-                        return res.json();
-                    });
+                return loadAnimationData(url, signal);
             }
 
             return Promise.reject('Missing data');
@@ -358,6 +384,9 @@ export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer)
 
             this.unsubscribe = context.derviedExpression(this.params.lottie_url).subscribe(url => {
                 const loadNumber = this.startLoad();
+                if (loadNumber !== this.loadNumber) {
+                    return;
+                }
                 const loading = Promise.all([this.loadData(url, this.loadAbort?.signal), loadPlayer()]);
                 loading.then(([json, loadAnimation]) => {
                     if (loadNumber !== this.loadNumber) {

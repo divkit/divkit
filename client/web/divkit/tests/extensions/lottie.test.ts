@@ -249,6 +249,13 @@ function playerWithoutIsPaused() {
     return { calls, listeners, extension };
 }
 
+/** A file that never comes: the test looks only at how its load starts and aborts. */
+function pendingLoad(): Promise<object> {
+    return new Promise(() => {
+        // Never settles
+    });
+}
+
 async function settle(): Promise<void> {
     // The extension mounts after a tick, the file and its json come in a few more
     for (let i = 0; i < 10; ++i) {
@@ -257,6 +264,154 @@ async function settle(): Promise<void> {
 }
 
 describe('Lottie extension', () => {
+    test('the host loader gives the animation of a lottie_url in place of the network', async() => {
+        // Arrange
+        const loadAnimationData = vi.fn().mockResolvedValue({ frames: 'loaded' });
+
+        // Act
+        renderLottie([], { lottie_url: 'https://example.com/banner.lottie' },
+            lottieExtensionBuilder(loadAnimation, { loadAnimationData }));
+        await settle();
+
+        // Assert
+        expect(loadAnimationData).toHaveBeenCalledTimes(1);
+        expect(loadAnimationData).toHaveBeenCalledWith('https://example.com/banner.lottie', {
+            signal: expect.any(AbortSignal)
+        });
+        expect(fetch).not.toHaveBeenCalled();
+        expect(animations.map(animation => animation.options)).toMatchObject([{ animationData: { frames: 'loaded' } }]);
+        expect(errors).toEqual([]);
+    });
+
+    test('inline animation data bypasses the host loader and the network', async() => {
+        // Arrange
+        const loadAnimationData = vi.fn();
+
+        // Act
+        renderLottie([], { lottie_json: { frames: 'inline' } },
+            lottieExtensionBuilder(loadAnimation, { loadAnimationData }));
+        await settle();
+
+        // Assert
+        expect(animations.map(animation => animation.options)).toMatchObject([{ animationData: { frames: 'inline' } }]);
+        expect(loadAnimationData).not.toHaveBeenCalled();
+        expect(fetch).not.toHaveBeenCalled();
+    });
+
+    test.each([
+        ['rejects', () => Promise.reject(new Error('Broken file'))],
+        ['throws at once', () => {
+            throw new Error('Broken file');
+        }]
+    ])('a host loader that %s is reported as a failed animation and the gif shows', async(_name, loader) => {
+        // Arrange
+        const loadAnimationData = vi.fn(loader);
+
+        // Act
+        renderLottie([], { lottie_url: 'https://example.com/broken.lottie' },
+            lottieExtensionBuilder(loadAnimation, { loadAnimationData }));
+        await settle();
+
+        // Assert
+        expect(animations).toHaveLength(0);
+        expect(errors.map(err => err.message)).toEqual(['Failed to load lottie animation']);
+        expect(target.querySelector('[data-lottie]')).toBeNull();
+    });
+
+    test('the host loader signal aborts once lottie_url changes, and its late result makes no animation', async() => {
+        // Arrange
+        const loads: { url: string; signal?: AbortSignal; resolve(data: object): void }[] = [];
+        const loadAnimationData = (url: string, { signal }: { signal?: AbortSignal }) =>
+            new Promise<object>(resolve => {
+                loads.push({ url, signal, resolve });
+            });
+        renderLottie([{ name: 'url', type: 'string', value: 'https://example.com/first.lottie' }], {
+            lottie_url: '@{url}'
+        }, lottieExtensionBuilder(loadAnimation, { loadAnimationData }));
+        await settle();
+
+        // Act
+        setVariable('url', { type: 'string', value: 'https://example.com/second.lottie' });
+        await settle();
+        loads[1].resolve({ frames: 'second' });
+        await settle();
+        loads[0].resolve({ frames: 'first' });
+        await settle();
+
+        // Assert
+        expect(loads.map(load => load.url)).toEqual([
+            'https://example.com/first.lottie',
+            'https://example.com/second.lottie'
+        ]);
+        expect(loads.map(load => load.signal?.aborted)).toEqual([true, false]);
+        expect(animations.map(animation => animation.options)).toMatchObject([{ animationData: { frames: 'second' } }]);
+        expect(errors).toEqual([]);
+    });
+
+    test('the host loader starts at once, so quick lottie_url changes abort the loads it has started', async() => {
+        // Arrange
+        const loads: { url: string; signal?: AbortSignal; abortedAtStart?: boolean }[] = [];
+        const loadAnimationData = (url: string, { signal }: { signal?: AbortSignal }) => {
+            loads.push({ url, signal, abortedAtStart: signal?.aborted });
+            return pendingLoad();
+        };
+        renderLottie([{ name: 'url', type: 'string', value: 'https://example.com/first.lottie' }], {
+            lottie_url: '@{url}'
+        }, lottieExtensionBuilder(loadAnimation, { loadAnimationData }));
+        await settle();
+
+        // Act
+        setVariable('url', { type: 'string', value: 'https://example.com/second.lottie' });
+        setVariable('url', { type: 'string', value: 'https://example.com/third.lottie' });
+
+        // Assert
+        expect(loads.map(load => [load.url, load.abortedAtStart, load.signal?.aborted])).toEqual([
+            ['https://example.com/first.lottie', false, true],
+            ['https://example.com/second.lottie', false, true],
+            ['https://example.com/third.lottie', false, false]
+        ]);
+    });
+
+    test('a host loader that removes the card once its load aborts starts no load for the card', async() => {
+        // Arrange
+        const urls: string[] = [];
+        const loadAnimationData = (url: string, { signal }: { signal?: AbortSignal }) => {
+            urls.push(url);
+            signal?.addEventListener('abort', () => {
+                instance?.$destroy();
+                instance = undefined;
+            });
+            return pendingLoad();
+        };
+        renderLottie([{ name: 'url', type: 'string', value: 'https://example.com/first.lottie' }], {
+            lottie_url: '@{url}'
+        }, lottieExtensionBuilder(loadAnimation, { loadAnimationData }));
+        await settle();
+
+        // Act
+        setVariable('url', { type: 'string', value: 'https://example.com/second.lottie' });
+        await settle();
+
+        // Assert
+        expect(instance).toBeUndefined();
+        expect(urls).toEqual(['https://example.com/first.lottie']);
+        expect(loadAnimation).not.toHaveBeenCalled();
+        expect(errors).toEqual([]);
+    });
+
+    test('an unsuccessful response is reported as a failed animation', async() => {
+        // Arrange
+        vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 404, json: vi.fn() }));
+
+        // Act
+        renderLottie([], { lottie_url: 'https://example.com/missing.json' });
+        await settle();
+
+        // Assert
+        expect(animations).toHaveLength(0);
+        expect(errors.map(err => err.message)).toEqual(['Failed to load lottie animation']);
+    });
+
     test('an animation with is_playing false is created paused and starts once is_playing is true', async() => {
         // Arrange
         renderLottie([{ name: 'playing', type: 'boolean', value: false }], {

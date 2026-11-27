@@ -95,6 +95,7 @@ export {
 } from './extensions/gesture';
 
 export {
+    type LottieOptions,
     lottieExtensionBuilder
 } from './extensions/lottie';
 

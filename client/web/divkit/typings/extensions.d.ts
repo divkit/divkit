@@ -56,6 +56,16 @@ interface LottiePlayer {
     loadAnimation: LoadAnimation;
 }
 
+export interface LottieOptions {
+    /**
+     * Loads the lottie_url file in place of fetch and response.json(), and resolves with the animation for the player.
+     * Inline lottie_json bypasses the loader. The signal aborts once lottie_url changes or the view is gone,
+     * and a result after that is dropped. The player changes the animation it gets, so every call resolves
+     * with a new object, not one cached for the URL
+     */
+    loadAnimationData?(url: string, opts: { signal?: AbortSignal }): Promise<object>;
+}
+
 interface LazyLottiePlayer {
     /**
      * Loads the player. Called for every animation, so it should load the player only once, as a dynamic import does
@@ -63,7 +73,10 @@ interface LazyLottiePlayer {
     loadPlayer(): Promise<LottiePlayer>;
 }
 
-export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer): typeof Lottie;
+export function lottieExtensionBuilder(
+    player: LoadAnimation | LazyLottiePlayer,
+    options?: LottieOptions
+): typeof Lottie;
 
 export type MarkdownProcessor = (markdown: string) => string;
 

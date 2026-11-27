@@ -100,3 +100,29 @@ map.set('lottie', lottieExtensionBuilder({
     loadPlayer: () => import('lottie-web/build/player/lottie_light').then(module => module.default)
 }));
 ```
+
+By default the extension loads `lottie_url` with `fetch` and reads it with `response.json()`. To load animation
+files your own way, for example to send credentials or to read another file format, pass `{ loadAnimationData }`
+as the second argument to `lottieExtensionBuilder`. The loader gets the URL and an `AbortSignal`, and resolves
+with the animation object for the player:
+
+```js
+import { lottieExtensionBuilder } from '@divkitframework/divkit/client';
+import Lottie from 'lottie-web/build/player/lottie';
+
+map.set('lottie', lottieExtensionBuilder(Lottie.loadAnimation, {
+    loadAnimationData(url, { signal }) {
+        return fetch(url, { signal, credentials: 'include' }).then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load ${url}`);
+            }
+            return response.json();
+        });
+    }
+}));
+```
+
+The extension aborts the signal once `lottie_url` changes or the view is gone, and drops a result that comes after
+that. A loader that rejects or throws fails the animation as a failed request does. Inline `lottie_json` goes
+straight to the player without the loader. The player changes the animation object it gets, so resolve every call
+with a new object: two animations with one cached object can play wrong.
