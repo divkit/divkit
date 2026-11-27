@@ -1,0 +1,174 @@
+{
+  "description": "A div-pager with layout_mode wrap_content first scrolled into view inside a gallery shows the edge of its third page",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "topic_card": {
+        "type": "text",
+        "width": {
+          "type": "fixed",
+          "value": 140
+        },
+        "height": {
+          "type": "fixed",
+          "value": 100
+        },
+        "border": {
+          "corner_radius": 16
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#FFB0C4DE"
+          }
+        ],
+        "font_size": 16,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center"
+      },
+      "row_block": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "fixed",
+          "value": 80
+        },
+        "margins": {
+          "left": 16,
+          "right": 16
+        },
+        "border": {
+          "corner_radius": 16
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#FFE0E0E0"
+          }
+        ],
+        "font_size": 16,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "pager_wrap_content_in_gallery",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "id": "gallery",
+            "orientation": "vertical",
+            "width": {
+              "type": "fixed",
+              "value": 340
+            },
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "item_spacing": 8,
+            "items": [
+              {
+                "type": "row_block",
+                "text": "Row 0"
+              },
+              {
+                "type": "row_block",
+                "text": "Row 1"
+              },
+              {
+                "type": "row_block",
+                "text": "Row 2"
+              },
+              {
+                "type": "row_block",
+                "text": "Row 3"
+              },
+              {
+                "type": "row_block",
+                "text": "Row 4"
+              },
+              {
+                "type": "row_block",
+                "text": "Row 5"
+              },
+              {
+                "type": "pager",
+                "id": "topics_pager",
+                "width": {
+                  "type": "match_parent"
+                },
+                "layout_mode": {
+                  "type": "wrap_content"
+                },
+                "item_spacing": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "items": [
+                  {
+                    "type": "topic_card",
+                    "text": "Topic 0"
+                  },
+                  {
+                    "type": "topic_card",
+                    "text": "Topic 1"
+                  },
+                  {
+                    "type": "topic_card",
+                    "text": "Topic 2"
+                  },
+                  {
+                    "type": "topic_card",
+                    "text": "Topic 3"
+                  },
+                  {
+                    "type": "topic_card",
+                    "text": "Topic 4"
+                  }
+                ]
+              },
+              {
+                "type": "row_block",
+                "text": "Row 6",
+                "height": {
+                  "type": "fixed",
+                  "value": 40
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "scroll_to_pager",
+        "url": "div-action://scroll_to_end?id=gallery&animated=false"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "pager_scrolled_into_view",
+      "target": {
+        "type": "div_id",
+        "id": "topics_pager"
+      }
+    }
+  ]
+}

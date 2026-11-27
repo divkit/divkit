@@ -100,6 +100,15 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
         }
     }
 
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        var offscreenPageLimit = viewPager.offscreenPageLimit
+        super.onLayout(changed, left, top, right, bottom)
+        while (viewPager.offscreenPageLimit > offscreenPageLimit) {
+            offscreenPageLimit = viewPager.offscreenPageLimit
+            viewPager.relayout()
+        }
+    }
+
     private fun notifyViewPagerMeasured(): Boolean {
         val scrollAxisSize = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
             viewPager.measuredWidth
@@ -127,4 +136,16 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
     }
 
     override fun getAccessibilityClassName() = "androidx.viewpager.widget.ViewPager"
+}
+
+// A limit raised while the RecyclerView is laid out takes effect only on its next layout:
+// the requestLayout() of setOffscreenPageLimit is dropped when the current layout ends.
+private fun ViewPager2.relayout() {
+    val recyclerView = getChildAt(0)
+    val isLayoutRequested = recyclerView?.isLayoutRequested == true
+    recyclerView?.forceLayout()
+    forceLayout()
+    measure(makeExactSpec(measuredWidth), makeExactSpec(measuredHeight))
+    layout(left, top, right, bottom)
+    if (isLayoutRequested) recyclerView?.requestLayout()
 }
