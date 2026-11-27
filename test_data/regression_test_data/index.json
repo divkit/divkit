@@ -994,6 +994,10 @@
         "android",
         "web"
       ],
+      "automated": [
+        "android",
+        "web"
+      ],
       "steps": [
         "Switch focus to handler",
         "Switch focus to idle"
@@ -1310,6 +1314,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "android"
+      ],
       "steps": [
         "Tap button 1",
         "Tap Menu Item 1",
@@ -1321,7 +1328,10 @@
         "Menu with 2 items appears."
       ],
       "file": "actions/menu.json",
-      "case_id": 512
+      "case_id": 512,
+      "automation_blocker": {
+        "web": "The runner cannot long tap, so the menu opened by a long tap on button 3 stays manual."
+      }
     },
     {
       "title": "Div errors visualization",
