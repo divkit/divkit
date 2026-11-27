@@ -2,12 +2,12 @@ package com.yandex.div.compose.images
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import coil3.Extras
 import coil3.PlatformContext
 import coil3.request.ImageRequest
 import coil3.request.transformations
 import coil3.size.Precision
 import coil3.size.Scale
-import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div.compose.di.Names
 import dev.zacsweers.metro.Inject
@@ -29,7 +29,7 @@ internal class ImageRequestFactory(
             .listener(imageRequestListener)
             .apply {
                 if (params.synchronous) {
-                    extras[UnthrottledImageDecoderFactory.enabled] = true
+                    extras[unthrottledImageDecodeKey] = true
                     coroutineContext(EmptyCoroutineContext)
                 }
                 if (params.limitToDisplaySize) {
@@ -43,7 +43,9 @@ internal class ImageRequestFactory(
 }
 
 @Composable
-internal fun rememberImageRequest(params: ImageRequestParams): ImageRequest {
-    val factory = LocalDivContext.current.component.imageRequestFactory
-    return remember(params) { factory.build(params) }
-}
+internal fun rememberImageRequest(
+    params: ImageRequestParams,
+    factory: ImageRequestFactory,
+): ImageRequest = remember(factory, params) { factory.build(params) }
+
+internal val unthrottledImageDecodeKey = Extras.Key(false)

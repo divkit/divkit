@@ -1,7 +1,6 @@
 package com.yandex.div.compose.images
 
 import android.os.Build
-import coil3.Extras
 import coil3.ImageLoader
 import coil3.decode.BitmapFactoryDecoder
 import coil3.decode.Decoder
@@ -20,12 +19,10 @@ internal object UnthrottledImageDecoderFactory : Decoder.Factory {
     }
 
     override fun create(result: SourceFetchResult, options: Options, imageLoader: ImageLoader): Decoder? {
-        if (!options.getExtra(enabled)) return null
+        if (!options.getExtra(unthrottledImageDecodeKey)) return null
 
         // Preview decoders never wait for Coil's shared background decode permits.
         return staticFactory?.create(result, options, imageLoader)
             ?: BitmapFactoryDecoder(result.source, options)
     }
-
-    val enabled = Extras.Key(false)
 }
