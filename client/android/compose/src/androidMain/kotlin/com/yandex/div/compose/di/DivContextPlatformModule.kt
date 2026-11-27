@@ -2,6 +2,7 @@ package com.yandex.div.compose.di
 
 import android.content.Context
 import android.content.res.AssetManager
+import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.font.AndroidFontFamilyFactory
 import com.yandex.div.compose.font.AndroidLineMetricsMeasurer
 import com.yandex.div.compose.font.FontFamilyFactory
@@ -13,6 +14,7 @@ import com.yandex.div.compose.tooltips.AndroidTooltipDrawObserverFactory
 import com.yandex.div.compose.tooltips.TooltipDrawObserverFactory
 import com.yandex.div.compose.views.slider.AndroidSliderTextPainterFactory
 import com.yandex.div.compose.views.slider.SliderTextPainterFactory
+import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.render.common.animation.SystemAnimationConfiguration
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
@@ -63,8 +65,16 @@ internal interface DivContextPlatformModule {
 
         @DivContextScope
         @Provides
-        fun provideSystemAnimationConfiguration(context: Context): SystemAnimationConfiguration {
-            return SystemAnimationConfiguration(context)
-        }
+        fun provideAnimationConfiguration(
+            context: Context,
+            animationsEnabledProvider: DivAnimationsEnabledProvider,
+        ): AnimationConfiguration = AnimationConfiguration(
+            systemAnimationsEnabled = SystemAnimationConfiguration(context)::isEnabled,
+            provider = object : AnimationConfiguration.Provider {
+                override val animationsEnabled get() = animationsEnabledProvider.animationsEnabled
+
+                override fun isAnimationsEnabled(): Boolean = animationsEnabledProvider.isAnimationsEnabled()
+            },
+        )
     }
 }

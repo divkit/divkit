@@ -18,7 +18,6 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.compose.visibility.VisibilityTransitionStorage
 import com.yandex.div.compose.visibility.observeRenderedVisibility
-import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.render.common.animation.SystemAnimationConfiguration
@@ -58,8 +57,8 @@ class VisibilityChangeTransitionTest {
     private val component = mockLocalComponent(variableController = variableController).apply {
         whenever(visibilityTransitionStorage) doReturn VisibilityTransitionStorage()
         whenever(animationConfiguration) doReturn AnimationConfiguration(
-            SystemAnimationConfiguration(RuntimeEnvironment.getApplication()),
-            object : DivAnimationsEnabledProvider {
+            systemAnimationsEnabled = SystemAnimationConfiguration(RuntimeEnvironment.getApplication())::isEnabled,
+            provider = object : AnimationConfiguration.Provider {
                 override val animationsEnabled = this@VisibilityChangeTransitionTest.animationsEnabled
             },
         )
