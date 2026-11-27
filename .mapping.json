@@ -1364,6 +1364,7 @@
   "client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/pager/PagerScrollPositionTest.kt":"divkit/public/client/android/compose/src/commonTest/kotlin/com/yandex/div/compose/views/pager/PagerScrollPositionTest.kt",
   "client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/font/DivFontSource.kt":"divkit/public/client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/font/DivFontSource.kt",
   "client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/locale/CurrencyFormatInfo.kt":"divkit/public/client/android/compose/src/iosMain/kotlin/com/yandex/div/compose/locale/CurrencyFormatInfo.kt",
+  "client/android/compose/src/iosTest/kotlin/com/yandex/div/compose/images/CoilSkikoCompatibilityTest.kt":"divkit/public/client/android/compose/src/iosTest/kotlin/com/yandex/div/compose/images/CoilSkikoCompatibilityTest.kt",
   "client/android/compose/src/test/screenshots/div-background/gradient-angles.webp":"divkit/public/client/android/compose/src/test/screenshots/div-background/gradient-angles.webp",
   "client/android/compose/src/test/screenshots/div-background/gradient-positions.webp":"divkit/public/client/android/compose/src/test/screenshots/div-background/gradient-positions.webp",
   "client/android/compose/src/test/screenshots/div-background/logical-position.webp":"divkit/public/client/android/compose/src/test/screenshots/div-background/logical-position.webp",
