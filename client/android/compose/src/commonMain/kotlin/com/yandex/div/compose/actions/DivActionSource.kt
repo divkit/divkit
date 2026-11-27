@@ -3,7 +3,7 @@ package com.yandex.div.compose.actions
 /**
  * Source of DivKit action.
  */
-enum class DivActionSource {
+public enum class DivActionSource {
     ANIMATION,
     BLUR,
     DISAPPEAR,

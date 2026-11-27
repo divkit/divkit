@@ -11,6 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
  *
  * @see com.yandex.div.compose.DivConfiguration
  */
-interface DivFontSourceProvider {
-    fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource
+public interface DivFontSourceProvider {
+    public fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource
 }

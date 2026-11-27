@@ -6,10 +6,10 @@ import com.yandex.div.histogram.HistogramFilter
 /**
  * Configuration for [com.yandex.div.compose.DivView] performance histograms reporting.
  */
-interface DivHistogramConfiguration {
-    val isEnabled: Boolean
-    val componentName: String
-    val histogramBridge: HistogramBridge
+public interface DivHistogramConfiguration {
+    public val isEnabled: Boolean
+    public val componentName: String
+    public val histogramBridge: HistogramBridge
 
     /**
      * [HistogramFilter] for the `DivCompose.Render.Prepare` histogram: the time
@@ -19,6 +19,6 @@ interface DivHistogramConfiguration {
      * [com.yandex.div.compose.DivContext.preload] or a patch has already created it; later
      * renders only look it up. Off by default.
      */
-    val prepareFilter: HistogramFilter
+    public val prepareFilter: HistogramFilter
         get() = HistogramFilter.OFF
 }

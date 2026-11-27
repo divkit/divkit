@@ -19,9 +19,9 @@ import dev.zacsweers.metro.Named
 /** Context of the element that triggered the action, including its available action scopes. */
 @DivLocalScope
 @Inject
-class DivActionHandlingContext internal constructor(
-    @param:Named(Names.CARD_ID) val cardId: String,
-    val expressionResolver: ExpressionResolver,
+public class DivActionHandlingContext internal constructor(
+    @param:Named(Names.CARD_ID) public val cardId: String,
+    public val expressionResolver: ExpressionResolver,
     private val localComponentStorage: DivLocalComponentStorage,
     private val collectionItemScopeStorage: CollectionItemScopeStorage,
     private val states: MutableState<List<DivData.State>>,

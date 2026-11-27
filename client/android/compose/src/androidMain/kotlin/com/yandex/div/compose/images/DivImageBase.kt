@@ -12,7 +12,7 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivImageScale
 
 @InternalApi
-fun Div.asImageBase(): DivImageBase? {
+public fun Div.asImageBase(): DivImageBase? {
     return when (this) {
         is Div.GifImage -> DivImageBase(
             contentAlignmentHorizontal = value.contentAlignmentHorizontal,
@@ -31,18 +31,18 @@ fun Div.asImageBase(): DivImageBase? {
 }
 
 @InternalApi
-class DivImageBase(
-    val contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>,
-    val contentAlignmentVertical: Expression<DivAlignmentVertical>,
-    val scale: Expression<DivImageScale>
+public class DivImageBase(
+    public val contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>,
+    public val contentAlignmentVertical: Expression<DivAlignmentVertical>,
+    public val scale: Expression<DivImageScale>
 ) {
     @Composable
-    fun observedAlignment(): Alignment {
+    public fun observedAlignment(): Alignment {
         return observedAlignment(contentAlignmentHorizontal, contentAlignmentVertical)
     }
 
     @Composable
-    fun observedContentScale(): ContentScale {
+    public fun observedContentScale(): ContentScale {
         return scale.observedContentScale()
     }
 }

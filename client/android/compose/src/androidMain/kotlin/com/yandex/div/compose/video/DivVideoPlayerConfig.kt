@@ -10,7 +10,7 @@ import org.json.JSONObject
  * Fed into the player on every composition; the player observes changes between
  * subsequent values and reacts (e.g. starts a new source, mutes, changes speed).
  */
-data class DivVideoPlayerConfig(
+public data class DivVideoPlayerConfig(
     val sources: List<DivVideoSource> = emptyList(),
     val autoplay: Boolean = false,
     val repeatable: Boolean = false,
@@ -23,7 +23,7 @@ data class DivVideoPlayerConfig(
 /**
  * Single source variant passed to a [DivVideoPlayer].
  */
-data class DivVideoSource(
+public data class DivVideoSource(
     val url: Uri,
     val mimeType: String = "",
     val resolution: DivVideoResolution? = null,
@@ -33,7 +33,7 @@ data class DivVideoSource(
 /**
  * Optional resolution metadata for a [DivVideoSource].
  */
-data class DivVideoResolution(
+public data class DivVideoResolution(
     val width: Int,
     val height: Int,
 )

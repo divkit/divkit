@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
  */
 @DivViewScope
 @Inject
-class DivTooltipController internal constructor(
+public class DivTooltipController internal constructor(
     @Named(Names.CARD_ID)
     private val cardId: String,
     @Named(Names.MAIN_COROUTINE_SCOPE)
@@ -40,10 +40,10 @@ class DivTooltipController internal constructor(
     }
 
     /** Popup content composition lifecycle events from both Div actions and controller commands. */
-    val events: SharedFlow<DivTooltipEvent> = mutableEvents.asSharedFlow()
+    public val events: SharedFlow<DivTooltipEvent> = mutableEvents.asSharedFlow()
 
     /** Tooltips whose anchors are currently composed and laid out in this card. */
-    val availableTooltips: StateFlow<Set<String>> = mutableAvailableTooltips.asStateFlow()
+    public val availableTooltips: StateFlow<Set<String>> = mutableAvailableTooltips.asStateFlow()
 
     /**
      * Shows a tooltip if its anchor is currently composed and laid out. Android View attachment is
@@ -59,7 +59,7 @@ class DivTooltipController internal constructor(
      * Popup content composition lifecycle is reported
      * separately through [events].
      */
-    fun showTooltip(
+    public fun showTooltip(
         tooltipId: String,
         multiple: Boolean,
     ): Boolean {
@@ -74,7 +74,7 @@ class DivTooltipController internal constructor(
      * @return `true` when a request was removed; `false` when the tooltip was not requested. Popup
      * content leaving composition is reported separately through [events].
      */
-    fun hideTooltip(tooltipId: String): Boolean {
+    public fun hideTooltip(tooltipId: String): Boolean {
         return tooltipStateStorage.hide(tooltipId)
     }
 
@@ -84,7 +84,7 @@ class DivTooltipController internal constructor(
      * @return `true` when the command was accepted, including when the card had no requested
      * tooltips. Popup content leaving composition is reported separately through [events].
      */
-    fun cancelTooltips(): Boolean {
+    public fun cancelTooltips(): Boolean {
         tooltipStateStorage.cancelAll()
         return true
     }

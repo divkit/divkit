@@ -6,7 +6,7 @@ package com.yandex.div.compose.observer.events
  * [cardId] is the card log id; [pagerId] is null for an element without an id.
  */
 @ConsistentCopyVisibility
-data class DivPagerPageChangedEvent internal constructor(
+public data class DivPagerPageChangedEvent internal constructor(
     val cardId: String,
     val pagerId: String?,
     val currentPageIndex: Int,

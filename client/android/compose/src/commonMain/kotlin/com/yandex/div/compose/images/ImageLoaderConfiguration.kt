@@ -8,24 +8,24 @@ import coil3.EventListener
  *
  * @see com.yandex.div.compose.DivConfiguration
  */
-interface ImageLoaderConfiguration {
+public interface ImageLoaderConfiguration {
 
     /**
      * Registers additional Coil components on [builder].
      * Built-in DivKit components are already added, except the network fetcher: it is added
      * afterwards, so a fetcher registered here takes precedence over it.
      */
-    fun applyComponents(builder: ComponentRegistry.Builder) = Unit
+    public fun applyComponents(builder: ComponentRegistry.Builder): Unit = Unit
 
     /**
      * Registers additional Coil event listeners.
      */
-    val eventListener: EventListener
+    public val eventListener: EventListener
         get() = EventListener.NONE
 
     /**
      * Enables or disables image loading errors reporting via [com.yandex.div.compose.DivReporter].
      */
-    val reportErrors: Boolean
+    public val reportErrors: Boolean
         get() = true
 }

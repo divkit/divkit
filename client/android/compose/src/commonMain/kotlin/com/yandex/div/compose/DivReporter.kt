@@ -9,17 +9,17 @@ import com.yandex.div.core.log.Log
  *
  * @see DivConfiguration
  */
-open class DivReporter {
+public open class DivReporter {
 
-    open fun reportError(message: String) {
+    public open fun reportError(message: String) {
         Log.e(TAG, message)
     }
 
-    open fun reportError(e: Exception) {
+    public open fun reportError(e: Exception) {
         Log.e(TAG, "", e)
     }
 
-    open fun reportWarning(message: String) {
+    public open fun reportWarning(message: String) {
         Log.w(TAG, message)
     }
 }

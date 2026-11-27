@@ -25,38 +25,38 @@ import com.yandex.div.compose.views.tabs.LocalIsMeasurementPass
  *         }
  *     }
  */
-interface DivComponentObserver {
+public interface DivComponentObserver {
     /**
      * Reports the first significant movement in a gesture (including its fling) or scroll action.
      * The accumulated absolute distance must exceed 5% of the viewport along the scroll axis.
      * Further movement in the same gesture or action does not repeat this event.
      * Use [onGalleryScrollCompleted] to observe completed movements, including shorter scrolls.
      */
-    fun onGallerySignificantScroll(event: DivGalleryScrollEvent): Unit = Unit
+    public fun onGallerySignificantScroll(event: DivGalleryScrollEvent): Unit = Unit
 
     /**
      * Called after a gesture (including its fling) or action moves the gallery and finishes.
      * A short movement can finish without an [onGallerySignificantScroll] notification.
      */
-    fun onGalleryScrollCompleted(event: DivGalleryScrollEvent): Unit = Unit
+    public fun onGalleryScrollCompleted(event: DivGalleryScrollEvent): Unit = Unit
 
     /**
      * Called after the selected pager page changes and scrolling settles, whether caused by a
      * gesture, a scroll action or an update to the page list. Initial selection and restoration
      * do not emit this event.
      */
-    fun onPagerPageChanged(event: DivPagerPageChangedEvent): Unit = Unit
+    public fun onPagerPageChanged(event: DivPagerPageChangedEvent): Unit = Unit
 
     /**
      * Called after the selected tab changes and scrolling settles. This includes swipes, title
      * taps, scroll actions and updates to selected_tab. Initial selection does not emit this event.
      */
-    fun onTabChanged(event: DivTabChangedEvent): Unit = Unit
+    public fun onTabChanged(event: DivTabChangedEvent): Unit = Unit
 
     /**
      * Called once when the user scrolls the tab title strip. This does not require a tab change.
      */
-    fun onTabTitlesScrolled(event: DivTabTitlesScrolledEvent): Unit = Unit
+    public fun onTabTitlesScrolled(event: DivTabTitlesScrolledEvent): Unit = Unit
 }
 
 /**

@@ -42,12 +42,12 @@ import kotlinx.coroutines.launch
  * ```
  */
 @Suppress("TooManyFunctions")
-class DivViewHost(
+public class DivViewHost(
     internal val divContext: DivContext,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) {
-    val composeView = ComposeView(divContext, attrs, defStyleAttr)
+    public val composeView: ComposeView = ComposeView(divContext, attrs, defStyleAttr)
 
     private val callbacks = mutableSetOf<VisibilityHost.Callback>()
     private val contentUnboundCallbacks = mutableSetOf<() -> Unit>()
@@ -97,7 +97,7 @@ class DivViewHost(
      *
      * @param preloadMode how to preload resources for [data]. Defaults to [PreloadMode.DISABLED].
      */
-    fun setContent(
+    public fun setContent(
         data: DivData,
         preloadMode: PreloadMode = PreloadMode.DISABLED,
         content: @Composable () -> Unit = { DivView(data) },
@@ -120,12 +120,12 @@ class DivViewHost(
      * Do not call [ComposeView.setContent] on [composeView] directly — visibility actions
      * require content to be set through this host.
      */
-    fun setContent(content: @Composable () -> Unit) {
+    public fun setContent(content: @Composable () -> Unit) {
         cancelPreload()
         setHostContent(content)
     }
 
-    fun onVisibleBoundsChanged() {
+    public fun onVisibleBoundsChanged() {
         trackVisibility()
     }
 
@@ -135,7 +135,7 @@ class DivViewHost(
      * Pending visibility actions are cancelled and eligible disappear actions are dispatched
      * synchronously. This method does not dispose the composition or remove its content.
      */
-    fun unbind() {
+    public fun unbind() {
         cancelPreload()
         val callbacksSnapshot = callbacks.toList()
         val contentUnboundCallbacksSnapshot = contentUnboundCallbacks.toList()

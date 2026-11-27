@@ -28,14 +28,14 @@ import dev.zacsweers.metro.createGraphFactory
  *    val configuration = divConfiguration {}
  *    val divContext = DivContext(activity, configuration)
  */
-class DivContext private constructor(
+public class DivContext private constructor(
     internal val component: DivContextComponent
 ) : ContextWrapper(component.baseContext) {
 
     /**
      * Creates a [DivContext] with provided [DivConfiguration].
      */
-    constructor(
+    public constructor(
         baseContext: Context,
         configuration: DivConfiguration
     ) : this(createComponent(baseContext, configuration, DivDebugConfiguration.Default))
@@ -46,7 +46,7 @@ class DivContext private constructor(
      * Do not use this constructor in production environment.
      */
     @InternalApi
-    constructor(
+    public constructor(
         baseContext: Context,
         configuration: DivConfiguration,
         debugConfiguration: DivDebugConfiguration
@@ -54,23 +54,23 @@ class DivContext private constructor(
 
     @InternalApi
     @VisibleForTesting
-    val debugFeatures: DivDebugFeatures
+    public val debugFeatures: DivDebugFeatures
         get() = component.debugFeatures
 
     /** Applies patches to this context's cards. */
     @ExperimentalApi
-    val patcher: DivPatcher
+    public val patcher: DivPatcher
         get() = component.patcher
 
     /** Returns a stored-values storage bound to [cardId]. */
-    fun getStoredValuesStorage(cardId: String): DivStoredValuesStorage =
+    public fun getStoredValuesStorage(cardId: String): DivStoredValuesStorage =
         component.storedValuesStorageFactory.create(cardId)
 
     /**
      * Returns the tooltip controller for an existing [DivView] context bound to [cardId], or
      * `null` when that card's context does not exist.
      */
-    fun getTooltipController(cardId: String): DivTooltipController? =
+    public fun getTooltipController(cardId: String): DivTooltipController? =
         component.viewContextStorage.get(cardId)?.component?.tooltipController
 
     /**
@@ -83,7 +83,7 @@ class DivContext private constructor(
      * @param preloadMode how to preload resources for [data]. Defaults to [PreloadMode.REQUIRED_ONLY].
      * @return aggregate result of preloading selected resources.
      */
-    suspend fun preload(
+    public suspend fun preload(
         data: DivData,
         preloadMode: PreloadMode = PreloadMode.REQUIRED_ONLY,
     ): PreloadResult = component.preloader.preload(data, preloadMode)
@@ -94,7 +94,7 @@ class DivContext private constructor(
      * Must be called only when there is no active [DivView] that uses given [data] in this
      * [DivContext].
      */
-    fun clearViewContext(data: DivData) {
+    public fun clearViewContext(data: DivData) {
         component.viewContextStorage.remove(data)
     }
 

@@ -8,7 +8,7 @@ package com.yandex.div.compose
  * - [ACTIVE_STATE_ONLY] — walk the current/active state tree; load all resources in it.
  * - [ALL] — walk all state variants; load all resources.
  */
-enum class PreloadMode {
+public enum class PreloadMode {
     DISABLED,
     REQUIRED_ONLY,
     ACTIVE_STATE_ONLY,

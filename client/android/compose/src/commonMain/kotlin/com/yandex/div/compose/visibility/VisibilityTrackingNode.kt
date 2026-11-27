@@ -15,7 +15,7 @@ import com.yandex.div.core.annotations.InternalApi
 @Composable
 @ReadOnlyComposable
 @InternalApi
-fun Modifier.onDivVisibilityChanged(
+public fun Modifier.onDivVisibilityChanged(
     minFractionVisible: Float,
     onVisibilityChanged: (Boolean) -> Unit,
 ): Modifier = this then VisibilityTrackingElement(

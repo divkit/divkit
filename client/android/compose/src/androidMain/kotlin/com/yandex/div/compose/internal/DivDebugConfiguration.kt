@@ -16,22 +16,22 @@ import kotlin.time.TimeSource
  * @see com.yandex.div.compose.DivContext
  */
 @InternalApi
-class DivDebugConfiguration(
+public class DivDebugConfiguration(
 
     /**
      * Overrides the main coroutine scope for debugging and testing.
      */
-    val coroutineScope: CoroutineScope? = null,
+    public val coroutineScope: CoroutineScope? = null,
 
     /**
      * Overrides the default [kotlinx.coroutines.Dispatchers.IO].
      */
-    val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    public val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 
     /**
      * Listens for all [AsyncImagePainter]s in [com.yandex.div.compose.DivView] state changes.
      */
-    val imagePainterStateListener: ((AsyncImagePainter.State) -> Unit)? = null,
+    public val imagePainterStateListener: ((AsyncImagePainter.State) -> Unit)? = null,
 
     /**
      * [TimeSource] that is used for time tracking in [com.yandex.div.compose.DivView] components.
@@ -39,9 +39,9 @@ class DivDebugConfiguration(
      * Provide custom value (e.g. TestCoroutineScheduler.timeSource) to mock the time source in
      * tests.
      */
-    val timeSource: TimeSource = TimeSource.Monotonic,
+    public val timeSource: TimeSource = TimeSource.Monotonic,
 ) {
-    companion object {
-        val Default = DivDebugConfiguration()
+    public companion object {
+        public val Default: DivDebugConfiguration = DivDebugConfiguration()
     }
 }

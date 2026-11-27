@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 @ExperimentalApi
 @DivContextScope
 @Inject
-class DivPatcher internal constructor(
+public class DivPatcher internal constructor(
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope,
     private val viewContextFactory: DivViewContextFactory,
@@ -35,7 +35,7 @@ class DivPatcher internal constructor(
      *
      *    val applied = divContext.patcher.applyPatch(data, patch)
      */
-    suspend fun applyPatch(data: DivData, patch: DivPatch): Boolean {
+    public suspend fun applyPatch(data: DivData, patch: DivPatch): Boolean {
         return withContext(mainCoroutineScope.coroutineContext.minusKey(Job)) {
             viewContextFactory.getOrCreate(data).component.patchCoordinator.applyPatch(patch)
         }

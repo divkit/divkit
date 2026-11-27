@@ -6,7 +6,7 @@ package com.yandex.div.compose.observer.events
  * [cardId] is the card log id; [galleryId] is null for an element without an id.
  */
 @ConsistentCopyVisibility
-data class DivGalleryScrollEvent internal constructor(
+public data class DivGalleryScrollEvent internal constructor(
     val cardId: String,
     val galleryId: String?,
     val firstVisibleItem: Int,

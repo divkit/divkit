@@ -8,7 +8,7 @@ import com.yandex.div.compose.preload.PreloadResult
  *
  * @see com.yandex.div.compose.DivConfiguration
  */
-interface DivVideoPreloader {
+public interface DivVideoPreloader {
     /**
      * Preloads the requested video resources.
      */
@@ -16,13 +16,13 @@ interface DivVideoPreloader {
         message = "Use preloadVideoWithResult instead.",
         replaceWith = ReplaceWith("preloadVideoWithResult(sources)"),
     )
-    suspend fun preloadVideo(sources: List<Uri>): Unit = Unit
+    public suspend fun preloadVideo(sources: List<Uri>): Unit = Unit
 
     /**
      * @return result of preloading requested video resources.
      */
     @Suppress("DEPRECATION")
-    suspend fun preloadVideoWithResult(sources: List<Uri>): PreloadResult {
+    public suspend fun preloadVideoWithResult(sources: List<Uri>): PreloadResult {
         preloadVideo(sources)
         return PreloadResult(true)
     }

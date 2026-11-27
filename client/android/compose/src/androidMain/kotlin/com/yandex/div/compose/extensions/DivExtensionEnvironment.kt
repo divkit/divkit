@@ -19,7 +19,7 @@ import com.yandex.div2.DivExtension
 @ConsistentCopyVisibility
 @Stable
 @Suppress("ComposableNaming")
-data class DivExtensionEnvironment internal constructor(
+public data class DivExtensionEnvironment internal constructor(
     val data: Div,
     val extension: DivExtension,
     val expressionResolver: ExpressionResolver,
@@ -28,7 +28,7 @@ data class DivExtensionEnvironment internal constructor(
     val storedValuesStorage: DivStoredValuesStorage,
 ) {
     @Composable
-    fun reportError(message: String) {
+    public fun reportError(message: String) {
         LaunchedEffect(message) {
             reporter.reportError(message)
         }

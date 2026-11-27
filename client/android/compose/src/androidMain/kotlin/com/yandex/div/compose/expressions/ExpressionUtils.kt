@@ -9,7 +9,7 @@ import com.yandex.div.json.expressions.Expression
 import kotlin.reflect.KClass
 
 @Composable
-inline fun <reified T : Any> Expression<T>?.observedValue(defaultValue: T): T {
+public inline fun <reified T : Any> Expression<T>?.observedValue(defaultValue: T): T {
     return observedValue(defaultValue, T::class)
 }
 
@@ -27,17 +27,17 @@ internal fun <T : Any> Expression<T>?.observedValue(
 }
 
 @Composable
-fun Expression<Double>?.observedFloatValue(defaultValue: Float): Float {
+public fun Expression<Double>?.observedFloatValue(defaultValue: Float): Float {
     return observedValue(defaultValue.toDouble()).toFloat()
 }
 
 @Composable
-fun Expression<Long>?.observedIntValue(defaultValue: Int): Int {
+public fun Expression<Long>?.observedIntValue(defaultValue: Int): Int {
     return observedValue(defaultValue.toLong()).toInt()
 }
 
 @Composable
-inline fun <reified T : Any> Expression<T>.observedValue(): T {
+public inline fun <reified T : Any> Expression<T>.observedValue(): T {
     return observedValue(T::class)
 }
 
@@ -52,17 +52,17 @@ internal fun <T : Any> Expression<T>.observedValue(valueType: KClass<T>): T {
 }
 
 @Composable
-fun Expression<Int>.observedColorValue(): Color {
+public fun Expression<Int>.observedColorValue(): Color {
     return observedValue().toColor()
 }
 
 @Composable
-fun Expression<Long>.observedIntValue(): Int {
+public fun Expression<Long>.observedIntValue(): Int {
     return observedValue().toInt()
 }
 
 @Composable
-fun Expression<Double>.observedFloatValue(): Float {
+public fun Expression<Double>.observedFloatValue(): Float {
     return observedValue().toFloat()
 }
 

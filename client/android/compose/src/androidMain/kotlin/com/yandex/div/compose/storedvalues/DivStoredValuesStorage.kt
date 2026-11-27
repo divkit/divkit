@@ -12,14 +12,14 @@ import com.yandex.div.data.StoredValue
  * Obtain a card-bound storage from [DivContext.getStoredValuesStorage],
  * [DivCustomEnvironment.storedValuesStorage], or [DivExtensionEnvironment.storedValuesStorage].
  */
-interface DivStoredValuesStorage {
+public interface DivStoredValuesStorage {
     /**
      * Returns a stored value with [name], or `null` if it does not exist or has expired.
      *
      * [DivStoredValueScope.Card] uses the card ID bound when obtaining this storage.
      * [DivStoredValueScope.Global] is shared by all cards.
      */
-    fun getStoredValue(
+    public fun getStoredValue(
         name: String,
         scope: DivStoredValueScope = DivStoredValueScope.Global,
     ): StoredValue?
@@ -30,7 +30,7 @@ interface DivStoredValuesStorage {
      * [DivStoredValueScope.Card] uses the card ID bound when obtaining this storage.
      * [DivStoredValueScope.Global] is shared by all cards.
      */
-    fun setValue(
+    public fun setValue(
         value: StoredValue,
         scope: DivStoredValueScope,
         lifetime: Long,
@@ -38,7 +38,7 @@ interface DivStoredValuesStorage {
 }
 
 /** Scope used to store and retrieve a value. */
-enum class DivStoredValueScope {
+public enum class DivStoredValueScope {
     /** Shared by all cards. */
     Global,
 

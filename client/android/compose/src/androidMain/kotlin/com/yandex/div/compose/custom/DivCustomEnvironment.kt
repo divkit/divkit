@@ -17,7 +17,7 @@ import com.yandex.div2.DivCustom
  */
 @ConsistentCopyVisibility
 @Stable
-data class DivCustomEnvironment internal constructor(
+public data class DivCustomEnvironment internal constructor(
     val data: DivCustom,
     val expressionResolver: ExpressionResolver,
     val items: @Composable () -> Unit,

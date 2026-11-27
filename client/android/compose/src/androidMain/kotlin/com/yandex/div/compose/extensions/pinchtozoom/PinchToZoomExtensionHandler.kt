@@ -23,7 +23,7 @@ import com.yandex.div2.Div
 /**
  * A [DivExtensionHandler] that adds pinch-to-zoom gesture support to `image` elements.
  */
-class PinchToZoomExtensionHandler(
+public class PinchToZoomExtensionHandler(
     private val configuration: PinchToZoomConfiguration = PinchToZoomConfiguration()
 ) : DivExtensionHandler {
 

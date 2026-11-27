@@ -13,13 +13,13 @@ import androidx.compose.ui.viewinterop.AndroidView
  * Subclasses provide [createView] / [bindView] callbacks and optionally override [release]
  * to clean up resources when the view leaves the composition.
  */
-abstract class DivCustomAndroidViewFactory : DivCustomViewFactory {
+public abstract class DivCustomAndroidViewFactory : DivCustomViewFactory {
 
-    abstract fun createView(environment: DivCustomEnvironment): View
+    public abstract fun createView(environment: DivCustomEnvironment): View
 
-    open fun bindView(view: View, environment: DivCustomEnvironment) = Unit
+    public open fun bindView(view: View, environment: DivCustomEnvironment): Unit = Unit
 
-    open fun release(view: View) = Unit
+    public open fun release(view: View): Unit = Unit
 
     @Composable
     final override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {

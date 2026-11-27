@@ -8,7 +8,7 @@ package com.yandex.div.compose.video
  *
  * @see com.yandex.div.compose.DivConfiguration
  */
-fun interface DivVideoPlayerFactory {
+public fun interface DivVideoPlayerFactory {
 
-    fun makePlayer(): DivVideoPlayer
+    public fun makePlayer(): DivVideoPlayer
 }

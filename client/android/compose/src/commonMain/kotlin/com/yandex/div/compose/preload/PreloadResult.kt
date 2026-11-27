@@ -5,7 +5,7 @@ package com.yandex.div.compose.preload
  *
  * @property isSuccessful whether every selected resource was preloaded successfully.
  */
-data class PreloadResult(
+public data class PreloadResult(
     val isSuccessful: Boolean,
 )
 

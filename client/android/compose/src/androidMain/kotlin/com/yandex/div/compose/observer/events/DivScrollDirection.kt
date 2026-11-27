@@ -4,7 +4,7 @@ package com.yandex.div.compose.observer.events
  * Navigation direction through gallery items or pager pages, independent of layout direction.
  * A cyclic pager reports the direction of the transition, including when it wraps.
  */
-enum class DivScrollDirection {
+public enum class DivScrollDirection {
     /**
      * Movement forward through the item order.
      */

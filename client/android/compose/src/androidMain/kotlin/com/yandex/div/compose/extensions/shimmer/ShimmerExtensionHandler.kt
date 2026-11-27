@@ -39,7 +39,7 @@ import kotlin.math.tan
  * A [DivExtensionHandler] that draws an animated placeholder for an `image` or `gif` elements
  * until its content is loaded.
  */
-class ShimmerExtensionHandler : DivExtensionHandler {
+public class ShimmerExtensionHandler : DivExtensionHandler {
     // used to synchronize animations across multiple elements
     private var animationStartTime: Long? = null
 

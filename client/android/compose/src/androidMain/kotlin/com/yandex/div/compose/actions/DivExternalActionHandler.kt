@@ -7,7 +7,7 @@ package com.yandex.div.compose.actions
  *
  * @see com.yandex.div.compose.DivConfiguration
  */
-interface DivExternalActionHandler {
+public interface DivExternalActionHandler {
 
     /**
      * Called when an action that does not handled by DivKit is triggered.
@@ -15,15 +15,21 @@ interface DivExternalActionHandler {
      * DivKit handles actions with `typed` parameter and actions with `url` that starts with
      * `div-action:` only.
      */
-    fun handle(context: DivActionHandlingContext, action: DivActionData) = Unit
+    public fun handle(context: DivActionHandlingContext, action: DivActionData): Unit = Unit
 
     /**
      * Called when a custom action (action with `"type": "custom"`) is triggered.
      */
-    fun handleCustomAction(context: DivActionHandlingContext, action: DivCustomActionData) = Unit
+    public fun handleCustomAction(
+        context: DivActionHandlingContext,
+        action: DivCustomActionData,
+    ): Unit = Unit
 
     /**
      * Called for every enabled action before DivKit or the application handles it.
      */
-    fun onActionTriggered(context: DivActionHandlingContext, action: DivActionData) = Unit
+    public fun onActionTriggered(
+        context: DivActionHandlingContext,
+        action: DivActionData,
+    ): Unit = Unit
 }

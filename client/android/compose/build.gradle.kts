@@ -1,6 +1,5 @@
 import com.android.build.api.variant.KotlinMultiplatformAndroidComponentsExtension
 import dev.detekt.gradle.Detekt
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 
 plugins {
     id("divkit.convention.library-kmp-ios")
@@ -13,10 +12,6 @@ plugins {
 }
 
 kotlin {
-    // Preserve the existing Android API while moving its source set.
-    // TODO(https://st.yandex-team.ru/DIVKIT-11051): Restore strict explicit API mode.
-    explicitApi = ExplicitApiMode.Disabled
-
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }

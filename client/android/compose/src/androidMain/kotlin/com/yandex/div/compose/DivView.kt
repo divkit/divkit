@@ -29,7 +29,7 @@ import kotlin.time.measureTimedValue
  * @param modifier the [Modifier] to be applied to the root layout.
  */
 @Composable
-fun DivView(
+public fun DivView(
     data: DivData,
     modifier: Modifier = Modifier
 ) {

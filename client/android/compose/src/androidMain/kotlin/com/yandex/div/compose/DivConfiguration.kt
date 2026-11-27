@@ -32,22 +32,22 @@ import com.yandex.div.core.network.DivNetworkClient
  *        DivView(data = data)
  *    }
  */
-class DivConfiguration private constructor(
-    val actionHandler: DivExternalActionHandler,
-    val animationsEnabledProvider: DivAnimationsEnabledProvider,
-    val customViewFactories: Map<String, DivCustomViewFactory>,
-    val extensionHandlers: Map<String, DivExtensionHandler>,
-    val fontSourceProvider: DivFontSourceProvider,
-    val histogramConfiguration: DivHistogramConfiguration,
-    val imageLoaderConfiguration: ImageLoaderConfiguration,
-    val patchDownloader: DivPatchDownloader?,
-    val playerFactory: DivVideoPlayerFactory,
-    val networkClient: DivNetworkClient,
-    val reporter: DivReporter,
-    val componentObserver: DivComponentObserver,
-    val variableController: DivVariableController,
-    val videoPreloader: DivVideoPreloader,
-    val wildcardExtensionHandlers: Map<String, DivExtensionHandler>,
+public class DivConfiguration private constructor(
+    public val actionHandler: DivExternalActionHandler,
+    public val animationsEnabledProvider: DivAnimationsEnabledProvider,
+    public val customViewFactories: Map<String, DivCustomViewFactory>,
+    public val extensionHandlers: Map<String, DivExtensionHandler>,
+    public val fontSourceProvider: DivFontSourceProvider,
+    public val histogramConfiguration: DivHistogramConfiguration,
+    public val imageLoaderConfiguration: ImageLoaderConfiguration,
+    public val patchDownloader: DivPatchDownloader?,
+    public val playerFactory: DivVideoPlayerFactory,
+    public val networkClient: DivNetworkClient,
+    public val reporter: DivReporter,
+    public val componentObserver: DivComponentObserver,
+    public val variableController: DivVariableController,
+    public val videoPreloader: DivVideoPreloader,
+    public val wildcardExtensionHandlers: Map<String, DivExtensionHandler>,
 ) {
 
     @Deprecated(
@@ -55,7 +55,7 @@ class DivConfiguration private constructor(
         level = DeprecationLevel.WARNING,
     )
     @JvmOverloads
-    constructor(
+    public constructor(
         actionHandler: DivExternalActionHandler = defaultActionHandler,
         customViewFactories: Map<String, DivCustomViewFactory> = emptyMap(),
         extensionHandlers: Map<String, DivExtensionHandler> = emptyMap(),
@@ -88,27 +88,29 @@ class DivConfiguration private constructor(
     /**
      * Configures a [DivConfiguration] using the same defaults as its constructor.
      */
-    class Builder {
-        var actionHandler: DivExternalActionHandler = defaultActionHandler
-        var animationsEnabledProvider: DivAnimationsEnabledProvider =
+    public class Builder {
+        public var actionHandler: DivExternalActionHandler = defaultActionHandler
+        public var animationsEnabledProvider: DivAnimationsEnabledProvider =
             DivAnimationsEnabledProvider.DEFAULT
-        var customViewFactories: Map<String, DivCustomViewFactory> = emptyMap()
-        var extensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
-        var fontSourceProvider: DivFontSourceProvider = DefaultFontSourceProvider
-        var histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration
-        var imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration
-        var playerFactory: DivVideoPlayerFactory = DisabledVideoPlayerFactory
-        var reporter: DivReporter = DivReporter()
-        var componentObserver: DivComponentObserver = defaultComponentObserver
-        var networkClient: DivNetworkClient = disabledNetworkClient
-        var variableController: DivVariableController = DivVariableController()
-        var videoPreloader: DivVideoPreloader = disabledVideoPreloader
-        var wildcardExtensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
+        public var customViewFactories: Map<String, DivCustomViewFactory> = emptyMap()
+        public var extensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
+        public var fontSourceProvider: DivFontSourceProvider = DefaultFontSourceProvider
+        public var histogramConfiguration: DivHistogramConfiguration =
+            DisabledHistogramConfiguration
+        public var imageLoaderConfiguration: ImageLoaderConfiguration =
+            defaultImageLoaderConfiguration
+        public var playerFactory: DivVideoPlayerFactory = DisabledVideoPlayerFactory
+        public var reporter: DivReporter = DivReporter()
+        public var componentObserver: DivComponentObserver = defaultComponentObserver
+        public var networkClient: DivNetworkClient = disabledNetworkClient
+        public var variableController: DivVariableController = DivVariableController()
+        public var videoPreloader: DivVideoPreloader = disabledVideoPreloader
+        public var wildcardExtensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
 
         @Deprecated("Use networkClient to customize network requests")
-        var patchDownloader: DivPatchDownloader? = null
+        public var patchDownloader: DivPatchDownloader? = null
 
-        fun build(): DivConfiguration = DivConfiguration(
+        public fun build(): DivConfiguration = DivConfiguration(
             actionHandler = actionHandler,
             animationsEnabledProvider = animationsEnabledProvider,
             customViewFactories = customViewFactories,
@@ -131,7 +133,7 @@ class DivConfiguration private constructor(
 /**
  * Creates a [DivConfiguration] using a [DivConfiguration.Builder] block.
  */
-fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfiguration =
+public fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfiguration =
     DivConfiguration.Builder().apply(block).build()
 
 private val defaultActionHandler = object : DivExternalActionHandler {}

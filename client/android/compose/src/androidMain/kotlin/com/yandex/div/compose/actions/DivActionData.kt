@@ -7,7 +7,7 @@ import org.json.JSONObject
  * Data associated with a DivKit action.
  */
 @ConsistentCopyVisibility
-data class DivActionData internal constructor(
+public data class DivActionData internal constructor(
     val id: String?,
     val payload: JSONObject?,
     val source: DivActionSource,

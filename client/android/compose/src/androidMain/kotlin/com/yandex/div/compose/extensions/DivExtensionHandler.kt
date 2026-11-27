@@ -9,13 +9,13 @@ import com.yandex.div.compose.preload.PreloadResult
  *
  * @see com.yandex.div.compose.DivConfiguration
  */
-interface DivExtensionHandler {
+public interface DivExtensionHandler {
 
     /**
      * Composes the element.
      */
     @Composable
-    fun Content(
+    public fun Content(
         modifier: Modifier,
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
@@ -28,7 +28,7 @@ interface DivExtensionHandler {
         message = "Use preloadWithResult instead.",
         replaceWith = ReplaceWith("preloadWithResult(environment)"),
     )
-    suspend fun preload(environment: DivExtensionEnvironment): Unit = Unit
+    public suspend fun preload(environment: DivExtensionEnvironment): Unit = Unit
 
     /**
      * Preloads resources required by the extension before the element is shown.
@@ -36,7 +36,7 @@ interface DivExtensionHandler {
      * @return result of preloading required resources.
      */
     @Suppress("DEPRECATION")
-    suspend fun preloadWithResult(environment: DivExtensionEnvironment): PreloadResult {
+    public suspend fun preloadWithResult(environment: DivExtensionEnvironment): PreloadResult {
         preload(environment)
         return PreloadResult(true)
     }

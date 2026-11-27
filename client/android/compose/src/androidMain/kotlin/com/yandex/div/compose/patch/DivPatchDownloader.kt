@@ -10,6 +10,6 @@ import com.yandex.div2.DivPatch
  * patch and invokes its actions and the download callbacks. Implementations must not block the
  * calling thread and should cancel their request when the calling coroutine is cancelled.
  */
-fun interface DivPatchDownloader {
-    suspend fun downloadPatch(url: Uri): DivPatch
+public fun interface DivPatchDownloader {
+    public suspend fun downloadPatch(url: Uri): DivPatch
 }

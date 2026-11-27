@@ -17,14 +17,14 @@ import dev.zacsweers.metro.Inject
 @DivContextScope
 @InternalApi
 @Inject
-class DivDebugFeatures internal constructor(
+public class DivDebugFeatures internal constructor(
     private val viewContextStorage: DivViewContextStorage
 ) {
 
     /**
      * Returns [ExpressionResolver] associated with the given [DivData].
      */
-    fun getExpressionResolver(data: DivData): ExpressionResolver? {
+    public fun getExpressionResolver(data: DivData): ExpressionResolver? {
         return viewContextStorage.get(data)?.rootLocalComponent?.expressionResolver
     }
 
@@ -32,7 +32,7 @@ class DivDebugFeatures internal constructor(
      * Performs action in the context of [com.yandex.div.compose.DivView] associated with
      * the given [DivData].
      */
-    fun performAction(data: DivData, action: DivAction) {
+    public fun performAction(data: DivData, action: DivAction) {
         viewContextStorage.get(data)?.let {
             it.component.actionHandler.handle(
                 context = it.rootLocalComponent.actionHandlingContext,
@@ -50,7 +50,7 @@ class DivDebugFeatures internal constructor(
      *
      * @see com.yandex.div.compose.histogram.DivHistogramConfiguration
      */
-    fun forceRecomposition(data: DivData) {
+    public fun forceRecomposition(data: DivData) {
         viewContextStorage.get(data)?.component?.histogramReporter?.forceRecomposition()
     }
 }

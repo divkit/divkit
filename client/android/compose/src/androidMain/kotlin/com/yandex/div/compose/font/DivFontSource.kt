@@ -9,24 +9,24 @@ import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
  * constructs the [androidx.compose.ui.text.font.Font] and applies weight / variation
  * settings.
  */
-actual sealed class DivFontSource {
+public actual sealed class DivFontSource {
 
     /**
      * Font is provided as a [androidx.compose.ui.text.font.FontFamily] instance.
      */
-    actual data class FontFamily actual constructor(
+    public actual data class FontFamily actual constructor(
         actual val fontFamily: ComposeFontFamily,
     ) : DivFontSource()
 
     /**
      * Font is stored as an Android font resource. Supports variation settings.
      */
-    data class Resource(@FontRes val resId: Int) : DivFontSource()
+    public data class Resource(@FontRes val resId: Int) : DivFontSource()
 
     /**
      * Font is stored as an app asset. Supports variation settings.
      */
-    data class Asset(val path: String) : DivFontSource()
+    public data class Asset(val path: String) : DivFontSource()
 
     /**
      * Font is provided as an already built [android.graphics.Typeface]. The requested
@@ -36,5 +36,5 @@ actual sealed class DivFontSource {
      * variation support.
      */
     @Deprecated("Use FontFamily instead")
-    data class Typeface(val typeface: android.graphics.Typeface) : DivFontSource()
+    public data class Typeface(val typeface: android.graphics.Typeface) : DivFontSource()
 }
