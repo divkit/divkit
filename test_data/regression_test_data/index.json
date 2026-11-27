@@ -2803,6 +2803,9 @@
     {
       "title": "Select",
       "case_id": 80,
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivSelect"
       ],
@@ -2813,11 +2816,17 @@
       "expected_results": [
         "When selecting, the text in the select should change."
       ],
-      "file": "select.json"
+      "file": "select.json",
+      "automation_blocker": {
+        "web": "The runner cannot tap an option of the native select list."
+      }
     },
     {
       "title": "Select with default item",
       "case_id": 81,
+      "automated": [
+        "android"
+      ],
       "tags": [
         "DivSelect"
       ],
@@ -2828,7 +2837,10 @@
       "expected_results": [
         "When selecting, the text in the select should change."
       ],
-      "file": "select_with_default.json"
+      "file": "select_with_default.json",
+      "automation_blocker": {
+        "web": "The runner cannot tap an option of the native select list."
+      }
     },
     {
       "title": "State transition trigger",
