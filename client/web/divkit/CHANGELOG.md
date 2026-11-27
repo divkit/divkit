@@ -1,3 +1,9 @@
+## 33.14.0 (November 30, 2026)
+
+* Fixed losing the first digit when replacing a masked phone number.
+* Fixed replacing selected text in a multiline input at its maximum length.
+
+
 ## 33.13.0 (November 23, 2026)
 
 * Fixed `set_stored_value` rejecting zero and empty values and storing typed booleans incorrectly.
